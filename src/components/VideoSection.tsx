@@ -2,35 +2,13 @@
 
 import { motion } from "framer-motion";
 import { Play, Clock } from "lucide-react";
+import { VideoItem } from "@/data/generate-content";
 
-const videos = [
-  {
-    img: "https://images.unsplash.com/photo-1495020689067-958852a7765e?w=600&h=400&fit=crop",
-    title: "Watch: Dramatic rescue as floods sweep through Yorkshire villages",
-    duration: "2:34",
-    time: "1 hour ago",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=600&h=400&fit=crop",
-    title: "Analysis: What the Budget means for YOUR wallet",
-    duration: "5:12",
-    time: "3 hours ago",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=600&h=400&fit=crop",
-    title: "Highlights: England vs Australia — Third Test, Day 2",
-    duration: "8:45",
-    time: "5 hours ago",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1551836022-4c4c79ecde51?w=600&h=400&fit=crop",
-    title: "Behind the scenes: Strictly Come Dancing final rehearsals",
-    duration: "3:20",
-    time: "6 hours ago",
-  },
-];
+interface VideoSectionProps {
+  videos: VideoItem[];
+}
 
-export default function VideoSection() {
+export default function VideoSection({ videos }: VideoSectionProps) {
   return (
     <section className="py-8 bg-white border-t-4 border-tabloid-red">
       <div className="max-w-[1400px] mx-auto px-4">
@@ -63,13 +41,11 @@ export default function VideoSection() {
                   className="w-full h-[180px] object-cover group-hover:scale-105 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors" />
-                {/* Play button */}
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="w-14 h-14 bg-tabloid-red/90 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg">
                     <Play className="w-6 h-6 text-white fill-white ml-1" />
                   </div>
                 </div>
-                {/* Duration */}
                 <div className="absolute bottom-2 right-2 bg-black/80 text-white text-xs px-2 py-0.5 rounded font-bold">
                   {video.duration}
                 </div>

@@ -11,21 +11,33 @@ import {
   User,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { SiteConfig } from "@/config/site-config";
 
 const categories = [
-  "News",
+  "Local News",
+  "US News",
   "Politics",
-  "Money",
   "World",
-  "Sport",
-  "Showbiz",
+  "Sports",
+  "Celebrity",
   "Lifestyle",
   "Opinion",
 ];
 
-export default function Header() {
+interface HeaderProps {
+  site: SiteConfig;
+}
+
+export default function Header({ site }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+
+  const today = new Date().toLocaleDateString("en-US", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
 
   return (
     <header className="bg-white border-b-4 border-tabloid-red sticky top-0 z-50 shadow-md">
@@ -33,10 +45,10 @@ export default function Header() {
       <div className="bg-tabloid-black text-white">
         <div className="max-w-[1400px] mx-auto px-4 flex items-center justify-between py-1.5 text-xs">
           <div className="flex items-center gap-4">
-            <span className="text-gray-300">Sunday 9 March 2026</span>
+            <span className="text-gray-300">{today}</span>
             <span className="hidden md:flex items-center gap-1 text-gray-300">
               <Cloud className="w-3 h-3" />
-              London 9°C
+              {site.city}, {site.stateAbbr} 72°F
               <ThermometerSun className="w-3 h-3 ml-1" />
             </span>
           </div>
@@ -70,7 +82,7 @@ export default function Header() {
                     className="text-white text-2xl md:text-4xl lg:text-5xl tracking-tighter"
                     style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900 }}
                   >
-                    THE DAILY
+                    {site.logoFirst}
                   </span>
                 </div>
                 <div className="bg-tabloid-black px-3 py-1 md:px-4 md:py-1.5">
@@ -78,7 +90,7 @@ export default function Header() {
                     className="text-white text-2xl md:text-4xl lg:text-5xl tracking-tighter"
                     style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900 }}
                   >
-                    HERALD
+                    {site.logoSecond}
                   </span>
                 </div>
               </div>
@@ -87,7 +99,7 @@ export default function Header() {
                   className="text-[10px] md:text-xs tracking-[0.3em] uppercase text-gray-500"
                   style={{ fontFamily: "'Oswald', sans-serif" }}
                 >
-                  Britain&apos;s Boldest Newspaper &bull; Est. 1902
+                  {site.tagline}
                 </span>
               </div>
             </div>

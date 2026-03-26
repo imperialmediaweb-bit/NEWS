@@ -3,8 +3,13 @@
 import { motion } from "framer-motion";
 import { Mail, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { SiteConfig } from "@/config/site-config";
 
-export default function NewsletterSignup() {
+interface NewsletterSignupProps {
+  site: SiteConfig;
+}
+
+export default function NewsletterSignup({ site }: NewsletterSignupProps) {
   return (
     <section className="py-10 bg-tabloid-dark-red">
       <div className="max-w-[1400px] mx-auto px-4">
@@ -26,7 +31,7 @@ export default function NewsletterSignup() {
             Get the Morning Headlines
           </h2>
           <p className="text-white/70 mb-6 text-sm md:text-base">
-            Britain&apos;s biggest stories delivered to your inbox every morning at 6am. Free. No spam. Unsubscribe anytime.
+            {site.state}&apos;s biggest stories delivered to your inbox every morning at 6am. Free. No spam. Unsubscribe anytime.
           </p>
           <form className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
             <input

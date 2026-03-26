@@ -2,16 +2,21 @@
 
 import { Facebook, Twitter, Instagram, Youtube } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { SiteConfig } from "@/config/site-config";
 
 const footerLinks = {
-  "News & Politics": ["UK News", "World News", "Politics", "Crime", "Education", "Health", "Science"],
-  "Sport": ["Football", "Cricket", "Rugby", "F1", "Tennis", "Boxing", "Golf"],
-  "Entertainment": ["Showbiz", "TV & Film", "Music", "Lifestyle", "Travel", "Food", "Fashion"],
+  "News & Politics": ["Local News", "US News", "Politics", "Crime", "Education", "Health", "Science"],
+  "Sports": ["Football", "Basketball", "Baseball", "Hockey", "Soccer", "MMA", "Golf"],
+  "Entertainment": ["Celebrity", "TV & Film", "Music", "Lifestyle", "Travel", "Food", "Fashion"],
   "Opinion": ["Columnists", "Editorials", "Letters", "Cartoons", "Debates"],
-  "About Us": ["About The Daily Herald", "Contact", "Advertise", "Work With Us", "Corrections", "Terms of Use", "Privacy Policy"],
+  "About Us": ["About", "Contact", "Advertise", "Work With Us", "Corrections", "Terms of Use", "Privacy Policy"],
 };
 
-export default function Footer() {
+interface FooterProps {
+  site: SiteConfig;
+}
+
+export default function Footer({ site }: FooterProps) {
   return (
     <footer className="bg-tabloid-black text-white">
       {/* Main footer */}
@@ -44,15 +49,15 @@ export default function Footer() {
       {/* Bottom bar */}
       <div className="max-w-[1400px] mx-auto px-4 py-6">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-0">
             <div className="bg-tabloid-red px-2 py-0.5">
               <span className="text-white text-lg font-black" style={{ fontFamily: "'Playfair Display', serif" }}>
-                THE DAILY
+                {site.logoFirst}
               </span>
             </div>
             <div className="bg-white px-2 py-0.5">
               <span className="text-tabloid-black text-lg font-black" style={{ fontFamily: "'Playfair Display', serif" }}>
-                HERALD
+                {site.logoSecond}
               </span>
             </div>
           </div>
@@ -73,7 +78,7 @@ export default function Footer() {
           </div>
 
           <p className="text-gray-500 text-xs">
-            © 2026 The Daily Herald. All rights reserved.
+            © {new Date().getFullYear()} {site.name}. All rights reserved.
           </p>
         </div>
       </div>

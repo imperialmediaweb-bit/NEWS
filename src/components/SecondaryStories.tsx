@@ -3,43 +3,13 @@
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Clock } from "lucide-react";
+import { Article } from "@/data/generate-content";
 
-const stories = [
-  {
-    img: "https://images.unsplash.com/photo-1532375810709-75b1da00537c?w=600&h=400&fit=crop",
-    badge: "News",
-    title: "Grenfell families slam government over 'shameful' compensation delays",
-    summary: "Survivors say promises made after the 2017 tragedy have been broken as hundreds still await payments.",
-    time: "35 min ago",
-    comments: 843,
-  },
-  {
-    img: "https://images.unsplash.com/photo-1504711434969-e33886168d8c?w=600&h=400&fit=crop",
-    badge: "World",
-    title: "US-China tensions soar as naval standoff erupts in South China Sea",
-    summary: "Pentagon confirms two warships were involved in a 'close encounter' near disputed waters.",
-    time: "1 hour ago",
-    comments: 1205,
-  },
-  {
-    img: "https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?w=600&h=400&fit=crop",
-    badge: "Lifestyle",
-    title: "The great British pub is dying — and this tiny village is fighting back",
-    summary: "Residents of a Somerset village have raised £400,000 to buy their local before developers move in.",
-    time: "2 hours ago",
-    comments: 567,
-  },
-  {
-    img: "https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?w=600&h=400&fit=crop",
-    badge: "Sport",
-    title: "Man United in shock bid for Barcelona wonderkid as January window looms",
-    summary: "Old Trafford chiefs are prepared to break the bank for the 19-year-old sensation.",
-    time: "3 hours ago",
-    comments: 2100,
-  },
-];
+interface SecondaryStoriesProps {
+  stories: Article[];
+}
 
-export default function SecondaryStories() {
+export default function SecondaryStories({ stories }: SecondaryStoriesProps) {
   return (
     <section className="max-w-[1400px] mx-auto px-4 py-6">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -73,7 +43,7 @@ export default function SecondaryStories() {
               <span className="flex items-center gap-1">
                 <Clock className="w-3 h-3" /> {story.time}
               </span>
-              <span>{story.comments.toLocaleString()} comments</span>
+              <span>{(story.comments || 0).toLocaleString()} comments</span>
             </div>
           </motion.article>
         ))}

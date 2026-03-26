@@ -3,20 +3,11 @@
 import { motion } from "framer-motion";
 import { TrendingUp, Flame } from "lucide-react";
 
-const mostRead = [
-  { title: "Teacher, 34, struck off for 'inappropriate relationship' with sixth-former", comments: 4200 },
-  { title: "Martin Lewis reveals the one thing every homeowner must do before April", comments: 3800 },
-  { title: "Fury as council spends £2m on 'cycle lanes to nowhere' while potholes grow", comments: 3100 },
-  { title: "Inside the £15m mansion where reality TV star threw 'wild' birthday bash", comments: 2900 },
-  { title: "NHS GP shortage reaches crisis point as patients wait 4 weeks for appointment", comments: 2600 },
-  { title: "Mum wins £50,000 payout after Tesco 'humiliated' her at checkout", comments: 2400 },
-  { title: "Shocking moment road rage driver mounts pavement in school zone", comments: 2100 },
-  { title: "Weather maps turn red as 'African plume' set to bring 30°C scorcher", comments: 1900 },
-  { title: "Prince Harry 'blindsided' Royal Family with surprise UK visit", comments: 1800 },
-  { title: "Pensioner, 82, fighting eviction after 40 years in council flat", comments: 1600 },
-];
+interface MostReadSidebarProps {
+  items: { title: string; comments: number }[];
+}
 
-export default function MostReadSidebar() {
+export default function MostReadSidebar({ items }: MostReadSidebarProps) {
   return (
     <div className="bg-white border border-tabloid-border rounded-lg overflow-hidden">
       <div className="bg-tabloid-red px-4 py-3 flex items-center gap-2">
@@ -30,7 +21,7 @@ export default function MostReadSidebar() {
         <TrendingUp className="w-4 h-4 text-white/70 ml-auto" />
       </div>
       <div className="divide-y divide-tabloid-border">
-        {mostRead.map((item, i) => (
+        {items.map((item, i) => (
           <motion.a
             key={i}
             href="#"

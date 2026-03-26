@@ -2,35 +2,13 @@
 
 import { motion } from "framer-motion";
 import { MessageSquare, ChevronRight } from "lucide-react";
+import { Columnist } from "@/data/generate-content";
 
-const columnists = [
-  {
-    img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face",
-    name: "Robert Hartley",
-    role: "Political Editor",
-    title: "The PM's days are numbered — and everyone in Westminster knows it",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop&crop=face",
-    name: "Sarah Mitchell",
-    role: "Economics Correspondent",
-    title: "Stop blaming the young — the housing crisis was caused by our generation",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=face",
-    name: "James Whitfield",
-    role: "Sports Columnist",
-    title: "English football has sold its soul — and the fans are paying the price",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop&crop=face",
-    name: "Eleanor Davies",
-    role: "Culture Critic",
-    title: "Why Britain's obsession with nostalgia is holding us back",
-  },
-];
+interface OpinionSectionProps {
+  columnists: Columnist[];
+}
 
-export default function OpinionSection() {
+export default function OpinionSection({ columnists }: OpinionSectionProps) {
   return (
     <section className="py-8 bg-gray-50 border-t-4 border-tabloid-red">
       <div className="max-w-[1400px] mx-auto px-4">

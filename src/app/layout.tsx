@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
+import { getActiveSite } from "@/config/sites";
 import "./globals.css";
 
+const site = getActiveSite();
+
 export const metadata: Metadata = {
-  title: "THE DAILY HERALD | Britain's Boldest Newspaper",
-  description: "Breaking news, showbiz, sport, politics and more from Britain's most-read tabloid newspaper.",
+  title: `${site.name} | ${site.tagline}`,
+  description: `Breaking news, celebrity, sports, politics and more from ${site.name} — ${site.state}'s most-read news source.`,
 };
 
 export default function RootLayout({

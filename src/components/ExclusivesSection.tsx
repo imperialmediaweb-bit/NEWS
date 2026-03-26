@@ -4,31 +4,19 @@ import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Clock, Lock } from "lucide-react";
 
-const exclusives = [
-  {
-    img: "https://images.unsplash.com/photo-1606761568499-6d2451b23c66?w=800&h=500&fit=crop",
-    title: "EXCLUSIVE: Inside the secretive private members' club where Cabinet ministers make backroom deals",
-    summary: "A Daily Herald investigation reveals the Mayfair establishment where political power brokers gather away from public scrutiny.",
-    time: "4 hours ago",
-    tag: "Investigation",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1504711434969-e33886168d8c?w=600&h=400&fit=crop",
-    title: "REVEALED: Defence chiefs covered up scale of cyber attacks on UK military systems",
-    summary: "Leaked documents show hundreds of attempted breaches were kept from Parliament.",
-    time: "6 hours ago",
-    tag: "Exclusive",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=600&h=400&fit=crop",
-    title: "The hidden landlords: How anonymous shell companies own 50,000 UK homes",
-    summary: "Our data investigation tracks the offshore ownership trail behind Britain's housing crisis.",
-    time: "8 hours ago",
-    tag: "Data Investigation",
-  },
-];
+interface Exclusive {
+  img: string;
+  title: string;
+  summary: string;
+  time: string;
+  tag: string;
+}
 
-export default function ExclusivesSection() {
+interface ExclusivesSectionProps {
+  exclusives: Exclusive[];
+}
+
+export default function ExclusivesSection({ exclusives }: ExclusivesSectionProps) {
   return (
     <section className="bg-tabloid-black py-10">
       <div className="max-w-[1400px] mx-auto px-4">
