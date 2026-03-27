@@ -16,7 +16,7 @@ export default function BrandBanner({ site }: BrandBannerProps) {
           <Bookmark className="w-8 h-8 text-[#c1121f]" />
           <h2
             className="text-3xl md:text-4xl"
-            style={{ fontFamily: "'DM Serif Display', serif", letterSpacing: "0.01em" }}
+            style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900 }}
           >
             {site.name.toUpperCase()}
           </h2>

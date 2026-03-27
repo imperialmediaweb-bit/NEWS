@@ -26,8 +26,8 @@ function Grid3Layout({ title, articles, accent }: { title: string; articles: Art
   return (
     <section className="py-6">
       {/* Red bar section header */}
-      <div className="text-white text-center py-2.5 mb-5" style={{ backgroundColor: accent }}>
-        <h2 className="text-sm md:text-base font-bold uppercase tracking-widest italic" style={{ fontFamily: "'Oswald', sans-serif" }}>
+      <div className="text-white text-center py-3 mb-6" style={{ backgroundColor: accent }}>
+        <h2 className="text-base md:text-lg font-bold uppercase tracking-widest italic" style={{ fontFamily: "'Oswald', sans-serif" }}>
           {title}
         </h2>
       </div>
@@ -100,8 +100,8 @@ function LeadSideLayout({ title, articles, accent }: { title: string; articles: 
 
   return (
     <section className="py-6">
-      <div className="text-white text-center py-2.5 mb-5" style={{ backgroundColor: accent }}>
-        <h2 className="text-sm md:text-base font-bold uppercase tracking-widest italic" style={{ fontFamily: "'Oswald', sans-serif" }}>
+      <div className="text-white text-center py-3 mb-6" style={{ backgroundColor: accent }}>
+        <h2 className="text-base md:text-lg font-bold uppercase tracking-widest italic" style={{ fontFamily: "'Oswald', sans-serif" }}>
           {title}
         </h2>
       </div>
@@ -158,8 +158,8 @@ function LeadSideLayout({ title, articles, accent }: { title: string; articles: 
 function ListLayout({ title, articles, accent }: { title: string; articles: Article[]; accent: string }) {
   return (
     <section className="py-6">
-      <div className="text-white text-center py-2.5 mb-5" style={{ backgroundColor: accent }}>
-        <h2 className="text-sm md:text-base font-bold uppercase tracking-widest italic" style={{ fontFamily: "'Oswald', sans-serif" }}>
+      <div className="text-white text-center py-3 mb-6" style={{ backgroundColor: accent }}>
+        <h2 className="text-base md:text-lg font-bold uppercase tracking-widest italic" style={{ fontFamily: "'Oswald', sans-serif" }}>
           {title}
         </h2>
       </div>

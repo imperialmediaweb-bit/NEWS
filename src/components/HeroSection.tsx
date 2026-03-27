@@ -13,8 +13,8 @@ export default function HeroSection({ main, side }: HeroSectionProps) {
   return (
     <section className="max-w-[1300px] mx-auto px-4 py-6">
       {/* Section header - red bar */}
-      <div className="bg-[#c1121f] text-white text-center py-2.5 mb-5">
-        <h2 className="text-sm md:text-base font-bold uppercase tracking-widest italic" style={{ fontFamily: "'Oswald', sans-serif" }}>
+      <div className="bg-[#c1121f] text-white text-center py-3 mb-6">
+        <h2 className="text-base md:text-lg font-bold uppercase tracking-widest italic" style={{ fontFamily: "'Oswald', sans-serif" }}>
           Local News
         </h2>
       </div>

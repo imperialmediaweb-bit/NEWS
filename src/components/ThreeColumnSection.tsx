@@ -19,8 +19,8 @@ export default function ThreeColumnSection({ columns }: ThreeColumnSectionProps)
         {columns.map((col, colIdx) => (
           <div key={colIdx}>
             {/* Column header - red bar */}
-            <div className="text-white text-center py-2 mb-4" style={{ backgroundColor: col.accent }}>
-              <h2 className="text-sm font-bold uppercase tracking-widest italic" style={{ fontFamily: "'Oswald', sans-serif" }}>
+            <div className="text-white text-center py-3 mb-4" style={{ backgroundColor: col.accent }}>
+              <h2 className="text-base font-bold uppercase tracking-widest italic" style={{ fontFamily: "'Oswald', sans-serif" }}>
                 {col.title}
               </h2>
             </div>

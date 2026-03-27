@@ -11,8 +11,8 @@ export default function PopularSection({ articles }: PopularSectionProps) {
   return (
     <section className="py-6">
       {/* Red bar header */}
-      <div className="bg-[#c1121f] text-white text-center py-2.5 mb-5">
-        <h2 className="text-sm md:text-base font-bold uppercase tracking-widest italic" style={{ fontFamily: "'Oswald', sans-serif" }}>
+      <div className="bg-[#c1121f] text-white text-center py-3 mb-6">
+        <h2 className="text-base md:text-lg font-bold uppercase tracking-widest italic" style={{ fontFamily: "'Oswald', sans-serif" }}>
           Popular
         </h2>
       </div>
