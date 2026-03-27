@@ -37,7 +37,7 @@ export default function CategoryBlock({ title, articles, accent = "#c1121f" }: C
             className="lg:col-span-6 group cursor-pointer"
           >
             <div className="relative overflow-hidden rounded-lg">
-              <img src={lead.img} alt={lead.title} className="w-full h-[260px] md:h-[300px] object-cover group-hover:scale-105 transition-transform duration-600" />
+              <img src={lead.img} alt={lead.title} className="w-full h-[300px] md:h-[380px] object-cover group-hover:scale-105 transition-transform duration-600" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
               <div className="absolute top-3 left-3">
                 <span className="text-white text-[9px] font-bold uppercase tracking-widest px-2 py-1 rounded-sm" style={{ backgroundColor: accent, fontFamily: "'Oswald', sans-serif" }}>{lead.category}</span>
@@ -65,7 +65,7 @@ export default function CategoryBlock({ title, articles, accent = "#c1121f" }: C
               className="group cursor-pointer card-hover"
             >
               <div className="relative overflow-hidden rounded-lg">
-                <img src={article.img} alt={article.title} className="w-full h-[160px] object-cover group-hover:scale-110 transition-transform duration-500" />
+                <img src={article.img} alt={article.title} className="w-full h-[200px] object-cover group-hover:scale-110 transition-transform duration-500" />
                 <div className="absolute top-2 left-2">
                   <span className="text-white text-[8px] font-bold uppercase tracking-widest px-1.5 py-0.5 rounded-sm" style={{ backgroundColor: accent, fontFamily: "'Oswald', sans-serif" }}>{article.category}</span>
                 </div>

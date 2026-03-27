@@ -54,17 +54,19 @@ export default function Header({ site }: HeaderProps) {
 
       {/* Masthead */}
       <div className="border-b border-gray-100 bg-white">
-        <div className="max-w-[1300px] mx-auto px-4 py-4 md:py-5 flex items-center justify-between">
+        <div className="max-w-[1300px] mx-auto px-4 py-6 md:py-8 flex items-center justify-between">
           <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>
             {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
-          <div className="flex-1 text-center md:text-left">
+          <div className="flex-1 flex items-center justify-center gap-4 md:gap-6">
             <h1
-              className="text-3xl md:text-5xl lg:text-6xl tracking-tight inline-block"
-              style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, letterSpacing: "-0.03em" }}
+              className="text-4xl md:text-6xl lg:text-[5rem] xl:text-[6rem] tracking-tight inline-block leading-none"
+              style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, letterSpacing: "-0.04em" }}
             >
               {site.name.toUpperCase()}
             </h1>
+            {/* Red dash accent — like a rushing train */}
+            <span className="hidden md:block w-16 lg:w-24 h-[6px] bg-[#c1121f] rounded-full" />
           </div>
           <Search className="w-5 h-5 text-gray-500 hover:text-[#c1121f] cursor-pointer transition-colors" />
         </div>

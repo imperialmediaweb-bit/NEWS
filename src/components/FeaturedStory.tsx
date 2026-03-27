@@ -20,7 +20,7 @@ export default function FeaturedStory({ article }: FeaturedStoryProps) {
         <img
           src={article.img}
           alt={article.title}
-          className="w-full h-[350px] md:h-[450px] lg:h-[500px] object-cover group-hover:scale-105 transition-transform duration-700"
+          className="w-full h-[400px] md:h-[500px] lg:h-[600px] object-cover group-hover:scale-105 transition-transform duration-700"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
 

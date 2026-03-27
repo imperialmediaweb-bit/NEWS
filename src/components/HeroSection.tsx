@@ -24,7 +24,7 @@ export default function HeroSection({ main, side }: HeroSectionProps) {
             <img
               src={main.img}
               alt={main.title}
-              className="w-full h-[320px] md:h-[480px] lg:h-[540px] object-cover group-hover:scale-105 transition-transform duration-700"
+              className="w-full h-[400px] md:h-[550px] lg:h-[650px] object-cover group-hover:scale-105 transition-transform duration-700"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent" />
             {/* Badge */}
@@ -66,7 +66,7 @@ export default function HeroSection({ main, side }: HeroSectionProps) {
                 <img
                   src={article.img}
                   alt={article.title}
-                  className="w-full h-[165px] object-cover group-hover:scale-110 transition-transform duration-600"
+                  className="w-full h-[205px] object-cover group-hover:scale-110 transition-transform duration-600"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
                 <div className="absolute top-3 left-3">

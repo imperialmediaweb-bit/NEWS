@@ -20,7 +20,11 @@ export interface SiteContent {
   politics: Article[];
   technology: Article[];
   sports: Article[];
+  entertainment: Article[];
+  business: Article[];
+  opinion: Article[];
   featuredStory: Article;
+  featuredStory2: Article;
   latestPosts: Article[];
   sidebarLatest: Article[];
   sidebarNewsletter: { title: string; description: string };
@@ -103,6 +107,32 @@ export function generateContent(site: SiteConfig): SiteContent {
       { img: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=600&h=400&fit=crop", title: `March Madness: ${state} College Pulls Off Stunning Upset`, category: "NCAA", date: "March 26, 2026" },
       { img: "https://images.unsplash.com/photo-1517466787929-bc90951d0974?w=600&h=400&fit=crop", title: "NASCAR Star Hints at Shock Retirement After Disastrous Race", category: "NASCAR", date: "March 26, 2026" },
     ],
+    entertainment: [
+      { img: "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=800&h=600&fit=crop", title: `Taylor Swift Confirms Surprise Concert at ${city} Stadium — Fans Scramble for Tickets`, summary: `The pop megastar stunned fans with a social media post confirming a previously unannounced stop in ${city} during her record-breaking tour.`, category: "Entertainment", date: "March 27, 2026" },
+      { img: "https://images.unsplash.com/photo-1585699324551-f6c309eedeca?w=600&h=400&fit=crop", title: "Dancing With The Stars 2026: First Celebrity Contestants Officially Revealed", category: "TV", date: "March 27, 2026" },
+      { img: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=600&h=400&fit=crop", title: "Netflix Smash Hit Breaks All-Time Streaming Record With 200M Views in One Week", category: "Streaming", date: "March 26, 2026" },
+      { img: "https://images.unsplash.com/photo-1594394874895-f484d5c5e88a?w=600&h=400&fit=crop", title: `Reality Star's $12M ${city} Mansion Party Ends With Police, 3 Arrests`, category: "Celebrity", date: "March 26, 2026" },
+    ],
+    business: [
+      { img: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800&h=600&fit=crop", title: `Wall Street Panic: ${state} Pension Fund Loses $2 Billion in Market Rout`, summary: `State officials scramble as aggressive investment strategy backfires spectacularly amid market volatility.`, category: "Finance", date: "March 27, 2026" },
+      { img: "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=600&h=400&fit=crop", title: `${state} Property Tax Loophole Could Save Homeowners $5,000 a Year`, category: "Money", date: "March 27, 2026" },
+      { img: "https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=600&h=400&fit=crop", title: "Gas Prices Set to Spike 30% This Summer, Analysts Warn", category: "Economy", date: "March 26, 2026" },
+      { img: "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=600&h=400&fit=crop", title: `Amazon Opens Massive New Warehouse in ${city}, Creating 3,000 Jobs`, category: "Jobs", date: "March 26, 2026" },
+    ],
+    opinion: [
+      { img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=800&h=600&fit=crop", title: `${state} Deserves Better — Why Our Governor Must Go Now`, summary: `The time for half-measures is over. Our state needs leadership that puts people over politics.`, category: "Opinion", date: "March 27, 2026" },
+      { img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=400&fit=crop", title: "Stop Blaming Social Media for Everything Wrong With Kids Today", category: "Opinion", date: "March 27, 2026" },
+      { img: "https://images.unsplash.com/photo-1453728013993-6d66e9c9123a?w=600&h=400&fit=crop", title: `I Moved to ${city} 5 Years Ago and I'd Do It Again in a Heartbeat`, category: "Column", date: "March 26, 2026" },
+      { img: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&h=400&fit=crop", title: "The American Dream Isn't Dead — But Washington Is Killing It", category: "Opinion", date: "March 26, 2026" },
+    ],
+    featuredStory2: {
+      img: "https://images.unsplash.com/photo-1504711434969-e33886168d8c?w=1400&h=700&fit=crop",
+      title: `BOMBSHELL: ${city} Police Chief Resigns After Body Camera Footage Leaks`,
+      summary: `The 12-year veteran abruptly stepped down just hours after ${name} obtained explosive footage that contradicts official department statements about a controversial use-of-force incident last month.`,
+      category: "Exclusive",
+      date: "March 27, 2026",
+      author: "David Chen, Crime & Justice Editor",
+    },
     featuredStory: {
       img: "https://images.unsplash.com/photo-1606761568499-6d2451b23c66?w=1400&h=700&fit=crop",
       title: `EXCLUSIVE: Inside the Secretive ${city} Club Where ${state} Power Brokers Make Backroom Deals`,
@@ -118,6 +148,9 @@ export function generateContent(site: SiteConfig): SiteContent {
       { img: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&h=400&fit=crop", title: "Doctor Reveals 5-Minute Morning Routine That Adds Years to Life", category: "Health", date: "March 26, 2026" },
       { img: "https://images.unsplash.com/photo-1585699324551-f6c309eedeca?w=600&h=400&fit=crop", title: "Dancing With The Stars 2026: First Contestants Revealed", category: "TV", date: "March 26, 2026" },
       { img: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=600&h=400&fit=crop", title: "Netflix Hit Breaks Streaming Record With 200M Views", category: "Streaming", date: "March 25, 2026" },
+      { img: "https://images.unsplash.com/photo-1532375810709-75b1da00537c?w=600&h=400&fit=crop", title: `Mom Wins $75,000 Lawsuit After Humiliating Walmart Incident in ${city}`, category: "News", date: "March 25, 2026" },
+      { img: "https://images.unsplash.com/photo-1584036561566-baf8f5f1b144?w=600&h=400&fit=crop", title: `${state} Hospital ER Wait Times Hit Record 9 Hours, Patients Outraged`, category: "Health", date: "March 25, 2026" },
+      { img: "https://images.unsplash.com/photo-1517466787929-bc90951d0974?w=600&h=400&fit=crop", title: `${city} Marathon Runner Collapses at Finish Line, Saved by Spectator Nurse`, category: "Inspiring", date: "March 25, 2026" },
     ],
     sidebarLatest: [
       { img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=150&fit=crop", title: `${state}'s Best BBQ Joints — Is Yours on the List?`, category: "Food", date: "5h ago" },
