@@ -19,8 +19,8 @@ export default function Footer({ site, about }: FooterProps) {
           {/* About */}
           <div className="md:col-span-4">
             <h3
-              className="text-3xl font-black tracking-tight mb-4"
-              style={{ fontFamily: "'Playfair Display', serif" }}
+              className="text-3xl tracking-tight mb-4"
+              style={{ fontFamily: "'Anton', sans-serif", letterSpacing: "0.02em" }}
             >
               {site.name.toUpperCase()}
             </h3>

@@ -14,6 +14,7 @@ export interface SiteContent {
   heroMain: Article;
   heroSide: Article[];
   trending: Article[];
+  popular: Article[];
   localNews: Article[];
   usNews: Article[];
   worldNews: Article[];
@@ -23,6 +24,8 @@ export interface SiteContent {
   entertainment: Article[];
   business: Article[];
   opinion: Article[];
+  showcase: Article[];
+  celebrity: Article[];
   featuredStory: Article;
   featuredStory2: Article;
   latestPosts: Article[];
@@ -70,6 +73,26 @@ export function generateContent(site: SiteConfig): SiteContent {
       { img: "https://images.unsplash.com/photo-1594394874895-f484d5c5e88a?w=200&h=150&fit=crop", title: `Inside the $12M mansion where reality star threw wild party`, category: "Celebrity", date: "5h ago" },
       { img: "https://images.unsplash.com/photo-1532375810709-75b1da00537c?w=200&h=150&fit=crop", title: `Mom wins $75,000 after Walmart humiliated her at ${city} store`, category: "News", date: "6h ago" },
       { img: "https://images.unsplash.com/photo-1584036561566-baf8f5f1b144?w=200&h=150&fit=crop", title: `${state} hospital ER wait times hit record 9 hours`, category: "Health", date: "7h ago" },
+    ],
+    popular: [
+      { img: "https://images.unsplash.com/photo-1504711434969-e33886168d8c?w=300&h=200&fit=crop", title: `${city} teacher arrested after scandal surfaces`, category: "Crime", date: "2h ago" },
+      { img: "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=300&h=200&fit=crop", title: `Save $5K on ${state} taxes with this loophole`, category: "Money", date: "3h ago" },
+      { img: "https://images.unsplash.com/photo-1590650153855-d9e808231d41?w=300&h=200&fit=crop", title: `${city} spends $3M on bike lanes nobody uses`, category: "Local", date: "4h ago" },
+      { img: "https://images.unsplash.com/photo-1594394874895-f484d5c5e88a?w=300&h=200&fit=crop", title: `Inside the $12M mansion party that ended in arrests`, category: "Celebrity", date: "5h ago" },
+      { img: "https://images.unsplash.com/photo-1532375810709-75b1da00537c?w=300&h=200&fit=crop", title: `Mom wins $75K after Walmart humiliation in ${city}`, category: "News", date: "6h ago" },
+      { img: "https://images.unsplash.com/photo-1584036561566-baf8f5f1b144?w=300&h=200&fit=crop", title: `${state} ER wait times hit 9 hours`, category: "Health", date: "7h ago" },
+    ],
+    showcase: [
+      { img: "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=600&h=400&fit=crop", title: `The ${city} restaurant that just won America's best diner award`, category: "Showcase", date: "March 27, 2026" },
+      { img: "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=300&h=200&fit=crop", title: `The secret ${state} vacation spot tourists haven't found`, category: "Travel", date: "March 26, 2026" },
+      { img: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=300&h=200&fit=crop", title: `$6 meal deal celebrity chefs say beats any restaurant`, category: "Food", date: "March 26, 2026" },
+      { img: "https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?w=300&h=200&fit=crop", title: `${city}'s hidden gem restaurants locals don't want you to know`, category: "Food", date: "March 25, 2026" },
+    ],
+    celebrity: [
+      { img: "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=600&h=400&fit=crop", title: `Kardashian documentary sparks controversy in ${city}`, category: "Celebrity", date: "March 27, 2026" },
+      { img: "https://images.unsplash.com/photo-1585699324551-f6c309eedeca?w=300&h=200&fit=crop", title: `DWTS 2026: first celebrity contestants revealed`, category: "TV", date: "March 26, 2026" },
+      { img: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=300&h=200&fit=crop", title: `Netflix hit breaks all-time streaming record`, category: "Streaming", date: "March 26, 2026" },
+      { img: "https://images.unsplash.com/photo-1594394874895-f484d5c5e88a?w=300&h=200&fit=crop", title: `Reality star's $12M ${city} party ends with police`, category: "Celebrity", date: "March 25, 2026" },
     ],
     localNews: [
       { img: "https://images.unsplash.com/photo-1569025690938-a00729c9e1f9?w=800&h=600&fit=crop", title: `Major Transit Strike to Paralyze ${city} as Union Rejects Pay Offer`, summary: `Commuters face chaos as three unions announce coordinated walkout affecting every route in the ${city} metro area.`, category: "Local News", date: "March 27, 2026" },
