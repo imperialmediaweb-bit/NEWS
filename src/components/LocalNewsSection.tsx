@@ -36,7 +36,7 @@ export default function LocalNewsSection({ articles }: LocalNewsSectionProps) {
               <img
                 src={article.img}
                 alt={article.title}
-                className="w-full h-[260px] object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                className="w-full h-[300px] object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent" />
               <div className="absolute top-4 left-4">

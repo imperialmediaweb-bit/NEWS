@@ -31,7 +31,7 @@ function NewsColumn({ title, articles }: { title: string; articles: Article[] })
             transition={{ delay: i * 0.05 }}
             className={`flex gap-3 cursor-pointer group pb-4 ${i < articles.length - 1 ? "border-b border-gray-100" : ""}`}
           >
-            <div className="relative overflow-hidden rounded shrink-0 w-[85px] h-[65px]">
+            <div className="relative overflow-hidden rounded shrink-0 w-[100px] h-[75px]">
               <img
                 src={article.img}
                 alt={article.title}

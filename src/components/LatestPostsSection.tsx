@@ -56,7 +56,7 @@ export default function LatestPostsSection({
               transition={{ delay: i * 0.05 }}
               className="flex gap-5 cursor-pointer group py-5 border-b border-gray-200 hover:bg-white/80 transition-colors px-3 -mx-3 rounded-lg"
             >
-              <div className="relative overflow-hidden rounded-lg shrink-0 w-[200px] h-[140px] shadow-sm">
+              <div className="relative overflow-hidden rounded-lg shrink-0 w-[240px] h-[170px] shadow-sm">
                 <img
                   src={post.img}
                   alt={post.title}
@@ -124,7 +124,7 @@ export default function LatestPostsSection({
                 transition={{ delay: i * 0.05 }}
                 className={`flex gap-3 cursor-pointer group pb-4 ${i < tabContent[activeTab].length - 1 ? "border-b border-gray-100" : ""}`}
               >
-                <div className="relative overflow-hidden rounded shrink-0 w-[75px] h-[58px]">
+                <div className="relative overflow-hidden rounded shrink-0 w-[90px] h-[68px]">
                   <img
                     src={article.img}
                     alt={article.title}

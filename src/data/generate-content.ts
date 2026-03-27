@@ -221,6 +221,20 @@ export function generateContent(site: SiteConfig): SiteContent {
         date: "March 24, 2026",
         time: "8 hours ago",
       },
+      {
+        img: "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=400&h=300&fit=crop",
+        title: "Decision after trial: New York judge reverses two wrongful convictions",
+        category: "US News",
+        date: "March 24, 2026",
+        time: "9 hours ago",
+      },
+      {
+        img: "https://images.unsplash.com/photo-1560472355-536de3962603?w=400&h=300&fit=crop",
+        title: "Opioid crisis: New federal program targets rural communities hardest hit",
+        category: "US News",
+        date: "March 23, 2026",
+        time: "12 hours ago",
+      },
     ],
 
     celebrityArticles: [
@@ -386,6 +400,30 @@ export function generateContent(site: SiteConfig): SiteContent {
         date: "March 25, 2026",
         time: "4 hours ago",
       },
+      {
+        img: "https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?w=400&h=300&fit=crop",
+        title: `Enhancing warehouse safety through predictive technology — ${state}'s occupational health initiative`,
+        summary: `New program uses AI-powered monitoring systems to prevent workplace injuries before they happen.`,
+        category: "Business",
+        date: "March 25, 2026",
+        time: "5 hours ago",
+      },
+      {
+        img: "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=400&h=300&fit=crop",
+        title: `The Luna, St. Pete Beach's posh new coastal retreat featuring the Malaysian Reserve`,
+        summary: `${state}'s latest luxury resort is already attracting international attention from travel critics.`,
+        category: "Travel",
+        date: "March 24, 2026",
+        time: "7 hours ago",
+      },
+      {
+        img: "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=400&h=300&fit=crop",
+        title: `${state} schools embrace new AI tutoring program backed by $20M federal grant`,
+        summary: `The initiative aims to personalize learning for 500,000 students across the state.`,
+        category: "Education",
+        date: "March 24, 2026",
+        time: "8 hours ago",
+      },
     ],
 
     sidebarNew: [
@@ -412,6 +450,18 @@ export function generateContent(site: SiteConfig): SiteContent {
         title: `NASCAR star hints at shock retirement after ${state} race`,
         date: "March 25, 2026",
         time: "6 hours ago",
+      },
+      {
+        img: "https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=150&h=100&fit=crop",
+        title: `${state} championship: Grace Christian surges to defeat South and secure title`,
+        date: "March 24, 2026",
+        time: "8 hours ago",
+      },
+      {
+        img: "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=150&h=100&fit=crop",
+        title: `Heart doctor reveals lifestyle changes that transformed his patients`,
+        date: "March 24, 2026",
+        time: "10 hours ago",
       },
     ],
 
