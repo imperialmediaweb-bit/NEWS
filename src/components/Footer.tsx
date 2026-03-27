@@ -18,11 +18,13 @@ export default function Footer({ site, about }: FooterProps) {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10">
           {/* About */}
           <div className="md:col-span-4">
-            <h3
-              className="text-3xl tracking-tight mb-4"
-              style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900 }}
-            >
-              {site.name.toUpperCase()}
+            <h3 className="flex items-baseline gap-2 mb-4">
+              <span className="text-2xl md:text-3xl text-white" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900 }}>
+                {site.logoFirst}
+              </span>
+              <span className="text-2xl md:text-3xl text-[#c1121f]" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900 }}>
+                {site.logoSecond}
+              </span>
             </h3>
             <p className="text-gray-400 text-sm leading-relaxed mb-5">{about}</p>
             <div className="flex items-center gap-3">

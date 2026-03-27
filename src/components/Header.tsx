@@ -43,17 +43,30 @@ export default function Header({ site }: HeaderProps) {
             {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
 
-          {/* Logo centered — engraved multi-line newspaper masthead */}
+          {/* Logo centered — unique two-part newspaper identity */}
           <div className="flex-1 text-center">
-            <h1
-              className="masthead-logo text-4xl md:text-6xl lg:text-7xl inline-block leading-none"
-              style={{ fontFamily: "'Oswald', sans-serif", fontWeight: 700, letterSpacing: "0.04em" }}
-            >
-              {site.name.toUpperCase()}
+            <h1 className="inline-flex items-baseline gap-1 md:gap-2 leading-none">
+              <span
+                className="text-3xl md:text-5xl lg:text-6xl text-black"
+                style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, letterSpacing: "-0.02em" }}
+              >
+                {site.logoFirst}
+              </span>
+              <span
+                className="text-3xl md:text-5xl lg:text-6xl text-[#c1121f]"
+                style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, letterSpacing: "-0.02em" }}
+              >
+                {site.logoSecond}
+              </span>
             </h1>
-            <p className="text-[10px] md:text-[12px] text-[#c1121f] mt-1.5 italic" style={{ fontFamily: "'Libre Baskerville', serif" }}>
-              &ldquo;{site.tagline}&rdquo;
-            </p>
+            {/* Red accent line */}
+            <div className="flex items-center justify-center gap-3 mt-2">
+              <span className="h-[2px] w-8 md:w-12 bg-[#c1121f]" />
+              <p className="text-[9px] md:text-[11px] text-gray-500 italic" style={{ fontFamily: "'Libre Baskerville', serif" }}>
+                {site.tagline}
+              </p>
+              <span className="h-[2px] w-8 md:w-12 bg-[#c1121f]" />
+            </div>
           </div>
 
           {/* Pricing Plans - right */}

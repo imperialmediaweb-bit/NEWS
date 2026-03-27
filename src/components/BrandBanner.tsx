@@ -14,11 +14,13 @@ export default function BrandBanner({ site }: BrandBannerProps) {
         {/* Logo */}
         <div className="flex items-center gap-3 shrink-0">
           <Bookmark className="w-8 h-8 text-[#c1121f]" />
-          <h2
-            className="masthead-logo text-2xl md:text-3xl"
-            style={{ fontFamily: "'Oswald', sans-serif", fontWeight: 700, letterSpacing: "0.04em" }}
-          >
-            {site.name.toUpperCase()}
+          <h2 className="flex items-baseline gap-1.5">
+            <span className="text-2xl md:text-3xl text-black" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900 }}>
+              {site.logoFirst}
+            </span>
+            <span className="text-2xl md:text-3xl text-[#c1121f]" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900 }}>
+              {site.logoSecond}
+            </span>
           </h2>
         </div>
         {/* About text */}
