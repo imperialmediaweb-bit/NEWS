@@ -46,7 +46,7 @@ function Grid3Layout({ title, articles, accent }: { title: string; articles: Art
               <img
                 src={article.img}
                 alt={article.title}
-                className="w-full h-[280px] md:h-[340px] object-cover group-hover:scale-105 transition-transform duration-600"
+                className="w-full h-[340px] md:h-[420px] object-cover group-hover:scale-105 transition-transform duration-600"
               />
               <div className="absolute top-3 left-3">
                 <span className="text-white text-[9px] font-bold uppercase tracking-widest px-2.5 py-1 shadow-lg" style={{ backgroundColor: accent, fontFamily: "'Oswald', sans-serif" }}>
@@ -79,7 +79,7 @@ function Grid3Layout({ title, articles, accent }: { title: string; articles: Art
               className="group cursor-pointer"
             >
               <div className="relative overflow-hidden">
-                <img src={article.img} alt={article.title} className="w-full h-[160px] object-cover group-hover:scale-110 transition-transform duration-500" />
+                <img src={article.img} alt={article.title} className="w-full h-[200px] object-cover group-hover:scale-110 transition-transform duration-500" />
               </div>
               <h4 className="mt-2 text-[13px] font-bold leading-tight group-hover:text-[#c1121f] transition-colors line-clamp-2" style={{ fontFamily: "'Source Serif 4', serif" }}>
                 {article.title}
@@ -115,7 +115,7 @@ function LeadSideLayout({ title, articles, accent }: { title: string; articles: 
             className="lg:col-span-7 group cursor-pointer"
           >
             <div className="relative overflow-hidden">
-              <img src={lead.img} alt={lead.title} className="w-full h-[300px] md:h-[400px] object-cover group-hover:scale-105 transition-transform duration-600" />
+              <img src={lead.img} alt={lead.title} className="w-full h-[350px] md:h-[450px] object-cover group-hover:scale-105 transition-transform duration-600" />
               <div className="absolute top-3 left-3">
                 <span className="text-white text-[9px] font-bold uppercase tracking-widest px-2.5 py-1 shadow-lg" style={{ backgroundColor: accent, fontFamily: "'Oswald', sans-serif" }}>{lead.category}</span>
               </div>
@@ -140,7 +140,7 @@ function LeadSideLayout({ title, articles, accent }: { title: string; articles: 
               transition={{ delay: i * 0.08 }}
               className="flex gap-3 group cursor-pointer"
             >
-              <img src={article.img} alt={article.title} className="w-[120px] h-[85px] object-cover shrink-0 group-hover:opacity-90 transition-opacity" />
+              <img src={article.img} alt={article.title} className="w-[140px] h-[100px] object-cover shrink-0 group-hover:opacity-90 transition-opacity" />
               <div className="min-w-0">
                 <span className="text-[9px] font-bold uppercase tracking-widest" style={{ color: accent, fontFamily: "'Oswald', sans-serif" }}>{article.category}</span>
                 <h4 className="text-[14px] font-bold leading-tight group-hover:text-[#c1121f] transition-colors line-clamp-2 mt-0.5" style={{ fontFamily: "'Source Serif 4', serif" }}>{article.title}</h4>
@@ -174,10 +174,10 @@ function ListLayout({ title, articles, accent }: { title: string; articles: Arti
             transition={{ delay: i * 0.05 }}
             className="flex gap-4 group cursor-pointer pb-5 border-b border-gray-200"
           >
-            <img src={article.img} alt={article.title} className="w-[140px] h-[100px] object-cover shrink-0 group-hover:opacity-90 transition-opacity" />
+            <img src={article.img} alt={article.title} className="w-[160px] h-[115px] object-cover shrink-0 group-hover:opacity-90 transition-opacity" />
             <div className="min-w-0">
               <span className="text-[9px] font-bold uppercase tracking-widest" style={{ color: accent, fontFamily: "'Oswald', sans-serif" }}>{article.category}</span>
-              <h4 className="text-[16px] font-bold leading-snug group-hover:text-[#c1121f] transition-colors line-clamp-2 mt-0.5" style={{ fontFamily: "'Source Serif 4', serif", fontWeight: 700 }}>
+              <h4 className="text-[17px] font-bold leading-snug group-hover:text-[#c1121f] transition-colors line-clamp-2 mt-0.5" style={{ fontFamily: "'Source Serif 4', serif", fontWeight: 700 }}>
                 {article.title}
               </h4>
               {article.summary && <p className="text-gray-500 text-[13px] line-clamp-2 mt-1 leading-relaxed">{article.summary}</p>}

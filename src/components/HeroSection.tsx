@@ -33,7 +33,7 @@ export default function HeroSection({ main, side }: HeroSectionProps) {
               <img
                 src={article.img}
                 alt={article.title}
-                className="w-full h-[300px] md:h-[380px] lg:h-[420px] object-cover group-hover:scale-105 transition-transform duration-700"
+                className="w-full h-[380px] md:h-[450px] lg:h-[520px] object-cover group-hover:scale-105 transition-transform duration-700"
               />
               {/* Category badge */}
               <div className="absolute top-3 left-3">

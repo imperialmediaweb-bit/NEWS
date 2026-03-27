@@ -38,7 +38,7 @@ export default function FeaturedStory({ article }: FeaturedStoryProps) {
         <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10">
           <h2
             className="text-white text-2xl md:text-4xl lg:text-5xl font-black leading-[1.05] mb-4 max-w-4xl drop-shadow-lg"
-            style={{ fontFamily: "'Playfair Display', serif" }}
+            style={{ fontFamily: "'DM Serif Display', serif" }}
           >
             {article.title}
           </h2>

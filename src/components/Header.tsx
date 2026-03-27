@@ -46,8 +46,8 @@ export default function Header({ site }: HeaderProps) {
           {/* Logo centered */}
           <div className="flex-1 text-center">
             <h1
-              className="text-4xl md:text-6xl lg:text-7xl xl:text-8xl inline-block leading-none"
-              style={{ fontFamily: "'Anton', sans-serif", fontWeight: 400, letterSpacing: "0.02em" }}
+              className="text-5xl md:text-7xl lg:text-8xl xl:text-[7rem] inline-block leading-none"
+              style={{ fontFamily: "'DM Serif Display', serif", fontWeight: 400, letterSpacing: "0.01em" }}
             >
               {site.name.toUpperCase()}
             </h1>

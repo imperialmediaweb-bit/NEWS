@@ -31,7 +31,7 @@ export default function PopularSection({ articles }: PopularSectionProps) {
               <img
                 src={article.img}
                 alt={article.title}
-                className="w-full h-[120px] object-cover group-hover:scale-110 transition-transform duration-500"
+                className="w-full h-[150px] object-cover group-hover:scale-110 transition-transform duration-500"
               />
               <div className="absolute top-1.5 left-1.5">
                 <span className="bg-[#c1121f] text-white text-[7px] font-bold uppercase tracking-widest px-1.5 py-0.5" style={{ fontFamily: "'Oswald', sans-serif" }}>

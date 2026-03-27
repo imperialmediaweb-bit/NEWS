@@ -20,7 +20,7 @@ export default function Footer({ site, about }: FooterProps) {
           <div className="md:col-span-4">
             <h3
               className="text-3xl tracking-tight mb-4"
-              style={{ fontFamily: "'Anton', sans-serif", letterSpacing: "0.02em" }}
+              style={{ fontFamily: "'DM Serif Display', serif", letterSpacing: "0.01em" }}
             >
               {site.name.toUpperCase()}
             </h3>

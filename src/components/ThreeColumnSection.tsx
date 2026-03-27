@@ -37,7 +37,7 @@ export default function ThreeColumnSection({ columns }: ThreeColumnSectionProps)
                   <img
                     src={col.articles[0].img}
                     alt={col.articles[0].title}
-                    className="w-full h-[200px] object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="w-full h-[260px] object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                 </div>
                 <h3
@@ -61,7 +61,7 @@ export default function ThreeColumnSection({ columns }: ThreeColumnSectionProps)
                   transition={{ delay: i * 0.05 }}
                   className="flex gap-3 group cursor-pointer pb-3 border-b border-gray-100"
                 >
-                  <img src={article.img} alt={article.title} className="w-[80px] h-[60px] object-cover shrink-0" />
+                  <img src={article.img} alt={article.title} className="w-[100px] h-[75px] object-cover shrink-0" />
                   <div className="min-w-0">
                     <h4 className="text-[13px] font-bold leading-tight group-hover:text-[#c1121f] transition-colors line-clamp-2" style={{ fontFamily: "'Source Serif 4', serif" }}>
                       {article.title}
