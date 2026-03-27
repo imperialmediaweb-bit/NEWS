@@ -2,26 +2,18 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  Search,
-  Menu,
-  X,
-  Cloud,
-  ThermometerSun,
-  User,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Mail, Menu, X } from "lucide-react";
 import { SiteConfig } from "@/config/site-config";
 
 const categories = [
-  "Local News",
-  "US News",
-  "Politics",
-  "World",
-  "Sports",
-  "Celebrity",
-  "Lifestyle",
-  "Opinion",
+  "HOME",
+  "LOCAL NEWS",
+  "POLITICS",
+  "NATIONAL NEWS",
+  "WORLD",
+  "LIFESTYLE",
+  "STORIES",
+  "MATERIALS",
 ];
 
 interface HeaderProps {
@@ -30,7 +22,6 @@ interface HeaderProps {
 
 export default function Header({ site }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
 
   const today = new Date().toLocaleDateString("en-US", {
     weekday: "long",
@@ -40,112 +31,56 @@ export default function Header({ site }: HeaderProps) {
   });
 
   return (
-    <header className="bg-white border-b-4 border-tabloid-red sticky top-0 z-50 shadow-md">
-      {/* Top utility bar */}
-      <div className="bg-tabloid-black text-white">
-        <div className="max-w-[1400px] mx-auto px-4 flex items-center justify-between py-1.5 text-xs">
-          <div className="flex items-center gap-4">
-            <span className="text-gray-300">{today}</span>
-            <span className="hidden md:flex items-center gap-1 text-gray-300">
-              <Cloud className="w-3 h-3" />
-              {site.city}, {site.stateAbbr} 72°F
-              <ThermometerSun className="w-3 h-3 ml-1" />
-            </span>
-          </div>
-          <div className="flex items-center gap-3">
-            <button className="hover:text-tabloid-accent-red transition-colors flex items-center gap-1">
-              <User className="w-3 h-3" /> Sign In
-            </button>
+    <header className="bg-white z-50">
+      {/* Top dark bar */}
+      <div className="bg-[#222] text-white">
+        <div className="max-w-[1200px] mx-auto px-4 flex items-center justify-between py-2 text-xs">
+          <span className="text-gray-300">{today}</span>
+          <div className="flex items-center gap-1 text-gray-300">
+            <a href="#" className="hover:text-white transition-colors px-2">HOME</a>
             <span className="text-gray-500">|</span>
-            <button className="hover:text-tabloid-accent-red transition-colors">Register</button>
+            <a href="#" className="hover:text-white transition-colors px-2">CONTACT</a>
+            <span className="text-gray-500">|</span>
+            <a href="#" className="hover:text-white transition-colors px-2">MY PAGE</a>
           </div>
         </div>
       </div>
 
-      {/* Main masthead */}
-      <div className="max-w-[1400px] mx-auto px-4 py-3 md:py-4">
-        <div className="flex items-center justify-between">
-          {/* Mobile menu toggle */}
-          <button
-            className="md:hidden"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
-
-          {/* Logo */}
-          <div className="flex-1 flex justify-center md:justify-start">
-            <div className="relative">
-              <div className="flex items-center gap-0">
-                <div className="bg-tabloid-red px-3 py-1 md:px-4 md:py-1.5">
-                  <span
-                    className="text-white text-2xl md:text-4xl lg:text-5xl tracking-tighter"
-                    style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900 }}
-                  >
-                    {site.logoFirst}
-                  </span>
-                </div>
-                <div className="bg-tabloid-black px-3 py-1 md:px-4 md:py-1.5">
-                  <span
-                    className="text-white text-2xl md:text-4xl lg:text-5xl tracking-tighter"
-                    style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900 }}
-                  >
-                    {site.logoSecond}
-                  </span>
-                </div>
-              </div>
-              <div className="text-center mt-0.5">
-                <span
-                  className="text-[10px] md:text-xs tracking-[0.3em] uppercase text-gray-500"
-                  style={{ fontFamily: "'Oswald', sans-serif" }}
-                >
-                  {site.tagline}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Search */}
-          <div className="flex items-center gap-2">
-            <AnimatePresence>
-              {searchOpen && (
-                <motion.input
-                  initial={{ width: 0, opacity: 0 }}
-                  animate={{ width: 200, opacity: 1 }}
-                  exit={{ width: 0, opacity: 0 }}
-                  className="border border-tabloid-border rounded px-3 py-1.5 text-sm"
-                  placeholder="Search stories..."
-                  autoFocus
-                />
-              )}
-            </AnimatePresence>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setSearchOpen(!searchOpen)}
-            >
-              <Search className="w-5 h-5" />
-            </Button>
-          </div>
-        </div>
+      {/* Masthead */}
+      <div className="max-w-[1200px] mx-auto px-4 py-6 md:py-8 flex items-center justify-center relative">
+        <Mail className="w-5 h-5 text-gray-400 absolute left-4 md:relative md:left-auto md:mr-4" />
+        <h1
+          className="text-4xl md:text-6xl lg:text-7xl tracking-tight text-center"
+          style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900 }}
+        >
+          {site.name.toUpperCase()}
+        </h1>
       </div>
 
-      {/* Navigation */}
+      {/* Red navigation bar */}
       <nav className="bg-tabloid-red">
-        <div className="max-w-[1400px] mx-auto px-4">
-          <ul className="hidden md:flex items-center">
-            {categories.map((cat) => (
-              <li key={cat}>
-                <a
-                  href="#"
-                  className="block px-4 lg:px-5 py-2.5 text-white text-sm font-bold uppercase tracking-wide hover:bg-tabloid-dark-red transition-colors"
-                  style={{ fontFamily: "'Oswald', sans-serif" }}
-                >
-                  {cat}
-                </a>
-              </li>
-            ))}
-          </ul>
+        <div className="max-w-[1200px] mx-auto px-4">
+          <div className="flex items-center justify-between md:justify-center">
+            <button
+              className="md:hidden p-2 text-white"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+            <ul className="hidden md:flex items-center justify-center">
+              {categories.map((cat) => (
+                <li key={cat}>
+                  <a
+                    href="#"
+                    className="block px-4 lg:px-5 py-3 text-white text-xs font-bold tracking-wider hover:bg-tabloid-dark-red transition-colors"
+                    style={{ fontFamily: "'Oswald', sans-serif" }}
+                  >
+                    {cat}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </nav>
 
@@ -156,14 +91,14 @@ export default function Header({ site }: HeaderProps) {
             initial={{ height: 0 }}
             animate={{ height: "auto" }}
             exit={{ height: 0 }}
-            className="md:hidden overflow-hidden bg-tabloid-black"
+            className="md:hidden overflow-hidden bg-tabloid-dark-red"
           >
             <ul className="py-2">
               {categories.map((cat) => (
                 <li key={cat}>
                   <a
                     href="#"
-                    className="block px-6 py-3 text-white font-bold uppercase tracking-wide hover:bg-tabloid-dark-red transition-colors text-sm"
+                    className="block px-6 py-3 text-white font-bold uppercase tracking-wide hover:bg-tabloid-red transition-colors text-sm"
                     style={{ fontFamily: "'Oswald', sans-serif" }}
                   >
                     {cat}

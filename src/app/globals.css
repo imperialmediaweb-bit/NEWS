@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
+  --background: #f5f5f5;
   --foreground: #111111;
 }
 
@@ -24,6 +24,18 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
 }
 
 /* Scrollbar styling */
@@ -36,17 +48,4 @@ body {
 ::-webkit-scrollbar-thumb {
   background: #c1121f;
   border-radius: 4px;
-}
-
-/* Ticker animation */
-@keyframes ticker {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
-.animate-ticker {
-  animation: ticker 30s linear infinite;
-}
-.animate-ticker:hover {
-  animation-play-state: paused;
 }
