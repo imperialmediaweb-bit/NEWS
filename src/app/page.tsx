@@ -4,14 +4,11 @@ import { getActiveSite } from "@/config/sites";
 import { generateContent } from "@/data/generate-content";
 
 import Header from "@/components/Header";
-import PromoBanner from "@/components/PromoBanner";
-import LocalNewsSection from "@/components/LocalNewsSection";
-import PopularSection from "@/components/PopularSection";
-import BrandBanner from "@/components/BrandBanner";
-import ThreeColumnSection from "@/components/ThreeColumnSection";
-import USNewsSection from "@/components/USNewsSection";
-import ThreeColumnNews from "@/components/ThreeColumnNews";
-import LatestPostsSection from "@/components/LatestPostsSection";
+import HeroSection from "@/components/HeroSection";
+import CategoryBlock from "@/components/CategoryBlock";
+import FeaturedStory from "@/components/FeaturedStory";
+import Sidebar from "@/components/Sidebar";
+import LatestPostsGrid from "@/components/LatestPostsGrid";
 import Footer from "@/components/Footer";
 
 const site = getActiveSite();
@@ -19,45 +16,46 @@ const content = generateContent(site);
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-[#f5f5f5]">
+    <div className="min-h-screen bg-[#f8f8f8]">
       <Header site={site} />
 
-      <PromoBanner />
+      {/* Hero */}
+      <HeroSection main={content.heroMain} side={content.heroSide} />
 
-      <LocalNewsSection articles={content.localNews} />
+      {/* Main content + sidebar layout */}
+      <div className="max-w-[1300px] mx-auto px-4">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          {/* Main content area */}
+          <div className="lg:col-span-8">
+            <CategoryBlock title="Local News" articles={content.localNews} accent="#c1121f" />
+            <CategoryBlock title="US News" articles={content.usNews} accent="#1a1a1a" />
+            <CategoryBlock title="World News" articles={content.worldNews} accent="#0077b6" />
 
-      <PopularSection articles={content.popularArticles} />
+            {/* Featured Story */}
+            <FeaturedStory article={content.featuredStory} />
 
-      <BrandBanner site={site} />
+            <CategoryBlock title="Politics" articles={content.politics} accent="#6a040f" />
+            <CategoryBlock title="Technology" articles={content.technology} accent="#023e8a" />
+            <CategoryBlock title="Sports" articles={content.sports} accent="#2d6a4f" />
+          </div>
 
-      <ThreeColumnSection
-        showcaseArticles={content.showcaseArticles}
-        sportsArticles={content.sportsArticles}
-        editorChoice={content.editorChoice}
-      />
+          {/* Sidebar */}
+          <div className="lg:col-span-4">
+            <div className="lg:sticky lg:top-[140px]">
+              <Sidebar
+                trending={content.trending}
+                latest={content.sidebarLatest}
+                newsletter={content.sidebarNewsletter}
+              />
+            </div>
+          </div>
+        </div>
 
-      <USNewsSection articles={content.usNewsArticles} />
+        {/* Latest Posts - full width */}
+        <LatestPostsGrid articles={content.latestPosts} />
+      </div>
 
-      <ThreeColumnNews
-        celebrityArticles={content.celebrityArticles}
-        worldArticles={content.worldArticles}
-        politicsArticles={content.politicsArticles}
-      />
-
-      <PromoBanner />
-
-      <LatestPostsSection
-        latestPosts={content.latestPosts}
-        sidebarNew={content.sidebarNew}
-        sidebarTech={content.sidebarTech}
-        sidebarLifestyle={content.sidebarLifestyle}
-      />
-
-      <Footer
-        site={site}
-        footerLatest={content.footerLatest}
-        footerPopular={content.footerPopular}
-      />
+      <Footer site={site} about={content.footerAbout} />
     </div>
   );
 }
