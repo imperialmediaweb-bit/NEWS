@@ -15,8 +15,8 @@ export default function BrandBanner({ site }: BrandBannerProps) {
         <div className="flex items-center gap-3 shrink-0">
           <Bookmark className="w-8 h-8 text-[#c1121f]" />
           <h2
-            className="text-3xl md:text-4xl"
-            style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900 }}
+            className="masthead-logo text-2xl md:text-3xl"
+            style={{ fontFamily: "'Oswald', sans-serif", fontWeight: 700, letterSpacing: "0.04em" }}
           >
             {site.name.toUpperCase()}
           </h2>

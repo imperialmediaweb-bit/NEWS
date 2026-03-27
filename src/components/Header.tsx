@@ -43,15 +43,15 @@ export default function Header({ site }: HeaderProps) {
             {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
 
-          {/* Logo centered — smaller, classic newspaper */}
+          {/* Logo centered — engraved multi-line newspaper masthead */}
           <div className="flex-1 text-center">
             <h1
-              className="text-3xl md:text-5xl lg:text-6xl inline-block leading-none"
-              style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, letterSpacing: "-0.02em" }}
+              className="masthead-logo text-4xl md:text-6xl lg:text-7xl inline-block leading-none"
+              style={{ fontFamily: "'Oswald', sans-serif", fontWeight: 700, letterSpacing: "0.04em" }}
             >
               {site.name.toUpperCase()}
             </h1>
-            <p className="text-[10px] md:text-[12px] text-gray-500 mt-1 italic" style={{ fontFamily: "'Libre Baskerville', serif" }}>
+            <p className="text-[10px] md:text-[12px] text-[#c1121f] mt-1.5 italic" style={{ fontFamily: "'Libre Baskerville', serif" }}>
               &ldquo;{site.tagline}&rdquo;
             </p>
           </div>
