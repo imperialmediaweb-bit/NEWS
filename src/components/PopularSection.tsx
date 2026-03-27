@@ -11,10 +11,13 @@ export default function PopularSection({ articles }: PopularSectionProps) {
   return (
     <section className="py-6">
       {/* Red bar header */}
-      <div className="bg-[#c1121f] text-white text-center py-3 mb-6">
-        <h2 className="text-base md:text-lg font-bold uppercase tracking-widest italic" style={{ fontFamily: "'Oswald', sans-serif" }}>
-          Popular
-        </h2>
+      <div className="flex items-center gap-3 mb-5">
+        <div className="bg-[#c1121f] text-white px-4 py-2">
+          <h2 className="text-sm md:text-base font-black uppercase tracking-widest" style={{ fontFamily: "'Oswald', sans-serif" }}>
+            Popular
+          </h2>
+        </div>
+        <span className="flex-1 h-[3px] bg-gray-200" />
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">

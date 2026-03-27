@@ -26,10 +26,13 @@ function Grid3Layout({ title, articles, accent }: { title: string; articles: Art
   return (
     <section className="py-6">
       {/* Red bar section header */}
-      <div className="text-white text-center py-3 mb-6" style={{ backgroundColor: accent }}>
-        <h2 className="text-base md:text-lg font-bold uppercase tracking-widest italic" style={{ fontFamily: "'Oswald', sans-serif" }}>
-          {title}
-        </h2>
+      <div className="flex items-center gap-3 mb-5">
+        <div className="bg-[#c1121f] text-white px-4 py-2" style={{ backgroundColor: accent }}>
+          <h2 className="text-sm md:text-base font-black uppercase tracking-widest" style={{ fontFamily: "'Oswald', sans-serif" }}>
+            {title}
+          </h2>
+        </div>
+        <span className="flex-1 h-[3px] bg-gray-200" />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -100,10 +103,13 @@ function LeadSideLayout({ title, articles, accent }: { title: string; articles: 
 
   return (
     <section className="py-6">
-      <div className="text-white text-center py-3 mb-6" style={{ backgroundColor: accent }}>
-        <h2 className="text-base md:text-lg font-bold uppercase tracking-widest italic" style={{ fontFamily: "'Oswald', sans-serif" }}>
-          {title}
-        </h2>
+      <div className="flex items-center gap-3 mb-5">
+        <div className="bg-[#c1121f] text-white px-4 py-2" style={{ backgroundColor: accent }}>
+          <h2 className="text-sm md:text-base font-black uppercase tracking-widest" style={{ fontFamily: "'Oswald', sans-serif" }}>
+            {title}
+          </h2>
+        </div>
+        <span className="flex-1 h-[3px] bg-gray-200" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
@@ -158,10 +164,13 @@ function LeadSideLayout({ title, articles, accent }: { title: string; articles: 
 function ListLayout({ title, articles, accent }: { title: string; articles: Article[]; accent: string }) {
   return (
     <section className="py-6">
-      <div className="text-white text-center py-3 mb-6" style={{ backgroundColor: accent }}>
-        <h2 className="text-base md:text-lg font-bold uppercase tracking-widest italic" style={{ fontFamily: "'Oswald', sans-serif" }}>
-          {title}
-        </h2>
+      <div className="flex items-center gap-3 mb-5">
+        <div className="bg-[#c1121f] text-white px-4 py-2" style={{ backgroundColor: accent }}>
+          <h2 className="text-sm md:text-base font-black uppercase tracking-widest" style={{ fontFamily: "'Oswald', sans-serif" }}>
+            {title}
+          </h2>
+        </div>
+        <span className="flex-1 h-[3px] bg-gray-200" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-8 gap-y-5">

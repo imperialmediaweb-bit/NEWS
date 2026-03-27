@@ -18,18 +18,25 @@ const content = generateContent(site);
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#f5f5f5]">
       <Header site={site} />
 
-      {/* LOCAL NEWS — 3-column grid with big images */}
+      {/* HERO — big main story + side trending */}
       <HeroSection main={content.heroMain} side={content.heroSide} />
 
-      {/* POPULAR — small horizontal row */}
+      {/* Ad banner */}
+      <div className="bg-black text-white text-center py-4 my-2">
+        <p className="text-sm md:text-base font-medium">
+          Promote your business. <a href="#" className="text-[#c1121f] font-bold hover:underline">Contact us!</a>
+        </p>
+      </div>
+
+      {/* POPULAR — trending stories row */}
       <div className="max-w-[1300px] mx-auto px-4">
         <PopularSection articles={content.popular} />
       </div>
 
-      {/* Brand Banner — logo + about text */}
+      {/* Brand identity banner */}
       <BrandBanner site={site} />
 
       {/* Three column: SHOWCASE | SPORTS | EDITOR'S CHOICE */}
@@ -59,35 +66,27 @@ export default function Home() {
         />
       </div>
 
-      {/* Promo banner */}
-      <div className="bg-gradient-to-r from-gray-700 via-gray-600 to-gray-700 text-white text-center py-4 my-6">
-        <p className="text-base md:text-lg font-medium">
-          Promote your business. <a href="#" className="font-bold hover:underline">Contact us!</a>
+      {/* Ad banner */}
+      <div className="bg-black text-white text-center py-4 my-4">
+        <p className="text-sm md:text-base font-medium">
+          Promote your business. <a href="#" className="text-[#c1121f] font-bold hover:underline">Contact us!</a>
         </p>
       </div>
 
-      {/* LATEST POSTS — list layout with sidebar */}
+      {/* LATEST + SIDEBAR */}
       <div className="max-w-[1300px] mx-auto px-4">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           <div className="lg:col-span-8">
             <CategoryBlock title="Latest Posts" articles={content.latestPosts} accent="#c1121f" layout="list" />
-
-            {/* Featured Story */}
             <FeaturedStory article={content.featuredStory} />
-
-            {/* More sections for length */}
             <CategoryBlock title="Entertainment" articles={content.entertainment} accent="#c1121f" layout="grid3" />
             <CategoryBlock title="Business & Finance" articles={content.business} accent="#c1121f" layout="lead-side" />
-
-            {/* Second Featured Story */}
             <FeaturedStory article={content.featuredStory2} />
-
             <CategoryBlock title="Opinion" articles={content.opinion} accent="#c1121f" layout="lead-side" />
           </div>
 
-          {/* Sidebar */}
           <div className="lg:col-span-4">
-            <div className="lg:sticky lg:top-[160px]">
+            <div className="lg:sticky lg:top-[140px]">
               <Sidebar
                 trending={content.trending}
                 latest={content.sidebarLatest}
