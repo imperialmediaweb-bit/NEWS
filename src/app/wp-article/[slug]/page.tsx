@@ -23,9 +23,8 @@ import Footer from "@/components/Footer";
 import ArticleSeo from "@/components/ArticleSeo";
 import Link from "next/link";
 
-export default function ArticlePage() {
+export default function WpArticlePage() {
   const params = useParams();
-  const category = (params.category as string) || "";
   const slug = (params.slug as string) || "";
 
   const site = useSiteDetection();
@@ -41,20 +40,21 @@ export default function ArticlePage() {
   } | null>(null);
   const [related, setRelated] = useState<Article[]>([]);
   const [content, setContent] = useState(() => generateContent(getActiveSite()));
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!site) return;
     setContent(generateContent(site));
 
-    // Try to load article from DB
-    fetch(`/api/article?site=${site.slug}&slug=${slug}&category=${category}`)
+    // Look up article by slug only (no category needed)
+    fetch(`/api/article?site=${site.slug}&slug=${slug}`)
       .then((r) => r.json())
       .then((data) => {
         if (data.article) {
           setArticle(data.article);
           setRelated(
             (data.related || []).map((r: Record<string, unknown>) => ({
-              img: (r.featured_image as string) || `https://picsum.photos/800/500?random=${r.id}`,
+              img: (r.featured_image as string) || "",
               title: r.title as string,
               summary: (r.summary as string) || "",
               category: (r.category as string) || "News",
@@ -64,27 +64,26 @@ export default function ArticlePage() {
             }))
           );
         }
+        setLoading(false);
       })
-      .catch(() => {});
-  }, [site, slug, category]);
+      .catch(() => setLoading(false));
+  }, [site, slug]);
 
-  const categoryLabel = category.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+  if (!site) return <div className="min-h-screen bg-[#f5f5f5]" />;
 
-  // Use DB article or fallback to mock
-  const displayTitle = article?.title || categoryLabel + " — " + slug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
-  const displayImage = article?.featured_image || `https://picsum.photos/1200/600?random=${slug.length}`;
+  const categoryLabel = (article?.category || "news").replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+  const categorySlug = (article?.category || "news").toLowerCase().replace(/\s+/g, "-");
+  const displayTitle = article?.title || slug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+  const displayImage = article?.featured_image || "";
   const displayAuthor = article?.author || "Staff Reporter";
   const displayDate = article?.published_at
     ? new Date(article.published_at).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })
-    : "March 28, 2026";
-  const displayContent = article?.content || `<p>Article content loading...</p>`;
+    : "";
+  const displayContent = article?.content || (loading ? "<p>Loading...</p>" : "<p>Article not found.</p>");
   const displaySummary = article?.summary || "";
 
-  // Fallback related from mock
-  const allMockArticles = [...content.usNews, ...content.localNews, ...content.worldNews, ...content.politics];
+  const allMockArticles = [...content.usNews, ...content.localNews, ...content.worldNews];
   const displayRelated = related.length > 0 ? related : allMockArticles.slice(0, 3);
-
-  if (!site) return <div className="min-h-screen bg-[#f5f5f5]" />;
 
   return (
     <div className="min-h-screen bg-[#f5f5f5]">
@@ -106,15 +105,19 @@ export default function ArticlePage() {
           <nav className="flex items-center gap-2 text-sm text-gray-500">
             <Link href="/" className="hover:text-[#c1121f] transition-colors">Home</Link>
             <ChevronRight size={14} />
-            <Link href={`/${category}`} className="hover:text-[#c1121f] transition-colors">{categoryLabel}</Link>
-            <ChevronRight size={14} />
+            {article?.category && (
+              <>
+                <Link href={`/${categorySlug}`} className="hover:text-[#c1121f] transition-colors">{categoryLabel}</Link>
+                <ChevronRight size={14} />
+              </>
+            )}
             <span className="text-gray-400 line-clamp-1">{displayTitle}</span>
           </nav>
         </div>
       </div>
 
-      {/* Hero Image — only show if there's a real image */}
-      {displayImage && !displayImage.includes("picsum.photos") ? (
+      {/* Hero Image — only show if there's an image */}
+      {displayImage && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -136,7 +139,10 @@ export default function ArticlePage() {
             </div>
           </div>
         </motion.div>
-      ) : (
+      )}
+
+      {/* Title without image */}
+      {!displayImage && (
         <div className="bg-black text-white">
           <div className="max-w-[1300px] mx-auto px-4 py-8 md:py-12">
             <span className="inline-block px-3 py-1 text-xs font-bold uppercase tracking-wider text-white rounded mb-4"
@@ -172,10 +178,10 @@ export default function ArticlePage() {
                     <p className="text-xs text-gray-400">{site.name}</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-1 text-gray-400"><Clock size={14} /><span>{displayDate}</span></div>
+                {displayDate && <div className="flex items-center gap-1 text-gray-400"><Clock size={14} /><span>{displayDate}</span></div>}
                 <div className="flex items-center gap-1 text-gray-400"><BookOpen size={14} /><span>5 min read</span></div>
-                <div className="flex items-center gap-1 text-gray-400"><Eye size={14} /><span>2,847 views</span></div>
-                <div className="flex items-center gap-1 text-gray-400"><MessageCircle size={14} /><span>34 comments</span></div>
+                <div className="flex items-center gap-1 text-gray-400"><Eye size={14} /><span>Views</span></div>
+                <div className="flex items-center gap-1 text-gray-400"><MessageCircle size={14} /><span>Comments</span></div>
                 <div className="ml-auto flex gap-2">
                   <button className="p-2 rounded-full bg-[#1877f2] text-white hover:opacity-80 transition-opacity"><Facebook size={16} /></button>
                   <button className="p-2 rounded-full bg-[#1da1f2] text-white hover:opacity-80 transition-opacity"><Twitter size={16} /></button>
@@ -228,13 +234,15 @@ export default function ArticlePage() {
                     return (
                       <motion.div key={i} initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}>
                         <Link href={`/${relCat}/${relSlug}`} className="group block bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow">
-                          <div className="relative h-[180px] overflow-hidden">
-                            <img src={rel.img} alt={rel.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                            <span className="absolute top-3 left-3 px-2 py-0.5 text-[10px] font-bold uppercase text-white rounded"
-                              style={{ backgroundColor: "#c1121f", fontFamily: "'Oswald', sans-serif" }}>
-                              {rel.category}
-                            </span>
-                          </div>
+                          {rel.img && (
+                            <div className="relative h-[180px] overflow-hidden">
+                              <img src={rel.img} alt={rel.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                              <span className="absolute top-3 left-3 px-2 py-0.5 text-[10px] font-bold uppercase text-white rounded"
+                                style={{ backgroundColor: "#c1121f", fontFamily: "'Oswald', sans-serif" }}>
+                                {rel.category}
+                              </span>
+                            </div>
+                          )}
                           <div className="p-4">
                             <h3 className="text-sm font-bold leading-snug group-hover:text-[#c1121f] transition-colors line-clamp-2"
                               style={{ fontFamily: "'Source Serif 4', serif", fontWeight: 700 }}>
