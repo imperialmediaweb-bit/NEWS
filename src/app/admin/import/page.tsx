@@ -34,19 +34,29 @@ export default function ImportPage() {
   const fileRef = useRef<HTMLInputElement>(null);
   const abortRef = useRef(false);
 
+  const [statusError, setStatusError] = useState("");
+
   // Load existing article counts on mount
   useEffect(() => {
     fetch("/api/admin/sites-status")
       .then((r) => r.json())
       .then((data) => {
+        if (data._error) {
+          setStatusError(data._error);
+          setLoadingStatus(false);
+          return;
+        }
         setExistingStatus(data);
         setLoadingStatus(false);
       })
-      .catch(() => setLoadingStatus(false));
+      .catch((err) => {
+        setStatusError(String(err));
+        setLoadingStatus(false);
+      });
   }, []);
 
-  const sitesWithArticles = Object.entries(existingStatus).filter(([, v]) => v.count > 0).length;
-  const totalExistingArticles = Object.values(existingStatus).reduce((sum, v) => sum + v.count, 0);
+  const sitesWithArticles = Object.entries(existingStatus).filter(([, v]) => v && v.count > 0).length;
+  const totalExistingArticles = Object.values(existingStatus).reduce((sum, v) => sum + (v?.count || 0), 0);
 
   // Import one page of one site via server
   async function importPage(siteSlug: string, page: number): Promise<{
@@ -262,6 +272,15 @@ export default function ImportPage() {
     <div>
       <h1 className="text-2xl font-bold mb-2">Import from WordPress</h1>
       <p className="text-gray-500 mb-6">Import articles from all 50 WordPress sites.</p>
+
+      {/* Status error */}
+      {statusError && (
+        <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6">
+          <p className="font-medium text-red-800">Could not load site status</p>
+          <p className="text-xs text-red-600 mt-1 font-mono">{statusError}</p>
+          <p className="text-xs text-gray-500 mt-2">Import will process all sites. Visit /api/admin/setup-db to create tables first.</p>
+        </div>
+      )}
 
       {/* Existing status banner */}
       {!loadingStatus && totalExistingArticles > 0 && (
