@@ -1,8 +1,15 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { Article } from "@/data/generate-content";
 import { ChevronRight } from "lucide-react";
+
+function articleHref(article: Article) {
+  const categorySlug = article.category.toLowerCase().replace(/\s+/g, '-');
+  const titleSlug = article.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  return `/${categorySlug}/${titleSlug}`;
+}
 
 interface ThreeColumnSectionProps {
   columns: {
@@ -30,48 +37,51 @@ export default function ThreeColumnSection({ columns }: ThreeColumnSectionProps)
 
             {/* Lead article with image */}
             {col.articles[0] && (
-              <motion.article
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className="group cursor-pointer mb-4"
-              >
-                <div className="relative overflow-hidden">
-                  <img
-                    src={col.articles[0].img}
-                    alt={col.articles[0].title}
-                    className="w-full h-[260px] object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                </div>
-                <h3
-                  className="mt-2 text-[15px] font-bold leading-snug group-hover:text-[#c1121f] transition-colors line-clamp-3"
-                  style={{ fontFamily: "'Source Serif 4', serif", fontWeight: 700 }}
+              <Link href={articleHref(col.articles[0])}>
+                <motion.article
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  className="group cursor-pointer mb-4"
                 >
-                  {col.articles[0].title}
-                </h3>
-                <span className="text-[10px] text-gray-400 mt-1 block">{col.articles[0].date}</span>
-              </motion.article>
+                  <div className="relative overflow-hidden">
+                    <img
+                      src={col.articles[0].img}
+                      alt={col.articles[0].title}
+                      className="w-full h-[260px] object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  </div>
+                  <h3
+                    className="mt-2 text-[15px] font-bold leading-snug group-hover:text-[#c1121f] transition-colors line-clamp-3"
+                    style={{ fontFamily: "'Source Serif 4', serif", fontWeight: 700 }}
+                  >
+                    {col.articles[0].title}
+                  </h3>
+                  <span className="text-[10px] text-gray-400 mt-1 block">{col.articles[0].date}</span>
+                </motion.article>
+              </Link>
             )}
 
             {/* Rest as list items */}
             <div className="space-y-3">
               {col.articles.slice(1).map((article, i) => (
-                <motion.article
-                  key={i}
-                  initial={{ opacity: 0, x: -5 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.05 }}
-                  className="flex gap-3 group cursor-pointer pb-3 border-b border-gray-100"
-                >
-                  <img src={article.img} alt={article.title} className="w-[100px] h-[75px] object-cover shrink-0" />
-                  <div className="min-w-0">
-                    <h4 className="text-[13px] font-bold leading-tight group-hover:text-[#c1121f] transition-colors line-clamp-2" style={{ fontFamily: "'Source Serif 4', serif" }}>
-                      {article.title}
-                    </h4>
-                    <span className="text-[10px] text-gray-400 mt-0.5 block">{article.date}</span>
-                  </div>
-                </motion.article>
+                <Link key={i} href={articleHref(article)}>
+                  <motion.article
+                    initial={{ opacity: 0, x: -5 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.05 }}
+                    className="flex gap-3 group cursor-pointer pb-3 border-b border-gray-100"
+                  >
+                    <img src={article.img} alt={article.title} className="w-[100px] h-[75px] object-cover shrink-0" />
+                    <div className="min-w-0">
+                      <h4 className="text-[13px] font-bold leading-tight group-hover:text-[#c1121f] transition-colors line-clamp-2" style={{ fontFamily: "'Source Serif 4', serif" }}>
+                        {article.title}
+                      </h4>
+                      <span className="text-[10px] text-gray-400 mt-0.5 block">{article.date}</span>
+                    </div>
+                  </motion.article>
+                </Link>
               ))}
             </div>
 
