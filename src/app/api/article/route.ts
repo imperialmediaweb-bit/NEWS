@@ -5,7 +5,6 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const siteSlug = searchParams.get("site") || "";
   const articleSlug = searchParams.get("slug") || "";
-  const category = searchParams.get("category") || "";
 
   try {
     // Get site
