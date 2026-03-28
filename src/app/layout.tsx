@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { getActiveSite } from "@/config/sites";
 import "./globals.css";
-import Script from "next/script";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
 
 const site = getActiveSite();
 
@@ -65,8 +65,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const gaId = site.gaMeasurementId;
-
   return (
     <html lang="en">
       <head>
@@ -78,22 +76,7 @@ export default function RootLayout({
       </head>
       <body className="antialiased bg-white">
         {children}
-        {gaId && (
-          <>
-            <Script
-              src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
-              strategy="afterInteractive"
-            />
-            <Script id="gtag-init" strategy="afterInteractive">
-              {`
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-                gtag('config', '${gaId}');
-              `}
-            </Script>
-          </>
-        )}
+        <GoogleAnalytics />
       </body>
     </html>
   );

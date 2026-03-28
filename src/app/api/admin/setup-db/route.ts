@@ -57,6 +57,8 @@ CREATE TABLE IF NOT EXISTS import_logs (
   completed_at TIMESTAMP
 );
 
+ALTER TABLE sites ADD COLUMN IF NOT EXISTS ga_measurement_id VARCHAR(50);
+
 CREATE INDEX IF NOT EXISTS idx_articles_site_id ON articles(site_id);
 CREATE INDEX IF NOT EXISTS idx_articles_category ON articles(category);
 CREATE INDEX IF NOT EXISTS idx_articles_published ON articles(published_at DESC);

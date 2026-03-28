@@ -8,6 +8,7 @@ import {
   Globe,
   Send,
   Download,
+  Settings,
   Menu,
 } from "lucide-react";
 import { useState } from "react";
@@ -18,6 +19,7 @@ const navItems = [
   { href: "/admin/sites", label: "Sites", icon: Globe },
   { href: "/admin/publish", label: "Publish", icon: Send },
   { href: "/admin/import", label: "Import", icon: Download },
+  { href: "/admin/settings", label: "Settings & SEO", icon: Settings },
 ];
 
 export default function AdminLayout({
