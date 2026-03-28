@@ -4,9 +4,8 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { ChevronRight, Tag } from "lucide-react";
-import { getActiveSite, getSiteByDomain } from "@/config/sites";
 import { generateContent, Article } from "@/data/generate-content";
-import { SiteConfig } from "@/config/site-config";
+import { useSiteDetection } from "@/hooks/useSiteDetection";
 import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar";
 import Footer from "@/components/Footer";
@@ -16,23 +15,21 @@ export default function TagPage() {
   const params = useParams();
   const tag = (params.tag as string) || "";
 
-  const [site, setSite] = useState<SiteConfig>(getActiveSite());
+  const site = useSiteDetection();
   const [articles, setArticles] = useState<Article[]>([]);
-  const [content, setContent] = useState(generateContent(getActiveSite()));
+  const [content, setContent] = useState(generateContent(site!));
 
   const tagLabel = tag
     .replace(/-/g, " ")
     .replace(/\b\w/g, (c) => c.toUpperCase());
 
   useEffect(() => {
-    const domain = window.location.hostname.replace("www.", "");
-    const detectedSite = getSiteByDomain(domain) || getActiveSite();
-    setSite(detectedSite);
-    const mockContent = generateContent(detectedSite);
+    if (!site) return;
+    const mockContent = generateContent(site);
     setContent(mockContent);
 
     // Try loading from DB — search articles matching tag keyword
-    fetch(`/api/tag?site=${detectedSite.slug}&tag=${tag}`)
+    fetch(`/api/tag?site=${site.slug}&tag=${tag}`)
       .then((r) => r.json())
       .then((data) => {
         if (data.articles && data.articles.length > 0) {
@@ -55,10 +52,12 @@ export default function TagPage() {
           ...mockContent.politics,
         ].slice(0, 12));
       });
-  }, [tag]);
+  }, [site, tag]);
 
   const makeSlug = (a: Article) =>
     a.slug || a.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+
+  if (!site) return <div className="min-h-screen bg-[#f5f5f5]" />;
 
   return (
     <div className="min-h-screen bg-[#f5f5f5]">

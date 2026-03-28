@@ -4,9 +4,8 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { ChevronRight } from "lucide-react";
-import { getActiveSite, getSiteByDomain } from "@/config/sites";
 import { generateContent, Article } from "@/data/generate-content";
-import { SiteConfig } from "@/config/site-config";
+import { useSiteDetection } from "@/hooks/useSiteDetection";
 import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar";
 import Footer from "@/components/Footer";
@@ -16,24 +15,21 @@ export default function CategoryPage() {
   const params = useParams();
   const category = (params.category as string) || "";
 
-  const [site, setSite] = useState<SiteConfig>(getActiveSite());
+  const site = useSiteDetection();
   const [articles, setArticles] = useState<Article[]>([]);
-  const [content, setContent] = useState(generateContent(getActiveSite()));
-  const [loaded, setLoaded] = useState(false);
+  const [content, setContent] = useState(generateContent(site!));
 
   const categoryLabel = category
     .replace(/-/g, " ")
     .replace(/\b\w/g, (c) => c.toUpperCase());
 
   useEffect(() => {
-    const domain = window.location.hostname.replace("www.", "");
-    const detectedSite = getSiteByDomain(domain) || getActiveSite();
-    setSite(detectedSite);
-    const mockContent = generateContent(detectedSite);
+    if (!site) return;
+    const mockContent = generateContent(site);
     setContent(mockContent);
 
     // Try loading articles from DB for this category
-    fetch(`/api/category?site=${detectedSite.slug}&category=${category}`)
+    fetch(`/api/category?site=${site.slug}&category=${category}`)
       .then((r) => r.json())
       .then((data) => {
         if (data.articles && data.articles.length > 0) {
@@ -54,7 +50,6 @@ export default function CategoryPage() {
           };
           setArticles(categoryMap[category] || mockContent.usNews);
         }
-        setLoaded(true);
       })
       .catch(() => {
         const categoryMap: Record<string, Article[]> = {
@@ -70,9 +65,8 @@ export default function CategoryPage() {
           celebrity: mockContent.celebrity,
         };
         setArticles(categoryMap[category] || mockContent.usNews);
-        setLoaded(true);
       });
-  }, [category]);
+  }, [site, category]);
 
   const leadArticle = articles[0];
   const gridArticles = articles.slice(1, 7);
@@ -80,6 +74,8 @@ export default function CategoryPage() {
 
   const makeSlug = (a: Article) =>
     a.slug || a.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+
+  if (!site) return <div className="min-h-screen bg-[#f5f5f5]" />;
 
   return (
     <div className="min-h-screen bg-[#f5f5f5]">

@@ -1,10 +1,10 @@
 import { SiteConfig } from "./site-config";
 
 /**
- * Change this single value to switch the active site.
- * Must match a key in the `sites` record below.
+ * Active site fallback — used when domain detection fails (localhost, etc.)
+ * Can be overridden with NEXT_PUBLIC_ACTIVE_SITE env var.
  */
-export const ACTIVE_SITE = "alaska-express";
+export const ACTIVE_SITE = process.env.NEXT_PUBLIC_ACTIVE_SITE || "alabama-express";
 
 export const sites: Record<string, SiteConfig> = {
   "alabama-express": {

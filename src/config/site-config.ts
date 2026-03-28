@@ -8,4 +8,5 @@ export interface SiteConfig {
   state: string;
   stateAbbr: string;
   tagline: string;
+  gaMeasurementId?: string;
 }

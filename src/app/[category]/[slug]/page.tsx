@@ -14,12 +14,12 @@ import {
   MessageCircle,
   BookOpen,
 } from "lucide-react";
-import { getActiveSite, getSiteByDomain } from "@/config/sites";
 import { generateContent, Article } from "@/data/generate-content";
-import { SiteConfig } from "@/config/site-config";
+import { useSiteDetection } from "@/hooks/useSiteDetection";
 import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar";
 import Footer from "@/components/Footer";
+import ArticleSeo from "@/components/ArticleSeo";
 import Link from "next/link";
 
 export default function ArticlePage() {
@@ -27,7 +27,7 @@ export default function ArticlePage() {
   const category = (params.category as string) || "";
   const slug = (params.slug as string) || "";
 
-  const [site, setSite] = useState<SiteConfig>(getActiveSite());
+  const site = useSiteDetection();
   const [article, setArticle] = useState<{
     title: string;
     content: string;
@@ -39,16 +39,14 @@ export default function ArticlePage() {
     slug: string;
   } | null>(null);
   const [related, setRelated] = useState<Article[]>([]);
-  const [content, setContent] = useState(generateContent(getActiveSite()));
+  const [content, setContent] = useState(() => generateContent(site!));
 
   useEffect(() => {
-    const domain = window.location.hostname.replace("www.", "");
-    const detectedSite = getSiteByDomain(domain) || getActiveSite();
-    setSite(detectedSite);
-    setContent(generateContent(detectedSite));
+    if (!site) return;
+    setContent(generateContent(site));
 
     // Try to load article from DB
-    fetch(`/api/article?site=${detectedSite.slug}&slug=${slug}&category=${category}`)
+    fetch(`/api/article?site=${site.slug}&slug=${slug}&category=${category}`)
       .then((r) => r.json())
       .then((data) => {
         if (data.article) {
@@ -67,7 +65,7 @@ export default function ArticlePage() {
         }
       })
       .catch(() => {});
-  }, [slug, category]);
+  }, [site, slug, category]);
 
   const categoryLabel = category.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 
@@ -85,8 +83,20 @@ export default function ArticlePage() {
   const allMockArticles = [...content.usNews, ...content.localNews, ...content.worldNews, ...content.politics];
   const displayRelated = related.length > 0 ? related : allMockArticles.slice(0, 3);
 
+  if (!site) return <div className="min-h-screen bg-[#f5f5f5]" />;
+
   return (
     <div className="min-h-screen bg-[#f5f5f5]">
+      <ArticleSeo
+        title={displayTitle}
+        description={displaySummary}
+        image={displayImage}
+        author={displayAuthor}
+        publishedAt={article?.published_at || ""}
+        category={categoryLabel}
+        slug={slug}
+        site={site}
+      />
       <Header site={site} />
 
       {/* Breadcrumb */}
