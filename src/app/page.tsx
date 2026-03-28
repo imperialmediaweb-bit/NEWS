@@ -1,7 +1,9 @@
 "use client";
 
-import { getActiveSite } from "@/config/sites";
-import { generateContent } from "@/data/generate-content";
+import { useEffect, useState } from "react";
+import { getActiveSite, getSiteByDomain } from "@/config/sites";
+import { generateContent, SiteContent } from "@/data/generate-content";
+import { SiteConfig } from "@/config/site-config";
 
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
@@ -13,10 +15,70 @@ import FeaturedStory from "@/components/FeaturedStory";
 import Sidebar from "@/components/Sidebar";
 import Footer from "@/components/Footer";
 
-const site = getActiveSite();
-const content = generateContent(site);
-
 export default function Home() {
+  const [site, setSite] = useState<SiteConfig>(getActiveSite());
+  const [content, setContent] = useState<SiteContent>(generateContent(getActiveSite()));
+  const [, setLoaded] = useState(false);
+
+  useEffect(() => {
+    // Detect site by domain
+    const domain = window.location.hostname.replace("www.", "");
+    const detectedSite = getSiteByDomain(domain);
+    if (detectedSite) {
+      setSite(detectedSite);
+      // Try to load articles from DB
+      fetch(`/api/site?slug=${detectedSite.slug}`)
+        .then((r) => r.json())
+        .then((data) => {
+          if (data.articles && data.articles.heroMain) {
+            // Use DB articles
+            setContent({
+              ...generateContent(detectedSite),
+              ...data.articles,
+              showcase: data.articles.localNews,
+              celebrity: data.articles.entertainment,
+              sidebarNewsletter: {
+                title: `Subscribe to ${detectedSite.name}`,
+                description: `Get the latest ${detectedSite.city} news delivered to your inbox`,
+              },
+              footerAbout: `${detectedSite.name} is ${detectedSite.city}'s #1 source for breaking news, politics, entertainment, and local coverage across ${detectedSite.state}.`,
+            });
+          } else {
+            // Fallback to mock data for this site
+            setContent(generateContent(detectedSite));
+          }
+          setLoaded(true);
+        })
+        .catch(() => {
+          setContent(generateContent(detectedSite));
+          setLoaded(true);
+        });
+    } else {
+      // Localhost or unknown domain — use ACTIVE_SITE
+      const activeSite = getActiveSite();
+      setSite(activeSite);
+      fetch(`/api/site?slug=${activeSite.slug}`)
+        .then((r) => r.json())
+        .then((data) => {
+          if (data.articles && data.articles.heroMain) {
+            setContent({
+              ...generateContent(activeSite),
+              ...data.articles,
+              showcase: data.articles.localNews,
+              celebrity: data.articles.entertainment,
+              sidebarNewsletter: {
+                title: `Subscribe to ${activeSite.name}`,
+                description: `Get the latest ${activeSite.city} news delivered to your inbox`,
+              },
+              footerAbout: `${activeSite.name} is ${activeSite.city}'s #1 source for breaking news, politics, entertainment, and local coverage across ${activeSite.state}.`,
+            });
+          }
+          setLoaded(true);
+        })
+        .catch(() => setLoaded(true));
+    }
+  }, []);
+
   return (
     <div className="min-h-screen bg-[#f5f5f5]">
       <Header site={site} />
