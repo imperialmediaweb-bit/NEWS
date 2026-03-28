@@ -4,6 +4,7 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { ChevronRight } from "lucide-react";
+import { getActiveSite } from "@/config/sites";
 import { generateContent, Article } from "@/data/generate-content";
 import { useSiteDetection } from "@/hooks/useSiteDetection";
 import Header from "@/components/Header";
@@ -17,7 +18,7 @@ export default function CategoryPage() {
 
   const site = useSiteDetection();
   const [articles, setArticles] = useState<Article[]>([]);
-  const [content, setContent] = useState(generateContent(site!));
+  const [content, setContent] = useState(() => generateContent(getActiveSite()));
 
   const categoryLabel = category
     .replace(/-/g, " ")

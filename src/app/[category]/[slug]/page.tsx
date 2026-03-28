@@ -14,6 +14,7 @@ import {
   MessageCircle,
   BookOpen,
 } from "lucide-react";
+import { getActiveSite } from "@/config/sites";
 import { generateContent, Article } from "@/data/generate-content";
 import { useSiteDetection } from "@/hooks/useSiteDetection";
 import Header from "@/components/Header";
@@ -39,7 +40,7 @@ export default function ArticlePage() {
     slug: string;
   } | null>(null);
   const [related, setRelated] = useState<Article[]>([]);
-  const [content, setContent] = useState(() => generateContent(site!));
+  const [content, setContent] = useState(() => generateContent(getActiveSite()));
 
   useEffect(() => {
     if (!site) return;

@@ -561,7 +561,15 @@ export const sites: Record<string, SiteConfig> = {
 
 /** Lookup site config by domain name */
 export function getSiteByDomain(domain: string): SiteConfig | undefined {
-  return Object.values(sites).find((s) => s.domain === domain);
+  // Clean up domain - remove www., port, trailing dots
+  const clean = domain.replace(/^www\./, "").replace(/:\d+$/, "").replace(/\.$/, "").toLowerCase();
+
+  // Exact match first
+  const exact = Object.values(sites).find((s) => s.domain.toLowerCase() === clean);
+  if (exact) return exact;
+
+  // Partial match (domain contains site domain or vice versa)
+  return Object.values(sites).find((s) => clean.includes(s.domain.toLowerCase()) || s.domain.toLowerCase().includes(clean));
 }
 
 export function getActiveSite(): SiteConfig {

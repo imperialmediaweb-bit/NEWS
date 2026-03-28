@@ -8,9 +8,13 @@ export function useSiteDetection() {
   const [site, setSite] = useState<SiteConfig | null>(null);
 
   useEffect(() => {
-    const domain = window.location.hostname.replace("www.", "");
-    const detectedSite = getSiteByDomain(domain) || getActiveSite();
-    setSite(detectedSite);
+    try {
+      const hostname = window.location.hostname || "";
+      const detectedSite = getSiteByDomain(hostname) || getActiveSite();
+      setSite(detectedSite);
+    } catch {
+      setSite(getActiveSite());
+    }
   }, []);
 
   return site;
