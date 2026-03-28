@@ -1,8 +1,15 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { Article } from "@/data/generate-content";
 import { TrendingUp, Clock, Mail, ChevronRight } from "lucide-react";
+
+function articleHref(article: Article) {
+  const categorySlug = article.category.toLowerCase().replace(/\s+/g, '-');
+  const titleSlug = article.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  return `/${categorySlug}/${titleSlug}`;
+}
 
 interface SidebarProps {
   trending: Article[];
@@ -23,33 +30,34 @@ export default function Sidebar({ trending, latest, newsletter }: SidebarProps) 
         </div>
         <div className="divide-y divide-gray-100">
           {trending.map((article, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, x: 10 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.05 }}
-              className="flex gap-3 p-3 group cursor-pointer hover:bg-red-50/50 transition-colors"
-            >
-              <span
-                className="text-2xl font-black text-gray-200 group-hover:text-[#c1121f] transition-colors shrink-0 w-8 text-center leading-none pt-1"
-                style={{ fontFamily: "'Oswald', sans-serif" }}
+            <Link key={i} href={articleHref(article)}>
+              <motion.div
+                initial={{ opacity: 0, x: 10 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.05 }}
+                className="flex gap-3 p-3 group cursor-pointer hover:bg-red-50/50 transition-colors"
               >
-                {i + 1}
-              </span>
-              <div className="flex gap-2.5 flex-1 min-w-0">
-                <img src={article.img} alt="" className="w-16 h-16 object-cover rounded shrink-0" />
-                <div className="min-w-0">
-                  <span className="text-[9px] font-bold uppercase tracking-widest text-[#c1121f]" style={{ fontFamily: "'Oswald', sans-serif" }}>
-                    {article.category}
-                  </span>
-                  <h4 className="text-[13px] font-bold leading-tight line-clamp-2 group-hover:text-[#c1121f] transition-colors" style={{ fontFamily: "'Source Serif 4', serif" }}>
-                    {article.title}
-                  </h4>
-                  <span className="text-[10px] text-gray-400 mt-0.5 block">{article.date}</span>
+                <span
+                  className="text-2xl font-black text-gray-200 group-hover:text-[#c1121f] transition-colors shrink-0 w-8 text-center leading-none pt-1"
+                  style={{ fontFamily: "'Oswald', sans-serif" }}
+                >
+                  {i + 1}
+                </span>
+                <div className="flex gap-2.5 flex-1 min-w-0">
+                  <img src={article.img} alt="" className="w-16 h-16 object-cover rounded shrink-0" />
+                  <div className="min-w-0">
+                    <span className="text-[9px] font-bold uppercase tracking-widest text-[#c1121f]" style={{ fontFamily: "'Oswald', sans-serif" }}>
+                      {article.category}
+                    </span>
+                    <h4 className="text-[13px] font-bold leading-tight line-clamp-2 group-hover:text-[#c1121f] transition-colors" style={{ fontFamily: "'Source Serif 4', serif" }}>
+                      {article.title}
+                    </h4>
+                    <span className="text-[10px] text-gray-400 mt-0.5 block">{article.date}</span>
+                  </div>
                 </div>
-              </div>
-            </motion.div>
+              </motion.div>
+            </Link>
           ))}
         </div>
       </div>
@@ -89,17 +97,19 @@ export default function Sidebar({ trending, latest, newsletter }: SidebarProps) 
         </div>
         <div className="divide-y divide-gray-100">
           {latest.map((article, i) => (
-            <div key={i} className="flex gap-3 p-3 group cursor-pointer hover:bg-gray-50 transition-colors">
-              <img src={article.img} alt="" className="w-14 h-14 object-cover rounded shrink-0" />
-              <div className="min-w-0">
-                <h4 className="text-[13px] font-bold leading-tight line-clamp-2 group-hover:text-[#c1121f] transition-colors" style={{ fontFamily: "'Source Serif 4', serif" }}>
-                  {article.title}
-                </h4>
-                <span className="text-[10px] text-gray-400 mt-1 flex items-center gap-1">
-                  <Clock className="w-2.5 h-2.5" /> {article.date}
-                </span>
+            <Link key={i} href={articleHref(article)}>
+              <div className="flex gap-3 p-3 group cursor-pointer hover:bg-gray-50 transition-colors">
+                <img src={article.img} alt="" className="w-14 h-14 object-cover rounded shrink-0" />
+                <div className="min-w-0">
+                  <h4 className="text-[13px] font-bold leading-tight line-clamp-2 group-hover:text-[#c1121f] transition-colors" style={{ fontFamily: "'Source Serif 4', serif" }}>
+                    {article.title}
+                  </h4>
+                  <span className="text-[10px] text-gray-400 mt-1 flex items-center gap-1">
+                    <Clock className="w-2.5 h-2.5" /> {article.date}
+                  </span>
+                </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
         <a href="#" className="block text-center py-3 text-[12px] font-bold uppercase tracking-wider text-[#c1121f] hover:bg-red-50 transition-colors border-t border-gray-100" style={{ fontFamily: "'Oswald', sans-serif" }}>

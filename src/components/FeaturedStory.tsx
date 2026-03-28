@@ -1,8 +1,15 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { Article } from "@/data/generate-content";
 import { Clock, ArrowRight } from "lucide-react";
+
+function articleHref(article: Article) {
+  const categorySlug = article.category.toLowerCase().replace(/\s+/g, '-');
+  const titleSlug = article.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  return `/${categorySlug}/${titleSlug}`;
+}
 
 interface FeaturedStoryProps {
   article: Article;
@@ -11,6 +18,7 @@ interface FeaturedStoryProps {
 export default function FeaturedStory({ article }: FeaturedStoryProps) {
   return (
     <section className="py-10">
+      <Link href={articleHref(article)}>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -56,6 +64,7 @@ export default function FeaturedStory({ article }: FeaturedStoryProps) {
           </div>
         </div>
       </motion.div>
+      </Link>
     </section>
   );
 }

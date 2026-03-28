@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 import { Search, Menu, X, AlertTriangle } from "lucide-react";
 import { SiteConfig } from "@/config/site-config";
 
@@ -79,15 +80,15 @@ export default function Header({ site }: HeaderProps) {
           <ul className="hidden md:flex items-center justify-center">
             {navItems.map((item, i) => (
               <li key={item}>
-                <a
-                  href="#"
-                  className={`block px-4 lg:px-6 py-3 text-[14px] font-bold uppercase tracking-wider transition-colors ${
+                <Link
+                  href={`/${item.toLowerCase().replace(/\s+/g, '-')}`}
+                  className={`block px-4 lg:px-6 py-3 text-[14px] font-bold uppercase tracking-wider transition-colors cursor-pointer ${
                     i === 0 ? "text-white bg-[#8b0000]" : "text-white/90 hover:text-white hover:bg-[#a00f1c]"
                   }`}
                   style={{ fontFamily: "'Oswald', sans-serif" }}
                 >
                   {item}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
@@ -104,8 +105,8 @@ export default function Header({ site }: HeaderProps) {
             <ul className="py-2">
               {navItems.map((item) => (
                 <li key={item}>
-                  <a href="#" className="block px-6 py-3 text-sm font-bold uppercase tracking-wide text-white hover:text-[#c1121f] hover:bg-gray-900 transition-colors"
-                    style={{ fontFamily: "'Oswald', sans-serif" }}>{item}</a>
+                  <Link href={`/${item.toLowerCase().replace(/\s+/g, '-')}`} className="block px-6 py-3 text-sm font-bold uppercase tracking-wide text-white hover:text-[#c1121f] hover:bg-gray-900 transition-colors cursor-pointer"
+                    style={{ fontFamily: "'Oswald', sans-serif" }}>{item}</Link>
                 </li>
               ))}
             </ul>
