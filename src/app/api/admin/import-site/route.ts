@@ -81,7 +81,7 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    const totalPages = parseInt(res.headers.get("x-wp-totalpages") || res.headers.get("X-WP-TotalPages") || "1");
+    const totalPages = parseInt(res.headers.get("x-wp-totalpages") || res.headers.get("X-WP-TotalPages") || "0") || 0;
     const posts = await res.json();
 
     if (!Array.isArray(posts) || posts.length === 0) {

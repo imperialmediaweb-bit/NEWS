@@ -72,8 +72,8 @@ export default function ImportPage() {
           return;
         }
 
-        totalImported += data.imported;
-        totalSkipped += data.skipped;
+        totalImported += data.imported || 0;
+        totalSkipped += data.skipped || 0;
 
         allResults[index] = {
           ...allResults[index],

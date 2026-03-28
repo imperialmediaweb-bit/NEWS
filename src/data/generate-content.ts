@@ -8,6 +8,7 @@ export interface Article {
   date: string;
   author?: string;
   time?: string;
+  slug?: string;
 }
 
 export interface SiteContent {
