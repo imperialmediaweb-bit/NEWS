@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { sites } from "@/config/sites";
-import { Download, CheckCircle, XCircle, Loader2, Upload, FileText, Play, Zap } from "lucide-react";
+import { Download, CheckCircle, XCircle, Loader2, Upload, FileText, Play, Zap, RefreshCw, SkipForward } from "lucide-react";
 
 interface ImportResult {
   site: string;
   slug: string;
-  status: "success" | "error" | "running" | "waiting";
+  status: "success" | "error" | "running" | "waiting" | "skipped";
   imported: number;
   skipped: number;
   page: number;
@@ -15,16 +15,38 @@ interface ImportResult {
   message?: string;
 }
 
+interface SiteStatus {
+  name: string;
+  count: number;
+}
+
 export default function ImportPage() {
   const siteList = Object.values(sites);
   const [importing, setImporting] = useState(false);
   const [results, setResults] = useState<ImportResult[]>([]);
   const [mode, setMode] = useState<"auto" | "xml">("auto");
+  const [importMode, setImportMode] = useState<"all" | "empty" | "failed">("empty");
   const [xmlSite, setXmlSite] = useState(siteList[0]?.slug || "");
   const [xmlFiles, setXmlFiles] = useState<File[]>([]);
   const [parallel, setParallel] = useState(3);
+  const [existingStatus, setExistingStatus] = useState<Record<string, SiteStatus>>({});
+  const [loadingStatus, setLoadingStatus] = useState(true);
   const fileRef = useRef<HTMLInputElement>(null);
   const abortRef = useRef(false);
+
+  // Load existing article counts on mount
+  useEffect(() => {
+    fetch("/api/admin/sites-status")
+      .then((r) => r.json())
+      .then((data) => {
+        setExistingStatus(data);
+        setLoadingStatus(false);
+      })
+      .catch(() => setLoadingStatus(false));
+  }, []);
+
+  const sitesWithArticles = Object.entries(existingStatus).filter(([, v]) => v.count > 0).length;
+  const totalExistingArticles = Object.values(existingStatus).reduce((sum, v) => sum + v.count, 0);
 
   // Import one page of one site via server
   async function importPage(siteSlug: string, page: number): Promise<{
@@ -107,28 +129,81 @@ export default function ImportPage() {
     setResults([...allResults]);
   }
 
-  // Auto import all sites with parallelism
+  // Auto import with smart skip
   const handleAutoImport = async () => {
     setImporting(true);
     abortRef.current = false;
 
-    const allResults: ImportResult[] = siteList.map((s) => ({
-      site: s.name,
-      slug: s.slug,
-      status: "waiting" as const,
-      imported: 0,
-      skipped: 0,
-      page: 0,
-      totalPages: 0,
-    }));
+    // Build list with skip info
+    const allResults: ImportResult[] = siteList.map((s) => {
+      const existing = existingStatus[s.slug];
+      const hasArticles = existing && existing.count > 0;
+
+      if (importMode === "empty" && hasArticles) {
+        return {
+          site: s.name,
+          slug: s.slug,
+          status: "skipped" as const,
+          imported: 0,
+          skipped: 0,
+          page: 0,
+          totalPages: 0,
+          message: `Already has ${existing.count.toLocaleString()} articles`,
+        };
+      }
+
+      return {
+        site: s.name,
+        slug: s.slug,
+        status: "waiting" as const,
+        imported: 0,
+        skipped: 0,
+        page: 0,
+        totalPages: 0,
+      };
+    });
     setResults([...allResults]);
 
-    // Process sites in batches of `parallel`
+    // Get only sites that need importing
+    const toImport = allResults
+      .map((r, i) => ({ ...r, index: i }))
+      .filter((r) => r.status === "waiting");
+
+    // Process in batches
     let i = 0;
-    while (i < siteList.length && !abortRef.current) {
-      const batch = siteList.slice(i, i + parallel);
-      const promises = batch.map((site, batchIdx) =>
-        importFullSite(site.slug, site.name, i + batchIdx, allResults)
+    while (i < toImport.length && !abortRef.current) {
+      const batch = toImport.slice(i, i + parallel);
+      const promises = batch.map((item) =>
+        importFullSite(item.slug, item.site, item.index, allResults)
+      );
+      await Promise.all(promises);
+      i += parallel;
+    }
+
+    setImporting(false);
+  };
+
+  // Retry only failed sites
+  const handleRetryFailed = async () => {
+    setImporting(true);
+    abortRef.current = false;
+
+    const failedIndexes = results
+      .map((r, i) => ({ ...r, index: i }))
+      .filter((r) => r.status === "error");
+
+    // Reset failed to waiting
+    const updatedResults = [...results];
+    for (const f of failedIndexes) {
+      updatedResults[f.index] = { ...updatedResults[f.index], status: "waiting", message: "Retrying...", imported: 0, skipped: 0 };
+    }
+    setResults([...updatedResults]);
+
+    let i = 0;
+    while (i < failedIndexes.length && !abortRef.current) {
+      const batch = failedIndexes.slice(i, i + parallel);
+      const promises = batch.map((item) =>
+        importFullSite(item.slug, item.site, item.index, updatedResults)
       );
       await Promise.all(promises);
       i += parallel;
@@ -180,12 +255,27 @@ export default function ImportPage() {
 
   const totalImported = results.reduce((sum, r) => sum + r.imported, 0);
   const totalDone = results.filter((r) => r.status === "success" || r.status === "error").length;
-  const totalSuccess = results.filter((r) => r.status === "success").length;
+  const totalFailed = results.filter((r) => r.status === "error").length;
+  const totalSkippedCount = results.filter((r) => r.status === "skipped").length;
 
   return (
     <div>
       <h1 className="text-2xl font-bold mb-2">Import from WordPress</h1>
       <p className="text-gray-500 mb-6">Import articles from all 50 WordPress sites.</p>
+
+      {/* Existing status banner */}
+      {!loadingStatus && totalExistingArticles > 0 && (
+        <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6 flex items-center justify-between">
+          <div>
+            <p className="font-medium text-blue-800">
+              {sitesWithArticles} sites already have {totalExistingArticles.toLocaleString()} articles in DB
+            </p>
+            <p className="text-xs text-blue-600 mt-1">
+              {siteList.length - sitesWithArticles} sites still need importing
+            </p>
+          </div>
+        </div>
+      )}
 
       <div className="flex gap-2 mb-6">
         <button
@@ -195,7 +285,7 @@ export default function ImportPage() {
           }`}
         >
           <Zap size={16} className="inline mr-2" />
-          Auto Import All 50
+          Auto Import
         </button>
         <button
           onClick={() => setMode("xml")}
@@ -217,6 +307,16 @@ export default function ImportPage() {
                 Server fetches articles from each WordPress site and saves to database.
               </p>
 
+              <label className="block text-sm font-medium mb-1">Import mode</label>
+              <select
+                value={importMode}
+                onChange={(e) => setImportMode(e.target.value as "all" | "empty" | "failed")}
+                className="w-full px-3 py-2 border rounded-lg mb-4 outline-none"
+              >
+                <option value="empty">Only sites without articles (skip imported)</option>
+                <option value="all">All 50 sites (reimport everything)</option>
+              </select>
+
               <label className="block text-sm font-medium mb-1">Parallel imports</label>
               <select
                 value={parallel}
@@ -235,11 +335,21 @@ export default function ImportPage() {
                 className="w-full py-3 rounded-xl font-bold text-white bg-[#c1121f] hover:bg-[#8b0000] disabled:bg-gray-300 flex items-center justify-center gap-2 transition-colors"
               >
                 {importing ? (
-                  <><Loader2 size={18} className="animate-spin" /> Importing {totalDone}/{siteList.length}...</>
+                  <><Loader2 size={18} className="animate-spin" /> Importing {totalDone}/{results.length - totalSkippedCount}...</>
                 ) : (
-                  <><Play size={18} /> Start Import All 50 Sites</>
+                  <><Play size={18} /> Start Import</>
                 )}
               </button>
+
+              {/* Retry Failed button */}
+              {totalFailed > 0 && !importing && (
+                <button
+                  onClick={handleRetryFailed}
+                  className="w-full mt-2 py-3 rounded-xl font-bold text-white bg-orange-500 hover:bg-orange-600 flex items-center justify-center gap-2 transition-colors"
+                >
+                  <RefreshCw size={18} /> Retry {totalFailed} Failed Sites
+                </button>
+              )}
 
               {importing && (
                 <button
@@ -250,11 +360,15 @@ export default function ImportPage() {
                 </button>
               )}
 
-              {totalImported > 0 && (
+              {(totalImported > 0 || totalExistingArticles > 0) && (
                 <div className="mt-4 text-center py-3 bg-green-50 rounded-lg">
-                  <p className="text-2xl font-bold text-green-700">{totalImported.toLocaleString()}</p>
-                  <p className="text-xs text-green-600">articles imported</p>
-                  <p className="text-xs text-gray-400 mt-1">{totalSuccess}/{results.length} sites done</p>
+                  <p className="text-2xl font-bold text-green-700">
+                    {(totalImported + totalExistingArticles).toLocaleString()}
+                  </p>
+                  <p className="text-xs text-green-600">total articles in DB</p>
+                  {totalImported > 0 && (
+                    <p className="text-xs text-gray-400 mt-1">+{totalImported.toLocaleString()} new this session</p>
+                  )}
                 </div>
               )}
             </div>
@@ -302,12 +416,13 @@ export default function ImportPage() {
         <div className="lg:col-span-2">
           <div className="bg-white rounded-xl shadow-sm p-6">
             <h2 className="font-bold mb-4">
-              Import Progress {totalDone > 0 && `(${totalDone}/${results.length})`}
+              Import Progress {totalDone > 0 && `(${totalDone}/${results.length - totalSkippedCount} active)`}
+              {totalSkippedCount > 0 && <span className="text-gray-400 text-sm font-normal ml-2">{totalSkippedCount} skipped</span>}
             </h2>
             {results.length === 0 ? (
               <div className="text-center py-12 text-gray-400">
                 <Download size={48} className="mx-auto mb-4 opacity-30" />
-                <p>Click &quot;Start Import All 50 Sites&quot; to begin.</p>
+                <p>{loadingStatus ? "Loading site status..." : "Click \"Start Import\" to begin."}</p>
               </div>
             ) : (
               <div className="space-y-2 max-h-[600px] overflow-y-auto">
@@ -316,12 +431,14 @@ export default function ImportPage() {
                     result.status === "success" ? "bg-green-50 border-green-200"
                     : result.status === "error" ? "bg-red-50 border-red-200"
                     : result.status === "running" ? "bg-blue-50 border-blue-200"
+                    : result.status === "skipped" ? "bg-gray-50 border-gray-200 opacity-60"
                     : "bg-gray-50 border-gray-200"
                   }`}>
                     <div className="flex items-center gap-3">
                       {result.status === "success" ? <CheckCircle size={18} className="text-green-500" />
                       : result.status === "error" ? <XCircle size={18} className="text-red-500" />
                       : result.status === "running" ? <Loader2 size={18} className="text-blue-500 animate-spin" />
+                      : result.status === "skipped" ? <SkipForward size={18} className="text-gray-400" />
                       : <div className="w-[18px] h-[18px] rounded-full border-2 border-gray-300" />}
                       <div>
                         <p className="font-medium text-sm">{result.site}</p>
