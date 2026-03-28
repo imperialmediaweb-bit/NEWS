@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import pool from "@/lib/db";
 import { sites } from "@/config/sites";
+import { submitToIndexNow } from "@/lib/indexnow";
 
 const WP_HEADERS = {
   "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
@@ -113,6 +114,20 @@ export async function POST(request: NextRequest) {
       } catch {
         skipped++;
       }
+    }
+
+    // Submit newly imported articles to IndexNow for instant indexing
+    if (imported > 0) {
+      const importedUrls = posts
+        .filter((post: Record<string, unknown>) => post.slug)
+        .map(
+          (post: Record<string, unknown>) =>
+            `https://${siteConfig.domain}/${post.slug}`
+        );
+
+      submitToIndexNow(siteConfig.domain, importedUrls).catch(() => {
+        // IndexNow submission is best-effort; don't block the response
+      });
     }
 
     return NextResponse.json({

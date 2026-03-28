@@ -22,7 +22,8 @@ export function middleware(request: NextRequest) {
     pathname.startsWith("/favicon") ||
     pathname.startsWith("/sitemap") ||
     pathname.startsWith("/robots") ||
-    pathname.startsWith("/tag")
+    pathname.startsWith("/tag") ||
+    pathname.startsWith("/seo")
   ) {
     const site = getSiteByDomain(domain);
     if (site) {
