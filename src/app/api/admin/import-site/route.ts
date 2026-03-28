@@ -3,32 +3,49 @@ import pool from "@/lib/db";
 import { sites } from "@/config/sites";
 import { submitToIndexNow } from "@/lib/indexnow";
 
-const WP_HEADERS = {
-  "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
-  "Accept": "application/json, text/plain, */*",
-  "Accept-Language": "en-US,en;q=0.9",
-  "Accept-Encoding": "gzip, deflate, br",
-  "Cache-Control": "no-cache",
-  "Referer": "https://www.google.com/",
-};
+// Rotate User-Agent to avoid Cloudflare fingerprinting
+const USER_AGENTS = [
+  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+  "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+  "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+  "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0",
+  "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.2 Safari/605.1.15",
+];
+
+function getHeaders(attempt: number) {
+  return {
+    "User-Agent": USER_AGENTS[attempt % USER_AGENTS.length],
+    "Accept": "application/json, text/plain, */*",
+    "Accept-Language": "en-US,en;q=0.9",
+    "Accept-Encoding": "gzip, deflate, br",
+    "Cache-Control": "no-cache",
+    "Referer": "https://www.google.com/",
+    "sec-ch-ua": '"Chromium";v="131", "Not_A Brand";v="24"',
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua-platform": '"Windows"',
+    "sec-fetch-dest": "empty",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-site": "same-origin",
+  };
+}
 
 async function tryFetch(url: string): Promise<Response | null> {
-  for (let attempt = 0; attempt < 3; attempt++) {
+  for (let attempt = 0; attempt < 5; attempt++) {
     try {
       const res = await fetch(url, {
-        headers: WP_HEADERS,
-        signal: AbortSignal.timeout(30000),
+        headers: getHeaders(attempt),
+        signal: AbortSignal.timeout(60000),
         redirect: "follow",
       });
       if (res.ok) return res;
       if (res.status === 403 || res.status === 503) {
-        // Cloudflare block — wait and retry
-        await new Promise(r => setTimeout(r, 3000 * (attempt + 1)));
+        // Cloudflare block — wait longer each time
+        await new Promise(r => setTimeout(r, 5000 * (attempt + 1)));
         continue;
       }
       if (res.status === 404 || res.status === 400) return null;
     } catch {
-      await new Promise(r => setTimeout(r, 2000 * (attempt + 1)));
+      await new Promise(r => setTimeout(r, 3000 * (attempt + 1)));
     }
   }
   return null;
