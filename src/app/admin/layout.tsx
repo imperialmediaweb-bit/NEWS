@@ -19,6 +19,7 @@ const navItems = [
   { href: "/admin/sites", label: "Sites", icon: Globe },
   { href: "/admin/publish", label: "Publish", icon: Send },
   { href: "/admin/import", label: "Import", icon: Download },
+  { href: "/admin/domains", label: "Domains", icon: Globe },
   { href: "/admin/settings", label: "Settings & SEO", icon: Settings },
 ];
 
