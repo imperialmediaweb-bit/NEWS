@@ -196,12 +196,14 @@ export default function ImportPage() {
     setImporting(true);
     abortRef.current = false;
 
-    // Build list — skip sites that already have articles (instant, no server call)
+    // Build list — skip only fully imported sites (10,000+ articles) instantly
+    // Sites with partial imports (< 10,000) continue importing
     const allResults: ImportResult[] = siteList.map((s) => {
       const existing = existingStatus[s.slug];
       const existingCount = existing?.count || 0;
 
-      if (existingCount > 0) {
+      // 10,000+ = fully imported, skip instantly
+      if (existingCount >= 10000) {
         return {
           site: s.name,
           slug: s.slug,
@@ -222,6 +224,7 @@ export default function ImportPage() {
         skipped: 0,
         page: 0,
         totalPages: 0,
+        message: existingCount > 0 ? `${existingCount.toLocaleString()} in DB, continuing...` : undefined,
       };
     });
     setResults([...allResults]);
