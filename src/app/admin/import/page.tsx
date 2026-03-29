@@ -196,10 +196,23 @@ export default function ImportPage() {
     setImporting(true);
     abortRef.current = false;
 
-    // Build list — show existing count but NEVER skip (always continue importing)
+    // Build list — skip sites that already have articles (instant, no server call)
     const allResults: ImportResult[] = siteList.map((s) => {
       const existing = existingStatus[s.slug];
       const existingCount = existing?.count || 0;
+
+      if (existingCount > 0) {
+        return {
+          site: s.name,
+          slug: s.slug,
+          status: "success" as const,
+          imported: 0,
+          skipped: 0,
+          page: 0,
+          totalPages: 0,
+          message: `Complete! ${existingCount.toLocaleString()} articles in DB`,
+        };
+      }
 
       return {
         site: s.name,
@@ -209,13 +222,14 @@ export default function ImportPage() {
         skipped: 0,
         page: 0,
         totalPages: 0,
-        message: existingCount > 0 ? `${existingCount.toLocaleString()} already in DB, continuing...` : undefined,
       };
     });
     setResults([...allResults]);
 
-    // Sliding window: as soon as one finishes, start the next
-    const toImport = allResults.map((r, i) => ({ ...r, index: i }));
+    // Only import sites that have 0 articles
+    const toImport = allResults
+      .map((r, i) => ({ ...r, index: i }))
+      .filter((r) => r.status === "waiting");
     let nextIdx = 0;
 
     async function runNext(): Promise<void> {
