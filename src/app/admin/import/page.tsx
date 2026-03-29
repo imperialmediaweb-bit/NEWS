@@ -64,6 +64,9 @@ export default function ImportPage() {
     totalPages: number;
     done: boolean;
     error?: string;
+    alreadyComplete?: boolean;
+    dbCount?: number;
+    wpTotal?: number;
   }> {
     const res = await fetch("/api/admin/import-site", {
       method: "POST",
@@ -103,6 +106,19 @@ export default function ImportPage() {
             message: data.error,
             imported: totalImported,
             skipped: totalSkipped,
+          };
+          setResults([...allResults]);
+          return;
+        }
+
+        // Site already fully imported — skip instantly
+        if (data.alreadyComplete) {
+          allResults[index] = {
+            ...allResults[index],
+            status: "success",
+            message: `Complete! ${data.dbCount}/${data.wpTotal} articles`,
+            imported: 0,
+            skipped: 0,
           };
           setResults([...allResults]);
           return;

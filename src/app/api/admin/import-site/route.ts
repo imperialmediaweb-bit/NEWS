@@ -100,6 +100,31 @@ export async function POST(request: NextRequest) {
     }
 
     const totalPages = parseInt(res.headers.get("x-wp-totalpages") || res.headers.get("X-WP-TotalPages") || "0") || 0;
+    const wpTotal = parseInt(res.headers.get("x-wp-total") || res.headers.get("X-WP-Total") || "0") || 0;
+
+    // On page 1, check if site is already fully imported
+    if (page === 1 && wpTotal > 0) {
+      const { rows: countRows } = await pool.query(
+        "SELECT COUNT(*)::int as cnt FROM articles WHERE site_id = $1",
+        [siteId]
+      );
+      const dbCount = countRows[0]?.cnt || 0;
+      // If DB has >= 95% of WP articles, consider it complete
+      if (dbCount >= wpTotal * 0.95) {
+        return NextResponse.json({
+          siteSlug,
+          page,
+          imported: 0,
+          skipped: 0,
+          totalPages,
+          done: true,
+          alreadyComplete: true,
+          dbCount,
+          wpTotal,
+        });
+      }
+    }
+
     const posts = await res.json();
 
     if (!Array.isArray(posts) || posts.length === 0) {
