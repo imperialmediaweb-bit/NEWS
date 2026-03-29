@@ -25,7 +25,6 @@ export default function ImportPage() {
   const [importing, setImporting] = useState(false);
   const [results, setResults] = useState<ImportResult[]>([]);
   const [mode, setMode] = useState<"auto" | "xml">("auto");
-  const [importMode, setImportMode] = useState<"all" | "empty" | "failed">("empty");
   const [xmlSite, setXmlSite] = useState(siteList[0]?.slug || "");
   const [xmlFiles, setXmlFiles] = useState<File[]>([]);
   const [parallel, setParallel] = useState(3);
@@ -149,23 +148,10 @@ export default function ImportPage() {
     setImporting(true);
     abortRef.current = false;
 
-    // Build list with skip info
+    // Build list — show existing count but NEVER skip (always continue importing)
     const allResults: ImportResult[] = siteList.map((s) => {
       const existing = existingStatus[s.slug];
-      const hasArticles = existing && existing.count > 0;
-
-      if (importMode === "empty" && hasArticles) {
-        return {
-          site: s.name,
-          slug: s.slug,
-          status: "skipped" as const,
-          imported: 0,
-          skipped: 0,
-          page: 0,
-          totalPages: 0,
-          message: `Already has ${existing.count.toLocaleString()} articles`,
-        };
-      }
+      const existingCount = existing?.count || 0;
 
       return {
         site: s.name,
@@ -175,16 +161,14 @@ export default function ImportPage() {
         skipped: 0,
         page: 0,
         totalPages: 0,
+        message: existingCount > 0 ? `${existingCount.toLocaleString()} already in DB, continuing...` : undefined,
       };
     });
     setResults([...allResults]);
 
-    // Get only sites that need importing
-    const toImport = allResults
-      .map((r, i) => ({ ...r, index: i }))
-      .filter((r) => r.status === "waiting");
+    // Process ALL sites in batches
+    const toImport = allResults.map((r, i) => ({ ...r, index: i }));
 
-    // Process in batches
     let i = 0;
     while (i < toImport.length && !abortRef.current) {
       const batch = toImport.slice(i, i + parallel);
@@ -271,7 +255,6 @@ export default function ImportPage() {
   const totalImported = results.reduce((sum, r) => sum + r.imported, 0);
   const totalDone = results.filter((r) => r.status === "success" || r.status === "error").length;
   const totalFailed = results.filter((r) => r.status === "error").length;
-  const totalSkippedCount = results.filter((r) => r.status === "skipped").length;
 
   return (
     <div>
@@ -331,16 +314,6 @@ export default function ImportPage() {
                 Server fetches articles from each WordPress site and saves to database.
               </p>
 
-              <label className="block text-sm font-medium mb-1">Import mode</label>
-              <select
-                value={importMode}
-                onChange={(e) => setImportMode(e.target.value as "all" | "empty" | "failed")}
-                className="w-full px-3 py-2 border rounded-lg mb-4 outline-none"
-              >
-                <option value="empty">Only sites without articles (skip imported)</option>
-                <option value="all">All 50 sites (reimport everything)</option>
-              </select>
-
               <label className="block text-sm font-medium mb-1">Parallel imports</label>
               <select
                 value={parallel}
@@ -359,7 +332,7 @@ export default function ImportPage() {
                 className="w-full py-3 rounded-xl font-bold text-white bg-[#c1121f] hover:bg-[#8b0000] disabled:bg-gray-300 flex items-center justify-center gap-2 transition-colors"
               >
                 {importing ? (
-                  <><Loader2 size={18} className="animate-spin" /> Importing {totalDone}/{results.length - totalSkippedCount}...</>
+                  <><Loader2 size={18} className="animate-spin" /> Importing {totalDone}/{results.length}...</>
                 ) : (
                   <><Play size={18} /> Start Import</>
                 )}
@@ -440,8 +413,7 @@ export default function ImportPage() {
         <div className="lg:col-span-2">
           <div className="bg-white rounded-xl shadow-sm p-6">
             <h2 className="font-bold mb-4">
-              Import Progress {totalDone > 0 && `(${totalDone}/${results.length - totalSkippedCount} active)`}
-              {totalSkippedCount > 0 && <span className="text-gray-400 text-sm font-normal ml-2">{totalSkippedCount} skipped</span>}
+              Import Progress {totalDone > 0 && `(${totalDone}/${results.length})`}
             </h2>
             {results.length === 0 ? (
               <div className="text-center py-12 text-gray-400">
