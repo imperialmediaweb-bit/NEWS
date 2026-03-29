@@ -71,7 +71,12 @@ export default function ImportPage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ siteSlug, page }),
     });
-    return res.json();
+    const text = await res.text();
+    try {
+      return JSON.parse(text);
+    } catch {
+      return { imported: 0, skipped: 0, totalPages: 0, done: false, error: text.slice(0, 100) };
+    }
   }
 
   // Import one full site page by page
