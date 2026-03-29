@@ -182,18 +182,21 @@ export default function ImportPage() {
     });
     setResults([...allResults]);
 
-    // Process ALL sites in batches
+    // Sliding window: as soon as one finishes, start the next
     const toImport = allResults.map((r, i) => ({ ...r, index: i }));
+    let nextIdx = 0;
 
-    let i = 0;
-    while (i < toImport.length && !abortRef.current) {
-      const batch = toImport.slice(i, i + parallel);
-      const promises = batch.map((item) =>
-        importFullSite(item.slug, item.site, item.index, allResults)
-      );
-      await Promise.all(promises);
-      i += parallel;
+    async function runNext(): Promise<void> {
+      while (nextIdx < toImport.length && !abortRef.current) {
+        const item = toImport[nextIdx];
+        nextIdx++;
+        await importFullSite(item.slug, item.site, item.index, allResults);
+      }
     }
+
+    // Start `parallel` workers, each picks up the next site when done
+    const workers = Array.from({ length: Math.min(parallel, toImport.length) }, () => runNext());
+    await Promise.all(workers);
 
     setImporting(false);
   };
