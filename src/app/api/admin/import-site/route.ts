@@ -29,7 +29,8 @@ function getHeaders(attempt: number) {
   };
 }
 
-async function tryFetch(url: string): Promise<Response | null> {
+async function tryFetch(url: string): Promise<{ res: Response | null; errorDetail?: string }> {
+  let lastError = "";
   for (let attempt = 0; attempt < 5; attempt++) {
     try {
       const res = await fetch(url, {
@@ -37,18 +38,21 @@ async function tryFetch(url: string): Promise<Response | null> {
         signal: AbortSignal.timeout(60000),
         redirect: "follow",
       });
-      if (res.ok) return res;
+      if (res.ok) return { res };
+      if (res.status === 404 || res.status === 400) return { res: null, errorDetail: `HTTP ${res.status}` };
+      // Read body for error details
+      const body = await res.text().catch(() => "");
+      lastError = `HTTP ${res.status}: ${body.slice(0, 200)}`;
       if (res.status === 403 || res.status === 503) {
-        // Cloudflare block — wait longer each time
         await new Promise(r => setTimeout(r, 5000 * (attempt + 1)));
         continue;
       }
-      if (res.status === 404 || res.status === 400) return null;
-    } catch {
+    } catch (e) {
+      lastError = String(e).slice(0, 200);
       await new Promise(r => setTimeout(r, 3000 * (attempt + 1)));
     }
   }
-  return null;
+  return { res: null, errorDetail: lastError || "All 5 attempts failed" };
 }
 
 export async function POST(request: NextRequest) {
@@ -82,9 +86,11 @@ export async function POST(request: NextRequest) {
     ];
 
     let res: Response | null = null;
+    let errorDetail = "";
     for (const url of urlPatterns) {
-      res = await tryFetch(url);
-      if (res) break;
+      const result = await tryFetch(url);
+      if (result.res) { res = result.res; break; }
+      errorDetail = result.errorDetail || errorDetail;
     }
 
     if (!res) {
@@ -95,7 +101,7 @@ export async function POST(request: NextRequest) {
         skipped: 0,
         totalPages: 0,
         done: true,
-        error: "Could not access WordPress API (Cloudflare blocking)",
+        error: `Could not access WordPress API: ${errorDetail}`,
       });
     }
 
