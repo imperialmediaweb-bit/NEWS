@@ -95,21 +95,43 @@ export default function ImportPage() {
     allResults[index] = { ...allResults[index], status: "running", message: "Starting..." };
     setResults([...allResults]);
 
+    let consecutiveErrors = 0;
+
     while (!abortRef.current) {
       try {
         const data = await importPage(siteSlug, page);
 
         if (data.error) {
-          allResults[index] = {
-            ...allResults[index],
-            status: "error",
-            message: data.error,
-            imported: totalImported,
-            skipped: totalSkipped,
-          };
-          setResults([...allResults]);
-          return;
+          // If it's Cloudflare blocking, stop this site
+          if (data.error.includes("Cloudflare") || data.error.includes("Could not access")) {
+            allResults[index] = {
+              ...allResults[index],
+              status: "error",
+              message: data.error,
+              imported: totalImported,
+              skipped: totalSkipped,
+            };
+            setResults([...allResults]);
+            return;
+          }
+          // Other errors (timeout etc) — skip this page, try next
+          consecutiveErrors++;
+          if (consecutiveErrors >= 3) {
+            allResults[index] = {
+              ...allResults[index],
+              status: totalImported > 0 ? "success" : "error",
+              message: totalImported > 0 ? `${totalImported} articles (stopped at page ${page})` : data.error,
+              imported: totalImported,
+              skipped: totalSkipped,
+            };
+            setResults([...allResults]);
+            return;
+          }
+          page++;
+          continue;
         }
+
+        consecutiveErrors = 0;
 
         // Site already fully imported — skip instantly
         if (data.alreadyComplete) {
@@ -140,14 +162,24 @@ export default function ImportPage() {
         if (data.done) break;
         page++;
       } catch (err) {
+        consecutiveErrors++;
+        if (consecutiveErrors >= 3) {
+          allResults[index] = {
+            ...allResults[index],
+            status: totalImported > 0 ? "success" : "error",
+            message: totalImported > 0 ? `${totalImported} articles (stopped at page ${page})` : String(err),
+            imported: totalImported,
+          };
+          setResults([...allResults]);
+          return;
+        }
+        // Skip this page, try next
         allResults[index] = {
           ...allResults[index],
-          status: "error",
-          message: String(err),
-          imported: totalImported,
+          message: `Page ${page} timeout, skipping...`,
         };
         setResults([...allResults]);
-        return;
+        page++;
       }
     }
 
