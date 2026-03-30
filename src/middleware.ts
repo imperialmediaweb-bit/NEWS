@@ -123,6 +123,15 @@ export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const ua = req.headers.get("user-agent") || "";
   const ip = getClientIp(req);
+  const host = req.headers.get("host") || "";
+
+  // ─── 0. Redirect www → non-www (SEO canonical) ───
+  if (host.startsWith("www.")) {
+    const nonWww = host.replace(/^www\./, "");
+    const url = new URL(pathname, `https://${nonWww}`);
+    url.search = req.nextUrl.search;
+    return NextResponse.redirect(url, 301);
+  }
 
   // ─── 1. Block known bad bots/scanners ───
   for (const pattern of BAD_BOT_PATTERNS) {
