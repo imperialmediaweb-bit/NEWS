@@ -66,6 +66,11 @@ export async function POST(req: NextRequest) {
       try {
         const url = feed.url(site.state, site.city);
         const items = await parseFeed(url);
+
+        if (items.length === 0) {
+          console.log(`[fetch] No items from ${feed.id} for ${site.state} — URL: ${url}`);
+        }
+
         const limited = items.slice(0, feed.maxItems);
 
         for (const item of limited) {

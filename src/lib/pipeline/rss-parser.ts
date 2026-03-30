@@ -15,15 +15,21 @@ const parser = new XMLParser({
 });
 
 export async function parseFeed(url: string): Promise<FeedItem[]> {
+  // Use a real browser User-Agent — Google News blocks non-browser requests
   const res = await fetch(url, {
     headers: {
-      "User-Agent": "Mozilla/5.0 (compatible; MediaChief/1.0)",
+      "User-Agent":
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+      Accept:
+        "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+      "Accept-Language": "en-US,en;q=0.9",
     },
     next: { revalidate: 0 },
   });
 
   if (!res.ok) {
-    throw new Error(`Feed fetch failed: ${res.status} ${res.statusText} for ${url}`);
+    console.error(`Feed fetch failed: ${res.status} for ${url}`);
+    return []; // Return empty instead of throwing — don't break the whole batch
   }
 
   const xml = await res.text();
