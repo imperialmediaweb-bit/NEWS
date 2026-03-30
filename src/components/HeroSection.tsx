@@ -80,16 +80,16 @@ export default function HeroSection({ main, side }: HeroSectionProps) {
                   <img
                     src={article.img}
                     alt={article.title}
-                    className="w-full h-[170px] object-cover group-hover:scale-110 transition-transform duration-500 opacity-80 group-hover:opacity-60"
+                    className="w-full h-[120px] md:h-[170px] object-cover group-hover:scale-110 transition-transform duration-500 opacity-80 group-hover:opacity-60"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
                   <div className="absolute top-2 left-2">
-                    <span className="bg-[#c1121f] text-white text-[8px] font-black uppercase tracking-widest px-2 py-0.5"
+                    <span className="bg-[#c1121f] text-white text-[7px] md:text-[8px] font-black uppercase tracking-widest px-1.5 md:px-2 py-0.5"
                       style={{ fontFamily: "'Oswald', sans-serif" }}>{article.category}</span>
                   </div>
                   <div className="absolute bottom-0 left-0 right-0 p-3">
                     <h3
-                      className="text-white text-[15px] font-bold leading-snug drop-shadow-lg line-clamp-2"
+                      className="text-white text-[13px] md:text-[15px] font-bold leading-snug drop-shadow-lg line-clamp-2"
                       style={{ fontFamily: "'Playfair Display', serif", fontWeight: 800 }}
                     >
                       {article.title}

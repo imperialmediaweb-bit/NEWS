@@ -54,14 +54,14 @@ export default function Home() {
       <HeroSection main={content.heroMain} side={content.heroSide} />
 
       {/* Ad banner */}
-      <div className="bg-black text-white text-center py-4 my-2">
-        <p className="text-sm md:text-base font-medium">
+      <div className="bg-black text-white text-center py-3 md:py-4 my-2">
+        <p className="text-xs md:text-base font-medium px-4">
           Promote your business. <a href="#" className="text-[#c1121f] font-bold hover:underline">Contact us!</a>
         </p>
       </div>
 
       {/* POPULAR — trending stories row */}
-      <div className="max-w-[1300px] mx-auto px-4">
+      <div className="max-w-[1300px] mx-auto px-3 md:px-4">
         <PopularSection articles={content.popular} />
       </div>
 
