@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 /**
- * Setup www -> non-www 301 redirect via Cloudflare Redirect Rules (free tier).
- * Uses the newer Rulesets API instead of legacy Page Rules.
+ * Setup www -> non-www 301 redirect via Cloudflare Single Redirect Rules.
  */
 export async function POST(req: NextRequest) {
   const token =
@@ -46,8 +45,7 @@ export async function POST(req: NextRequest) {
 
   for (const zone of allZones) {
     try {
-      // Step 1: Ensure www DNS record exists (needed for Cloudflare to handle the request)
-      // Create a proxied CNAME www -> root domain (Cloudflare intercepts before reaching Railway)
+      // Step 1: Ensure www DNS record exists (proxied so Cloudflare handles it)
       let hasWwwDns = false;
       for (const type of ["A", "AAAA", "CNAME"]) {
         const existRes = await fetch(
@@ -57,16 +55,12 @@ export async function POST(req: NextRequest) {
         const existData = await existRes.json();
         if ((existData.result || []).length > 0) {
           hasWwwDns = true;
-          // Make sure it's proxied (orange cloud) so Cloudflare can redirect
+          // Ensure proxied
           for (const rec of existData.result) {
             if (!rec.proxied) {
               await fetch(
                 `https://api.cloudflare.com/client/v4/zones/${zone.id}/dns_records/${rec.id}`,
-                {
-                  method: "PATCH",
-                  headers: cfHeaders,
-                  body: JSON.stringify({ proxied: true }),
-                }
+                { method: "PATCH", headers: cfHeaders, body: JSON.stringify({ proxied: true }) }
               );
             }
           }
@@ -74,7 +68,6 @@ export async function POST(req: NextRequest) {
       }
 
       if (!hasWwwDns) {
-        // Create proxied CNAME www -> root (Cloudflare handles redirect before Railway)
         await fetch(
           `https://api.cloudflare.com/client/v4/zones/${zone.id}/dns_records`,
           {
@@ -91,88 +84,73 @@ export async function POST(req: NextRequest) {
         );
       }
 
-      // Step 2: Create redirect rule using Rulesets API
-      // First, check existing redirect rules
+      // Step 2: Create Single Redirect rule (phase: http_request_redirect)
+      // Check if ruleset exists for this phase
       const rulesetsRes = await fetch(
-        `https://api.cloudflare.com/client/v4/zones/${zone.id}/rulesets?phase=http_request_dynamic_redirect`,
+        `https://api.cloudflare.com/client/v4/zones/${zone.id}/rulesets`,
         { headers: cfHeaders }
       );
       const rulesetsData = await rulesetsRes.json();
 
-      // Check if www redirect rule already exists in any ruleset
-      let ruleExists = false;
+      let redirectRulesetId = "";
       for (const rs of rulesetsData.result || []) {
-        if (rs.phase === "http_request_dynamic_redirect") {
-          const rsDetailRes = await fetch(
-            `https://api.cloudflare.com/client/v4/zones/${zone.id}/rulesets/${rs.id}`,
-            { headers: cfHeaders }
-          );
-          const rsDetail = await rsDetailRes.json();
-          for (const rule of rsDetail.result?.rules || []) {
-            if (rule.description?.includes("www redirect") || rule.expression?.includes("www.")) {
-              ruleExists = true;
-              break;
-            }
-          }
-        }
-      }
-
-      if (ruleExists) {
-        results.push({ domain: zone.name, status: "OK", detail: "Rule already exists" });
-        continue;
-      }
-
-      // Create or update the redirect ruleset
-      const rulesetPayload = {
-        name: "www to non-www redirect",
-        kind: "zone",
-        phase: "http_request_dynamic_redirect",
-        rules: [
-          {
-            expression: `(http.host eq "www.${zone.name}")`,
-            description: "www redirect to non-www",
-            action: "redirect",
-            action_parameters: {
-              from_value: {
-                status_code: 301,
-                target_url: {
-                  expression: `concat("https://${zone.name}", http.request.uri.path)`,
-                },
-                preserve_query_string: true,
-              },
-            },
-          },
-        ],
-      };
-
-      // Try to find existing ruleset to update, or create new
-      let rulesetId = "";
-      for (const rs of rulesetsData.result || []) {
-        if (rs.phase === "http_request_dynamic_redirect") {
-          rulesetId = rs.id;
+        if (rs.phase === "http_request_redirect") {
+          redirectRulesetId = rs.id;
           break;
         }
       }
 
+      // Check if www rule already exists
+      if (redirectRulesetId) {
+        const rsRes = await fetch(
+          `https://api.cloudflare.com/client/v4/zones/${zone.id}/rulesets/${redirectRulesetId}`,
+          { headers: cfHeaders }
+        );
+        const rsData = await rsRes.json();
+        const hasWwwRule = (rsData.result?.rules || []).some(
+          (r: { expression?: string }) => r.expression?.includes("www.")
+        );
+        if (hasWwwRule) {
+          results.push({ domain: zone.name, status: "OK", detail: "Rule already exists" });
+          continue;
+        }
+      }
+
+      const redirectRule = {
+        expression: `(http.host eq "www.${zone.name}")`,
+        description: "www redirect to non-www",
+        action: "redirect",
+        action_parameters: {
+          from_value: {
+            status_code: 301,
+            target_url: {
+              value: `https://${zone.name}`,
+            },
+            preserve_query_string: true,
+          },
+        },
+      };
+
       let ruleRes;
-      if (rulesetId) {
+      if (redirectRulesetId) {
         // Add rule to existing ruleset
         ruleRes = await fetch(
-          `https://api.cloudflare.com/client/v4/zones/${zone.id}/rulesets/${rulesetId}/rules`,
-          {
-            method: "POST",
-            headers: cfHeaders,
-            body: JSON.stringify(rulesetPayload.rules[0]),
-          }
+          `https://api.cloudflare.com/client/v4/zones/${zone.id}/rulesets/${redirectRulesetId}/rules`,
+          { method: "POST", headers: cfHeaders, body: JSON.stringify(redirectRule) }
         );
       } else {
-        // Create new ruleset with the rule
+        // Create new ruleset
         ruleRes = await fetch(
           `https://api.cloudflare.com/client/v4/zones/${zone.id}/rulesets`,
           {
             method: "POST",
             headers: cfHeaders,
-            body: JSON.stringify(rulesetPayload),
+            body: JSON.stringify({
+              name: "www redirect",
+              kind: "zone",
+              phase: "http_request_redirect",
+              rules: [redirectRule],
+            }),
           }
         );
       }
@@ -184,7 +162,7 @@ export async function POST(req: NextRequest) {
         results.push({
           domain: zone.name,
           status: "FAILED",
-          detail: ruleData.errors?.[0]?.message || JSON.stringify(ruleData.errors),
+          detail: ruleData.errors?.[0]?.message || JSON.stringify(ruleData.errors?.slice(0, 2)),
         });
       }
     } catch (err) {
