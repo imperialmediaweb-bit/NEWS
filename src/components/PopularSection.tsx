@@ -41,6 +41,7 @@ export default function PopularSection({ articles }: PopularSectionProps) {
                 <img
                   src={article.img}
                   alt={article.title}
+                  loading="lazy"
                   className="w-full h-[120px] md:h-[150px] object-cover group-hover:scale-110 transition-transform duration-500"
                 />
                 <div className="absolute top-1.5 left-1.5">

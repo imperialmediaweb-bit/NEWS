@@ -32,6 +32,7 @@ export default function HeroSection({ main, side }: HeroSectionProps) {
               <img
                 src={main.img}
                 alt={main.title}
+                loading="eager"
                 className="w-full h-[400px] md:h-[500px] lg:h-[600px] object-cover group-hover:scale-105 transition-transform duration-700 opacity-80 group-hover:opacity-70"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
@@ -80,6 +81,7 @@ export default function HeroSection({ main, side }: HeroSectionProps) {
                   <img
                     src={article.img}
                     alt={article.title}
+                    loading="lazy"
                     className="w-full h-[120px] md:h-[170px] object-cover group-hover:scale-110 transition-transform duration-500 opacity-80 group-hover:opacity-60"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />

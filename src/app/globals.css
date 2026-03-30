@@ -5,6 +5,8 @@
 :root {
   --background: #ffffff;
   --foreground: #111111;
+  --font-playfair: 'Playfair Display', Georgia, serif;
+  --font-oswald: 'Oswald', Arial, sans-serif;
 }
 
 * {
@@ -121,4 +123,21 @@ body {
   width: 100%;
   border-radius: 0.5rem;
   margin: 1.5rem 0;
+}
+
+/* Performance: font classes to avoid inline styles */
+.font-playfair {
+  font-family: var(--font-playfair);
+}
+.font-oswald {
+  font-family: var(--font-oswald);
+}
+.font-serif {
+  font-family: Georgia, 'Times New Roman', serif;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  .animate-ticker { animation: none; }
+  * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
 }

@@ -45,7 +45,7 @@ export default function Sidebar({ trending, latest, newsletter }: SidebarProps) 
                   {i + 1}
                 </span>
                 <div className="flex gap-2.5 flex-1 min-w-0">
-                  <img src={article.img} alt="" className="w-16 h-16 object-cover rounded shrink-0" />
+                  <img src={article.img} alt="" loading="lazy" className="w-16 h-16 object-cover rounded shrink-0" />
                   <div className="min-w-0">
                     <span className="text-[9px] font-bold uppercase tracking-widest text-[#c1121f]" style={{ fontFamily: "'Oswald', sans-serif" }}>
                       {article.category}
@@ -99,7 +99,7 @@ export default function Sidebar({ trending, latest, newsletter }: SidebarProps) 
           {latest.map((article, i) => (
             <Link key={i} href={articleHref(article)}>
               <div className="flex gap-3 p-3 group cursor-pointer hover:bg-gray-50 transition-colors">
-                <img src={article.img} alt="" className="w-14 h-14 object-cover rounded shrink-0" />
+                <img src={article.img} alt="" loading="lazy" className="w-14 h-14 object-cover rounded shrink-0" />
                 <div className="min-w-0">
                   <h4 className="text-[13px] font-bold leading-tight line-clamp-2 group-hover:text-[#c1121f] transition-colors" style={{ fontFamily: "'Source Serif 4', serif" }}>
                     {article.title}
