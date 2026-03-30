@@ -86,7 +86,7 @@ async function processZones(cfToken: string) {
 
         let redirectRulesetId = "";
         for (const rs of rulesetsData.result || []) {
-          if (rs.phase === "http_request_redirect") {
+          if (rs.phase === "http_request_dynamic_redirect") {
             redirectRulesetId = rs.id;
             break;
           }
@@ -136,7 +136,7 @@ async function processZones(cfToken: string) {
               body: JSON.stringify({
                 name: "www redirect",
                 kind: "zone",
-                phase: "http_request_redirect",
+                phase: "http_request_dynamic_redirect",
                 rules: [redirectRule],
               }),
             }
