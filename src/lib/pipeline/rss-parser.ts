@@ -79,10 +79,37 @@ function normalizeAtom(entries: unknown[]): FeedItem[] {
   });
 }
 
+function decodeHtmlEntities(text: string): string {
+  const entities: Record<string, string> = {
+    "&amp;": "&",
+    "&lt;": "<",
+    "&gt;": ">",
+    "&quot;": '"',
+    "&apos;": "'",
+    "&#8216;": "\u2018",
+    "&#8217;": "\u2019",
+    "&#8220;": "\u201C",
+    "&#8221;": "\u201D",
+    "&#8211;": "\u2013",
+    "&#8212;": "\u2014",
+    "&#8230;": "\u2026",
+    "&#160;": " ",
+  };
+  let result = text;
+  for (const [entity, char] of Object.entries(entities)) {
+    result = result.split(entity).join(char);
+  }
+  // Decode numeric entities like &#123;
+  result = result.replace(/&#(\d+);/g, (_, num) => String.fromCharCode(parseInt(num, 10)));
+  return result;
+}
+
 function stripCDATA(text: string): string {
-  return text
-    .replace(/<!\[CDATA\[/g, "")
-    .replace(/\]\]>/g, "")
-    .replace(/<[^>]+>/g, "")
-    .trim();
+  return decodeHtmlEntities(
+    text
+      .replace(/<!\[CDATA\[/g, "")
+      .replace(/\]\]>/g, "")
+      .replace(/<[^>]+>/g, "")
+      .trim()
+  );
 }
