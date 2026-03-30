@@ -7,7 +7,12 @@ export interface RewriteResult {
   suggestedImageQuery: string;
 }
 
-type LLMProvider = "gemini" | "anthropic";
+type LLMProvider = "gemini" | "openai" | "anthropic";
+
+// Round-robin counter stored in memory (resets on deploy, which is fine)
+let rotationIndex = 0;
+
+const PROVIDER_ORDER: LLMProvider[] = ["gemini", "openai", "anthropic"];
 
 async function getConfig(key: string, fallback: string): Promise<string> {
   try {
@@ -19,6 +24,36 @@ async function getConfig(key: string, fallback: string): Promise<string> {
   } catch {
     return fallback;
   }
+}
+
+/**
+ * Get the next provider based on the configured strategy.
+ * - "rotation": round-robin Gemini → OpenAI → Claude
+ * - "cheapest": always Gemini (cheapest), others as fallback
+ * - "gemini" / "openai" / "anthropic": single provider with fallback chain
+ */
+async function getProviderChain(): Promise<LLMProvider[]> {
+  const strategy = await getConfig("llm_provider", "rotation");
+
+  if (strategy === "rotation") {
+    const idx = rotationIndex % PROVIDER_ORDER.length;
+    rotationIndex++;
+    // Start from current rotation position, then try others
+    const chain: LLMProvider[] = [];
+    for (let i = 0; i < PROVIDER_ORDER.length; i++) {
+      chain.push(PROVIDER_ORDER[(idx + i) % PROVIDER_ORDER.length]);
+    }
+    return chain;
+  }
+
+  if (strategy === "cheapest") {
+    return ["gemini", "openai", "anthropic"];
+  }
+
+  // Single provider with fallback to others
+  const primary = strategy as LLMProvider;
+  const fallbacks = PROVIDER_ORDER.filter((p) => p !== primary);
+  return [primary, ...fallbacks];
 }
 
 function buildNewsPrompt(
@@ -97,11 +132,13 @@ Return ONLY a valid JSON object (no markdown code fences):
 }`;
 }
 
+// ─── LLM Provider Implementations ───
+
 async function callGemini(prompt: string): Promise<RewriteResult> {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error("GEMINI_API_KEY not set");
 
-  const model = await getConfig("llm_model", "gemini-2.0-flash");
+  const model = await getConfig("llm_model_gemini", "gemini-2.0-flash");
   const res = await fetch(
     `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
     {
@@ -124,8 +161,37 @@ async function callGemini(prompt: string): Promise<RewriteResult> {
   }
 
   const data = await res.json();
-  const text =
-    data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
+  const text = data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
+  return parseRewriteResponse(text);
+}
+
+async function callOpenAI(prompt: string): Promise<RewriteResult> {
+  const apiKey = process.env.OPENAI_API_KEY;
+  if (!apiKey) throw new Error("OPENAI_API_KEY not set");
+
+  const model = await getConfig("llm_model_openai", "gpt-4o-mini");
+  const res = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${apiKey}`,
+    },
+    body: JSON.stringify({
+      model,
+      temperature: 0.7,
+      max_tokens: 4096,
+      response_format: { type: "json_object" },
+      messages: [{ role: "user", content: prompt }],
+    }),
+  });
+
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`OpenAI API error ${res.status}: ${err}`);
+  }
+
+  const data = await res.json();
+  const text = data?.choices?.[0]?.message?.content || "";
   return parseRewriteResponse(text);
 }
 
@@ -133,6 +199,7 @@ async function callAnthropic(prompt: string): Promise<RewriteResult> {
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) throw new Error("ANTHROPIC_API_KEY not set");
 
+  const model = await getConfig("llm_model_anthropic", "claude-haiku-4-5-20241022");
   const res = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
     headers: {
@@ -141,7 +208,7 @@ async function callAnthropic(prompt: string): Promise<RewriteResult> {
       "anthropic-version": "2023-06-01",
     },
     body: JSON.stringify({
-      model: "claude-haiku-4-5-20241022",
+      model,
       max_tokens: 4096,
       temperature: 0.7,
       messages: [{ role: "user", content: prompt }],
@@ -154,13 +221,19 @@ async function callAnthropic(prompt: string): Promise<RewriteResult> {
   }
 
   const data = await res.json();
-  const text =
-    data?.content?.[0]?.text || "";
+  const text = data?.content?.[0]?.text || "";
   return parseRewriteResponse(text);
 }
 
+// ─── Provider dispatch ───
+
+const PROVIDER_FNS: Record<LLMProvider, (prompt: string) => Promise<RewriteResult>> = {
+  gemini: callGemini,
+  openai: callOpenAI,
+  anthropic: callAnthropic,
+};
+
 function parseRewriteResponse(text: string): RewriteResult {
-  // Strip markdown code fences if present
   const cleaned = text
     .replace(/^```json?\s*/i, "")
     .replace(/```\s*$/i, "")
@@ -175,6 +248,29 @@ function parseRewriteResponse(text: string): RewriteResult {
   };
 }
 
+/**
+ * Call LLM with automatic fallback chain.
+ * Tries each provider in the chain until one succeeds.
+ */
+async function callWithFallback(prompt: string): Promise<RewriteResult> {
+  const chain = await getProviderChain();
+  const errors: string[] = [];
+
+  for (const provider of chain) {
+    try {
+      const result = await PROVIDER_FNS[provider](prompt);
+      return result;
+    } catch (error) {
+      errors.push(`${provider}: ${String(error)}`);
+      console.error(`LLM ${provider} failed, trying next...`, error);
+    }
+  }
+
+  throw new Error(`All LLM providers failed: ${errors.join(" | ")}`);
+}
+
+// ─── Public API ───
+
 export async function rewriteArticle(
   siteName: string,
   state: string,
@@ -184,30 +280,8 @@ export async function rewriteArticle(
   sourceUrl: string,
   category: string
 ): Promise<RewriteResult> {
-  const provider = (await getConfig("llm_provider", "gemini")) as LLMProvider;
   const prompt = buildNewsPrompt(siteName, state, city, title, description, sourceUrl, category);
-
-  try {
-    if (provider === "gemini") {
-      return await callGemini(prompt);
-    } else {
-      return await callAnthropic(prompt);
-    }
-  } catch (error) {
-    // Fallback to the other provider
-    console.error(`Primary LLM (${provider}) failed, trying fallback:`, error);
-    try {
-      if (provider === "gemini") {
-        return await callAnthropic(prompt);
-      } else {
-        return await callGemini(prompt);
-      }
-    } catch (fallbackError) {
-      throw new Error(
-        `Both LLM providers failed. Primary: ${error}. Fallback: ${fallbackError}`
-      );
-    }
-  }
+  return callWithFallback(prompt);
 }
 
 export async function generateOpinion(
@@ -217,7 +291,6 @@ export async function generateOpinion(
   title: string,
   description: string
 ): Promise<RewriteResult> {
-  const provider = (await getConfig("llm_provider", "gemini")) as LLMProvider;
   const penNames = [
     "James Whitfield",
     "Sarah Mitchell",
@@ -227,25 +300,5 @@ export async function generateOpinion(
   ];
   const penName = penNames[Math.floor(Math.random() * penNames.length)];
   const prompt = buildOpinionPrompt(siteName, state, city, title, description, penName);
-
-  try {
-    if (provider === "gemini") {
-      return await callGemini(prompt);
-    } else {
-      return await callAnthropic(prompt);
-    }
-  } catch (error) {
-    console.error(`Primary LLM (${provider}) failed for opinion, trying fallback:`, error);
-    try {
-      if (provider === "gemini") {
-        return await callAnthropic(prompt);
-      } else {
-        return await callGemini(prompt);
-      }
-    } catch (fallbackError) {
-      throw new Error(
-        `Both LLM providers failed for opinion. Primary: ${error}. Fallback: ${fallbackError}`
-      );
-    }
-  }
+  return callWithFallback(prompt);
 }

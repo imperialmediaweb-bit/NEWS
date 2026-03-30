@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import pool from "@/lib/db";
+import { isPublishingHours } from "@/config/feeds";
 import { rewriteArticle } from "@/lib/pipeline/rewriter";
 import { findImage } from "@/lib/pipeline/images";
 import { publishArticle } from "@/lib/pipeline/publisher";
@@ -18,6 +19,10 @@ export async function POST(req: NextRequest) {
 
   if (!(await isPipelineEnabled())) {
     return NextResponse.json({ message: "Pipeline disabled" });
+  }
+
+  if (!isPublishingHours()) {
+    return NextResponse.json({ message: "Outside publishing hours (6 AM - 10 PM ET)" });
   }
 
   const body = await req.json().catch(() => ({}));

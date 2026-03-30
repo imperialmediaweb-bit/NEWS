@@ -19,17 +19,15 @@ const CONFIG_FIELDS: Omit<ConfigEntry, "value">[] = [
   },
   {
     key: "llm_provider",
-    label: "LLM Provider",
+    label: "LLM Strategy",
     type: "select",
     options: [
-      { value: "gemini", label: "Gemini Flash (cheapest)" },
-      { value: "anthropic", label: "Claude Haiku (fallback)" },
+      { value: "rotation", label: "Rotation: Gemini → OpenAI → Claude (recommended)" },
+      { value: "cheapest", label: "Cheapest first: Gemini → OpenAI → Claude" },
+      { value: "gemini", label: "Gemini Flash only (cheapest)" },
+      { value: "openai", label: "OpenAI GPT-4o-mini only" },
+      { value: "anthropic", label: "Claude Haiku only" },
     ],
-  },
-  {
-    key: "llm_model",
-    label: "LLM Model",
-    type: "text",
   },
   {
     key: "articles_per_batch",
@@ -195,7 +193,8 @@ export default function PipelineSettingsPage() {
         <div className="text-xs text-gray-600 space-y-1 font-mono">
           <p>CRON_SECRET=your-random-secret</p>
           <p>GEMINI_API_KEY=your-google-ai-studio-key</p>
-          <p>ANTHROPIC_API_KEY=your-anthropic-key (optional fallback)</p>
+          <p>OPENAI_API_KEY=your-openai-key</p>
+          <p>ANTHROPIC_API_KEY=your-anthropic-key</p>
           <p>PIXABAY_API_KEY=your-pixabay-key</p>
           <p>PEXELS_API_KEY=your-pexels-key (optional)</p>
           <p>UNSPLASH_ACCESS_KEY=your-unsplash-key (optional)</p>

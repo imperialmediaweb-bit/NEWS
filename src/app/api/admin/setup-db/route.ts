@@ -105,9 +105,11 @@ CREATE TABLE IF NOT EXISTS pipeline_config (
 );
 INSERT INTO pipeline_config (key, value) VALUES
   ('enabled', 'true'),
-  ('llm_provider', 'gemini'),
-  ('llm_model', 'gemini-2.0-flash'),
-  ('articles_per_batch', '5'),
+  ('llm_provider', 'rotation'),
+  ('llm_model_gemini', 'gemini-2.0-flash'),
+  ('llm_model_openai', 'gpt-4o-mini'),
+  ('llm_model_anthropic', 'claude-haiku-4-5-20241022'),
+  ('articles_per_batch', '10'),
   ('image_provider', 'pixabay'),
   ('opinion_enabled', 'true')
 ON CONFLICT (key) DO NOTHING;

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { feeds, STATE_BATCHES } from "@/config/feeds";
+import { feeds, STATE_BATCHES, isPublishingHours } from "@/config/feeds";
 import { parseFeed } from "@/lib/pipeline/rss-parser";
 import { isDuplicate, insertFeedItem } from "@/lib/pipeline/dedup";
 import {
@@ -21,6 +21,10 @@ export async function POST(req: NextRequest) {
 
   if (!(await isPipelineEnabled())) {
     return NextResponse.json({ message: "Pipeline disabled" });
+  }
+
+  if (!isPublishingHours()) {
+    return NextResponse.json({ message: "Outside publishing hours (6 AM - 10 PM ET)" });
   }
 
   const body = await req.json().catch(() => ({}));
