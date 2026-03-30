@@ -1,67 +1,143 @@
 import pool from "@/lib/db";
 import { RewriteResult } from "./rewriter";
 
-// Realistic journalist bylines — diverse, American-sounding names
-// Each category has its own pool of "beat reporters"
-const REPORTERS: Record<string, string[]> = {
+// Realistic journalist bylines with titles — like real US newspapers
+// Format: "Name, Title" — saved as author field
+interface Reporter {
+  name: string;
+  title: string;
+}
+
+const REPORTERS: Record<string, Reporter[]> = {
   "local-news": [
-    "Sarah Mitchell", "James Whitfield", "Maria Gonzalez", "David Park",
-    "Emily Richardson", "Marcus Johnson", "Rachel Kim", "Thomas O'Brien",
-    "Angela Davis", "Christopher Lee",
+    { name: "Sarah Mitchell", title: "Senior Local Reporter" },
+    { name: "James Whitfield", title: "Metro Desk Editor" },
+    { name: "Maria Gonzalez", title: "Local News Correspondent" },
+    { name: "David Park", title: "Staff Writer" },
+    { name: "Emily Richardson", title: "Community Affairs Reporter" },
+    { name: "Marcus Johnson", title: "Junior Reporter" },
+    { name: "Rachel Kim", title: "City Hall Correspondent" },
+    { name: "Thomas O'Brien", title: "Breaking News Reporter" },
+    { name: "Angela Davis", title: "Local Desk Editor" },
+    { name: "Christopher Lee", title: "Staff Reporter" },
   ],
   "us-news": [
-    "Michael Torres", "Jennifer Walsh", "Robert Chen", "Amanda Foster",
-    "Daniel Brooks", "Katherine Nguyen", "Brian Sullivan", "Laura Martinez",
+    { name: "Michael Torres", title: "National Correspondent" },
+    { name: "Jennifer Walsh", title: "Senior National Reporter" },
+    { name: "Robert Chen", title: "Washington Correspondent" },
+    { name: "Amanda Foster", title: "National Desk Editor" },
+    { name: "Daniel Brooks", title: "Senior Staff Writer" },
+    { name: "Katherine Nguyen", title: "National Affairs Reporter" },
+    { name: "Brian Sullivan", title: "Staff Writer" },
+    { name: "Laura Martinez", title: "Junior National Reporter" },
   ],
   politics: [
-    "Patricia Coleman", "Andrew Stevens", "Michelle Wang", "Steven Keller",
-    "Diana Reyes", "William Hart", "Samantha Pierce", "Jonathan Blake",
+    { name: "Patricia Coleman", title: "Senior Political Correspondent" },
+    { name: "Andrew Stevens", title: "Political Editor" },
+    { name: "Michelle Wang", title: "Capitol Bureau Chief" },
+    { name: "Steven Keller", title: "Political Analyst" },
+    { name: "Diana Reyes", title: "Politics Reporter" },
+    { name: "William Hart", title: "Senior Political Writer" },
+    { name: "Samantha Pierce", title: "Government Affairs Reporter" },
+    { name: "Jonathan Blake", title: "Junior Political Correspondent" },
   ],
   sports: [
-    "Tyler Jackson", "Nicole Adams", "Kevin Murphy", "Megan Thompson",
-    "Derek Williams", "Ashley Morgan", "Ryan Cooper", "Brittany Hall",
+    { name: "Tyler Jackson", title: "Sports Editor" },
+    { name: "Nicole Adams", title: "Senior Sports Reporter" },
+    { name: "Kevin Murphy", title: "Sports Columnist" },
+    { name: "Megan Thompson", title: "Staff Sports Writer" },
+    { name: "Derek Williams", title: "Athletics Correspondent" },
+    { name: "Ashley Morgan", title: "Sports Desk Reporter" },
+    { name: "Ryan Cooper", title: "Junior Sports Writer" },
+    { name: "Brittany Hall", title: "Sideline Reporter" },
   ],
   entertainment: [
-    "Jessica Lane", "Brandon Cruz", "Olivia Bennett", "Nathan Reed",
-    "Sophia Turner", "Ethan Price", "Chloe Rivera", "Dylan Moore",
+    { name: "Jessica Lane", title: "Entertainment Editor" },
+    { name: "Brandon Cruz", title: "Culture Correspondent" },
+    { name: "Olivia Bennett", title: "Arts & Entertainment Reporter" },
+    { name: "Nathan Reed", title: "Senior Entertainment Writer" },
+    { name: "Sophia Turner", title: "Pop Culture Reporter" },
+    { name: "Ethan Price", title: "Staff Entertainment Writer" },
+    { name: "Chloe Rivera", title: "Junior Arts Reporter" },
+    { name: "Dylan Moore", title: "Media Correspondent" },
   ],
   celebrity: [
-    "Vanessa Cole", "Jake Morrison", "Isabella Grant", "Lucas Webb",
-    "Hannah Phillips", "Mason Clark", "Emma Russo", "Noah Patterson",
+    { name: "Vanessa Cole", title: "Celebrity Correspondent" },
+    { name: "Jake Morrison", title: "Entertainment Desk Editor" },
+    { name: "Isabella Grant", title: "Senior Celebrity Reporter" },
+    { name: "Lucas Webb", title: "Hollywood Correspondent" },
+    { name: "Hannah Phillips", title: "Celebrity News Writer" },
+    { name: "Mason Clark", title: "Pop Culture Editor" },
+    { name: "Emma Russo", title: "Staff Celebrity Writer" },
+    { name: "Noah Patterson", title: "Junior Entertainment Reporter" },
   ],
   technology: [
-    "Alex Sharma", "Priya Patel", "Jason Wu", "Rebecca Hoffman",
-    "Kevin Chang", "Mia Rodriguez", "Daniel Kim", "Sarah Nakamura",
+    { name: "Alex Sharma", title: "Technology Editor" },
+    { name: "Priya Patel", title: "Senior Tech Reporter" },
+    { name: "Jason Wu", title: "Silicon Valley Correspondent" },
+    { name: "Rebecca Hoffman", title: "Tech Industry Analyst" },
+    { name: "Kevin Chang", title: "Digital Trends Reporter" },
+    { name: "Mia Rodriguez", title: "Staff Tech Writer" },
+    { name: "Daniel Kim", title: "Innovation Correspondent" },
+    { name: "Sarah Nakamura", title: "Junior Tech Reporter" },
   ],
   "world-news": [
-    "Catherine Banks", "Gregory Stone", "Natalie Herrera", "Peter Lawson",
-    "Victoria Cross", "Simon Hayes", "Gabriella Fox", "Adrian Wells",
+    { name: "Catherine Banks", title: "Foreign Correspondent" },
+    { name: "Gregory Stone", title: "International Editor" },
+    { name: "Natalie Herrera", title: "Senior World Affairs Reporter" },
+    { name: "Peter Lawson", title: "Global Desk Editor" },
+    { name: "Victoria Cross", title: "International Correspondent" },
+    { name: "Simon Hayes", title: "World News Analyst" },
+    { name: "Gabriella Fox", title: "Staff International Writer" },
+    { name: "Adrian Wells", title: "Junior Foreign Correspondent" },
   ],
   lifestyle: [
-    "Lauren Hayes", "Jordan Ellis", "Melissa Green", "Chris Donovan",
-    "Stephanie Ross", "Ian Carter", "Heather Quinn", "Mark Fisher",
+    { name: "Lauren Hayes", title: "Lifestyle Editor" },
+    { name: "Jordan Ellis", title: "Health & Wellness Reporter" },
+    { name: "Melissa Green", title: "Senior Features Writer" },
+    { name: "Chris Donovan", title: "Lifestyle Correspondent" },
+    { name: "Stephanie Ross", title: "Living Section Editor" },
+    { name: "Ian Carter", title: "Staff Features Writer" },
+    { name: "Heather Quinn", title: "Wellness Columnist" },
+    { name: "Mark Fisher", title: "Junior Lifestyle Reporter" },
   ],
   crime: [
-    "Frank Doyle", "Sandra Vega", "Raymond Scott", "Teresa Burke",
-    "Gary Palmer", "Monica Reeves", "Douglas Grant", "Linda Marsh",
+    { name: "Frank Doyle", title: "Senior Crime Reporter" },
+    { name: "Sandra Vega", title: "Crime & Justice Editor" },
+    { name: "Raymond Scott", title: "Investigative Reporter" },
+    { name: "Teresa Burke", title: "Court Correspondent" },
+    { name: "Gary Palmer", title: "Crime Desk Reporter" },
+    { name: "Monica Reeves", title: "Public Safety Correspondent" },
+    { name: "Douglas Grant", title: "Staff Crime Writer" },
+    { name: "Linda Marsh", title: "Junior Crime Reporter" },
   ],
   business: [
-    "Richard Yang", "Caroline Shaw", "Jeffrey Morgan", "Diane Fletcher",
-    "Philip Reed", "Alicia Barnes", "Howard Klein", "Margaret Chen",
+    { name: "Richard Yang", title: "Business Editor" },
+    { name: "Caroline Shaw", title: "Senior Financial Reporter" },
+    { name: "Jeffrey Morgan", title: "Wall Street Correspondent" },
+    { name: "Diane Fletcher", title: "Economy Reporter" },
+    { name: "Philip Reed", title: "Markets Analyst" },
+    { name: "Alicia Barnes", title: "Business Desk Editor" },
+    { name: "Howard Klein", title: "Staff Business Writer" },
+    { name: "Margaret Chen", title: "Junior Financial Reporter" },
   ],
   opinion: [
-    "James Whitfield", "Sarah Mitchell", "David Chen",
-    "Maria Rodriguez", "Robert Thompson",
+    { name: "James Whitfield", title: "Senior Editorial Writer" },
+    { name: "Sarah Mitchell", title: "Opinion Columnist" },
+    { name: "David Chen", title: "Contributing Editor" },
+    { name: "Maria Rodriguez", title: "Editorial Board Member" },
+    { name: "Robert Thompson", title: "Guest Columnist" },
   ],
 };
 
-const DEFAULT_REPORTERS = [
-  "Staff Reporter", "News Desk", "Editorial Team",
+const DEFAULT_REPORTERS: Reporter[] = [
+  { name: "Staff Reporter", title: "News Desk" },
 ];
 
 function getReporter(category: string): string {
-  const pool = REPORTERS[category] || DEFAULT_REPORTERS;
-  return pool[Math.floor(Math.random() * pool.length)];
+  const reporters = REPORTERS[category] || DEFAULT_REPORTERS;
+  const reporter = reporters[Math.floor(Math.random() * reporters.length)];
+  return `${reporter.name}, ${reporter.title}`;
 }
 
 function slugify(title: string): string {
