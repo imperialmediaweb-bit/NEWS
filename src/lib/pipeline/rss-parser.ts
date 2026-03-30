@@ -53,16 +53,12 @@ export async function parseFeed(url: string): Promise<FeedItem[]> {
       : [];
 
   return items.map((item: Record<string, unknown>) => ({
-    guid: String(item.guid || item.link || ""),
-    title: stripCDATA(String(item.title || "")),
-    link: String(item.link || ""),
-    description: stripCDATA(String(item.description || "")),
-    pubDate: String(item.pubDate || ""),
-    source: String(
-      typeof item.source === "object" && item.source !== null
-        ? (item.source as Record<string, string>)["#text"] || ""
-        : item.source || ""
-    ),
+    guid: extractText(item.guid) || extractText(item.link) || "",
+    title: stripCDATA(extractText(item.title) || ""),
+    link: extractText(item.link) || "",
+    description: stripCDATA(extractText(item.description) || ""),
+    pubDate: extractText(item.pubDate) || "",
+    source: extractText(item.source) || "",
   }));
 }
 
@@ -83,6 +79,27 @@ function normalizeAtom(entries: unknown[]): FeedItem[] {
       source: "",
     };
   });
+}
+
+/**
+ * Extract text from XML node — handles both strings and objects like
+ * { "@_isPermaLink": "false", "#text": "actual-guid-value" }
+ */
+function extractText(node: unknown): string {
+  if (node === null || node === undefined) return "";
+  if (typeof node === "string") return node;
+  if (typeof node === "number") return String(node);
+  if (typeof node === "object") {
+    const obj = node as Record<string, unknown>;
+    // fast-xml-parser puts text content in "#text" when attributes exist
+    if ("#text" in obj) return String(obj["#text"]);
+    // For <link> with href attribute (Atom)
+    if ("@_href" in obj) return String(obj["@_href"]);
+    // Fallback: try to get any string value
+    const values = Object.values(obj).filter((v) => typeof v === "string");
+    return values.length > 0 ? String(values[0]) : "";
+  }
+  return String(node);
 }
 
 function decodeHtmlEntities(text: string): string {
