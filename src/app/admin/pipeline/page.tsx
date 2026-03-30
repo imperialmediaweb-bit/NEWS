@@ -206,6 +206,11 @@ export default function PipelineDashboard() {
         <h2 className="font-bold mb-4">Manual Actions</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           <ActionButton
+            label="Run Cron (All)"
+            loading={actionLoading === "cron"}
+            onClick={() => runAction("cron")}
+          />
+          <ActionButton
             label="Fetch RSS"
             loading={actionLoading === "fetch"}
             onClick={() => runAction("fetch")}
@@ -230,6 +235,20 @@ export default function PipelineDashboard() {
             loading={actionLoading === "cleanup"}
             onClick={() => runAction("cleanup")}
           />
+        </div>
+      </div>
+
+      {/* Cron Setup Guide */}
+      <div className="bg-blue-50 rounded-xl shadow-sm p-6">
+        <h2 className="font-bold mb-2">Automatic Scheduling</h2>
+        <p className="text-sm text-gray-600 mb-3">
+          Set up ONE cron job to automate the entire pipeline. The <code>/api/pipeline/cron</code> endpoint handles all scheduling internally.
+        </p>
+        <div className="bg-white rounded-lg p-4 text-sm font-mono text-gray-700">
+          <p className="mb-1"><strong>URL:</strong> <code>POST {typeof window !== "undefined" ? window.location.origin : ""}/api/pipeline/cron</code></p>
+          <p className="mb-1"><strong>Schedule:</strong> Every 5 minutes (<code>*/5 * * * *</code>)</p>
+          <p className="mb-1"><strong>Header:</strong> <code>Authorization: Bearer [CRON_SECRET]</code></p>
+          <p className="mt-3 text-gray-500">Also supports GET — use any free uptime monitor (UptimeRobot, cron-job.org, etc.)</p>
         </div>
       </div>
 
