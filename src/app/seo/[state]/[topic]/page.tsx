@@ -78,6 +78,9 @@ export default function SeoTopicPage() {
     const existingLd = document.querySelector("script[data-seo-ld]");
     if (existingLd) existingLd.remove();
 
+    const topicLabel = topicSlug.replace(/-/g, " ").replace(/\b\w/g, (c: string) => c.toUpperCase());
+
+    // CollectionPage schema
     const ldScript = document.createElement("script");
     ldScript.type = "application/ld+json";
     ldScript.setAttribute("data-seo-ld", "true");
@@ -88,7 +91,7 @@ export default function SeoTopicPage() {
       description: page.description,
       url,
       publisher: {
-        "@type": "Organization",
+        "@type": "NewsMediaOrganization",
         name: site.name,
         logo: {
           "@type": "ImageObject",
@@ -109,12 +112,64 @@ export default function SeoTopicPage() {
           addressCountry: "US",
         },
       },
+      inLanguage: "en-US",
+      isPartOf: {
+        "@type": "WebSite",
+        name: site.name,
+        url: `https://${site.domain}`,
+      },
     });
     document.head.appendChild(ldScript);
+
+    // FAQ schema — auto-generated FAQs for rich snippets in Google
+    const faqScript = document.createElement("script");
+    faqScript.type = "application/ld+json";
+    faqScript.setAttribute("data-seo-faq", "true");
+    faqScript.textContent = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: [
+        {
+          "@type": "Question",
+          name: `What is the latest ${topicLabel.toLowerCase()} news in ${state.city}, ${state.state}?`,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: `${site.name} provides real-time ${topicLabel.toLowerCase()} news coverage for ${state.city}, ${state.state}. Our reporters deliver breaking news, in-depth analysis, and up-to-date reporting on all ${topicLabel.toLowerCase()} developments across ${state.state}.`,
+          },
+        },
+        {
+          "@type": "Question",
+          name: `Where can I find ${topicLabel.toLowerCase()} updates for ${state.state}?`,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: `You can find the latest ${topicLabel.toLowerCase()} updates for ${state.state} right here on ${site.name}. We cover ${state.city} and surrounding areas with daily news updates from our team of local reporters.`,
+          },
+        },
+        {
+          "@type": "Question",
+          name: `How often is ${topicLabel.toLowerCase()} news updated on ${site.name}?`,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: `${site.name} updates ${topicLabel.toLowerCase()} news multiple times per day, 7 days a week. Our editorial team monitors all major developments in ${state.city}, ${state.state} to bring you the most current reporting.`,
+          },
+        },
+        {
+          "@type": "Question",
+          name: `Is ${site.name} a reliable source for ${state.state} news?`,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: `Yes, ${site.name} is part of the MediaChief network of 50 state newspapers across the United States. Our team of experienced journalists provides accurate, verified reporting on ${topicLabel.toLowerCase()} and other news topics in ${state.city}, ${state.state}.`,
+          },
+        },
+      ],
+    });
+    document.head.appendChild(faqScript);
 
     return () => {
       const ld = document.querySelector("script[data-seo-ld]");
       if (ld) ld.remove();
+      const faq = document.querySelector("script[data-seo-faq]");
+      if (faq) faq.remove();
     };
   }, [config, site, stateSlug, topicSlug]);
 
@@ -485,6 +540,52 @@ export default function SeoTopicPage() {
                   Visit Homepage
                 </Link>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* FAQ Section — matches FAQ schema for rich snippets */}
+      <div className="max-w-[1300px] mx-auto px-4 pb-8">
+        <div className="bg-white rounded-xl shadow-sm p-6">
+          <h2
+            className="text-2xl mb-6 pb-3 border-b-2 border-[#c1121f]"
+            style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900 }}
+          >
+            Frequently Asked Questions
+          </h2>
+          <div className="space-y-5">
+            <div>
+              <h3 className="font-bold text-sm mb-1">
+                What is the latest {topicLabel.toLowerCase()} news in {stateConfig.city}, {stateConfig.state}?
+              </h3>
+              <p className="text-gray-600 text-sm">
+                {site.name} provides real-time {topicLabel.toLowerCase()} news coverage for {stateConfig.city}, {stateConfig.state}. Our reporters deliver breaking news, in-depth analysis, and up-to-date reporting on all {topicLabel.toLowerCase()} developments across {stateConfig.state}.
+              </p>
+            </div>
+            <div>
+              <h3 className="font-bold text-sm mb-1">
+                Where can I find {topicLabel.toLowerCase()} updates for {stateConfig.state}?
+              </h3>
+              <p className="text-gray-600 text-sm">
+                You can find the latest {topicLabel.toLowerCase()} updates for {stateConfig.state} right here on {site.name}. We cover {stateConfig.city} and surrounding areas with daily news updates from our team of local reporters.
+              </p>
+            </div>
+            <div>
+              <h3 className="font-bold text-sm mb-1">
+                How often is {topicLabel.toLowerCase()} news updated on {site.name}?
+              </h3>
+              <p className="text-gray-600 text-sm">
+                {site.name} updates {topicLabel.toLowerCase()} news multiple times per day, 7 days a week. Our editorial team monitors all major developments in {stateConfig.city}, {stateConfig.state} to bring you the most current reporting.
+              </p>
+            </div>
+            <div>
+              <h3 className="font-bold text-sm mb-1">
+                Is {site.name} a reliable source for {stateConfig.state} news?
+              </h3>
+              <p className="text-gray-600 text-sm">
+                Yes, {site.name} is part of the MediaChief network of 50 state newspapers across the United States. Our team of experienced journalists provides accurate, verified reporting on {topicLabel.toLowerCase()} and other news topics in {stateConfig.city}, {stateConfig.state}.
+              </p>
             </div>
           </div>
         </div>

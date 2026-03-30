@@ -118,7 +118,13 @@ export default async function ArticlePage({
   const image = article?.featured_image || "";
   const url = `https://${site.domain}/${params.category}/${params.slug}`;
 
-  // JSON-LD: NewsArticle
+  // Parse author name and title
+  const authorParts = (article?.author || "Staff Reporter").split(",");
+  const authorName = authorParts[0]?.trim() || "Staff Reporter";
+  const authorTitle = authorParts[1]?.trim() || "Staff Reporter";
+  const authorSlug = authorName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+
+  // JSON-LD: NewsArticle (Google News optimized)
   const newsArticleJsonLd = {
     "@context": "https://schema.org",
     "@type": "NewsArticle",
@@ -129,7 +135,13 @@ export default async function ArticlePage({
     dateModified: article?.published_at || "",
     author: {
       "@type": "Person",
-      name: article?.author || "Staff Reporter",
+      name: authorName,
+      jobTitle: authorTitle,
+      url: `https://${site.domain}/author/${authorSlug}`,
+      worksFor: {
+        "@type": "NewsMediaOrganization",
+        name: site.name,
+      },
     },
     publisher: {
       "@type": "NewsMediaOrganization",
@@ -137,6 +149,8 @@ export default async function ArticlePage({
       logo: {
         "@type": "ImageObject",
         url: `https://${site.domain}/api/favicon?site=${site.slug}`,
+        width: 600,
+        height: 60,
       },
       parentOrganization: {
         "@type": "Organization",
@@ -147,6 +161,14 @@ export default async function ArticlePage({
       "@type": "WebPage",
       "@id": url,
     },
+    isAccessibleForFree: true,
+    articleSection: categoryLabel,
+    inLanguage: "en-US",
+    copyrightHolder: {
+      "@type": "Organization",
+      name: site.name,
+    },
+    copyrightYear: new Date(article?.published_at || "").getFullYear() || new Date().getFullYear(),
   };
 
   // JSON-LD: BreadcrumbList

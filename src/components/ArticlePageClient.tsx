@@ -136,7 +136,12 @@ export default function ArticlePageClient({ site, article, related, categorySlug
                     <User size={18} className="text-gray-500" />
                   </div>
                   <div>
-                    <p className="font-bold text-gray-900">{displayAuthor}</p>
+                    <Link
+                      href={`/author/${displayAuthor.split(",")[0].trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}`}
+                      className="font-bold text-gray-900 hover:text-[#c1121f] transition-colors"
+                    >
+                      {displayAuthor}
+                    </Link>
                     <p className="text-xs text-gray-400">{site.name}</p>
                   </div>
                 </div>
