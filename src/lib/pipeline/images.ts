@@ -68,7 +68,9 @@ async function searchUnsplash(query: string): Promise<ImageResult | null> {
 }
 
 type ImageProvider = (query: string) => Promise<ImageResult | null>;
-const providers: ImageProvider[] = [searchPixabay, searchPexels, searchUnsplash];
+
+// Pexels & Unsplash allow hotlinking, Pixabay as fallback only
+const providers: ImageProvider[] = [searchPexels, searchUnsplash, searchPixabay];
 
 /**
  * Try a single query across all 3 providers.
