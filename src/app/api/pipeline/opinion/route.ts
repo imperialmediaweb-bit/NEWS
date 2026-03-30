@@ -40,9 +40,10 @@ export async function POST(req: NextRequest) {
   try {
     // Get trending topics from recent feed items (rewritten ones = real news)
     const { rows: topics } = await pool.query(
-      `SELECT id, title, description, category FROM feed_items
+      `SELECT id, title, description, category, state FROM feed_items
        WHERE status = 'rewritten'
        AND category NOT IN ('crime', 'celebrity')
+       AND state IS NOT NULL
        AND created_at > NOW() - INTERVAL '24 hours'
        ORDER BY created_at DESC
        LIMIT 10`
@@ -67,13 +68,16 @@ export async function POST(req: NextRequest) {
 
     for (const topic of selected) {
       try {
-        // Use first site for context
-        const firstSite = Object.values(sites)[0];
+        // Use the topic's state site for context
+        const siteEntry = Object.values(sites).find(
+          (s) => s.state === topic.state
+        );
+        if (!siteEntry) continue;
 
         const rewrite = await generateOpinion(
-          firstSite.name,
-          firstSite.state,
-          firstSite.city,
+          siteEntry.name,
+          siteEntry.state,
+          siteEntry.city,
           topic.title,
           topic.description || ""
         );
@@ -86,8 +90,7 @@ export async function POST(req: NextRequest) {
           category: "opinion",
           sourceUrl: "",
           imageUrl: image?.url || null,
-          scope: "national",
-          state: null,
+          state: topic.state,
           author: "Opinion Desk",
         });
 

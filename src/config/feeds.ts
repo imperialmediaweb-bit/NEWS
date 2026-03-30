@@ -1,174 +1,149 @@
 export interface FeedConfig {
   id: string;
-  url: string | ((state: string, city?: string) => string);
+  url: (state: string, city?: string) => string;
   category: string;
-  scope: "local" | "national" | "world";
   intervalHours: number;
   maxItems: number;
 }
 
+// All feeds are local per state — unique content per site, no duplicate content
 export const feeds: FeedConfig[] = [
-  // LOCAL NEWS (per state) — every 2 hours
+  // LOCAL NEWS — every 2 hours
   {
     id: "google-news-local",
     url: (state: string) =>
       `https://news.google.com/rss/search?q=${encodeURIComponent(state + " news")}&hl=en-US&gl=US&ceid=US:en`,
     category: "local-news",
-    scope: "local",
     intervalHours: 2,
-    maxItems: 10,
+    maxItems: 5,
   },
   {
     id: "google-news-local-city",
     url: (_state: string, city?: string) =>
       `https://news.google.com/rss/search?q=${encodeURIComponent((city || "") + " news")}&hl=en-US&gl=US&ceid=US:en`,
     category: "local-news",
-    scope: "local",
     intervalHours: 2,
-    maxItems: 5,
+    maxItems: 3,
   },
 
-  // NATIONAL NEWS — every 3 hours
+  // US / NATIONAL NEWS — every 3 hours
   {
     id: "google-news-us",
-    url: "https://news.google.com/rss/search?q=United+States+news&hl=en-US&gl=US&ceid=US:en",
+    url: (state: string) =>
+      `https://news.google.com/rss/search?q=${encodeURIComponent(state + " national news")}&hl=en-US&gl=US&ceid=US:en`,
     category: "us-news",
-    scope: "national",
     intervalHours: 3,
-    maxItems: 10,
-  },
-  {
-    id: "ap-news-top",
-    url: "https://rsshub.app/apnews/topics/apf-topnews",
-    category: "us-news",
-    scope: "national",
-    intervalHours: 3,
-    maxItems: 8,
+    maxItems: 4,
   },
 
   // POLITICS — every 4 hours
   {
     id: "google-news-politics",
-    url: "https://news.google.com/rss/search?q=US+politics&hl=en-US&gl=US&ceid=US:en",
-    category: "politics",
-    scope: "national",
-    intervalHours: 4,
-    maxItems: 8,
-  },
-  {
-    id: "google-news-politics-local",
     url: (state: string) =>
       `https://news.google.com/rss/search?q=${encodeURIComponent(state + " politics")}&hl=en-US&gl=US&ceid=US:en`,
     category: "politics",
-    scope: "local",
     intervalHours: 4,
-    maxItems: 5,
+    maxItems: 4,
   },
 
   // SPORTS — every 4 hours
   {
     id: "google-news-sports",
-    url: "https://news.google.com/rss/search?q=sports+news&hl=en-US&gl=US&ceid=US:en",
-    category: "sports",
-    scope: "national",
-    intervalHours: 4,
-    maxItems: 8,
-  },
-  {
-    id: "google-news-sports-local",
     url: (state: string) =>
       `https://news.google.com/rss/search?q=${encodeURIComponent(state + " sports")}&hl=en-US&gl=US&ceid=US:en`,
     category: "sports",
-    scope: "local",
-    intervalHours: 5,
-    maxItems: 5,
+    intervalHours: 4,
+    maxItems: 4,
   },
 
-  // ENTERTAINMENT / CELEBRITY — every 5 hours
+  // ENTERTAINMENT — every 5 hours
   {
     id: "google-news-entertainment",
-    url: "https://news.google.com/rss/search?q=entertainment+celebrity+news&hl=en-US&gl=US&ceid=US:en",
+    url: (state: string) =>
+      `https://news.google.com/rss/search?q=${encodeURIComponent(state + " entertainment")}&hl=en-US&gl=US&ceid=US:en`,
     category: "entertainment",
-    scope: "national",
     intervalHours: 5,
-    maxItems: 8,
+    maxItems: 3,
   },
+
+  // CELEBRITY — every 6 hours
   {
     id: "google-news-celebrity",
-    url: "https://news.google.com/rss/search?q=celebrity+gossip+scandal&hl=en-US&gl=US&ceid=US:en",
+    url: (state: string) =>
+      `https://news.google.com/rss/search?q=${encodeURIComponent(state + " celebrity gossip")}&hl=en-US&gl=US&ceid=US:en`,
     category: "celebrity",
-    scope: "national",
-    intervalHours: 5,
-    maxItems: 6,
+    intervalHours: 6,
+    maxItems: 3,
   },
 
   // TECHNOLOGY — every 6 hours
   {
     id: "google-news-tech",
-    url: "https://news.google.com/rss/search?q=technology+news&hl=en-US&gl=US&ceid=US:en",
+    url: (state: string) =>
+      `https://news.google.com/rss/search?q=${encodeURIComponent(state + " technology")}&hl=en-US&gl=US&ceid=US:en`,
     category: "technology",
-    scope: "national",
     intervalHours: 6,
-    maxItems: 8,
+    maxItems: 3,
   },
 
   // WORLD NEWS — every 5 hours
   {
     id: "google-news-world",
-    url: "https://news.google.com/rss/search?q=world+news&hl=en-US&gl=US&ceid=US:en",
+    url: (state: string) =>
+      `https://news.google.com/rss/search?q=${encodeURIComponent(state + " world news")}&hl=en-US&gl=US&ceid=US:en`,
     category: "world-news",
-    scope: "world",
     intervalHours: 5,
-    maxItems: 8,
-  },
-  {
-    id: "guardian-world",
-    url: "https://www.theguardian.com/world/rss",
-    category: "world-news",
-    scope: "world",
-    intervalHours: 5,
-    maxItems: 5,
+    maxItems: 3,
   },
 
   // LIFESTYLE — every 7 hours
   {
     id: "google-news-lifestyle",
-    url: "https://news.google.com/rss/search?q=lifestyle+health+wellness&hl=en-US&gl=US&ceid=US:en",
+    url: (state: string) =>
+      `https://news.google.com/rss/search?q=${encodeURIComponent(state + " lifestyle health")}&hl=en-US&gl=US&ceid=US:en`,
     category: "lifestyle",
-    scope: "national",
     intervalHours: 7,
-    maxItems: 6,
+    maxItems: 3,
   },
 
-  // CRIME / SCANDALS — every 5 hours
+  // CRIME — every 5 hours
   {
     id: "google-news-crime",
-    url: "https://news.google.com/rss/search?q=crime+scandal+news&hl=en-US&gl=US&ceid=US:en",
+    url: (state: string) =>
+      `https://news.google.com/rss/search?q=${encodeURIComponent(state + " crime")}&hl=en-US&gl=US&ceid=US:en`,
     category: "crime",
-    scope: "national",
     intervalHours: 5,
-    maxItems: 6,
+    maxItems: 4,
   },
 
   // BUSINESS — every 6 hours
   {
     id: "google-news-business",
-    url: "https://news.google.com/rss/search?q=business+economy+news&hl=en-US&gl=US&ceid=US:en",
+    url: (state: string) =>
+      `https://news.google.com/rss/search?q=${encodeURIComponent(state + " business economy")}&hl=en-US&gl=US&ceid=US:en`,
     category: "business",
-    scope: "national",
     intervalHours: 6,
-    maxItems: 6,
+    maxItems: 3,
   },
 
   // OPINION (seed topics for AI generation) — every 8 hours
   {
     id: "google-news-opinion-seed",
-    url: "https://news.google.com/rss/search?q=editorial+opinion+debate&hl=en-US&gl=US&ceid=US:en",
+    url: (state: string) =>
+      `https://news.google.com/rss/search?q=${encodeURIComponent(state + " editorial opinion")}&hl=en-US&gl=US&ceid=US:en`,
     category: "opinion",
-    scope: "national",
     intervalHours: 8,
-    maxItems: 4,
+    maxItems: 2,
   },
+];
+
+// 50 states split into 5 batches of 10 for cron scheduling
+export const STATE_BATCHES: string[][] = [
+  ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia"],
+  ["Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland"],
+  ["Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey"],
+  ["New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina"],
+  ["South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"],
 ];
 
 // Categories that map to URL slugs

@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
   }
 
   const body = await req.json().catch(() => ({}));
-  const batchSize = body.batchSize || 5;
+  const batchSize = body.batchSize || 10;
 
   const startTime = Date.now();
   const runId = await logRunStart("rewrite");
@@ -44,37 +44,24 @@ export async function POST(req: NextRequest) {
 
   let processed = 0;
   let failed = 0;
-  const results: { feedItemId: number; title: string; published: number }[] = [];
+  const results: { feedItemId: number; title: string; state: string }[] = [];
 
   for (const item of pending) {
     try {
-      // Find a representative site for the rewrite context
-      let siteName = "MediaChief News";
-      let state = "United States";
-      let city = "New York";
+      // Every feed_item has a state — find the matching site for context
+      const siteEntry = Object.values(sites).find(
+        (s) => s.state === item.state
+      );
 
-      if (item.state) {
-        const siteEntry = Object.values(sites).find(
-          (s) => s.state === item.state
-        );
-        if (siteEntry) {
-          siteName = siteEntry.name;
-          state = siteEntry.state;
-          city = siteEntry.city;
-        }
-      } else {
-        // For national articles, use a generic context (first site)
-        const firstSite = Object.values(sites)[0];
-        siteName = firstSite.name;
-        state = firstSite.state;
-        city = firstSite.city;
+      if (!siteEntry) {
+        throw new Error(`No site config for state: ${item.state}`);
       }
 
-      // Rewrite with LLM
+      // Rewrite with LLM using the specific site context
       const rewrite = await rewriteArticle(
-        siteName,
-        state,
-        city,
+        siteEntry.name,
+        siteEntry.state,
+        siteEntry.city,
         item.title,
         item.description || "",
         item.source_url,
@@ -84,15 +71,13 @@ export async function POST(req: NextRequest) {
       // Find an image
       const image = await findImage(rewrite.suggestedImageQuery);
 
-      // Publish to appropriate sites
-      const scope = item.state ? "local" : "national";
-      const publishedCount = await publishArticle({
+      // Publish to the single matching state site
+      await publishArticle({
         feedItemId: item.id,
         rewrite,
         category: item.category,
         sourceUrl: item.source_url,
         imageUrl: image?.url || null,
-        scope: scope as "local" | "national" | "world",
         state: item.state,
       });
 
@@ -100,7 +85,7 @@ export async function POST(req: NextRequest) {
       results.push({
         feedItemId: item.id,
         title: rewrite.title,
-        published: publishedCount,
+        state: item.state,
       });
     } catch (error) {
       failed++;

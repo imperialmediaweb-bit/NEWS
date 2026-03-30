@@ -1,7 +1,7 @@
 "use client";
 
 import { feeds, CATEGORY_MAP } from "@/config/feeds";
-import { Rss, Globe, MapPin } from "lucide-react";
+import { Rss, MapPin } from "lucide-react";
 
 export default function FeedsPage() {
   const categories = Array.from(new Set(feeds.map((f) => f.category)));
@@ -14,7 +14,7 @@ export default function FeedsPage() {
           Feed Configuration
         </h1>
         <p className="text-gray-500 text-sm mt-1">
-          {feeds.length} feeds across {categories.length} categories
+          {feeds.length} feeds across {categories.length} categories — all per state
         </p>
       </div>
 
@@ -27,7 +27,7 @@ export default function FeedsPage() {
             </h2>
             <p className="text-gray-500 text-xs mb-4">
               {categoryFeeds.length} feed(s) &middot; Every{" "}
-              {categoryFeeds[0].intervalHours}h
+              {categoryFeeds[0].intervalHours}h &middot; Per state
             </p>
             <div className="space-y-3">
               {categoryFeeds.map((feed) => (
@@ -36,35 +36,16 @@ export default function FeedsPage() {
                   className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg"
                 >
                   <div className="mt-0.5">
-                    {feed.scope === "local" ? (
-                      <MapPin className="w-4 h-4 text-blue-500" />
-                    ) : (
-                      <Globe className="w-4 h-4 text-green-500" />
-                    )}
+                    <MapPin className="w-4 h-4 text-blue-500" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="font-medium text-sm">{feed.id}</p>
-                    <p className="text-gray-500 text-xs mt-0.5 truncate">
-                      {typeof feed.url === "string"
-                        ? feed.url
-                        : `Dynamic URL (per ${feed.scope === "local" ? "state" : "region"})`}
+                    <p className="text-gray-500 text-xs mt-0.5">
+                      Dynamic URL per state (50 queries per fetch)
                     </p>
                     <div className="flex gap-3 mt-1 text-xs text-gray-400">
-                      <span>Max: {feed.maxItems} items</span>
-                      <span>
-                        Scope:{" "}
-                        <span
-                          className={
-                            feed.scope === "local"
-                              ? "text-blue-500"
-                              : feed.scope === "world"
-                                ? "text-purple-500"
-                                : "text-green-500"
-                          }
-                        >
-                          {feed.scope}
-                        </span>
-                      </span>
+                      <span>Max: {feed.maxItems} items/state</span>
+                      <span className="text-blue-500">Scope: per state</span>
                       <span>Interval: {feed.intervalHours}h</span>
                     </div>
                   </div>
