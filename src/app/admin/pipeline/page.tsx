@@ -37,14 +37,20 @@ export default function PipelineDashboard() {
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
 
+  const [error, setError] = useState<string | null>(null);
+
   const fetchStatus = useCallback(async () => {
     try {
       const res = await fetch("/api/pipeline/status?key=" + encodeURIComponent(localStorage.getItem("cron_secret") || ""));
       if (res.ok) {
         setStatus(await res.json());
+        setError(null);
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setError(`Error ${res.status}: ${data.error || "Failed to load status"}`);
       }
-    } catch {
-      /* ignore */
+    } catch (err) {
+      setError("Network error: " + String(err));
     } finally {
       setLoading(false);
     }
@@ -85,7 +91,7 @@ export default function PipelineDashboard() {
     const secret = localStorage.getItem("cron_secret") || "";
     const newValue = status?.config?.enabled === "true" ? "false" : "true";
     try {
-      await fetch("/api/pipeline/config", {
+      const res = await fetch("/api/pipeline/config", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -93,9 +99,14 @@ export default function PipelineDashboard() {
         },
         body: JSON.stringify({ key: "enabled", value: newValue }),
       });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        alert(`Error ${res.status}: ${data.error || "Failed to toggle pipeline"}`);
+        return;
+      }
       fetchStatus();
-    } catch {
-      /* ignore */
+    } catch (err) {
+      alert("Network error: " + String(err));
     }
   }
 
@@ -141,6 +152,13 @@ export default function PipelineDashboard() {
           </button>
         </div>
       </div>
+
+      {/* Error Banner */}
+      {error && (
+        <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-700 text-sm">
+          <strong>Error:</strong> {error}
+        </div>
+      )}
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
