@@ -15,7 +15,60 @@ function getSiteFromHeaders() {
   }
 }
 
-async function getArticleData(siteSlug: string, articleSlug: string) {
+/**
+ * Auto Internal Linking — injects contextual links to other articles
+ * from the same site into the article content.
+ * Inserts up to 5 links, placed after paragraphs, with natural anchor text.
+ */
+function injectInternalLinks(
+  content: string,
+  linkArticles: { title: string; slug: string; category: string }[],
+  domain: string
+): string {
+  if (linkArticles.length === 0 || !content) return content;
+
+  // Split content into paragraphs (by </p> tags)
+  const paragraphs = content.split("</p>");
+  if (paragraphs.length < 3) return content;
+
+  // Pick up to 5 articles to link, spread evenly through the content
+  const maxLinks = Math.min(5, linkArticles.length);
+  const linksToInsert = linkArticles.slice(0, maxLinks);
+
+  // Calculate insertion points — skip first and last paragraphs
+  const insertableCount = paragraphs.length - 2; // skip first and last
+  if (insertableCount < 1) return content;
+
+  const step = Math.max(1, Math.floor(insertableCount / maxLinks));
+
+  let linkIndex = 0;
+  const result: string[] = [];
+
+  for (let i = 0; i < paragraphs.length; i++) {
+    result.push(paragraphs[i]);
+    if (i < paragraphs.length - 1) {
+      result.push("</p>");
+    }
+
+    // Insert link after this paragraph (skip first paragraph, only on </p> boundaries)
+    if (
+      i > 0 &&
+      i < paragraphs.length - 1 &&
+      linkIndex < linksToInsert.length &&
+      (i - 1) % step === 0
+    ) {
+      const link = linksToInsert[linkIndex];
+      const href = `https://${domain}/${link.category}/${link.slug}`;
+      const relatedBox = `<p style="margin:16px 0;padding:12px 16px;background:#f8f8f8;border-left:3px solid #c1121f;font-size:0.95em;"><strong>Related:</strong> <a href="${href}" style="color:#c1121f;text-decoration:underline;">${link.title}</a></p>`;
+      result.push(relatedBox);
+      linkIndex++;
+    }
+  }
+
+  return result.join("");
+}
+
+async function getArticleData(siteSlug: string, articleSlug: string, domain: string) {
   try {
     const { rows: siteRows } = await pool.query("SELECT id FROM sites WHERE slug = $1", [siteSlug]);
     if (siteRows.length === 0) return { article: null, related: [] };
@@ -29,15 +82,31 @@ async function getArticleData(siteSlug: string, articleSlug: string) {
     if (articleRows.length === 0) return { article: null, related: [] };
     const article = articleRows[0];
 
+    // Get related articles from same category (for sidebar)
     const { rows: relatedRows } = await pool.query(
       "SELECT * FROM articles WHERE site_id = $1 AND category = $2 AND id != $3 ORDER BY published_at DESC LIMIT 5",
       [siteId, article.category, article.id]
     );
 
-    const format = (row: Record<string, unknown>) => ({
+    // Get articles for internal linking (mix of same category + other categories)
+    const { rows: linkRows } = await pool.query(
+      `(SELECT title, slug, category FROM articles WHERE site_id = $1 AND category = $2 AND id != $3 ORDER BY published_at DESC LIMIT 3)
+       UNION ALL
+       (SELECT title, slug, category FROM articles WHERE site_id = $1 AND category != $2 ORDER BY published_at DESC LIMIT 3)`,
+      [siteId, article.category, article.id]
+    );
+
+    // Inject internal links into article content
+    const enrichedContent = injectInternalLinks(
+      (article.content as string) || "",
+      linkRows as { title: string; slug: string; category: string }[],
+      domain
+    );
+
+    const format = (row: Record<string, unknown>, useEnrichedContent = false) => ({
       title: row.title as string,
       slug: row.slug as string,
-      content: (row.content as string) || "",
+      content: useEnrichedContent ? enrichedContent : ((row.content as string) || ""),
       summary: (row.summary as string) || "",
       category: (row.category as string) || "news",
       author: (row.author as string) || "Staff Reporter",
@@ -57,7 +126,7 @@ async function getArticleData(siteSlug: string, articleSlug: string) {
       slug: row.slug as string,
     });
 
-    return { article: format(article), related: relatedRows.map(formatRelated) };
+    return { article: format(article, true), related: relatedRows.map(formatRelated) };
   } catch {
     return { article: null, related: [] };
   }
@@ -69,7 +138,7 @@ export async function generateMetadata({
   params: { category: string; slug: string };
 }): Promise<Metadata> {
   const site = getSiteFromHeaders();
-  const { article } = await getArticleData(site.slug, params.slug);
+  const { article } = await getArticleData(site.slug, params.slug, site.domain);
 
   const categoryLabel = params.category.replace(/-/g, " ").replace(/\b\w/g, (c: string) => c.toUpperCase());
   const title = article?.title || `${categoryLabel} - ${params.slug.replace(/-/g, " ")}`;
@@ -110,7 +179,7 @@ export default async function ArticlePage({
   params: { category: string; slug: string };
 }) {
   const site = getSiteFromHeaders();
-  const { article, related } = await getArticleData(site.slug, params.slug);
+  const { article, related } = await getArticleData(site.slug, params.slug, site.domain);
 
   const categoryLabel = params.category.replace(/-/g, " ").replace(/\b\w/g, (c: string) => c.toUpperCase());
   const displayTitle = article?.title || `${categoryLabel} — ${params.slug.replace(/-/g, " ")}`;

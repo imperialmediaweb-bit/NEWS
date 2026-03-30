@@ -17,6 +17,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/business`, lastModified: new Date(), changeFrequency: "daily", priority: 0.7 },
     { url: `${baseUrl}/technology`, lastModified: new Date(), changeFrequency: "daily", priority: 0.7 },
     { url: `${baseUrl}/opinion`, lastModified: new Date(), changeFrequency: "daily", priority: 0.6 },
+    // Hub pages — topic cluster authority pages
+    { url: `${baseUrl}/hub/local-news`, lastModified: new Date(), changeFrequency: "hourly", priority: 0.85 },
+    { url: `${baseUrl}/hub/us-news`, lastModified: new Date(), changeFrequency: "hourly", priority: 0.85 },
+    { url: `${baseUrl}/hub/politics`, lastModified: new Date(), changeFrequency: "hourly", priority: 0.85 },
+    { url: `${baseUrl}/hub/crime`, lastModified: new Date(), changeFrequency: "hourly", priority: 0.85 },
+    { url: `${baseUrl}/hub/sports`, lastModified: new Date(), changeFrequency: "daily", priority: 0.8 },
+    { url: `${baseUrl}/hub/entertainment`, lastModified: new Date(), changeFrequency: "daily", priority: 0.8 },
+    { url: `${baseUrl}/hub/celebrity`, lastModified: new Date(), changeFrequency: "daily", priority: 0.8 },
+    { url: `${baseUrl}/hub/technology`, lastModified: new Date(), changeFrequency: "daily", priority: 0.8 },
+    { url: `${baseUrl}/hub/business`, lastModified: new Date(), changeFrequency: "daily", priority: 0.8 },
+    { url: `${baseUrl}/hub/lifestyle`, lastModified: new Date(), changeFrequency: "daily", priority: 0.75 },
+    { url: `${baseUrl}/hub/world-news`, lastModified: new Date(), changeFrequency: "daily", priority: 0.75 },
+    { url: `${baseUrl}/hub/opinion`, lastModified: new Date(), changeFrequency: "daily", priority: 0.7 },
   ];
 
   try {
