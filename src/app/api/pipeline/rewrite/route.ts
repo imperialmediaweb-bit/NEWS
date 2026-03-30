@@ -73,8 +73,8 @@ export async function POST(req: NextRequest) {
         item.category
       );
 
-      // Find an image
-      const image = await findImage(rewrite.suggestedImageQuery);
+      // Find an image (with category fallback for precision)
+      const image = await findImage(rewrite.suggestedImageQuery, item.category);
 
       // Publish to the single matching state site
       await publishArticle({

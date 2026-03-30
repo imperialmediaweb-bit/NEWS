@@ -67,33 +67,115 @@ async function searchUnsplash(query: string): Promise<ImageResult | null> {
   };
 }
 
+type ImageProvider = (query: string) => Promise<ImageResult | null>;
+const providers: ImageProvider[] = [searchPixabay, searchPexels, searchUnsplash];
+
 /**
- * Search for an image using the suggested query.
- * Tries Pixabay → Pexels → Unsplash in order.
- * Returns null if no image found from any provider.
+ * Try a single query across all 3 providers.
  */
-export async function findImage(query: string): Promise<ImageResult | null> {
-  if (!query) return null;
-
-  // Check cache
-  const cached = imageCache.get(query);
-  if (cached !== undefined) return cached;
-
-  const providers = [searchPixabay, searchPexels, searchUnsplash];
-
+async function tryQuery(query: string): Promise<ImageResult | null> {
   for (const provider of providers) {
     try {
       const result = await provider(query);
-      if (result) {
-        imageCache.set(query, result);
-        return result;
-      }
+      if (result) return result;
     } catch {
       continue;
     }
   }
+  return null;
+}
 
-  imageCache.set(query, null);
+/**
+ * Generate progressively simpler queries from the original.
+ * Example: "Rhode Island courthouse fire investigation" →
+ *   1. "Rhode Island courthouse fire investigation"
+ *   2. "courthouse fire investigation"
+ *   3. "courthouse fire"
+ *   4. category fallback
+ */
+function buildQueryCascade(query: string, category?: string): string[] {
+  const queries: string[] = [query];
+
+  const words = query.split(/\s+/);
+
+  // Remove state names if present (first 1-2 words often are)
+  if (words.length > 3) {
+    // Try without first word (often state name)
+    queries.push(words.slice(1).join(" "));
+  }
+
+  // Try just the core (last 2-3 words)
+  if (words.length > 3) {
+    queries.push(words.slice(-3).join(" "));
+  }
+  if (words.length > 2) {
+    queries.push(words.slice(-2).join(" "));
+  }
+
+  // Category-specific fallback images that always return results
+  if (category) {
+    const categoryFallbacks: Record<string, string> = {
+      "local-news": "city skyline newspaper",
+      "us-news": "american flag capitol",
+      politics: "capitol building government",
+      sports: "stadium sports arena",
+      entertainment: "movie theater entertainment",
+      celebrity: "red carpet celebrity",
+      technology: "technology computer modern",
+      "world-news": "globe world map",
+      lifestyle: "healthy lifestyle wellness",
+      crime: "police law enforcement",
+      business: "business office finance",
+      opinion: "newspaper editorial desk",
+    };
+    const fallback = categoryFallbacks[category];
+    if (fallback && !queries.includes(fallback)) {
+      queries.push(fallback);
+    }
+  }
+
+  // Ultimate fallback
+  queries.push("breaking news newspaper");
+
+  return queries;
+}
+
+/**
+ * Search for an image using progressive query simplification.
+ * 1. Try the exact suggested query across all providers
+ * 2. If no results, simplify the query (remove state, reduce words)
+ * 3. If still nothing, use a category-specific generic query
+ * 4. Last resort: generic "news" image
+ *
+ * Always returns an image — never null.
+ */
+export async function findImage(
+  query: string,
+  category?: string
+): Promise<ImageResult | null> {
+  if (!query && !category) return null;
+
+  // Check cache with category context
+  const cacheKey = `${query}|${category || ""}`;
+  const cached = imageCache.get(cacheKey);
+  if (cached !== undefined) return cached;
+
+  const queries = buildQueryCascade(query || "news", category);
+
+  for (const q of queries) {
+    // Skip empty queries
+    if (!q.trim()) continue;
+
+    const result = await tryQuery(q.trim());
+    if (result) {
+      // Use original query as alt text, not the simplified one
+      result.alt = query || category || "News image";
+      imageCache.set(cacheKey, result);
+      return result;
+    }
+  }
+
+  imageCache.set(cacheKey, null);
   return null;
 }
 

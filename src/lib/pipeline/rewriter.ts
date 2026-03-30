@@ -92,7 +92,7 @@ Return ONLY a valid JSON object with these fields (no markdown code fences):
   "title": "your new headline",
   "summary": "2-3 sentence meta description under 160 characters",
   "content": "full HTML article body",
-  "suggested_image_query": "2-4 word image search query"
+  "suggested_image_query": "2-4 word stock photo search query describing the VISUAL SCENE (e.g. 'courthouse steps reporters', 'factory workers assembly line', 'football stadium night game'). Be specific and visual, NOT abstract."
 }`;
 }
 
@@ -128,7 +128,7 @@ Return ONLY a valid JSON object (no markdown code fences):
   "title": "your opinion headline",
   "summary": "2-3 sentence meta description under 160 characters",
   "content": "full HTML article body",
-  "suggested_image_query": "2-4 word image search query"
+  "suggested_image_query": "2-4 word stock photo search query describing the VISUAL SCENE. Be specific and visual, NOT abstract."
 }`;
 }
 

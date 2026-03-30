@@ -82,7 +82,7 @@ export async function POST(req: NextRequest) {
           topic.description || ""
         );
 
-        const image = await findImage(rewrite.suggestedImageQuery);
+        const image = await findImage(rewrite.suggestedImageQuery, "opinion");
 
         await publishArticle({
           feedItemId: topic.id,
