@@ -2,8 +2,20 @@
 
 import { SiteConfig } from "@/config/site-config";
 import { Facebook, Twitter, Instagram, Youtube, Mail } from "lucide-react";
+import Link from "next/link";
 
 const categories = ["Home", "Local News", "US News", "World", "Politics", "Sports", "Technology", "Entertainment", "Lifestyle", "Opinion"];
+
+const companyLinks = [
+  { label: "About Us", href: "/about" },
+  { label: "Contact", href: "/contact" },
+  { label: "Careers", href: "/careers" },
+  { label: "Advertise", href: "/advertise" },
+  { label: "Ethics Policy", href: "/ethics" },
+  { label: "Corrections", href: "/corrections" },
+  { label: "Terms of Use", href: "/terms" },
+  { label: "Privacy Policy", href: "/privacy" },
+];
 
 interface FooterProps {
   site: SiteConfig;
@@ -42,13 +54,16 @@ export default function Footer({ site, about }: FooterProps) {
               Categories
             </h4>
             <ul className="space-y-2">
-              {categories.map((cat) => (
-                <li key={cat}>
-                  <a href="#" className="text-gray-400 text-sm hover:text-white hover:pl-1 transition-all">
-                    {cat}
-                  </a>
-                </li>
-              ))}
+              {categories.map((cat) => {
+                const href = cat === "Home" ? "/" : `/${cat.toLowerCase().replace(/\s+/g, "-")}`;
+                return (
+                  <li key={cat}>
+                    <Link href={href} className="text-gray-400 text-sm hover:text-white hover:pl-1 transition-all">
+                      {cat}
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
           </div>
 
@@ -58,11 +73,11 @@ export default function Footer({ site, about }: FooterProps) {
               Company
             </h4>
             <ul className="space-y-2">
-              {["About Us", "Contact", "Careers", "Advertise", "Ethics Policy", "Corrections", "Terms of Use", "Privacy Policy"].map((link) => (
-                <li key={link}>
-                  <a href="#" className="text-gray-400 text-sm hover:text-white hover:pl-1 transition-all">
-                    {link}
-                  </a>
+              {companyLinks.map((link) => (
+                <li key={link.href}>
+                  <Link href={link.href} className="text-gray-400 text-sm hover:text-white hover:pl-1 transition-all">
+                    {link.label}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -95,9 +110,17 @@ export default function Footer({ site, about }: FooterProps) {
           <p className="text-gray-500 text-xs">
             &copy; {new Date().getFullYear()} {site.name}. All rights reserved.
           </p>
-          <p className="text-gray-600 text-[10px]">
-            Privacy Policy &bull; Terms of Use &bull; Do Not Sell My Information &bull; Advertise With Us
-          </p>
+          <div className="flex flex-wrap gap-x-3 gap-y-1 text-gray-600 text-[10px]">
+            <Link href="/privacy" className="hover:text-gray-400 transition-colors">Privacy Policy</Link>
+            <span>&bull;</span>
+            <Link href="/terms" className="hover:text-gray-400 transition-colors">Terms of Use</Link>
+            <span>&bull;</span>
+            <Link href="/dmca" className="hover:text-gray-400 transition-colors">DMCA</Link>
+            <span>&bull;</span>
+            <Link href="/editorial-policy" className="hover:text-gray-400 transition-colors">Editorial Policy</Link>
+            <span>&bull;</span>
+            <Link href="/advertise" className="hover:text-gray-400 transition-colors">Advertise With Us</Link>
+          </div>
         </div>
       </div>
     </footer>
