@@ -82,6 +82,27 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const site = getSiteFromHeaders();
+
+  const organizationJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "NewsMediaOrganization",
+    name: site.name,
+    url: `https://${site.domain}`,
+    logo: {
+      "@type": "ImageObject",
+      url: `https://${site.domain}/api/favicon?site=${site.slug}`,
+    },
+    sameAs: [],
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: site.city,
+      addressRegion: site.state,
+      addressCountry: "US",
+    },
+    description: `${site.name} — Breaking news, local news, politics, sports, entertainment and more from ${site.city}, ${site.state}.`,
+  };
+
   return (
     <html lang="en">
       <head>
@@ -93,6 +114,10 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
       </head>
       <body className="antialiased bg-white overflow-x-hidden">
         {children}
