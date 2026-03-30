@@ -16,16 +16,26 @@ function LoginForm() {
     setLoading(true);
     setError("");
 
-    // Validate by trying to access admin with the key
-    const res = await fetch(`/api/pipeline/status?key=${encodeURIComponent(password)}`);
-    if (res.ok) {
-      // Set cookie and redirect
-      document.cookie = `admin_token=${password}; path=/; max-age=${60 * 60 * 24 * 7}; secure; samesite=strict`;
-      // Also store in localStorage for API calls from dashboard
-      localStorage.setItem("cron_secret", password);
-      window.location.href = redirect;
-    } else {
-      setError("Invalid password. Access denied.");
+    try {
+      // Server-side login — sets httpOnly cookie (not accessible by JS)
+      const res = await fetch("/api/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password }),
+      });
+
+      if (res.ok) {
+        // Store secret for API calls from admin dashboard
+        localStorage.setItem("cron_secret", password);
+        // Redirect — cookie is already set by server
+        window.location.href = redirect;
+      } else {
+        const data = await res.json().catch(() => ({ error: "Login failed" }));
+        setError(data.error || "Invalid password. Access denied.");
+        setLoading(false);
+      }
+    } catch {
+      setError("Network error. Please try again.");
       setLoading(false);
     }
   }

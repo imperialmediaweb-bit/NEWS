@@ -156,7 +156,8 @@ export function middleware(req: NextRequest) {
   }
 
   // ─── 4. Admin protection — server-side auth ───
-  if (pathname.startsWith("/admin")) {
+  // Skip login page itself and login API
+  if (pathname.startsWith("/admin") && !pathname.startsWith("/admin-login") && !pathname.startsWith("/api/admin/login")) {
     const adminSecret = process.env.CRON_SECRET;
     if (adminSecret) {
       // Check cookie or query param for admin auth
@@ -193,7 +194,7 @@ export function middleware(req: NextRequest) {
   }
 
   // ─── 5. Protect admin API routes ───
-  if (pathname.startsWith("/api/admin")) {
+  if (pathname.startsWith("/api/admin") && pathname !== "/api/admin/login") {
     const token =
       req.headers.get("authorization")?.replace("Bearer ", "") ||
       req.nextUrl.searchParams.get("key") ||
