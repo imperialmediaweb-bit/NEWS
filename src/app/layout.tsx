@@ -94,13 +94,18 @@ export default function RootLayout({
       url: `https://${site.domain}/api/favicon?site=${site.slug}`,
     },
     sameAs: [],
+    parentOrganization: {
+      "@type": "Organization",
+      name: "MediaChief",
+      description: "America's largest media trust with 50 state newspapers delivering breaking news coast to coast.",
+    },
     address: {
       "@type": "PostalAddress",
       addressLocality: site.city,
       addressRegion: site.state,
       addressCountry: "US",
     },
-    description: `${site.name} — Breaking news, local news, politics, sports, entertainment and more from ${site.city}, ${site.state}.`,
+    description: `${site.name} — Breaking news, local news, politics, sports, entertainment and more from ${site.city}, ${site.state}. A MediaChief publication.`,
   };
 
   return (

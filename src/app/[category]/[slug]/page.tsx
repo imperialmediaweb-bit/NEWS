@@ -132,11 +132,15 @@ export default async function ArticlePage({
       name: article?.author || "Staff Reporter",
     },
     publisher: {
-      "@type": "Organization",
+      "@type": "NewsMediaOrganization",
       name: site.name,
       logo: {
         "@type": "ImageObject",
         url: `https://${site.domain}/api/favicon?site=${site.slug}`,
+      },
+      parentOrganization: {
+        "@type": "Organization",
+        name: "MediaChief",
       },
     },
     mainEntityOfPage: {
