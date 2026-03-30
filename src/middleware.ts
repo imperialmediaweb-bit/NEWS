@@ -155,12 +155,51 @@ export function middleware(req: NextRequest) {
     });
   }
 
-  // ─── 4. Admin protection ───
+  // ─── 4. Admin protection — server-side auth ───
   if (pathname.startsWith("/admin")) {
-    // Admin pages need the CRON_SECRET (handled client-side via localStorage)
-    // But block direct API admin access without auth header
-    if (pathname.startsWith("/api/admin")) {
-      // setup-db is a GET, other admin APIs should check auth themselves
+    const adminSecret = process.env.CRON_SECRET;
+    if (adminSecret) {
+      // Check cookie or query param for admin auth
+      const adminCookie = req.cookies.get("admin_token")?.value;
+      const queryKey = req.nextUrl.searchParams.get("key");
+
+      if (adminCookie !== adminSecret && queryKey !== adminSecret) {
+        // Not authenticated — show login page
+        // If key is provided but wrong, reject
+        if (queryKey && queryKey !== adminSecret) {
+          return new NextResponse("Forbidden — invalid key", { status: 403 });
+        }
+
+        // Redirect to admin login
+        const loginUrl = new URL("/admin-login", req.url);
+        loginUrl.searchParams.set("redirect", pathname);
+        return NextResponse.redirect(loginUrl);
+      }
+
+      // If authenticated via query param, set cookie and redirect clean URL
+      if (queryKey === adminSecret && adminCookie !== adminSecret) {
+        const redirectUrl = new URL(pathname, req.url);
+        const response = NextResponse.redirect(redirectUrl);
+        response.cookies.set("admin_token", adminSecret, {
+          httpOnly: true,
+          secure: true,
+          sameSite: "strict",
+          maxAge: 60 * 60 * 24 * 7, // 7 days
+          path: "/",
+        });
+        return response;
+      }
+    }
+  }
+
+  // ─── 5. Protect admin API routes ───
+  if (pathname.startsWith("/api/admin")) {
+    const token =
+      req.headers.get("authorization")?.replace("Bearer ", "") ||
+      req.nextUrl.searchParams.get("key") ||
+      req.cookies.get("admin_token")?.value;
+    if (token !== process.env.CRON_SECRET) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
   }
 
