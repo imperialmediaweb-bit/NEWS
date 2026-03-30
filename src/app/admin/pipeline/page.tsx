@@ -215,6 +215,28 @@ export default function PipelineDashboard() {
         </div>
       </div>
 
+      {/* Seed — Initial Content Population */}
+      <div className="bg-orange-50 rounded-xl shadow-sm p-6">
+        <h2 className="font-bold mb-2">Seed — Populate Initial Content</h2>
+        <p className="text-sm text-gray-600 mb-4">
+          Run each batch (0-4) to populate ~50 articles per state.
+          Each batch = 10 states. Total cost: ~$5.50 for all 50 states.
+        </p>
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+          {[0, 1, 2, 3, 4].map((batch) => (
+            <ActionButton
+              key={batch}
+              label={`Seed Batch ${batch}`}
+              loading={actionLoading === `seed-${batch}`}
+              onClick={() => {
+                setActionLoading(`seed-${batch}`);
+                runAction("seed", { batch, maxPerCategory: 4 });
+              }}
+            />
+          ))}
+        </div>
+      </div>
+
       {/* Config */}
       <div className="bg-white rounded-xl shadow-sm p-6">
         <h2 className="font-bold mb-4">Current Configuration</h2>

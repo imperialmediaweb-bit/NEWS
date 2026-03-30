@@ -330,6 +330,51 @@ export async function rewriteArticle(
   return callWithFallback(prompt);
 }
 
+/**
+ * Short article rewrite for seed/breaking mode (300-500 words).
+ * Faster, cheaper, used for initial site population.
+ */
+export async function rewriteArticleShort(
+  siteName: string,
+  state: string,
+  city: string,
+  title: string,
+  description: string,
+  category: string
+): Promise<RewriteResult> {
+  const prompt = `You are a news journalist writing a SHORT article for ${siteName}, a ${state} news publication in ${city}.
+
+Write a concise 300-500 word news article. Be direct and factual.
+
+RULES:
+- 300-500 words ONLY — short and punchy
+- Original headline, different from the source
+- Strong opening paragraph with the key facts
+- 2-3 short body paragraphs with context
+- One subheading (H2) to break up the text
+- Third person, objective tone
+- Attribute facts generically: "officials said", "authorities confirmed", "records show"
+- NEVER name other news outlets as sources
+- NEVER accuse anyone — use "alleged", "accused of", "charged with"
+- NEVER publish private info or name minors/victims
+- Add a brief ${state} local angle where possible
+- HTML format: <h2>, <p>, <strong>, <em> tags
+- Do NOT include <h1> title
+
+Topic: ${title}
+Details: ${description}
+Category: ${category}
+
+Return ONLY valid JSON (no code fences):
+{
+  "title": "headline",
+  "summary": "meta description under 160 chars",
+  "content": "HTML article body",
+  "suggested_image_query": "2-4 word visual scene description for stock photo"
+}`;
+  return callWithFallback(prompt);
+}
+
 export async function generateOpinion(
   siteName: string,
   state: string,
