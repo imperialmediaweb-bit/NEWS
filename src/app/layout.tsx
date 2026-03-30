@@ -4,6 +4,7 @@ import { getSiteByDomain, getActiveSite } from "@/config/sites";
 import "./globals.css";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import AnalyticsTracker from "@/components/AnalyticsTracker";
+import CookieConsent from "@/components/CookieConsent";
 
 function getSiteFromHeaders() {
   try {
@@ -129,6 +130,7 @@ export default function RootLayout({
         {children}
         <GoogleAnalytics />
         <AnalyticsTracker />
+        <CookieConsent />
       </body>
     </html>
   );
