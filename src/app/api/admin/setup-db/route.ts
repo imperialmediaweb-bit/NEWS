@@ -66,6 +66,56 @@ CREATE INDEX IF NOT EXISTS idx_articles_site_category ON articles(site_id, categ
 CREATE INDEX IF NOT EXISTS idx_articles_site_slug ON articles(site_id, slug);
 CREATE INDEX IF NOT EXISTS idx_articles_wp_id ON articles(wp_original_id);
 CREATE INDEX IF NOT EXISTS idx_categories_site_id ON categories(site_id);
+
+-- Pipeline tables
+CREATE TABLE IF NOT EXISTS feed_items (
+  id SERIAL PRIMARY KEY,
+  guid VARCHAR(500) UNIQUE NOT NULL,
+  source_feed VARCHAR(255) NOT NULL,
+  source_url VARCHAR(2000) NOT NULL,
+  title VARCHAR(500) NOT NULL,
+  description TEXT,
+  category VARCHAR(100) NOT NULL,
+  state VARCHAR(100),
+  fetched_at TIMESTAMP DEFAULT NOW(),
+  status VARCHAR(20) DEFAULT 'pending',
+  error_message TEXT,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_feed_items_status ON feed_items(status);
+CREATE INDEX IF NOT EXISTS idx_feed_items_guid ON feed_items(guid);
+CREATE INDEX IF NOT EXISTS idx_feed_items_category_state ON feed_items(category, state);
+
+CREATE TABLE IF NOT EXISTS pipeline_runs (
+  id SERIAL PRIMARY KEY,
+  stage VARCHAR(50) NOT NULL,
+  category VARCHAR(100),
+  items_processed INTEGER DEFAULT 0,
+  items_failed INTEGER DEFAULT 0,
+  duration_ms INTEGER,
+  error_message TEXT,
+  started_at TIMESTAMP DEFAULT NOW(),
+  completed_at TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS pipeline_config (
+  key VARCHAR(100) PRIMARY KEY,
+  value TEXT NOT NULL,
+  updated_at TIMESTAMP DEFAULT NOW()
+);
+INSERT INTO pipeline_config (key, value) VALUES
+  ('enabled', 'true'),
+  ('llm_provider', 'gemini'),
+  ('llm_model', 'gemini-2.0-flash'),
+  ('articles_per_batch', '5'),
+  ('image_provider', 'pixabay'),
+  ('opinion_enabled', 'true')
+ON CONFLICT (key) DO NOTHING;
+
+-- Extend articles table for pipeline
+ALTER TABLE articles ADD COLUMN IF NOT EXISTS source_feed_item_id INTEGER;
+ALTER TABLE articles ADD COLUMN IF NOT EXISTS source_url VARCHAR(2000);
+ALTER TABLE articles ADD COLUMN IF NOT EXISTS auto_generated BOOLEAN DEFAULT false;
 `;
 
 export async function GET() {

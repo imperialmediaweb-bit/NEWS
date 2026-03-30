@@ -10,6 +10,7 @@ import {
   Download,
   Settings,
   Menu,
+  Zap,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -21,6 +22,7 @@ const navItems = [
   { href: "/admin/import", label: "Import", icon: Download },
   { href: "/admin/domains", label: "Domains", icon: Globe },
   { href: "/admin/settings", label: "Settings & SEO", icon: Settings },
+  { href: "/admin/pipeline", label: "Pipeline", icon: Zap },
 ];
 
 export default function AdminLayout({
