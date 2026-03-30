@@ -66,13 +66,15 @@ export async function GET(request: NextRequest) {
       .join("\n");
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>${escapeXml(site.name)}</title>
     <link>${siteUrl}</link>
     <description>${escapeXml(site.tagline)}</description>
     <language>en-us</language>
     <lastBuildDate>${now}</lastBuildDate>
+    <atom:link href="https://pubsubhubbub.appspot.com/" rel="hub" />
+    <atom:link href="${siteUrl}/feed" rel="self" type="application/rss+xml" />
 ${items}
   </channel>
 </rss>`;

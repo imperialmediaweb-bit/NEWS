@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import { getSiteByDomain, getActiveSite } from "@/config/sites";
 import "./globals.css";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
+import AnalyticsTracker from "@/components/AnalyticsTracker";
 
 function getSiteFromHeaders() {
   try {
@@ -127,6 +128,7 @@ export default function RootLayout({
       <body className="antialiased bg-white overflow-x-hidden">
         {children}
         <GoogleAnalytics />
+        <AnalyticsTracker />
       </body>
     </html>
   );

@@ -114,6 +114,22 @@ INSERT INTO pipeline_config (key, value) VALUES
   ('opinion_enabled', 'true')
 ON CONFLICT (key) DO NOTHING;
 
+-- Page views analytics
+CREATE TABLE IF NOT EXISTS page_views (
+  id SERIAL PRIMARY KEY,
+  site_id INTEGER REFERENCES sites(id) ON DELETE CASCADE,
+  path VARCHAR(500) NOT NULL,
+  title VARCHAR(300),
+  referrer VARCHAR(500),
+  user_agent VARCHAR(500),
+  ip_hash VARCHAR(64),
+  created_at TIMESTAMP DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_page_views_site_id ON page_views(site_id);
+CREATE INDEX IF NOT EXISTS idx_page_views_created ON page_views(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_page_views_site_created ON page_views(site_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_page_views_path ON page_views(path);
+
 -- Extend articles table for pipeline
 ALTER TABLE articles ADD COLUMN IF NOT EXISTS source_feed_item_id INTEGER;
 ALTER TABLE articles ADD COLUMN IF NOT EXISTS source_url VARCHAR(2000);
