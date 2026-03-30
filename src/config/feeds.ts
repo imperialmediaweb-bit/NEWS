@@ -12,50 +12,23 @@ function gNews(query: string, whenHours?: number): string {
   return `https://news.google.com/rss/search?q=${encodeURIComponent(query + when)}&hl=en-US&gl=US&ceid=US:en`;
 }
 
-// All feeds are local per state — unique content per site, no duplicate content
+// ALL feeds are local per state — unique content per site, no duplicate content
 // Articles are filtered to recent hours using Google News "when:" operator
 export const feeds: FeedConfig[] = [
-  // LOCAL NEWS — every 1h, only last 2h articles
+  // LOCAL NEWS — every 2h, only last 3h articles
   {
     id: "google-news-local",
-    url: (state: string) => gNews(`${state} news`, 2),
+    url: (state: string) => gNews(`${state} news`, 3),
     category: "local-news",
-    intervalHours: 1,
-    maxItems: 3,
+    intervalHours: 2,
+    maxItems: 5,
   },
   {
     id: "google-news-local-city",
-    url: (_state: string, city?: string) => gNews(`${city || ""} news`, 2),
+    url: (state: string, city?: string) => gNews(`${city || ""} ${state} news`, 3),
     category: "local-news",
-    intervalHours: 1,
-    maxItems: 2,
-  },
-
-  // POLITICS — every 2h, only last 3h articles
-  {
-    id: "google-news-politics",
-    url: (state: string) => gNews(`${state} politics`, 3),
-    category: "politics",
     intervalHours: 2,
-    maxItems: 2,
-  },
-
-  // CRIME — every 2h, only last 3h articles
-  {
-    id: "google-news-crime",
-    url: (state: string) => gNews(`${state} crime`, 3),
-    category: "crime",
-    intervalHours: 2,
-    maxItems: 2,
-  },
-
-  // SPORTS — every 2h, only last 3h articles
-  {
-    id: "google-news-sports",
-    url: (state: string) => gNews(`${state} sports`, 3),
-    category: "sports",
-    intervalHours: 2,
-    maxItems: 2,
+    maxItems: 3,
   },
 
   // US / NATIONAL NEWS — every 3h, only last 4h articles
@@ -64,70 +37,97 @@ export const feeds: FeedConfig[] = [
     url: (state: string) => gNews(`${state} national news`, 4),
     category: "us-news",
     intervalHours: 3,
-    maxItems: 2,
+    maxItems: 4,
   },
 
-  // WORLD NEWS — every 6h, only last 8h articles
+  // POLITICS — every 4h, only last 5h articles
+  {
+    id: "google-news-politics",
+    url: (state: string) => gNews(`${state} politics`, 5),
+    category: "politics",
+    intervalHours: 4,
+    maxItems: 4,
+  },
+
+  // SPORTS — every 4h, only last 5h articles
+  {
+    id: "google-news-sports",
+    url: (state: string) => gNews(`${state} sports`, 5),
+    category: "sports",
+    intervalHours: 4,
+    maxItems: 4,
+  },
+
+  // CRIME — every 5h, only last 6h articles
+  {
+    id: "google-news-crime",
+    url: (state: string) => gNews(`${state} crime`, 6),
+    category: "crime",
+    intervalHours: 5,
+    maxItems: 4,
+  },
+
+  // WORLD NEWS — every 5h, only last 6h articles
   {
     id: "google-news-world",
-    url: (state: string) => gNews(`${state} world news`, 8),
+    url: (state: string) => gNews(`${state} world news`, 6),
     category: "world-news",
-    intervalHours: 6,
-    maxItems: 2,
+    intervalHours: 5,
+    maxItems: 3,
   },
 
-  // ENTERTAINMENT — every 12h, only last 24h articles
+  // ENTERTAINMENT — every 5h, only last 6h articles
   {
     id: "google-news-entertainment",
-    url: (state: string) => gNews(`${state} entertainment`, 24),
+    url: (state: string) => gNews(`${state} entertainment`, 6),
     category: "entertainment",
-    intervalHours: 12,
-    maxItems: 2,
+    intervalHours: 5,
+    maxItems: 3,
   },
 
-  // CELEBRITY — every 12h, only last 24h articles
+  // CELEBRITY — every 6h, only last 8h articles
   {
     id: "google-news-celebrity",
-    url: (state: string) => gNews(`${state} celebrity gossip`, 24),
+    url: (state: string) => gNews(`${state} celebrity gossip`, 8),
     category: "celebrity",
-    intervalHours: 12,
-    maxItems: 2,
+    intervalHours: 6,
+    maxItems: 3,
   },
 
-  // BUSINESS — every 12h, only last 24h articles
-  {
-    id: "google-news-business",
-    url: (state: string) => gNews(`${state} business economy`, 24),
-    category: "business",
-    intervalHours: 12,
-    maxItems: 2,
-  },
-
-  // TECHNOLOGY — every 12h, only last 24h articles
+  // TECHNOLOGY — every 6h, only last 8h articles
   {
     id: "google-news-tech",
-    url: (state: string) => gNews(`${state} technology`, 24),
+    url: (state: string) => gNews(`${state} technology`, 8),
     category: "technology",
-    intervalHours: 12,
-    maxItems: 2,
+    intervalHours: 6,
+    maxItems: 3,
   },
 
-  // LIFESTYLE — every 12h, only last 24h articles
+  // BUSINESS — every 6h, only last 8h articles
+  {
+    id: "google-news-business",
+    url: (state: string) => gNews(`${state} business economy`, 8),
+    category: "business",
+    intervalHours: 6,
+    maxItems: 3,
+  },
+
+  // LIFESTYLE — every 7h, only last 8h articles
   {
     id: "google-news-lifestyle",
-    url: (state: string) => gNews(`${state} lifestyle health`, 24),
+    url: (state: string) => gNews(`${state} lifestyle health`, 8),
     category: "lifestyle",
-    intervalHours: 12,
-    maxItems: 2,
+    intervalHours: 7,
+    maxItems: 3,
   },
 
-  // OPINION (seed topics) — every 12h
+  // OPINION (seed topics) — every 8h, only last 12h articles
   {
     id: "google-news-opinion-seed",
-    url: (state: string) => gNews(`${state} editorial opinion`, 24),
+    url: (state: string) => gNews(`${state} editorial opinion`, 12),
     category: "opinion",
-    intervalHours: 12,
-    maxItems: 1,
+    intervalHours: 8,
+    maxItems: 2,
   },
 ];
 
@@ -153,11 +153,9 @@ export function isPublishingHours(): boolean {
   const utcHour = now.getUTCHours();
 
   // Publishing window in UTC: 10:00 - 03:00 next day (wraps midnight)
-  // This covers 6 AM - 10 PM ET (EST, roughly — DST shifts by 1h which is fine)
   if (PUBLISH_START_HOUR_UTC < PUBLISH_END_HOUR_UTC) {
     return utcHour >= PUBLISH_START_HOUR_UTC && utcHour < PUBLISH_END_HOUR_UTC;
   }
-  // Wraps past midnight UTC
   return utcHour >= PUBLISH_START_HOUR_UTC || utcHour < PUBLISH_END_HOUR_UTC;
 }
 
