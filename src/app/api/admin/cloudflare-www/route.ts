@@ -1,11 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 
 /**
- * Setup www -> non-www redirect via Cloudflare Redirect Rules.
- *
- * Strategy: Instead of CNAME to Railway (which requires adding www domains on Railway),
- * we use Cloudflare's redirect rules to 301 redirect www to non-www.
- * This way Cloudflare handles the redirect itself — traffic never reaches Railway.
+ * Setup www -> non-www 301 redirect via Cloudflare Redirect Rules (free tier).
+ * Uses the newer Rulesets API instead of legacy Page Rules.
  */
 export async function POST(req: NextRequest) {
   const token =
@@ -22,6 +19,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "cfToken required in body" }, { status: 400 });
   }
 
+  const cfHeaders = { Authorization: `Bearer ${cfToken}`, "Content-Type": "application/json" };
   const results: { domain: string; status: string; detail?: string }[] = [];
 
   // Get all zones
@@ -30,91 +28,164 @@ export async function POST(req: NextRequest) {
   let totalPages = 1;
 
   while (page <= totalPages) {
-    const zonesRes = await fetch(
+    const res = await fetch(
       `https://api.cloudflare.com/client/v4/zones?per_page=50&page=${page}`,
-      { headers: { Authorization: `Bearer ${cfToken}`, "Content-Type": "application/json" } }
+      { headers: cfHeaders }
     );
-    const zonesData = await zonesRes.json();
-    if (!zonesData.success) {
-      return NextResponse.json({ error: "Cloudflare API error", details: zonesData.errors }, { status: 400 });
+    const data = await res.json();
+    if (!data.success) {
+      return NextResponse.json({ error: "Cloudflare API error", details: data.errors }, { status: 400 });
     }
-    for (const z of zonesData.result || []) {
+    for (const z of data.result || []) {
       allZones.push({ id: z.id, name: z.name });
     }
-    const info = zonesData.result_info || {};
+    const info = data.result_info || {};
     totalPages = Math.ceil((info.total_count || 0) / (info.per_page || 50));
     page++;
   }
 
   for (const zone of allZones) {
     try {
-      // Step 1: Delete existing www DNS records (CNAME to Railway we just created)
+      // Step 1: Ensure www DNS record exists (needed for Cloudflare to handle the request)
+      // Create a proxied CNAME www -> root domain (Cloudflare intercepts before reaching Railway)
+      let hasWwwDns = false;
       for (const type of ["A", "AAAA", "CNAME"]) {
-        const existingRes = await fetch(
+        const existRes = await fetch(
           `https://api.cloudflare.com/client/v4/zones/${zone.id}/dns_records?type=${type}&name=www.${zone.name}`,
-          { headers: { Authorization: `Bearer ${cfToken}`, "Content-Type": "application/json" } }
+          { headers: cfHeaders }
         );
-        const existingData = await existingRes.json();
-        for (const record of existingData.result || []) {
-          await fetch(
-            `https://api.cloudflare.com/client/v4/zones/${zone.id}/dns_records/${record.id}`,
-            { method: "DELETE", headers: { Authorization: `Bearer ${cfToken}` } }
-          );
+        const existData = await existRes.json();
+        if ((existData.result || []).length > 0) {
+          hasWwwDns = true;
+          // Make sure it's proxied (orange cloud) so Cloudflare can redirect
+          for (const rec of existData.result) {
+            if (!rec.proxied) {
+              await fetch(
+                `https://api.cloudflare.com/client/v4/zones/${zone.id}/dns_records/${rec.id}`,
+                {
+                  method: "PATCH",
+                  headers: cfHeaders,
+                  body: JSON.stringify({ proxied: true }),
+                }
+              );
+            }
+          }
         }
       }
 
-      // Step 2: Create a Page Rule for www redirect: www.domain.com/* -> https://domain.com/$1
-      // First check if page rule already exists
-      const existingRulesRes = await fetch(
-        `https://api.cloudflare.com/client/v4/zones/${zone.id}/pagerules?status=active`,
-        { headers: { Authorization: `Bearer ${cfToken}`, "Content-Type": "application/json" } }
-      );
-      const existingRulesData = await existingRulesRes.json();
-      const wwwRuleExists = (existingRulesData.result || []).some(
-        (rule: { targets?: { constraint?: { value?: string } }[] }) =>
-          rule.targets?.some((t) => t.constraint?.value?.includes(`www.${zone.name}`))
-      );
-
-      if (!wwwRuleExists) {
-        const ruleRes = await fetch(
-          `https://api.cloudflare.com/client/v4/zones/${zone.id}/pagerules`,
+      if (!hasWwwDns) {
+        // Create proxied CNAME www -> root (Cloudflare handles redirect before Railway)
+        await fetch(
+          `https://api.cloudflare.com/client/v4/zones/${zone.id}/dns_records`,
           {
             method: "POST",
-            headers: { Authorization: `Bearer ${cfToken}`, "Content-Type": "application/json" },
+            headers: cfHeaders,
             body: JSON.stringify({
-              targets: [
-                {
-                  target: "url",
-                  constraint: { operator: "matches", value: `www.${zone.name}/*` },
-                },
-              ],
-              actions: [
-                {
-                  id: "forwarding_url",
-                  value: {
-                    url: `https://${zone.name}/$1`,
-                    status_code: 301,
-                  },
-                },
-              ],
-              priority: 1,
-              status: "active",
+              type: "CNAME",
+              name: "www",
+              content: zone.name,
+              ttl: 1,
+              proxied: true,
             }),
           }
         );
-        const ruleData = await ruleRes.json();
-        if (ruleData.success) {
-          results.push({ domain: zone.name, status: "OK", detail: "Page rule created" });
-        } else {
-          // Page rules might be limited on free plan, try Bulk Redirect as fallback
-          results.push({
-            domain: zone.name,
-            status: "PARTIAL",
-            detail: `Page rule failed: ${ruleData.errors?.[0]?.message || "unknown"}. DNS records cleaned.`,
-          });
+      }
+
+      // Step 2: Create redirect rule using Rulesets API
+      // First, check existing redirect rules
+      const rulesetsRes = await fetch(
+        `https://api.cloudflare.com/client/v4/zones/${zone.id}/rulesets?phase=http_request_dynamic_redirect`,
+        { headers: cfHeaders }
+      );
+      const rulesetsData = await rulesetsRes.json();
+
+      // Check if www redirect rule already exists in any ruleset
+      let ruleExists = false;
+      for (const rs of rulesetsData.result || []) {
+        if (rs.phase === "http_request_dynamic_redirect") {
+          const rsDetailRes = await fetch(
+            `https://api.cloudflare.com/client/v4/zones/${zone.id}/rulesets/${rs.id}`,
+            { headers: cfHeaders }
+          );
+          const rsDetail = await rsDetailRes.json();
+          for (const rule of rsDetail.result?.rules || []) {
+            if (rule.description?.includes("www redirect") || rule.expression?.includes("www.")) {
+              ruleExists = true;
+              break;
+            }
+          }
         }
+      }
+
+      if (ruleExists) {
+        results.push({ domain: zone.name, status: "OK", detail: "Rule already exists" });
+        continue;
+      }
+
+      // Create or update the redirect ruleset
+      const rulesetPayload = {
+        name: "www to non-www redirect",
+        kind: "zone",
+        phase: "http_request_dynamic_redirect",
+        rules: [
+          {
+            expression: `(http.host eq "www.${zone.name}")`,
+            description: "www redirect to non-www",
+            action: "redirect",
+            action_parameters: {
+              from_value: {
+                status_code: 301,
+                target_url: {
+                  expression: `concat("https://${zone.name}", http.request.uri.path)`,
+                },
+                preserve_query_string: true,
+              },
+            },
+          },
+        ],
+      };
+
+      // Try to find existing ruleset to update, or create new
+      let rulesetId = "";
+      for (const rs of rulesetsData.result || []) {
+        if (rs.phase === "http_request_dynamic_redirect") {
+          rulesetId = rs.id;
+          break;
+        }
+      }
+
+      let ruleRes;
+      if (rulesetId) {
+        // Add rule to existing ruleset
+        ruleRes = await fetch(
+          `https://api.cloudflare.com/client/v4/zones/${zone.id}/rulesets/${rulesetId}/rules`,
+          {
+            method: "POST",
+            headers: cfHeaders,
+            body: JSON.stringify(rulesetPayload.rules[0]),
+          }
+        );
       } else {
-        results.push({ domain: zone.name, status: "OK", detail: "Page rule already exists" });
+        // Create new ruleset with the rule
+        ruleRes = await fetch(
+          `https://api.cloudflare.com/client/v4/zones/${zone.id}/rulesets`,
+          {
+            method: "POST",
+            headers: cfHeaders,
+            body: JSON.stringify(rulesetPayload),
+          }
+        );
+      }
+
+      const ruleData = await ruleRes.json();
+      if (ruleData.success) {
+        results.push({ domain: zone.name, status: "OK", detail: "Redirect rule created" });
+      } else {
+        results.push({
+          domain: zone.name,
+          status: "FAILED",
+          detail: ruleData.errors?.[0]?.message || JSON.stringify(ruleData.errors),
+        });
       }
     } catch (err) {
       results.push({ domain: zone.name, status: "ERROR", detail: String(err) });
@@ -122,8 +193,7 @@ export async function POST(req: NextRequest) {
   }
 
   const ok = results.filter((r) => r.status === "OK").length;
-  const partial = results.filter((r) => r.status === "PARTIAL").length;
-  const failed = results.filter((r) => r.status === "ERROR").length;
+  const failed = results.filter((r) => r.status !== "OK").length;
 
-  return NextResponse.json({ total: allZones.length, ok, partial, failed, results });
+  return NextResponse.json({ total: allZones.length, ok, failed, results });
 }
