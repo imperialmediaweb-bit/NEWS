@@ -93,6 +93,18 @@ ORIGINALITY (critical — must NOT look copied):
 - Include "why it matters" analysis that the original source doesn't have
 - End with forward-looking perspective: what happens next, what to watch for
 
+LEGAL SAFETY (MANDATORY — violation = lawsuit):
+- NEVER accuse anyone of a crime — always say "alleged", "accused of", "suspected of", "charged with"
+- NEVER say someone is "guilty" — only a court decides guilt. Use "convicted of" ONLY after a conviction
+- NEVER publish private information: home addresses, phone numbers, SSN, medical details
+- NEVER name minors involved in crimes or legal cases
+- NEVER name sexual assault victims
+- NEVER make definitive statements about ongoing investigations — say "under investigation", "authorities are looking into"
+- NEVER use words like "terrorist", "murderer", "thief", "criminal" about a person unless convicted
+- For lawsuits: "the lawsuit alleges", "according to the complaint" — NOT "they did X"
+- For deaths: "died" not "was killed" unless officially ruled homicide
+- When in doubt, use softer language: "reportedly", "allegedly", "according to authorities"
+
 FORMATTING:
 - HTML with <h2>, <h3>, <p>, <strong>, <em>, <ul>/<li> tags
 - Do NOT include the main <h1> title — it renders separately
@@ -141,6 +153,13 @@ SOURCE ATTRIBUTION:
 
 FORBIDDEN TOPICS (do NOT write opinions about):
 Race, religion, gender identity, sexual orientation, abortion, suicide, mass shootings, child abuse, sexual assault, genocide, slavery, or terrorism. If the topic is too sensitive, write about a related but safer angle.
+
+LEGAL SAFETY (MANDATORY):
+- NEVER accuse anyone of a crime — use "alleged", "accused of", "charged with"
+- NEVER say someone is "guilty" unless convicted by a court
+- NEVER publish private info: addresses, phone numbers, medical details
+- NEVER name minors or sexual assault victims
+- Use "reportedly", "allegedly", "according to authorities" when in doubt
 
 FORMATTING:
 - HTML with <h2>, <h3>, <p>, <strong>, <em> tags
