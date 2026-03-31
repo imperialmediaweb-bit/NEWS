@@ -277,12 +277,9 @@ export default function PipelineDashboard() {
       {/* Config */}
       <div className="bg-white rounded-xl shadow-sm p-6">
         <h2 className="font-bold mb-4">Current Configuration</h2>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {Object.entries(status?.config || {}).map(([key, val]) => (
-            <div key={key} className="px-3 py-2 bg-gray-50 rounded-lg text-sm">
-              <span className="text-gray-500">{key}:</span>{" "}
-              <span className="font-medium">{val}</span>
-            </div>
+            <ConfigItem key={key} label={key} value={val} />
           ))}
         </div>
       </div>
@@ -344,6 +341,56 @@ export default function PipelineDashboard() {
           </table>
         </div>
       </div>
+    </div>
+  );
+}
+
+function ConfigItem({ label, value }: { label: string; value: string }) {
+  const [expanded, setExpanded] = useState(false);
+  const isLong = value && value.length > 80;
+  const isJSON = value && (value.startsWith("{") || value.startsWith("["));
+
+  let preview = value || "—";
+  if (isJSON) {
+    try {
+      const parsed = JSON.parse(value);
+      if (parsed.total !== undefined) {
+        preview = `Total: ${parsed.total}`;
+        if (parsed.indexnowOk !== undefined) preview += ` | IndexNow: ${parsed.indexnowOk} | WebSub: ${parsed.websubOk} | GSC: ${parsed.gscSitemapOk}`;
+        if (parsed.ok !== undefined) preview += ` | OK: ${parsed.ok}`;
+        if (parsed.completedAt) preview += ` | ${new Date(parsed.completedAt).toLocaleString()}`;
+      } else {
+        const keys = Object.keys(parsed);
+        preview = `{${keys.slice(0, 3).join(", ")}${keys.length > 3 ? ", ..." : ""}}`;
+      }
+    } catch {
+      preview = value.slice(0, 60) + "...";
+    }
+  } else if (isLong) {
+    preview = value.slice(0, 60) + "...";
+  }
+
+  return (
+    <div className="bg-gray-50 rounded-lg text-sm overflow-hidden">
+      <div
+        className={`flex items-center justify-between px-3 py-2 ${isLong ? "cursor-pointer hover:bg-gray-100" : ""}`}
+        onClick={() => isLong && setExpanded(!expanded)}
+      >
+        <div className="min-w-0">
+          <span className="text-gray-500">{label}:</span>{" "}
+          <span className="font-medium">{expanded ? "" : preview}</span>
+        </div>
+        {isLong && (
+          <span className="text-gray-400 text-xs ml-2 flex-shrink-0">
+            {expanded ? "▲ collapse" : "▼ expand"}
+          </span>
+        )}
+      </div>
+      {expanded && (
+        <pre className="px-3 pb-3 text-xs text-gray-600 overflow-x-auto max-h-64 overflow-y-auto whitespace-pre-wrap break-all">
+          {isJSON ? JSON.stringify(JSON.parse(value), null, 2) : value}
+        </pre>
+      )}
     </div>
   );
 }
