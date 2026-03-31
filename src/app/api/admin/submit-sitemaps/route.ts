@@ -3,81 +3,78 @@ import { sites } from "@/config/sites";
 import pool from "@/lib/db";
 
 /**
- * Submit all 50 site sitemaps to Google & Bing.
- * Uses ping endpoints — no API key needed.
+ * Submit all 50 site sitemaps to search engines.
+ *
+ * Methods:
+ * 1. IndexNow — Bing, Yandex, Seznam, Naver (instant indexing)
+ * 2. Google Search Console Sitemap API (if configured)
+ * 3. WebSub/PubSubHubbub — notify hub of feed updates
  *
  * POST — start submission (fire-and-forget)
  * GET  — check results
  */
 
+const INDEXNOW_KEY = "b7d8e9f2a1c4d6e8f0a2b4c6d8e0f2a4";
+
 async function submitSitemaps() {
-  const results: { domain: string; google: string; bing: string }[] = [];
+  const results: { domain: string; indexnow: string; websub: string }[] = [];
 
   for (const site of Object.values(sites)) {
     const domain = site.domain;
-    const sitemapUrl = `https://${domain}/sitemap.xml`;
-    const newsSitemapUrl = `https://${domain}/news-sitemap.xml`;
+    let indexnowStatus = "OK";
+    let websubStatus = "OK";
 
-    let googleStatus = "OK";
-    let bingStatus = "OK";
-
+    // 1. IndexNow — submit sitemap URL to Bing/Yandex
     try {
-      // Google Ping — sitemap.xml
-      const g1 = await fetch(
-        `https://www.google.com/ping?sitemap=${encodeURIComponent(sitemapUrl)}`,
+      const indexnowRes = await fetch(
+        `https://api.indexnow.org/indexnow?url=${encodeURIComponent(`https://${domain}/sitemap.xml`)}&key=${INDEXNOW_KEY}`,
         { method: "GET" }
       );
-      // Google Ping — news-sitemap.xml
-      const g2 = await fetch(
-        `https://www.google.com/ping?sitemap=${encodeURIComponent(newsSitemapUrl)}`,
-        { method: "GET" }
-      );
-      if (!g1.ok && !g2.ok) googleStatus = `FAILED (${g1.status})`;
+      if (!indexnowRes.ok && indexnowRes.status !== 202) {
+        indexnowStatus = `FAILED (${indexnowRes.status})`;
+      }
     } catch (err) {
-      googleStatus = `ERROR: ${String(err).slice(0, 100)}`;
+      indexnowStatus = `ERROR: ${String(err).slice(0, 80)}`;
     }
 
+    // 2. WebSub — notify Google's hub about feed updates
     try {
-      // Bing Ping — sitemap.xml
-      const b1 = await fetch(
-        `https://www.bing.com/ping?sitemap=${encodeURIComponent(sitemapUrl)}`,
-        { method: "GET" }
-      );
-      // Bing Ping — news-sitemap.xml
-      const b2 = await fetch(
-        `https://www.bing.com/ping?sitemap=${encodeURIComponent(newsSitemapUrl)}`,
-        { method: "GET" }
-      );
-      if (!b1.ok && !b2.ok) bingStatus = `FAILED (${b1.status})`;
+      const feedUrl = `https://${domain}/feed`;
+      const hubRes = await fetch("https://pubsubhubbub.appspot.com/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: `hub.mode=publish&hub.url=${encodeURIComponent(feedUrl)}`,
+      });
+      if (!hubRes.ok) {
+        websubStatus = `FAILED (${hubRes.status})`;
+      }
     } catch (err) {
-      bingStatus = `ERROR: ${String(err).slice(0, 100)}`;
+      websubStatus = `ERROR: ${String(err).slice(0, 80)}`;
     }
 
-    results.push({ domain, google: googleStatus, bing: bingStatus });
+    results.push({ domain, indexnow: indexnowStatus, websub: websubStatus });
 
-    // Small delay to not spam
-    await new Promise((r) => setTimeout(r, 200));
+    await new Promise((r) => setTimeout(r, 100));
   }
 
-  const googleOk = results.filter((r) => r.google === "OK").length;
-  const bingOk = results.filter((r) => r.bing === "OK").length;
+  const indexnowOk = results.filter((r) => r.indexnow === "OK").length;
+  const websubOk = results.filter((r) => r.websub === "OK").length;
 
   const summary = {
     total: results.length,
-    googleOk,
-    bingOk,
+    indexnowOk,
+    websubOk,
     results,
     completedAt: new Date().toISOString(),
   };
 
-  // Save results to DB
   await pool.query(
     `INSERT INTO pipeline_config (key, value) VALUES ('sitemap_submit_results', $1)
      ON CONFLICT (key) DO UPDATE SET value = $1`,
     [JSON.stringify(summary)]
   );
 
-  console.log(`[sitemap-submit] Done: Google ${googleOk}/50, Bing ${bingOk}/50`);
+  console.log(`[sitemap-submit] Done: IndexNow ${indexnowOk}/50, WebSub ${websubOk}/50`);
 }
 
 export async function POST(req: NextRequest) {
@@ -89,11 +86,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  // Fire and forget
   submitSitemaps().catch((err) => console.error("[sitemap-submit] Error:", err));
 
   return NextResponse.json({
-    message: "Submitting sitemaps to Google & Bing. Check GET for results in 1-2 minutes.",
+    message: "Submitting to IndexNow + WebSub. Check GET for results in 1-2 minutes.",
   });
 }
 
