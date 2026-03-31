@@ -266,8 +266,11 @@ export default async function ArticlePage({
     ],
   };
 
+  const ampUrl = `https://${site.domain}/${params.category}/${params.slug}/amp`;
+
   return (
     <>
+      <link rel="amphtml" href={ampUrl} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(newsArticleJsonLd) }}
