@@ -133,6 +133,14 @@ export function middleware(req: NextRequest) {
     return NextResponse.redirect(url, 301);
   }
 
+  // ─── 0b. Redirect old WordPress URLs (/YYYY/MM/DD/slug) to /wp-article/slug ───
+  const wpMatch = pathname.match(/^\/\d{4}\/\d{2}\/\d{2}\/(.+?)\/?$/);
+  if (wpMatch) {
+    const slug = wpMatch[1];
+    const url = new URL(`/wp-article/${slug}`, req.url);
+    return NextResponse.redirect(url, 301);
+  }
+
   // ─── 1. Block known bad bots/scanners ───
   for (const pattern of BAD_BOT_PATTERNS) {
     if (pattern.test(ua)) {
