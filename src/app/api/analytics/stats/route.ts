@@ -84,6 +84,71 @@ export async function GET(req: NextRequest) {
       ORDER BY hour
     `);
 
+    // Top pages from search engines (Google, Bing, Yahoo)
+    const { rows: searchPages } = await pool.query(`
+      SELECT pv.path, pv.title, s.domain,
+        substring(pv.referrer from '://([^/]+)') as search_engine,
+        COUNT(*)::int as views
+      FROM page_views pv
+      LEFT JOIN sites s ON pv.site_id = s.id
+      WHERE pv.created_at > NOW() - INTERVAL '7 days'
+        AND (pv.referrer ILIKE '%google.%' OR pv.referrer ILIKE '%bing.%' OR pv.referrer ILIKE '%yahoo.%' OR pv.referrer ILIKE '%duckduckgo.%')
+      GROUP BY pv.path, pv.title, s.domain, search_engine
+      ORDER BY views DESC
+      LIMIT 30
+    `);
+
+    // Top user agents (to spot bots)
+    const { rows: topUserAgents } = await pool.query(`
+      SELECT
+        CASE
+          WHEN user_agent ILIKE '%googlebot%' THEN 'Googlebot'
+          WHEN user_agent ILIKE '%bingbot%' THEN 'Bingbot'
+          WHEN user_agent ILIKE '%yandex%' THEN 'Yandex'
+          WHEN user_agent ILIKE '%baidu%' THEN 'Baidu'
+          WHEN user_agent ILIKE '%semrush%' THEN 'SEMrush'
+          WHEN user_agent ILIKE '%ahrefs%' THEN 'Ahrefs'
+          WHEN user_agent ILIKE '%mj12bot%' THEN 'Majestic'
+          WHEN user_agent ILIKE '%dotbot%' THEN 'DotBot'
+          WHEN user_agent ILIKE '%petalbot%' THEN 'PetalBot'
+          WHEN user_agent ILIKE '%bytespider%' THEN 'ByteSpider'
+          WHEN user_agent ILIKE '%gptbot%' THEN 'GPTBot'
+          WHEN user_agent ILIKE '%claudebot%' THEN 'ClaudeBot'
+          WHEN user_agent ILIKE '%chrome%' THEN 'Chrome (Real User)'
+          WHEN user_agent ILIKE '%firefox%' THEN 'Firefox (Real User)'
+          WHEN user_agent ILIKE '%safari%' AND user_agent NOT ILIKE '%chrome%' THEN 'Safari (Real User)'
+          WHEN user_agent ILIKE '%edge%' THEN 'Edge (Real User)'
+          WHEN user_agent = '' OR user_agent IS NULL THEN 'No UA (Bot)'
+          ELSE 'Other: ' || LEFT(user_agent, 50)
+        END as agent_type,
+        COUNT(*)::int as views
+      FROM page_views
+      WHERE created_at > NOW() - INTERVAL '24 hours'
+      GROUP BY agent_type
+      ORDER BY views DESC
+      LIMIT 20
+    `);
+
+    // Countries / regions from IPs (approximate from visitor_id pattern)
+    const { rows: searchEngineBreakdown } = await pool.query(`
+      SELECT
+        CASE
+          WHEN referrer ILIKE '%google.%' THEN 'Google'
+          WHEN referrer ILIKE '%bing.%' THEN 'Bing'
+          WHEN referrer ILIKE '%yahoo.%' THEN 'Yahoo'
+          WHEN referrer ILIKE '%duckduckgo.%' THEN 'DuckDuckGo'
+          WHEN referrer ILIKE '%facebook.%' OR referrer ILIKE '%fb.%' THEN 'Facebook'
+          WHEN referrer ILIKE '%twitter.%' OR referrer ILIKE '%t.co%' THEN 'Twitter/X'
+          WHEN referrer = '' OR referrer IS NULL THEN 'Direct / Bot'
+          ELSE 'Other'
+        END as source,
+        COUNT(*)::int as views
+      FROM page_views
+      WHERE created_at > NOW() - INTERVAL '7 days'
+      GROUP BY source
+      ORDER BY views DESC
+    `);
+
     return NextResponse.json({
       totals: totals[0] || { today: 0, week: 0, month: 0 },
       sitesToday,
@@ -91,6 +156,9 @@ export async function GET(req: NextRequest) {
       topPages,
       topReferrers,
       hourlyTrend,
+      searchPages,
+      topUserAgents,
+      searchEngineBreakdown,
     });
   } catch (error) {
     return NextResponse.json({ error: String(error) }, { status: 500 });
