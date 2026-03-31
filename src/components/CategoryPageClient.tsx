@@ -18,17 +18,21 @@ interface CategoryPageClientProps {
 export default function CategoryPageClient({ site, categorySlug, categoryLabel }: CategoryPageClientProps) {
   const [articles, setArticles] = useState<Article[]>([]);
   const [content, setContent] = useState(() => generateContent(site));
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const mockContent = generateContent(site);
-    setContent(mockContent);
-
-    fetch(`/api/category?site=${site.slug}&category=${categorySlug}`)
+  function loadArticles(pageNum: number, append = false) {
+    setLoading(true);
+    fetch(`/api/category?site=${site.slug}&category=${categorySlug}&page=${pageNum}`)
       .then((r) => r.json())
       .then((data) => {
         if (data.articles && data.articles.length > 0) {
-          setArticles(data.articles);
-        } else {
+          setArticles((prev) => append ? [...prev, ...data.articles] : data.articles);
+          setTotalPages(data.totalPages || 1);
+          setPage(pageNum);
+        } else if (!append) {
+          const mockContent = generateContent(site);
           const categoryMap: Record<string, Article[]> = {
             "local-news": mockContent.localNews,
             "us-news": mockContent.usNews,
@@ -43,22 +47,33 @@ export default function CategoryPageClient({ site, categorySlug, categoryLabel }
           };
           setArticles(categoryMap[categorySlug] || mockContent.usNews);
         }
+        setLoading(false);
       })
       .catch(() => {
-        const categoryMap: Record<string, Article[]> = {
-          "local-news": mockContent.localNews,
-          "us-news": mockContent.usNews,
-          "world-news": mockContent.worldNews,
-          politics: mockContent.politics,
-          sports: mockContent.sports,
-          entertainment: mockContent.entertainment,
-          business: mockContent.business,
-          technology: mockContent.technology,
-          opinion: mockContent.opinion,
-          celebrity: mockContent.celebrity,
-        };
-        setArticles(categoryMap[categorySlug] || mockContent.usNews);
+        if (!append) {
+          const mockContent = generateContent(site);
+          const categoryMap: Record<string, Article[]> = {
+            "local-news": mockContent.localNews,
+            "us-news": mockContent.usNews,
+            "world-news": mockContent.worldNews,
+            politics: mockContent.politics,
+            sports: mockContent.sports,
+            entertainment: mockContent.entertainment,
+            business: mockContent.business,
+            technology: mockContent.technology,
+            opinion: mockContent.opinion,
+            celebrity: mockContent.celebrity,
+          };
+          setArticles(categoryMap[categorySlug] || mockContent.usNews);
+        }
+        setLoading(false);
       });
+  }
+
+  useEffect(() => {
+    const mockContent = generateContent(site);
+    setContent(mockContent);
+    loadArticles(1);
   }, [site, categorySlug]);
 
   const leadArticle = articles[0];
@@ -194,6 +209,19 @@ export default function CategoryPageClient({ site, categorySlug, categoryLabel }
                     </Link>
                   </motion.div>
                 ))}
+              </div>
+            )}
+            {/* Load More Button */}
+            {page < totalPages && (
+              <div className="text-center mt-8">
+                <button
+                  onClick={() => loadArticles(page + 1, true)}
+                  disabled={loading}
+                  className="px-8 py-3 bg-[#c1121f] text-white font-bold rounded-lg hover:bg-[#9b111e] transition-colors disabled:opacity-50"
+                  style={{ fontFamily: "'Oswald', sans-serif", letterSpacing: "1px", textTransform: "uppercase" }}
+                >
+                  {loading ? "Loading..." : "Load More Articles"}
+                </button>
               </div>
             )}
           </div>

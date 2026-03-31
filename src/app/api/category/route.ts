@@ -33,8 +33,20 @@ export async function GET(request: NextRequest) {
     const variants = categoryVariants[category] || [category];
     const placeholders = variants.map((_, i) => `$${i + 2}`).join(", ");
 
+    const page = parseInt(searchParams.get("page") || "1", 10);
+    const perPage = 20;
+    const offset = (page - 1) * perPage;
+
+    // Get total count
+    const { rows: countRows } = await pool.query(
+      `SELECT COUNT(*) as total FROM articles WHERE site_id = $1 AND category IN (${placeholders})`,
+      [siteId, ...variants]
+    );
+    const total = parseInt(countRows[0]?.total || "0", 10);
+    const totalPages = Math.ceil(total / perPage);
+
     const { rows } = await pool.query(
-      `SELECT * FROM articles WHERE site_id = $1 AND category IN (${placeholders}) ORDER BY published_at DESC LIMIT 30`,
+      `SELECT * FROM articles WHERE site_id = $1 AND category IN (${placeholders}) ORDER BY published_at DESC LIMIT ${perPage} OFFSET ${offset}`,
       [siteId, ...variants]
     );
 
@@ -48,7 +60,7 @@ export async function GET(request: NextRequest) {
       slug: row.slug as string,
     }));
 
-    return NextResponse.json({ articles });
+    return NextResponse.json({ articles, page, totalPages, total });
   } catch {
     return NextResponse.json({ articles: [] });
   }
