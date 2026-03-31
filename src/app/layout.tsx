@@ -75,7 +75,7 @@ export async function generateMetadata(): Promise<Metadata> {
       icon: `/api/favicon?site=${site.slug}`,
     },
     other: {
-      "google-site-verification": "",
+      "google-site-verification": "aV0XJE-iAF9jk2o4XvPTcJyQjSvyuH8ZcPV0zi-G2I8",
     },
   };
 }
