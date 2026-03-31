@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 import { getSiteByDomain, getActiveSite } from "@/config/sites";
 import pool from "@/lib/db";
 import ArticlePageClient from "@/components/ArticlePageClient";
@@ -109,11 +110,18 @@ export default async function WpArticlePage({
   const site = getSiteFromHeaders();
   const { article, related } = await getArticleBySlug(site.slug, params.slug);
 
-  const categorySlug = (article?.category || "news").toLowerCase().replace(/\s+/g, "-");
-  const categoryLabel = categorySlug.replace(/-/g, " ").replace(/\b\w/g, (c: string) => c.toUpperCase());
-  const displayTitle = article?.title || params.slug.replace(/-/g, " ");
-  const description = article?.summary || `Read ${displayTitle} on ${site.name}`;
-  const image = article?.featured_image || "";
+  // Redirect to canonical URL if article exists
+  if (article) {
+    const cat = (article.category || "news").toLowerCase().replace(/\s+/g, "-");
+    redirect(`/${cat}/${params.slug}`);
+  }
+
+  // Article not found — show 404-style page
+  const categorySlug = "news";
+  const categoryLabel = "News";
+  const displayTitle = params.slug.replace(/-/g, " ");
+  const description = `Read ${displayTitle} on ${site.name}`;
+  const image = "";
   const url = `https://${site.domain}/${categorySlug}/${params.slug}`;
 
   const newsArticleJsonLd = {
@@ -122,9 +130,9 @@ export default async function WpArticlePage({
     headline: displayTitle,
     description,
     image: image ? [image] : [],
-    datePublished: article?.published_at || "",
-    dateModified: article?.published_at || "",
-    author: { "@type": "Person", name: article?.author || "Staff Reporter" },
+    datePublished: "",
+    dateModified: "",
+    author: { "@type": "Person", name: "Staff Reporter" },
     publisher: {
       "@type": "NewsMediaOrganization",
       name: site.name,
