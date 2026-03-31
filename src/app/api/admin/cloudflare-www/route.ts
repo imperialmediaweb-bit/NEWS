@@ -92,30 +92,49 @@ async function processZones(cfToken: string) {
           }
         }
 
-        // Check if www rule already exists
+        // Delete old www rules that don't preserve path
         if (redirectRulesetId) {
           const rsRes = await fetch(
             `https://api.cloudflare.com/client/v4/zones/${zone.id}/rulesets/${redirectRulesetId}`,
             { headers: cfHeaders }
           );
           const rsData = await rsRes.json();
-          const hasWwwRule = (rsData.result?.rules || []).some(
+          const wwwRules = (rsData.result?.rules || []).filter(
             (r: { expression?: string }) => r.expression?.includes("www.")
           );
-          if (hasWwwRule) {
-            results.push({ domain: zone.name, status: "OK", detail: "Rule already exists" });
-            continue;
+          // Delete old rules
+          for (const oldRule of wwwRules) {
+            await fetch(
+              `https://api.cloudflare.com/client/v4/zones/${zone.id}/rulesets/${redirectRulesetId}/rules/${oldRule.id}`,
+              { method: "DELETE", headers: cfHeaders }
+            );
+          }
+          // Re-fetch ruleset ID since deleting all rules may delete the ruleset
+          const rsCheck = await fetch(
+            `https://api.cloudflare.com/client/v4/zones/${zone.id}/rulesets`,
+            { headers: cfHeaders }
+          );
+          const rsCheckData = await rsCheck.json();
+          redirectRulesetId = "";
+          for (const rs of rsCheckData.result || []) {
+            if (rs.phase === "http_request_dynamic_redirect") {
+              redirectRulesetId = rs.id;
+              break;
+            }
           }
         }
 
+        // New rule with dynamic expression that preserves full path + query
         const redirectRule = {
           expression: `(http.host eq "www.${zone.name}")`,
-          description: "www redirect to non-www",
+          description: "www redirect to non-www with full path",
           action: "redirect",
           action_parameters: {
             from_value: {
               status_code: 301,
-              target_url: { value: `https://${zone.name}` },
+              target_url: {
+                expression: `concat("https://${zone.name}", http.request.uri.path)`,
+              },
               preserve_query_string: true,
             },
           },
