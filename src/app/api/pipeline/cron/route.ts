@@ -71,6 +71,12 @@ export async function POST(req: NextRequest) {
     actions.push("cleanup");
   }
 
+  // ─── Submit sitemaps to Google & Bing: daily at 6 AM UTC ───
+  if (utcHour === 6 && utcMinute < 5) {
+    fireAndForget(baseUrl, "admin/submit-sitemaps", {}, secret);
+    actions.push("submit_sitemaps");
+  }
+
   if (actions.length === 0) {
     actions.push("nothing_due");
   }
