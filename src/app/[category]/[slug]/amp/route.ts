@@ -55,7 +55,7 @@ export async function GET(
     .replace(/<img([^>]*?)src="([^"]*)"([^>]*?)>/gi, (_, before, src, after) => {
       const altMatch = (before + after).match(/alt="([^"]*)"/);
       const alt = altMatch ? altMatch[1] : title;
-      return `<amp-img src="${src}" alt="${alt}" width="800" height="450" layout="responsive"></amp-img>`;
+      return `<amp-img src="${src}" alt="${alt}" width="1200" height="675" layout="responsive"></amp-img>`;
     })
     .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, "")
     .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, "")
@@ -66,15 +66,13 @@ export async function GET(
 <html amp lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,minimum-scale=1">
-  <link rel="canonical" href="${canonicalUrl}">
-  <title>${escapeHtml(title)} | ${site.name}</title>
-  <meta name="description" content="${escapeHtml(summary)}">
-
   <script async src="https://cdn.ampproject.org/v0.js"></script>
+  <title>${escapeHtml(title)} | ${site.name}</title>
+  <link rel="canonical" href="${canonicalUrl}">
+  <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+  <meta name="description" content="${escapeHtml(summary)}">
   <script async custom-element="amp-analytics" src="https://cdn.ampproject.org/v0/amp-analytics-0.1.js"></script>
   <script async custom-element="amp-social-share" src="https://cdn.ampproject.org/v0/amp-social-share-0.1.js"></script>
-
   <style amp-boilerplate>body{-webkit-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-moz-animation:-amp-start 8s steps(1,end) 0s 1 normal both;animation:-amp-start 8s steps(1,end) 0s 1 normal both}@-webkit-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-moz-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}</style><noscript><style amp-boilerplate>body{-webkit-animation:none;-moz-animation:none;animation:none}</style></noscript>
 
   <style amp-custom>
@@ -104,7 +102,7 @@ export async function GET(
     "@type": "NewsArticle",
     "headline": ${JSON.stringify(title)},
     "description": ${JSON.stringify(summary)},
-    "image": ${image ? JSON.stringify([image]) : "[]"},
+    "image": ${image ? `[{"@type":"ImageObject","url":${JSON.stringify(image)},"width":1200,"height":675}]` : "[]"},
     "datePublished": "${publishedAt}",
     "dateModified": "${publishedAt}",
     "author": { "@type": "Person", "name": ${JSON.stringify(author)} },
@@ -130,7 +128,7 @@ export async function GET(
       By <strong>${escapeHtml(author)}</strong>${publishedAt ? ` &bull; ${new Date(publishedAt).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}` : ""}
     </div>
 
-    ${image ? `<amp-img src="${escapeHtml(image)}" alt="${escapeHtml(title)}" width="800" height="450" layout="responsive"></amp-img>` : ""}
+    ${image ? `<amp-img src="${escapeHtml(image)}" alt="${escapeHtml(title)}" width="1200" height="675" layout="responsive"></amp-img>` : ""}
 
     <div class="content">
       ${ampContent}
@@ -138,7 +136,7 @@ export async function GET(
 
     <div class="share">
       <amp-social-share type="twitter" width="40" height="40"></amp-social-share>
-      <amp-social-share type="facebook" width="40" height="40" data-param-app_id=""></amp-social-share>
+      <amp-social-share type="facebook" width="40" height="40"></amp-social-share>
       <amp-social-share type="linkedin" width="40" height="40"></amp-social-share>
       <amp-social-share type="email" width="40" height="40"></amp-social-share>
     </div>
