@@ -9,7 +9,7 @@ interface ContactFormProps {
 }
 
 export default function ContactForm({ siteName, siteDomain }: ContactFormProps) {
-  const [formData, setFormData] = useState({ name: "", email: "", subject: "", message: "" });
+  const [formData, setFormData] = useState({ name: "", email: "", department: "", subject: "", message: "" });
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -27,7 +27,7 @@ export default function ContactForm({ siteName, siteDomain }: ContactFormProps) 
 
       if (res.ok) {
         setStatus("sent");
-        setFormData({ name: "", email: "", subject: "", message: "" });
+        setFormData({ name: "", email: "", department: "", subject: "", message: "" });
       } else {
         const data = await res.json();
         setErrorMsg(data.error || "Something went wrong. Please try again.");
@@ -102,6 +102,26 @@ export default function ContactForm({ siteName, siteDomain }: ContactFormProps) 
             className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-[#c1121f] focus:ring-1 focus:ring-[#c1121f] transition-colors"
             placeholder="john@example.com"
           />
+        </div>
+
+        <div>
+          <label className="block text-sm font-bold mb-1.5 uppercase tracking-wider text-gray-700" style={{ fontFamily: "'Oswald', sans-serif" }}>
+            Department
+          </label>
+          <select
+            required
+            value={formData.department}
+            onChange={(e) => setFormData({ ...formData, department: e.target.value })}
+            className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-[#c1121f] focus:ring-1 focus:ring-[#c1121f] transition-colors bg-white"
+          >
+            <option value="" disabled>Select a department...</option>
+            <option value="General Inquiries">General Inquiries</option>
+            <option value="News Tips">News Tips</option>
+            <option value="Advertising">Advertising</option>
+            <option value="Corrections">Corrections</option>
+            <option value="Legal / DMCA">Legal / DMCA</option>
+            <option value="Privacy Requests">Privacy Requests</option>
+          </select>
         </div>
 
         <div>

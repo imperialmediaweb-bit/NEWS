@@ -5,9 +5,9 @@ const CONTACT_EMAIL = "ainewss2023@gmail.com";
 
 export async function POST(req: NextRequest) {
   try {
-    const { name, email, subject, message, siteName, siteDomain } = await req.json();
+    const { name, email, department, subject, message, siteName, siteDomain } = await req.json();
 
-    if (!name || !email || !subject || !message) {
+    if (!name || !email || !department || !subject || !message) {
       return NextResponse.json({ error: "All fields are required." }, { status: 400 });
     }
 
@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
       from: fromAddress,
       to: CONTACT_EMAIL,
       replyTo: email,
-      subject: `[${siteName}] ${subject}`,
+      subject: `[${siteName}] [${department}] ${subject}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <div style="background: #111; padding: 20px; text-align: center;">
@@ -40,6 +40,10 @@ export async function POST(req: NextRequest) {
               <tr>
                 <td style="padding: 8px 0; color: #666; font-size: 13px; width: 100px;"><strong>Site:</strong></td>
                 <td style="padding: 8px 0; font-size: 13px;">${siteName} (${siteDomain})</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 0; color: #666; font-size: 13px;"><strong>Department:</strong></td>
+                <td style="padding: 8px 0; font-size: 13px;"><span style="background: #c1121f; color: #fff; padding: 2px 8px; border-radius: 3px; font-size: 12px; font-weight: bold;">${department}</span></td>
               </tr>
               <tr>
                 <td style="padding: 8px 0; color: #666; font-size: 13px;"><strong>Name:</strong></td>
