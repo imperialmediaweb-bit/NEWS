@@ -6,6 +6,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Link from "next/link";
 import { Mail, MapPin, Clock, Send } from "lucide-react";
+import ContactForm from "@/components/ContactForm";
 
 function getSiteFromHeaders() {
   try {
@@ -135,34 +136,9 @@ export default function ContactPage() {
             </div>
           </div>
 
-          {/* Quick Links & Policies */}
+          {/* Contact Form */}
           <div className="space-y-6">
-            <div className="bg-white rounded-xl shadow-sm p-6 md:p-8">
-              <h2 className="text-xl font-bold mb-6" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900 }}>
-                Quick Links
-              </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {[
-                  { href: "/about", label: "About Us" },
-                  { href: "/careers", label: "Careers" },
-                  { href: "/advertise", label: "Advertise With Us" },
-                  { href: "/corrections", label: "Report a Correction" },
-                  { href: "/dmca", label: "DMCA / Copyright" },
-                  { href: "/privacy", label: "Privacy Policy" },
-                  { href: "/terms", label: "Terms of Use" },
-                  { href: "/ethics", label: "Ethics Policy" },
-                  { href: "/editorial-policy", label: "Editorial Policy" },
-                ].map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className="flex items-center gap-2 px-4 py-3 bg-gray-50 rounded-lg text-sm font-medium text-gray-700 hover:bg-red-50 hover:text-[#c1121f] transition-colors"
-                  >
-                    <span className="text-[#c1121f]">&rsaquo;</span> {link.label}
-                  </Link>
-                ))}
-              </div>
-            </div>
+            <ContactForm siteName={site.name} siteDomain={site.domain} />
 
             <div className="bg-[#1a1a1a] rounded-xl p-6 md:p-8 text-white">
               <h2 className="text-xl font-bold mb-3" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900 }}>
