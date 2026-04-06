@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 
 const CONTACT_EMAIL = "ainewss2023@gmail.com";
 
@@ -11,16 +11,16 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "All fields are required." }, { status: 400 });
     }
 
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_APP_PASSWORD,
-      },
-    });
+    const resend = new Resend(process.env.RESEND_API_KEY);
 
-    await transporter.sendMail({
-      from: `"${siteName} Contact Form" <${process.env.GMAIL_USER}>`,
+    // If the domain is verified in Resend, send from contact@domain
+    // Otherwise fall back to the Resend default
+    const fromAddress = process.env.RESEND_VERIFIED_DOMAINS?.includes(siteDomain)
+      ? `${siteName} <contact@${siteDomain}>`
+      : `${siteName} <onboarding@resend.dev>`;
+
+    await resend.emails.send({
+      from: fromAddress,
       to: CONTACT_EMAIL,
       replyTo: email,
       subject: `[${siteName}] ${subject}`,
