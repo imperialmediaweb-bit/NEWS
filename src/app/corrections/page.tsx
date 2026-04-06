@@ -110,8 +110,7 @@ export default function CorrectionsPage() {
               <li>If possible, a source for the correct information.</li>
             </ul>
             <p>
-              <strong>Email:</strong> corrections@{site.domain}<br />
-              <strong>Subject Line:</strong> &quot;Correction Request — [Article Title]&quot;
+              Visit our <Link href="/contact" className="text-[#c1121f] underline">Contact Page</Link> with subject <strong>&quot;Correction Request — [Article Title]&quot;</strong>
             </p>
 
             <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
@@ -130,7 +129,7 @@ export default function CorrectionsPage() {
               For correction requests or questions about our corrections process:
             </p>
             <p>
-              Email: corrections@{site.domain}<br />
+              Visit our <Link href="/contact" className="text-[#c1121f] underline">Contact Page</Link><br />
               See also: <Link href="/ethics" className="text-[#c1121f] underline">Ethics Policy</Link> | <Link href="/editorial-policy" className="text-[#c1121f] underline">Editorial Policy</Link>
             </p>
 

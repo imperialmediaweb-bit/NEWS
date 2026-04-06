@@ -147,7 +147,7 @@ export default function PrivacyPage() {
               <li><strong>Right to Correct:</strong> You may request that we correct inaccurate personal information.</li>
               <li><strong>Right to Limit Use of Sensitive Information:</strong> You may limit the use of sensitive personal information to purposes necessary for providing our services.</li>
             </ul>
-            <p>To exercise these rights, contact us at privacy@{site.domain}.</p>
+            <p>To exercise these rights, please visit our <Link href="/contact" className="text-[#c1121f] underline">Contact Page</Link>.</p>
 
             <h3 style={{ fontFamily: "'Oswald', sans-serif", textTransform: "uppercase", fontSize: "1rem" }}>8.2 Virginia Residents (VCDPA)</h3>
             <p>Virginia residents have the right to access, correct, delete, and obtain a copy of their personal data, and to opt out of targeted advertising, sale of personal data, and profiling.</p>
@@ -163,14 +163,14 @@ export default function PrivacyPage() {
 
             <h3 style={{ fontFamily: "'Oswald', sans-serif", textTransform: "uppercase", fontSize: "1rem" }}>8.6 Do Not Sell My Personal Information</h3>
             <p>
-              To opt out of the sale or sharing of your personal information for targeted advertising purposes, please email us at privacy@{site.domain} with the subject line &quot;Do Not Sell My Personal Information.&quot; We will process your request within 15 business days.
+              To opt out of the sale or sharing of your personal information for targeted advertising purposes, please visit our <Link href="/contact" className="text-[#c1121f] underline">Contact Page</Link> and include &quot;Do Not Sell My Personal Information&quot; in your message. We will process your request within 15 business days.
             </p>
 
             <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
               9. Children&apos;s Privacy
             </h2>
             <p>
-              {site.name} does not knowingly collect personal information from children under 13 years of age. If we learn that we have collected personal information from a child under 13, we will take steps to delete such information as soon as possible. If you believe that we have collected information from a child under 13, please contact us at privacy@{site.domain}.
+              {site.name} does not knowingly collect personal information from children under 13 years of age. If we learn that we have collected personal information from a child under 13, we will take steps to delete such information as soon as possible. If you believe that we have collected information from a child under 13, please reach out via our <Link href="/contact" className="text-[#c1121f] underline">Contact Page</Link>.
             </p>
 
             <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
@@ -189,8 +189,7 @@ export default function PrivacyPage() {
             <p>
               <strong>{site.name}</strong> — A MediaChief Publication<br />
               Privacy Officer<br />
-              Email: privacy@{site.domain}<br />
-              Website: <Link href="/contact" className="text-[#c1121f] underline">Contact Page</Link>
+              Visit our <Link href="/contact" className="text-[#c1121f] underline">Contact Page</Link>
             </p>
 
           </div>

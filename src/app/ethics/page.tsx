@@ -145,8 +145,8 @@ export default function EthicsPage() {
               If you believe {site.name} has violated any principle in this Ethics Policy, we encourage you to contact us:
             </p>
             <p>
-              Email: ethics@{site.domain}<br />
-              We review all complaints and take appropriate action. See our <Link href="/contact" className="text-[#c1121f] underline">Contact Page</Link> for additional ways to reach us.
+              Please visit our <Link href="/contact" className="text-[#c1121f] underline">Contact Page</Link> to reach us.
+              We review all complaints and take appropriate action.
             </p>
 
           </div>

@@ -178,7 +178,7 @@ export default function EditorialPolicyPage() {
               Questions about our editorial practices? Contact our editorial team at:
             </p>
             <p>
-              Email: editor@{site.domain}<br />
+              Visit our <Link href="/contact" className="text-[#c1121f] underline">Contact Page</Link><br />
               See also: <Link href="/ethics" className="text-[#c1121f] underline">Ethics Policy</Link> | <Link href="/corrections" className="text-[#c1121f] underline">Corrections Policy</Link>
             </p>
 

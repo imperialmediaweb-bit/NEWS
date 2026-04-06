@@ -181,8 +181,7 @@ export default function TermsPage() {
             </p>
             <p>
               <strong>{site.name}</strong> — A MediaChief Publication<br />
-              Email: legal@{site.domain}<br />
-              Website: <Link href="/contact" className="text-[#c1121f] underline">Contact Page</Link>
+              Visit our <Link href="/contact" className="text-[#c1121f] underline">Contact Page</Link>
             </p>
 
           </div>

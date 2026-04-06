@@ -68,8 +68,7 @@ export default function DmcaPage() {
               <p style={{ margin: 0 }}>
                 <strong>DMCA Agent — MediaChief</strong><br />
                 {site.name}<br />
-                Email: dmca@{site.domain}<br />
-                Subject Line: &quot;DMCA Notice — {site.name}&quot;
+                Visit our <Link href="/contact" className="text-[#c1121f] underline">Contact Page</Link> with subject &quot;DMCA Notice — {site.name}&quot;
               </p>
             </div>
 
@@ -128,8 +127,7 @@ export default function DmcaPage() {
               For any DMCA-related inquiries, please contact:
             </p>
             <p>
-              Email: dmca@{site.domain}<br />
-              Please include &quot;DMCA Notice&quot; or &quot;DMCA Counter-Notification&quot; in the subject line.
+              Visit our <Link href="/contact" className="text-[#c1121f] underline">Contact Page</Link> and include &quot;DMCA Notice&quot; or &quot;DMCA Counter-Notification&quot; in your message.
             </p>
 
           </div>

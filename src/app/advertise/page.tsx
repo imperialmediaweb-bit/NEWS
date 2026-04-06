@@ -116,9 +116,7 @@ export default function AdvertisePage() {
               Ready to reach {site.state} readers? Contact our advertising team:
             </p>
             <p>
-              <strong>Email:</strong> ads@{site.domain}<br />
-              <strong>Network Sales:</strong> advertising@mediachief.com<br />
-              <strong>Subject Line:</strong> &quot;Advertising Inquiry — {site.name}&quot;
+              Visit our <Link href="/contact" className="text-[#c1121f] underline">Contact Page</Link> with subject <strong>&quot;Advertising Inquiry — {site.name}&quot;</strong>
             </p>
             <p>
               We&apos;ll respond within 1-2 business days with a media kit, rate card, and custom proposal tailored to your goals.

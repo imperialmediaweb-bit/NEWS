@@ -102,11 +102,9 @@ export default function AboutPage() {
             <p>
               We want to hear from you. Whether you have a news tip, a question, feedback, or a correction, please reach out:
             </p>
-            <ul>
-              <li><strong>General Inquiries:</strong> info@{site.domain}</li>
-              <li><strong>News Tips:</strong> tips@{site.domain}</li>
-              <li><strong>Advertising:</strong> ads@{site.domain}</li>
-            </ul>
+            <p>
+              Please visit our <Link href="/contact" className="text-[#c1121f] underline">Contact Page</Link> for general inquiries, news tips, and advertising questions.
+            </p>
             <p>
               Visit our <Link href="/contact" className="text-[#c1121f] underline">Contact Page</Link> for more ways to reach us, or explore <Link href="/careers" className="text-[#c1121f] underline">career opportunities</Link> at MediaChief.
             </p>
