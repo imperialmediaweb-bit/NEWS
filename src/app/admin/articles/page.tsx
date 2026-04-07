@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Search, ChevronLeft, ChevronRight, Trash2, Edit } from "lucide-react";
 
 interface Article {
@@ -17,6 +18,7 @@ interface Article {
 }
 
 export default function ArticlesPage() {
+  const router = useRouter();
   const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -24,6 +26,7 @@ export default function ArticlesPage() {
   const [categoryFilter, setCategoryFilter] = useState("");
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
+  const [deleting, setDeleting] = useState<number | null>(null);
   const perPage = 25;
 
   useEffect(() => {
@@ -49,6 +52,20 @@ export default function ArticlesPage() {
   }, [page, search, siteFilter, categoryFilter]);
 
   const totalPages = Math.ceil(total / perPage);
+
+  const handleDelete = async (id: number, title: string) => {
+    if (!confirm(`Delete "${title}"?`)) return;
+    setDeleting(id);
+    try {
+      const res = await fetch(`/api/admin/articles/${id}`, { method: "DELETE" });
+      if (res.ok) {
+        setArticles((prev) => prev.filter((a) => a.id !== id));
+        setTotal((prev) => prev - 1);
+      }
+    } finally {
+      setDeleting(null);
+    }
+  };
 
   return (
     <div>
@@ -170,10 +187,19 @@ export default function ArticlesPage() {
                   </td>
                   <td className="px-4 py-3 text-right">
                     <div className="flex justify-end gap-2">
-                      <button className="p-1 text-gray-400 hover:text-blue-500">
+                      <button
+                        onClick={() => router.push(`/admin/articles/${article.id}/edit`)}
+                        className="p-1 text-gray-400 hover:text-blue-500"
+                        title="Edit"
+                      >
                         <Edit size={16} />
                       </button>
-                      <button className="p-1 text-gray-400 hover:text-red-500">
+                      <button
+                        onClick={() => handleDelete(article.id, article.title)}
+                        disabled={deleting === article.id}
+                        className="p-1 text-gray-400 hover:text-red-500 disabled:opacity-30"
+                        title="Delete"
+                      >
                         <Trash2 size={16} />
                       </button>
                     </div>
