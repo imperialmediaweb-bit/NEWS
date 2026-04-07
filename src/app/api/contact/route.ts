@@ -13,11 +13,7 @@ export async function POST(req: NextRequest) {
 
     const resend = new Resend(process.env.RESEND_API_KEY);
 
-    // If the domain is verified in Resend, send from contact@domain
-    // Otherwise fall back to the Resend default
-    const fromAddress = process.env.RESEND_VERIFIED_DOMAINS?.includes(siteDomain)
-      ? `${siteName} <contact@${siteDomain}>`
-      : `${siteName} <onboarding@resend.dev>`;
+    const fromAddress = `${siteName} <contact@alabama-express.com>`;
 
     await resend.emails.send({
       from: fromAddress,
