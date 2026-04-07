@@ -61,6 +61,15 @@ export default function ArticlePageClient({ site, article, related, categorySlug
   const displayContent = article?.content || "<p>Article not found.</p>";
   const displaySummary = article?.summary || "";
 
+  // If content has no HTML paragraph tags, convert double newlines to paragraphs
+  const formattedContent = displayContent.includes("<p>") || displayContent.includes("<p ")
+    ? displayContent
+    : displayContent
+        .split(/\n\s*\n/)
+        .filter((p) => p.trim())
+        .map((p) => `<p>${p.trim()}</p>`)
+        .join("\n");
+
   const allMockArticles = [...content.usNews, ...content.localNews, ...content.worldNews, ...content.politics];
   const displayRelated: (RelatedArticle | Article)[] = related.length > 0 ? related : allMockArticles.slice(0, 3);
 
@@ -82,14 +91,14 @@ export default function ArticlePageClient({ site, article, related, categorySlug
       </div>
 
       {/* Hero Image */}
-      {displayImage && !displayImage.includes("picsum.photos") ? (
+      {displayImage ? (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6 }}
           className="relative w-full h-[300px] md:h-[450px] lg:h-[550px] overflow-hidden"
         >
-          <img src={displayImage} alt={displayTitle} className="w-full h-full object-cover" />
+          <img src={displayImage} alt={displayTitle} className="w-full h-full object-cover" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
           <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10">
             <div className="max-w-[1300px] mx-auto">
@@ -167,7 +176,7 @@ export default function ArticlePageClient({ site, article, related, categorySlug
               )}
               <div className="article-content prose prose-lg max-w-none"
                 style={{ fontFamily: "'Source Serif 4', serif", lineHeight: 1.8 }}
-                dangerouslySetInnerHTML={{ __html: displayContent }}
+                dangerouslySetInnerHTML={{ __html: formattedContent }}
               />
             </div>
 
