@@ -22,20 +22,17 @@ export async function POST(request: NextRequest) {
       const config = siteConfigs[siteSlug];
       if (!config) continue;
 
-      const { rows: existing } = await pool.query("SELECT id, slug FROM sites WHERE slug = $1", [siteSlug]);
-      if (existing.length > 0) {
-        siteIds.push(existing[0]);
-      } else {
-        // Auto-create site if missing
-        const { rows: inserted } = await pool.query(
-          `INSERT INTO sites (slug, domain, name, logo_first, logo_second, city, state, state_abbr, tagline)
-           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-           ON CONFLICT (slug) DO UPDATE SET slug = EXCLUDED.slug
-           RETURNING id, slug`,
-          [config.slug, config.domain, config.name, config.logoFirst, config.logoSecond,
-           config.city, config.state, config.stateAbbr, config.tagline]
-        );
-        siteIds.push(inserted[0]);
+      // Upsert site - create if missing, return id either way
+      const { rows: upserted } = await pool.query(
+        `INSERT INTO sites (slug, domain, name, logo_first, logo_second, city, state, state_abbr, tagline)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+         ON CONFLICT (slug) DO UPDATE SET name = EXCLUDED.name
+         RETURNING id, slug`,
+        [config.slug, config.domain, config.name, config.logoFirst, config.logoSecond,
+         config.city, config.state, config.stateAbbr, config.tagline]
+      );
+      if (upserted.length > 0) {
+        siteIds.push(upserted[0]);
       }
     }
 
@@ -52,7 +49,7 @@ export async function POST(request: NextRequest) {
       results.push({ site: site.slug, inserted: rows.length > 0 });
     }
 
-    return NextResponse.json({ success: true, results });
+    return NextResponse.json({ success: true, results, sitesFound: siteIds.length, slug });
   } catch (e) {
     return NextResponse.json({ error: String(e) }, { status: 500 });
   }

@@ -53,7 +53,8 @@ export async function GET(request: NextRequest) {
       articles: articlesRes.rows,
       total: countRes.rows[0].count,
     });
-  } catch {
-    return NextResponse.json({ articles: [], total: 0 });
+  } catch (e) {
+    console.error("Articles list error:", e);
+    return NextResponse.json({ articles: [], total: 0, error: String(e) });
   }
 }
