@@ -10,11 +10,13 @@ interface ImageUploadProps {
 
 export default function ImageUpload({ value, onChange }: ImageUploadProps) {
   const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState("");
   const [mode, setMode] = useState<"upload" | "url">(value && value.startsWith("http") ? "url" : "upload");
   const fileRef = useRef<HTMLInputElement>(null);
 
   const handleUpload = async (file: File) => {
     setUploading(true);
+    setError("");
     try {
       const formData = new FormData();
       formData.append("file", file);
@@ -22,7 +24,11 @@ export default function ImageUpload({ value, onChange }: ImageUploadProps) {
       const data = await res.json();
       if (data.url) {
         onChange(data.url);
+      } else {
+        setError(data.error || "Upload failed");
       }
+    } catch {
+      setError("Network error. Try again.");
     } finally {
       setUploading(false);
     }
@@ -56,6 +62,10 @@ export default function ImageUpload({ value, onChange }: ImageUploadProps) {
           <LinkIcon size={12} className="inline mr-1" /> URL
         </button>
       </div>
+
+      {error && (
+        <div className="text-red-500 text-xs mb-2 bg-red-50 p-2 rounded">{error}</div>
+      )}
 
       {mode === "upload" ? (
         <div

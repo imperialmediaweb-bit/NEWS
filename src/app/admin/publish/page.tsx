@@ -103,7 +103,7 @@ export default function PublishPage() {
 
             <ContentEditor value={content} onChange={setContent} />
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium mb-1">
                   Category
@@ -133,10 +133,9 @@ export default function PublishPage() {
                   className="w-full px-4 py-2 border rounded-lg outline-none"
                 />
               </div>
-              <div className="sm:col-span-3">
-                <ImageUpload value={featuredImage} onChange={setFeaturedImage} />
-              </div>
             </div>
+
+            <ImageUpload value={featuredImage} onChange={setFeaturedImage} />
           </div>
         </div>
 

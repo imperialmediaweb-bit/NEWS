@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import pool from "@/lib/db";
+import { sites as siteConfigs } from "@/config/sites";
 
 export async function POST(request: NextRequest) {
   try {
@@ -15,16 +16,32 @@ export async function POST(request: NextRequest) {
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/(^-|-$)/g, "");
 
-    // Get site IDs for selected slugs
-    const placeholders = siteSlugs.map((_: string, i: number) => `$${i + 1}`).join(", ");
-    const { rows: siteRows } = await pool.query(
-      `SELECT id, slug FROM sites WHERE slug IN (${placeholders})`,
-      siteSlugs
-    );
+    // Get or create sites
+    const siteIds: { id: number; slug: string }[] = [];
+    for (const siteSlug of siteSlugs) {
+      const config = siteConfigs[siteSlug];
+      if (!config) continue;
+
+      const { rows: existing } = await pool.query("SELECT id, slug FROM sites WHERE slug = $1", [siteSlug]);
+      if (existing.length > 0) {
+        siteIds.push(existing[0]);
+      } else {
+        // Auto-create site if missing
+        const { rows: inserted } = await pool.query(
+          `INSERT INTO sites (slug, domain, name, logo_first, logo_second, city, state, state_abbr, tagline)
+           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+           ON CONFLICT (slug) DO UPDATE SET slug = EXCLUDED.slug
+           RETURNING id, slug`,
+          [config.slug, config.domain, config.name, config.logoFirst, config.logoSecond,
+           config.city, config.state, config.stateAbbr, config.tagline]
+        );
+        siteIds.push(inserted[0]);
+      }
+    }
 
     // Insert article for each site
     const results = [];
-    for (const site of siteRows) {
+    for (const site of siteIds) {
       const { rows } = await pool.query(
         `INSERT INTO articles (site_id, title, slug, content, summary, category, author, featured_image)
          VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
