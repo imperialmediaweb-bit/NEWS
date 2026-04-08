@@ -265,7 +265,7 @@ export function middleware(req: NextRequest) {
       "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com",
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com",
-      "img-src 'self' data: https://images.pexels.com https://images.unsplash.com https://pixabay.com https://cdn.pixabay.com https://*.googleusercontent.com",
+      "img-src 'self' data: https://images.pexels.com https://images.unsplash.com https://pixabay.com https://cdn.pixabay.com https://*.googleusercontent.com https://res.cloudinary.com",
       "connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://*.google-analytics.com https://*.analytics.google.com https://region1.google-analytics.com",
       "frame-ancestors 'self'",
       "base-uri 'self'",
