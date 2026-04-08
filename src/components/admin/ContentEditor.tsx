@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { Bold, Italic, Heading2, Heading3, List, ListOrdered, Quote, Image, Minus, Upload, Loader2 } from "lucide-react";
+import { Bold, Italic, Heading2, Heading3, List, ListOrdered, Quote, Image, Minus, Loader2 } from "lucide-react";
 
 interface ContentEditorProps {
   value: string;
