@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { sites } from "@/config/sites";
 import { Send, Check } from "lucide-react";
+import ContentEditor from "@/components/admin/ContentEditor";
+import ImageUpload from "@/components/admin/ImageUpload";
 
 export default function PublishPage() {
   const siteList = Object.values(sites);
@@ -99,16 +101,7 @@ export default function PublishPage() {
               />
             </div>
 
-            <div>
-              <label className="block text-sm font-medium mb-1">Content</label>
-              <textarea
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                placeholder="Full article content..."
-                rows={12}
-                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#c1121f] focus:border-transparent outline-none resize-y"
-              />
-            </div>
+            <ContentEditor value={content} onChange={setContent} />
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
@@ -140,17 +133,8 @@ export default function PublishPage() {
                   className="w-full px-4 py-2 border rounded-lg outline-none"
                 />
               </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">
-                  Featured Image URL
-                </label>
-                <input
-                  type="text"
-                  value={featuredImage}
-                  onChange={(e) => setFeaturedImage(e.target.value)}
-                  placeholder="https://..."
-                  className="w-full px-4 py-2 border rounded-lg outline-none"
-                />
+              <div className="sm:col-span-3">
+                <ImageUpload value={featuredImage} onChange={setFeaturedImage} />
               </div>
             </div>
           </div>

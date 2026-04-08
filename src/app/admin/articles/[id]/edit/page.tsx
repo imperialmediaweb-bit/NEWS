@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { ArrowLeft, Save, Loader2, Check } from "lucide-react";
+import ContentEditor from "@/components/admin/ContentEditor";
+import ImageUpload from "@/components/admin/ImageUpload";
 
 interface ArticleData {
   id: number;
@@ -146,15 +148,7 @@ export default function EditArticlePage() {
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-1">Content</label>
-            <textarea
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              rows={16}
-              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#c1121f] focus:border-transparent outline-none resize-y font-mono text-sm"
-            />
-          </div>
+          <ContentEditor value={content} onChange={setContent} />
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
@@ -184,29 +178,9 @@ export default function EditArticlePage() {
                 className="w-full px-4 py-2 border rounded-lg outline-none"
               />
             </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">Featured Image URL</label>
-              <input
-                type="text"
-                value={featuredImage}
-                onChange={(e) => setFeaturedImage(e.target.value)}
-                placeholder="https://..."
-                className="w-full px-4 py-2 border rounded-lg outline-none"
-              />
-            </div>
           </div>
 
-          {featuredImage && (
-            <div>
-              <label className="block text-sm font-medium mb-1">Image Preview</label>
-              <img
-                src={featuredImage}
-                alt="Preview"
-                className="max-h-[200px] rounded-lg object-cover"
-                onError={(e) => { e.currentTarget.style.display = 'none'; }}
-              />
-            </div>
-          )}
+          <ImageUpload value={featuredImage} onChange={setFeaturedImage} />
         </div>
 
         <button
