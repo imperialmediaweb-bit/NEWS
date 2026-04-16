@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import pool from "@/lib/db";
 import { sites, getActiveSite, getSiteByDomain } from "@/config/sites";
 
+// Cache responses for 5 minutes on CDN, revalidate on demand
+export const revalidate = 300;
+
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const domain = searchParams.get("domain") || "";
@@ -70,6 +73,10 @@ export async function GET(request: NextRequest) {
         featuredStory2: allArticles[1] || null,
       },
       totalArticles: latest.rows.length,
+    }, {
+      headers: {
+        "Cache-Control": "public, s-maxage=300, stale-while-revalidate=600",
+      },
     });
   } catch {
     // DB not connected — return config only

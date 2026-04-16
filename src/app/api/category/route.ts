@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import pool from "@/lib/db";
 
+export const revalidate = 300;
+
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const siteSlug = searchParams.get("site") || "";
@@ -60,7 +62,11 @@ export async function GET(request: NextRequest) {
       slug: row.slug as string,
     }));
 
-    return NextResponse.json({ articles, page, totalPages, total });
+    return NextResponse.json({ articles, page, totalPages, total }, {
+      headers: {
+        "Cache-Control": "public, s-maxage=300, stale-while-revalidate=600",
+      },
+    });
   } catch {
     return NextResponse.json({ articles: [] });
   }

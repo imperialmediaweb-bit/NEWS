@@ -19,7 +19,7 @@ async function searchPixabay(query: string): Promise<ImageResult | null> {
   if (!hit) return null;
 
   return {
-    url: hit.largeImageURL || hit.webformatURL,
+    url: hit.webformatURL || hit.largeImageURL,
     alt: query,
     credit: `Photo by ${hit.user} on Pixabay`,
   };
@@ -40,7 +40,7 @@ async function searchPexels(query: string): Promise<ImageResult | null> {
   if (!photo) return null;
 
   return {
-    url: photo.src.large2x || photo.src.large || photo.src.original,
+    url: photo.src.large || photo.src.medium || photo.src.original,
     alt: query,
     credit: `Photo by ${photo.photographer} on Pexels`,
   };
@@ -61,7 +61,7 @@ async function searchUnsplash(query: string): Promise<ImageResult | null> {
   if (!photo) return null;
 
   return {
-    url: photo.urls.regular || photo.urls.full,
+    url: photo.urls.small || photo.urls.regular,
     alt: photo.alt_description || query,
     credit: `Photo by ${photo.user.name} on Unsplash`,
   };
