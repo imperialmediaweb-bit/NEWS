@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Search, Menu, X, AlertTriangle } from "lucide-react";
 import { SiteConfig } from "@/config/site-config";
 
-const navItems = ["Local News", "Politics", "US News", "World", "Sports", "Entertainment", "Scandals"];
+const navItems = ["Local News", "Politics", "US News", "World", "Sports", "Entertainment", "Scandals", "Web Stories"];
 const breakingHeadlines = [
   "BREAKING: Governor faces calls to resign",
   "Housing market in freefall — worst crash since 2008",

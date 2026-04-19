@@ -91,10 +91,60 @@ export default function WebStoryPage() {
     };
   }, [story]);
 
-  // Inject structured data and meta tags
+  // Inject structured data and meta tags for Google Discover + SEO
   useEffect(() => {
     if (!story) return;
 
+    document.title = `${story.title} | ${site.name}`;
+
+    const elements: HTMLElement[] = [];
+
+    const setMeta = (attr: "name" | "property", key: string, content: string) => {
+      const meta = document.createElement("meta");
+      meta.setAttribute(attr, key);
+      meta.content = content;
+      document.head.appendChild(meta);
+      elements.push(meta);
+    };
+
+    // Google Discover — requires large image preview
+    setMeta("name", "robots", "max-image-preview:large, max-snippet:-1, max-video-preview:-1");
+    setMeta("name", "description", story.summary || story.title);
+
+    // Open Graph for Discover + social
+    setMeta("property", "og:type", "article");
+    setMeta("property", "og:title", story.title);
+    setMeta("property", "og:description", story.summary || story.title);
+    setMeta("property", "og:image", story.featured_image);
+    setMeta("property", "og:image:width", "1200");
+    setMeta("property", "og:image:height", "1200");
+    setMeta("property", "og:url", `https://${site.domain}/web-stories/${story.slug}`);
+    setMeta("property", "og:site_name", site.name);
+    setMeta("property", "article:published_time", story.published_at);
+    setMeta("property", "article:author", story.author);
+    setMeta("property", "article:section", story.category);
+
+    // Twitter card
+    setMeta("name", "twitter:card", "summary_large_image");
+    setMeta("name", "twitter:title", story.title);
+    setMeta("name", "twitter:description", story.summary || story.title);
+    setMeta("name", "twitter:image", story.featured_image);
+
+    // AMP link for Google
+    const ampLink = document.createElement("link");
+    ampLink.rel = "amphtml";
+    ampLink.href = `/web-stories/${story.slug}/amp`;
+    document.head.appendChild(ampLink);
+    elements.push(ampLink);
+
+    // Canonical
+    const canonical = document.createElement("link");
+    canonical.rel = "canonical";
+    canonical.href = `https://${site.domain}/web-stories/${story.slug}`;
+    document.head.appendChild(canonical);
+    elements.push(canonical);
+
+    // WebStory structured data
     const schemaScript = document.createElement("script");
     schemaScript.type = "application/ld+json";
     schemaScript.textContent = JSON.stringify({
@@ -119,15 +169,12 @@ export default function WebStoryPage() {
       },
     });
     document.head.appendChild(schemaScript);
-
-    const ampLink = document.createElement("link");
-    ampLink.rel = "amphtml";
-    ampLink.href = `/web-stories/${story.slug}/amp`;
-    document.head.appendChild(ampLink);
+    elements.push(schemaScript);
 
     return () => {
-      document.head.removeChild(schemaScript);
-      document.head.removeChild(ampLink);
+      elements.forEach((el) => {
+        if (document.head.contains(el)) document.head.removeChild(el);
+      });
     };
   }, [story, site]);
 
