@@ -23,20 +23,22 @@ export async function GET(request: NextRequest) {
 
     const siteId = siteRows[0].id;
 
-    // Fetch articles by sections
+    const cols = "id, title, slug, summary, featured_image, category, author, published_at, views";
+
+    // Fetch articles by sections — only list columns, no content
     const [hero, trending, latest, localNews, usNews, worldNews, politics, sports, entertainment, business, technology, opinion] = await Promise.all([
-      pool.query("SELECT * FROM articles WHERE site_id = $1 ORDER BY published_at DESC LIMIT 4", [siteId]),
-      pool.query("SELECT * FROM articles WHERE site_id = $1 ORDER BY views DESC LIMIT 6", [siteId]),
-      pool.query("SELECT * FROM articles WHERE site_id = $1 ORDER BY published_at DESC LIMIT 15", [siteId]),
-      pool.query("SELECT * FROM articles WHERE site_id = $1 AND category IN ('local-news','local','news') ORDER BY published_at DESC LIMIT 8", [siteId]),
-      pool.query("SELECT * FROM articles WHERE site_id = $1 AND category IN ('us-news','national','us') ORDER BY published_at DESC LIMIT 8", [siteId]),
-      pool.query("SELECT * FROM articles WHERE site_id = $1 AND category IN ('world-news','world','international') ORDER BY published_at DESC LIMIT 8", [siteId]),
-      pool.query("SELECT * FROM articles WHERE site_id = $1 AND category IN ('politics','political') ORDER BY published_at DESC LIMIT 8", [siteId]),
-      pool.query("SELECT * FROM articles WHERE site_id = $1 AND category IN ('sports','sport') ORDER BY published_at DESC LIMIT 8", [siteId]),
-      pool.query("SELECT * FROM articles WHERE site_id = $1 AND category IN ('entertainment','celebrity','culture') ORDER BY published_at DESC LIMIT 8", [siteId]),
-      pool.query("SELECT * FROM articles WHERE site_id = $1 AND category IN ('business','economy','finance') ORDER BY published_at DESC LIMIT 8", [siteId]),
-      pool.query("SELECT * FROM articles WHERE site_id = $1 AND category IN ('technology','tech','science') ORDER BY published_at DESC LIMIT 8", [siteId]),
-      pool.query("SELECT * FROM articles WHERE site_id = $1 AND category IN ('opinion','editorial','op-ed') ORDER BY published_at DESC LIMIT 8", [siteId]),
+      pool.query(`SELECT ${cols} FROM articles WHERE site_id = $1 ORDER BY published_at DESC LIMIT 4`, [siteId]),
+      pool.query(`SELECT ${cols} FROM articles WHERE site_id = $1 ORDER BY views DESC LIMIT 6`, [siteId]),
+      pool.query(`SELECT ${cols} FROM articles WHERE site_id = $1 ORDER BY published_at DESC LIMIT 15`, [siteId]),
+      pool.query(`SELECT ${cols} FROM articles WHERE site_id = $1 AND category IN ('local-news','local','news') ORDER BY published_at DESC LIMIT 8`, [siteId]),
+      pool.query(`SELECT ${cols} FROM articles WHERE site_id = $1 AND category IN ('us-news','national','us') ORDER BY published_at DESC LIMIT 8`, [siteId]),
+      pool.query(`SELECT ${cols} FROM articles WHERE site_id = $1 AND category IN ('world-news','world','international') ORDER BY published_at DESC LIMIT 8`, [siteId]),
+      pool.query(`SELECT ${cols} FROM articles WHERE site_id = $1 AND category IN ('politics','political') ORDER BY published_at DESC LIMIT 8`, [siteId]),
+      pool.query(`SELECT ${cols} FROM articles WHERE site_id = $1 AND category IN ('sports','sport') ORDER BY published_at DESC LIMIT 8`, [siteId]),
+      pool.query(`SELECT ${cols} FROM articles WHERE site_id = $1 AND category IN ('entertainment','celebrity','culture') ORDER BY published_at DESC LIMIT 8`, [siteId]),
+      pool.query(`SELECT ${cols} FROM articles WHERE site_id = $1 AND category IN ('business','economy','finance') ORDER BY published_at DESC LIMIT 8`, [siteId]),
+      pool.query(`SELECT ${cols} FROM articles WHERE site_id = $1 AND category IN ('technology','tech','science') ORDER BY published_at DESC LIMIT 8`, [siteId]),
+      pool.query(`SELECT ${cols} FROM articles WHERE site_id = $1 AND category IN ('opinion','editorial','op-ed') ORDER BY published_at DESC LIMIT 8`, [siteId]),
     ]);
 
     const toArticle = (row: Record<string, unknown>) => ({
