@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import pool from "@/lib/db";
 
+export const revalidate = 300;
+
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const siteSlug = searchParams.get("site") || "";
@@ -16,7 +18,7 @@ export async function GET(request: NextRequest) {
     // Search articles where title, summary, or category contains the tag keyword
     const keyword = tag.replace(/-/g, " ");
     const { rows } = await pool.query(
-      `SELECT * FROM articles WHERE site_id = $1
+      `SELECT id, title, slug, summary, featured_image, category, author, published_at FROM articles WHERE site_id = $1
        AND (title ILIKE $2 OR summary ILIKE $2 OR category ILIKE $2)
        ORDER BY published_at DESC LIMIT 20`,
       [siteId, `%${keyword}%`]
@@ -32,7 +34,9 @@ export async function GET(request: NextRequest) {
       slug: row.slug as string,
     }));
 
-    return NextResponse.json({ articles });
+    return NextResponse.json({ articles }, {
+      headers: { "Cache-Control": "public, s-maxage=300, stale-while-revalidate=600" },
+    });
   } catch {
     return NextResponse.json({ articles: [] });
   }

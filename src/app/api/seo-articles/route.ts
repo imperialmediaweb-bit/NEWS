@@ -93,7 +93,7 @@ export async function GET(request: NextRequest) {
     conditions.push(searchClause);
 
     const query = `
-      SELECT a.* FROM articles a
+      SELECT a.id, a.title, a.slug, a.summary, a.featured_image, a.category, a.author, a.published_at, a.views FROM articles a
       WHERE ${conditions.join(" AND ")}
       ORDER BY a.published_at DESC
       LIMIT 30

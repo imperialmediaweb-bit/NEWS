@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
 
     // Get related articles (same category)
     const { rows: relatedRows } = await pool.query(
-      "SELECT * FROM articles WHERE site_id = $1 AND category = $2 AND id != $3 ORDER BY published_at DESC LIMIT 3",
+      "SELECT id, title, slug, summary, featured_image, category, author, published_at, views FROM articles WHERE site_id = $1 AND category = $2 AND id != $3 ORDER BY published_at DESC LIMIT 3",
       [siteId, article.category, article.id]
     );
 
