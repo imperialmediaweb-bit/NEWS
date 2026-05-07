@@ -8,7 +8,7 @@
 # ============================================================
 
 # === CONFIG ===
-CF_API_TOKEN="YOUR_CLOUDFLARE_API_TOKEN"  # Global API Key or API Token with WAF edit permission
+CF_API_TOKEN="YOUR_CLOUDFLARE_GLOBAL_API_KEY"
 CF_EMAIL="imperialmediaweb@gmail.com"      # Your Cloudflare email
 
 RULE_NAME="Block bot countries"
