@@ -40,7 +40,30 @@ const BAD_BOT_PATTERNS = [
   /scrapy/i,
   /wget/i,
   /curl\/[0-9]/i,
+  /AhrefsBot/i,
+  /SemrushBot/i,
+  /MJ12bot/i,
+  /DotBot/i,
+  /PetalBot/i,
+  /BLEXBot/i,
+  /DataForSeoBot/i,
+  /SeznamBot/i,
+  /YandexBot/i,
+  /Bytespider/i,
+  /GPTBot/i,
+  /ClaudeBot/i,
+  /CCBot/i,
+  /anthropic-ai/i,
+  /Claude-Web/i,
+  /Omgilibot/i,
+  /cohere-ai/i,
 ];
+
+// ─── Blocked countries (bot traffic sources) ───
+const BLOCKED_COUNTRIES = new Set([
+  "SG", "VN", "HK", "MY", "ID", "BR", "IN", "PH",
+  "TH", "PK", "BD", "NG", "CN",
+]);
 
 // ─── Blocked attack paths ───
 const BLOCKED_PATHS = [
@@ -139,6 +162,12 @@ export function middleware(req: NextRequest) {
     const slug = wpMatch[1];
     const url = new URL(`/wp-article/${slug}`, req.url);
     return NextResponse.redirect(url, 301);
+  }
+
+  // ─── 0c. Block traffic from bot countries (via Cloudflare cf-ipcountry) ───
+  const country = req.headers.get("cf-ipcountry") || "";
+  if (country && BLOCKED_COUNTRIES.has(country)) {
+    return new NextResponse("Access Denied", { status: 403 });
   }
 
   // ─── 1. Block known bad bots/scanners ───
