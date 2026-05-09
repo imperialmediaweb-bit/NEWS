@@ -279,15 +279,6 @@ function categoryEmoji(category: string | null): string {
   return "📰";
 }
 
-function diacritics(s: string): string {
-  return s
-    .replace(/[ăâ]/gi, "a")
-    .replace(/[î]/gi, "i")
-    .replace(/[șş]/gi, "s")
-    .replace(/[țţ]/gi, "t")
-    .replace(/\s+/g, "");
-}
-
 function makeHashtags(siteSlug: string, city?: string, state?: string): string {
   const tags: string[] = [];
   if (state) tags.push(`#${state.replace(/\s+/g, "")}`);
