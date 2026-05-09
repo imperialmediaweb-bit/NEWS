@@ -2,40 +2,33 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const genAI = process.env.GEMINI_API_KEY ? new GoogleGenerativeAI(process.env.GEMINI_API_KEY) : null;
 
-const FB_CAPTION_PROMPT = `Ești editor social media pentru un ziar local românesc. Scrii un POST FACEBOOK pentru un articol de știri.
+const FB_CAPTION_PROMPT = `You are a social media editor for a local American news outlet. Write a FACEBOOK POST for a news article.
 
-⚠️ REGULA #1 — NU HALUCINA:
-- Folosești EXCLUSIV informații din titlul și sumarul primit. NU inventa NIMIC.
-- NU adăuga: cifre, nume, declarații, citate, date, adrese, vârste, sume care nu sunt în sumar.
-- Nume proprii (persoane, instituții, localități) → copiază EXACT cum sunt scrise în sumar.
-- Dacă sumarul e scurt, postarea e scurtă. NU umple cu speculații sau presupuneri.
-- NU presupune evoluții viitoare, reacții, opinii ale persoanelor menționate.
+⚠️ RULE #1 — NO HALLUCINATION:
+- Use ONLY information from the title and summary provided. DO NOT invent ANYTHING.
+- DO NOT add: numbers, names, quotes, dates, addresses, ages, amounts not in the summary.
+- Proper nouns (people, institutions, places) → copy EXACTLY as written in the summary.
+- If the summary is short, the post is short. DO NOT fill with speculation.
+- DO NOT assume future developments, reactions, or opinions of mentioned people.
 
-⚠️ REGULA #2 — GRAMATICĂ ROMÂNĂ CORECTĂ:
-- Diacritice OBLIGATORII: ă â î ș ț (NU a, i, s, t).
-- Acord subiect-predicat: "copiii sunt" (nu "copiii este"), "autoritățile au anunțat".
-- Acord substantiv-adjectiv în gen/număr: "probleme mari", "copil mic", "casa nouă".
-- Cratimă obligatorie unde trebuie: "s-a", "m-a", "te-a", "ne-am", "să-i", "nu-mi".
-- Virgula înainte de "iar", "însă", "dar", "deoarece", "pentru că".
-- NU începe propoziții cu conjuncție ("Dar", "Și", "Însă").
-- Localitățile NU sunt agenți: NU scrie "Botoșani a anunțat" — scrie "Autoritățile din Botoșani au anunțat" sau "La Botoșani s-a anunțat".
-- Anonimizare legală: pentru ACUZAȚI/SUSPECȚI nedovediți → folosește INIȚIALE (G.C., M.P.).
+⚠️ RULE #2 — CORRECT ENGLISH:
+- Proper grammar, spelling, and punctuation.
+- Use AP style for news writing.
 
-⚠️ REGULA #3 — STIL ANTI-AI / ANTI-CLIȘEU:
-- Tonul: jurnalist local autentic, conversațional. NU corporate, NU AI-style.
-- NU începe cu "Astăzi", "Atenție", "Vești bune/rele", "Iată", "Află", "Aflăm" — clișee detectate ca AI.
-- NU folosi "În urma...", "Conform...", "Potrivit..." la început — clișee de știre.
-- VARIAZĂ structura: uneori începi cu fapt concret, uneori cu cifră, uneori cu nume propriu, uneori cu localitate, uneori cu un citat dacă există în sumar.
-- INTERZIS hype gol: "incredibil", "uluitor", "șocant", "spectaculos" — doar dacă faptul ÎN SINE merită.
+⚠️ RULE #3 — ANTI-AI / ANTI-CLICHÉ STYLE:
+- Tone: authentic local journalist, conversational. NOT corporate, NOT AI-style.
+- DO NOT start with "Today", "Breaking", "In a shocking", "According to" — detected as AI clichés.
+- VARY structure: sometimes start with a concrete fact, sometimes a number, sometimes a name, sometimes a location.
+- NO empty hype: "incredible", "stunning", "shocking", "spectacular" — only if the fact ITSELF warrants it.
 
-⚠️ REGULA #4 — FORMAT FB:
-- Folosește 1-2 emoji DOAR unde se potrivesc natural (nu spam).
-- Încheie cu o ÎNTREBARE AUTENTICĂ specifică pe subiect (NU "ce părere aveți" — prea generic).
-- Adaugă pe ultimul rând: 2-3 hashtag-uri relevante (oraș + temă).
-- LUNGIME: 4-7 rânduri cu line breaks între idei. NU paragraf bloc.
-- INTERZIS meta-referințe: "citește articolul", "află aici", "click aici", "articolul complet" — link-ul e în primul comentariu, voi adăuga eu separat.
+⚠️ RULE #4 — FB FORMAT:
+- Use 1-2 emoji ONLY where they fit naturally (no spam).
+- End with an AUTHENTIC question specific to the topic (NOT "what do you think" — too generic).
+- Add on the last line: 2-3 relevant hashtags (state + topic).
+- LENGTH: 4-7 lines with line breaks between ideas. NOT a block paragraph.
+- NO meta-references: "read the article", "click here", "full article" — the link is in the first comment, I'll add it separately.
 
-OUTPUT: DOAR textul postării. Fără ghilimele, fără markdown, fără "Caption:", fără explicații. Dacă sumarul e prea slab pentru o postare onestă, returnează doar titlul + 1 întrebare + hashtag-uri.`;
+OUTPUT: ONLY the post text. No quotes, no markdown, no "Caption:", no explanations. If the summary is too weak for an honest post, return just the title + 1 question + hashtags.`;
 
 export interface FbCaptionInput {
   title: string;
@@ -57,14 +50,14 @@ export async function generateFbCaptionWithAI(input: FbCaptionInput): Promise<st
       },
     });
 
-    const userPrompt = `ARTICOL:
-Titlu: ${input.title}
-Categoria: ${input.category || "local"}
-Oraș: ${input.city}
-Județ: ${input.state}
-Sumar: ${input.excerpt.slice(0, 600)}
+    const userPrompt = `ARTICLE:
+Title: ${input.title}
+Category: ${input.category || "local-news"}
+City: ${input.city}
+State: ${input.state}
+Summary: ${input.excerpt.slice(0, 600)}
 
-Scrie POST-ul Facebook conform regulilor. NU adăuga "Articolul complet în primul comentariu" — îl pun eu separat.`;
+Write the Facebook POST following the rules. DO NOT add "Full article in first comment" — I'll add it separately.`;
 
     const res = await model.generateContent([
       { text: FB_CAPTION_PROMPT },
@@ -79,13 +72,13 @@ Scrie POST-ul Facebook conform regulilor. NU adăuga "Articolul complet în prim
 }
 
 const COMMENT_TEMPLATES = [
-  "📰 Articolul complet 👉 ",
-  "🔗 Citește toată povestea aici 👉 ",
-  "👇 Articolul complet pe site 👉 ",
-  "📖 Detaliile complete în articol 👉 ",
-  "✍️ Toate informațiile aici 👉 ",
-  "📌 Articolul integral 👉 ",
-  "🔎 Mai multe detalii 👉 ",
+  "📰 Full article 👉 ",
+  "🔗 Read the full story here 👉 ",
+  "👇 Full article on our website 👉 ",
+  "📖 Complete details in the article 👉 ",
+  "✍️ All the details here 👉 ",
+  "📌 Full article 👉 ",
+  "🔎 More details 👉 ",
 ];
 
 export function pickCommentTemplate(seed: number): string {

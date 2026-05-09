@@ -218,37 +218,37 @@ export function buildArticleUrl(siteDomain: string, article: ArticleForFb): stri
 
 const ENGAGING_QUESTIONS_BY_CATEGORY: Record<string, string[]> = {
   sport: [
-    "Credeți că rezultatul va fi diferit data viitoare?",
-    "Voi cum ați comenta meciul?",
-    "Cine credeți că merita victoria?",
+    "Do you think the outcome will be different next time?",
+    "How would you rate this performance?",
+    "Who deserved the win in your opinion?",
   ],
   politic: [
-    "Ce decizie ați fi luat în locul lor?",
-    "Credeți că schimbă ceva pentru oamenii obișnuiți?",
-    "Ce ați vrea să se întâmple în continuare?",
+    "What decision would you have made in their place?",
+    "Do you think this changes anything for regular people?",
+    "What do you want to see happen next?",
   ],
-  econom: [
-    "Cum vă afectează asta direct buzunarul?",
-    "V-ați gândit cum schimbă asta planurile voastre?",
-    "Voi cum vă pregătiți pentru lunile următoare?",
+  business: [
+    "How does this affect your wallet directly?",
+    "Have you thought about how this changes your plans?",
+    "How are you preparing for the months ahead?",
   ],
-  justit: [
-    "Vi se pare o decizie corectă?",
-    "Ce sancțiune ar fi fost cu adevărat dreaptă?",
-    "Credeți că se va merge până la capăt?",
+  crime: [
+    "Does this seem like a fair outcome to you?",
+    "What punishment would have been truly just?",
+    "Do you think this case will go all the way?",
   ],
-  acciden: [
-    "Ați trecut și voi prin ceva similar?",
-    "Ce ar trebui făcut pentru ca asta să nu se mai repete?",
-    "Cunoașteți pe cineva afectat?",
+  health: [
+    "Have you or someone you know dealt with something similar?",
+    "What should be done to prevent this from happening again?",
+    "Do you know anyone affected by this?",
   ],
   default: [
-    "Voi ce părere aveți?",
-    "Cum vedeți voi situația?",
-    "Sunteți de acord cu ce s-a întâmplat?",
-    "Cunoașteți cazuri similare?",
-    "Cum credeți că va evolua povestea asta?",
-    "Ce ați face în locul lor?",
+    "What's your take on this?",
+    "How do you see this situation?",
+    "Do you agree with what happened?",
+    "Have you seen similar cases?",
+    "How do you think this story will develop?",
+    "What would you do in their place?",
   ],
 };
 
@@ -290,21 +290,21 @@ function diacritics(s: string): string {
 
 function makeHashtags(siteSlug: string, city?: string, state?: string): string {
   const tags: string[] = [];
-  if (state) tags.push(`#${diacritics(state)}`);
+  if (state) tags.push(`#${state.replace(/\s+/g, "")}`);
   const brand = siteSlug.split("-").map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join("");
   tags.push(`#${brand}`);
-  tags.push(state ? `#stiri${diacritics(state)}` : "#stiriLocale");
+  tags.push(state ? `#${state.replace(/\s+/g, "")}News` : "#LocalNews");
   return tags.slice(0, 3).join(" ");
 }
 
 const SAVE_SHARE_CTAS = [
-  "📌 Salvează postarea ca să nu o pierzi",
-  "👥 Distribuie unui prieten din",
-  "💾 Salvează articolul pentru mai târziu",
-  "📲 Trimite asta unei persoane interesate din",
-  "🔖 Marchează articolul",
-  "👀 Voi care sunteți din",
-  "🔁 Distribuie dacă te-a interesat",
+  "📌 Save this post so you don't miss it",
+  "👥 Share this with a friend from",
+  "💾 Save this article for later",
+  "📲 Send this to someone interested from",
+  "🔖 Bookmark this article",
+  "👀 Anyone here from",
+  "🔁 Share if you found this interesting",
 ];
 
 function pickSaveShareCta(seed: number, city?: string): string {
