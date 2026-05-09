@@ -8,3 +8,12 @@ const pool = new Pool({
 });
 
 export default pool;
+
+export async function query(text: string, params?: unknown[]) {
+  const client = await pool.connect();
+  try {
+    return await client.query(text, params);
+  } finally {
+    client.release();
+  }
+}

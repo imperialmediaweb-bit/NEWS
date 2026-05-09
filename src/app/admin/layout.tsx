@@ -12,6 +12,7 @@ import {
   Menu,
   Zap,
   BarChart3,
+  Facebook,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -25,6 +26,7 @@ const navItems = [
   { href: "/admin/settings", label: "Settings & SEO", icon: Settings },
   { href: "/admin/pipeline", label: "Pipeline", icon: Zap },
   { href: "/admin/analytics", label: "Analytics", icon: BarChart3 },
+  { href: "/admin/facebook", label: "Facebook", icon: Facebook },
 ];
 
 export default function AdminLayout({

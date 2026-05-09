@@ -202,8 +202,8 @@ export function middleware(req: NextRequest) {
   }
 
   // ─── 4. Admin protection — server-side auth ───
-  // Skip login page itself and login API
-  if (pathname.startsWith("/admin") && !pathname.startsWith("/admin-login") && !pathname.startsWith("/api/admin/login")) {
+  // Skip login page, login API, and Facebook OAuth callback
+  if (pathname.startsWith("/admin") && !pathname.startsWith("/admin-login") && !pathname.startsWith("/api/admin/login") && !pathname.startsWith("/api/auth/facebook/callback")) {
     const adminSecret = process.env.CRON_SECRET;
     if (adminSecret) {
       // Check cookie or query param for admin auth
