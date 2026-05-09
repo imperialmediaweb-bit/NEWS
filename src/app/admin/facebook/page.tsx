@@ -48,11 +48,18 @@ function FacebookAdminInner() {
     load();
   }
 
-  async function autoAssociate() {
+  async function autoAssociate(clean = false) {
     setAssociating(true);
-    const res = await fetch("/api/facebook/auto-associate", { method: "POST" });
+    const res = await fetch("/api/facebook/auto-associate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ clean }),
+    });
     const data = await res.json();
-    setAssociateResult(`${data.matched} asociate, ${data.already} deja setate, ${data.unmatched?.length || 0} nerecunoscute`);
+    const msg = clean
+      ? `${data.matched} asociate, ${data.already} deja setate, ${data.removed} șterse (neasociate)`
+      : `${data.matched} asociate, ${data.already} deja setate, ${data.unmatched?.length || 0} nerecunoscute`;
+    setAssociateResult(msg);
     load();
     setAssociating(false);
   }
@@ -108,12 +115,18 @@ function FacebookAdminInner() {
         </div>
         <div className="flex gap-2">
           <button
-            onClick={autoAssociate}
+            onClick={() => {
+              if (confirm("Asociază automat ȘI șterge paginile care nu aparțin rețelei SUA?")) {
+                autoAssociate(true);
+              } else {
+                autoAssociate(false);
+              }
+            }}
             disabled={associating}
             className="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2.5 rounded-lg font-medium text-sm transition-colors disabled:opacity-50"
           >
             <Wand2 className="w-4 h-4" />
-            {associating ? "Se asociază..." : "Asociere automată"}
+            {associating ? "Se asociază..." : "Asociere + Curăță"}
           </button>
           <a
             href="/api/auth/facebook/start"

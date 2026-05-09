@@ -6,7 +6,9 @@ import {
   fetchUserPages,
   savePages,
   verifyState,
+  FbPageData,
 } from "@/lib/facebook";
+import { sites } from "@/config/sites";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -45,8 +47,20 @@ export async function GET(req: NextRequest) {
     await ensureSchema();
     const shortToken = await exchangeCodeForUserToken(code);
     const longToken = await exchangeForLongLivedToken(shortToken);
-    const pages = await fetchUserPages(longToken);
-    const saved = await savePages(pages);
+    const allPages = await fetchUserPages(longToken);
+
+    // Filter: only keep pages that match a SUA site name
+    const siteList = Object.values(sites);
+    const normalize = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
+    const suaPages = allPages.filter((p: FbPageData) => {
+      const np = normalize(p.name);
+      return siteList.some((s) => {
+        const nn = normalize(s.name);
+        return np === nn || np.includes(nn) || nn.includes(np);
+      });
+    });
+
+    const saved = await savePages(suaPages);
 
     return redirectTo(req, { connected: String(saved) });
   } catch (e) {

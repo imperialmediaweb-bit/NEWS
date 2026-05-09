@@ -14,6 +14,9 @@ export async function POST(req: NextRequest) {
   const adminSecret = process.env.CRON_SECRET || "admin123";
   if (adminCookie !== adminSecret) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
 
+  const body = await req.json().catch(() => ({}));
+  const cleanUnmatched = body.clean === true;
+
   await ensureSchema();
 
   const { rows: pages } = await query(
@@ -24,9 +27,10 @@ export async function POST(req: NextRequest) {
   let matched = 0;
   let already = 0;
   const unmatched: string[] = [];
+  const unmatchedIds: string[] = [];
 
   for (const page of pages) {
-    if (page.site_slug) { already++; continue; }
+    if (page.site_slug && siteList.some((s) => s.slug === page.site_slug)) { already++; continue; }
 
     const normalizedPage = normalize(page.page_name);
     const match = siteList.find((s) => {
@@ -46,8 +50,17 @@ export async function POST(req: NextRequest) {
       matched++;
     } else {
       unmatched.push(page.page_name);
+      unmatchedIds.push(page.page_id);
     }
   }
 
-  return NextResponse.json({ matched, already, unmatched, total: pages.length });
+  let removed = 0;
+  if (cleanUnmatched && unmatchedIds.length > 0) {
+    for (const pid of unmatchedIds) {
+      await query(`DELETE FROM facebook_pages WHERE page_id = $1`, [pid]);
+      removed++;
+    }
+  }
+
+  return NextResponse.json({ matched, already, unmatched, removed, total: pages.length });
 }
