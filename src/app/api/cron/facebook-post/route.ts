@@ -13,7 +13,7 @@ interface PageRow {
   access_token: string;
 }
 
-async function postOneArticleForSite(siteSlug: string, maxPerDay: number): Promise<{ ok: boolean; reason: string; details?: unknown }> {
+async function postOneArticleForSite(siteSlug: string, maxPerHour: number): Promise<{ ok: boolean; reason: string; details?: unknown }> {
   const pageRes = await query(
     `SELECT page_id, page_name, site_slug, access_token
      FROM facebook_pages
@@ -24,14 +24,14 @@ async function postOneArticleForSite(siteSlug: string, maxPerDay: number): Promi
   const page = pageRes.rows[0] as PageRow | undefined;
   if (!page) return { ok: false, reason: "no_fb_page_for_site" };
 
-  // Check daily quota
+  // Check hourly quota (1 post per hour per page)
   const quotaRes = await query(
     `SELECT COUNT(*)::int AS cnt FROM facebook_posts
-     WHERE page_id = $1 AND status = 'success' AND posted_at >= NOW() - INTERVAL '24 hours'`,
+     WHERE page_id = $1 AND status = 'success' AND posted_at >= NOW() - INTERVAL '1 hour'`,
     [page.page_id]
   );
-  if ((quotaRes.rows[0]?.cnt || 0) >= maxPerDay) {
-    return { ok: false, reason: "daily_quota_reached" };
+  if ((quotaRes.rows[0]?.cnt || 0) >= maxPerHour) {
+    return { ok: false, reason: "hourly_quota_reached" };
   }
 
   // SUA adaptation: JOIN sites to get site_slug, map summary→excerpt, category→category_slug
@@ -87,10 +87,18 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  // Only post during US hours: 8 AM - 6 PM EST (UTC-5)
+  const now = new Date();
+  const estHour = new Date(now.toLocaleString("en-US", { timeZone: "America/New_York" })).getHours();
+  const forceAll = req.nextUrl.searchParams.get("all") === "1";
+  if (!forceAll && (estHour < 8 || estHour >= 18)) {
+    return NextResponse.json({ message: "Outside posting hours (8 AM - 6 PM EST)", estHour });
+  }
+
   await ensureSchema();
 
   const siteParam = req.nextUrl.searchParams.get("site");
-  const maxPerDay = parseInt(req.nextUrl.searchParams.get("max_per_day") || "10", 10);
+  const maxPerHour = parseInt(req.nextUrl.searchParams.get("max_per_hour") || "1", 10);
 
   let targetSites: string[];
   if (siteParam) {
@@ -104,7 +112,7 @@ export async function GET(req: NextRequest) {
 
   const results: Record<string, { ok: boolean; reason: string; details?: unknown }> = {};
   for (const slug of targetSites) {
-    results[slug] = await postOneArticleForSite(slug, maxPerDay);
+    results[slug] = await postOneArticleForSite(slug, maxPerHour);
   }
 
   const summary = {
