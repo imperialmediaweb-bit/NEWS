@@ -107,12 +107,12 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  // Only post during US hours: 8 AM - 6 PM EST (UTC-5)
+  // Only post during US hours: 7 AM - 10 PM EST (UTC-5)
   const now = new Date();
   const estHour = new Date(now.toLocaleString("en-US", { timeZone: "America/New_York" })).getHours();
   const forceAll = req.nextUrl.searchParams.get("all") === "1";
-  if (!forceAll && (estHour < 8 || estHour >= 18)) {
-    return NextResponse.json({ message: "Outside posting hours (8 AM - 6 PM EST)", estHour });
+  if (!forceAll && (estHour < 7 || estHour >= 22)) {
+    return NextResponse.json({ message: "Outside posting hours (7 AM - 10 PM EST)", estHour });
   }
 
   await ensureSchema();
