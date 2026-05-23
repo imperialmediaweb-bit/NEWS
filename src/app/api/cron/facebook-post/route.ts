@@ -13,6 +13,21 @@ interface PageRow {
   access_token: string;
 }
 
+// Words that trigger Facebook content moderation — skip these articles
+const SENSITIVE_KEYWORDS = [
+  "killed", "murder", "rape", "sexual assault", "suicide", "dead body",
+  "mass shooting", "school shooting", "child abuse", "child exploitation",
+  "domestic violence", "homicide", "manslaughter", "fatal", "death toll",
+  "massacre", "terrorist", "terrorism", "bomb threat", "hostage",
+  "overdose", "drug bust", "human trafficking", "kidnapping",
+  "molestation", "pedophile", "arson death", "hate crime",
+];
+
+function isSensitiveContent(title: string, excerpt: string | null): boolean {
+  const text = `${title} ${excerpt || ""}`.toLowerCase();
+  return SENSITIVE_KEYWORDS.some((kw) => text.includes(kw));
+}
+
 async function postOneArticleForSite(siteSlug: string, maxPerHour: number): Promise<{ ok: boolean; reason: string; details?: unknown }> {
   const pageRes = await query(
     `SELECT page_id, page_name, site_slug, access_token
@@ -50,6 +65,11 @@ async function postOneArticleForSite(siteSlug: string, maxPerHour: number): Prom
   );
   const article = articleRes.rows[0] as ArticleForFb | undefined;
   if (!article) return { ok: false, reason: "no_new_article" };
+
+  // Skip sensitive content that could get the page flagged
+  if (isSensitiveContent(article.title, article.excerpt)) {
+    return { ok: false, reason: "sensitive_content_skipped", details: article.title };
+  }
 
   const siteCfg = sites[siteSlug];
   const siteDomain = siteCfg?.domain || `${siteSlug}.com`;
