@@ -62,8 +62,10 @@ export async function GET(request: NextRequest) {
     const { rows: siteRows } = await pool.query("SELECT id FROM sites WHERE slug = $1", [site.slug]);
     if (siteRows.length > 0) {
       const siteId = siteRows[0].id;
+      // Google allows up to 50,000 URLs per sitemap file. Use that as the cap
+      // so every article is included (minus the 22 static/hub pages above).
       const { rows: articles } = await pool.query(
-        "SELECT slug, category, published_at FROM articles WHERE site_id = $1 ORDER BY published_at DESC LIMIT 5000",
+        "SELECT slug, category, published_at FROM articles WHERE site_id = $1 ORDER BY published_at DESC LIMIT 49000",
         [siteId]
       );
       const articlePages: SitemapEntry[] = articles.map((row: Record<string, unknown>) => ({
