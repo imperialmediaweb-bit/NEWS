@@ -24,6 +24,8 @@ ${urls.join("\n")}
   return new NextResponse(xml, {
     headers: {
       "Content-Type": "application/xml",
+      "Cache-Control": "public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400",
+      "CDN-Cache-Control": "public, max-age=86400",
     },
   });
 }

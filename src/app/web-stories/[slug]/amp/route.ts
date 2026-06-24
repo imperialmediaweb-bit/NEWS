@@ -141,7 +141,11 @@ export async function GET(
 
     return new NextResponse(ampHtml, {
       status: 200,
-      headers: { "Content-Type": "text/html" },
+      headers: {
+        "Content-Type": "text/html",
+        "Cache-Control": "public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400",
+        "CDN-Cache-Control": "public, max-age=86400",
+      },
     });
   } catch {
     return new NextResponse("Internal server error", { status: 500 });

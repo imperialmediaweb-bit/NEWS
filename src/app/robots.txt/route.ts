@@ -26,7 +26,8 @@ Sitemap: ${baseUrl}/sitemap_index.xml
   return new NextResponse(text, {
     headers: {
       "Content-Type": "text/plain",
-      "Cache-Control": "public, max-age=3600",
+      "Cache-Control": "public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400",
+      "CDN-Cache-Control": "public, max-age=86400",
     },
   });
 }
