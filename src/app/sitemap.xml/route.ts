@@ -99,7 +99,8 @@ ${urls}
   return new NextResponse(xml, {
     headers: {
       "Content-Type": "application/xml",
-      "Cache-Control": "public, max-age=900",
+      "Cache-Control": "public, max-age=900, s-maxage=3600, stale-while-revalidate=7200",
+      "CDN-Cache-Control": "public, max-age=3600",
     },
   });
 }

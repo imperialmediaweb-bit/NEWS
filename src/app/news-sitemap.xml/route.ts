@@ -104,7 +104,8 @@ ${urls}
     return new NextResponse(xml, {
       headers: {
         "Content-Type": "application/xml",
-        "Cache-Control": "public, max-age=900",
+        "Cache-Control": "public, max-age=900, s-maxage=1800, stale-while-revalidate=3600",
+        "CDN-Cache-Control": "public, max-age=1800",
       },
     });
   } catch {
