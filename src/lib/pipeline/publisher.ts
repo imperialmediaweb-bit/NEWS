@@ -1,5 +1,6 @@
 import pool from "@/lib/db";
 import { RewriteResult } from "./rewriter";
+import { sites as siteConfigs } from "@/config/sites";
 
 // Realistic journalist bylines with titles — like real US newspapers
 // Format: "Name, Title" — saved as author field
@@ -173,12 +174,32 @@ export async function publishArticle(opts: PublishOptions): Promise<number> {
     "SELECT id FROM sites WHERE state = $1 LIMIT 1",
     [opts.state]
   );
-  if (siteRows.length === 0) {
-    console.error(`No site found for state: ${opts.state}`);
-    return 0;
-  }
 
-  const siteId = siteRows[0].id;
+  let siteId: number;
+  if (siteRows.length > 0) {
+    siteId = siteRows[0].id;
+  } else {
+    // Self-heal: seed the site row from config instead of bailing, so the
+    // pipeline works even if the sites table was never seeded.
+    const cfg = Object.values(siteConfigs).find((s) => s.state === opts.state);
+    if (!cfg) {
+      console.error(`No site config for state: ${opts.state}`);
+      return 0;
+    }
+    const { rows: created } = await pool.query(
+      `INSERT INTO sites (slug, domain, name, logo_first, logo_second, city, state, state_abbr, tagline)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+       ON CONFLICT (slug) DO UPDATE SET domain = EXCLUDED.domain
+       RETURNING id`,
+      [cfg.slug, cfg.domain, cfg.name, cfg.logoFirst, cfg.logoSecond,
+       cfg.city, cfg.state, cfg.stateAbbr, cfg.tagline]
+    );
+    if (created.length === 0) {
+      console.error(`Failed to seed site for state: ${opts.state}`);
+      return 0;
+    }
+    siteId = created[0].id;
+  }
 
   try {
     const { rowCount } = await pool.query(
