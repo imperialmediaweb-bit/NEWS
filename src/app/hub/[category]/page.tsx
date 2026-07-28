@@ -3,6 +3,8 @@ import { headers } from "next/headers";
 import { getSiteByDomain, getActiveSite } from "@/config/sites";
 import pool from "@/lib/db";
 import Link from "next/link";
+import Footer from "@/components/Footer";
+import { generateContent } from "@/data/generate-content";
 
 function getSiteFromHeaders() {
   try {
@@ -443,6 +445,7 @@ export default async function HubPage({
           </div>
         </div>
       </div>
+      <Footer site={site} about={generateContent(site).footerAbout} />
     </>
   );
 }
