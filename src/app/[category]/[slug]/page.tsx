@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { headers } from "next/headers";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { getSiteByDomain, getActiveSite } from "@/config/sites";
 import pool from "@/lib/db";
 import ArticlePageClient from "@/components/ArticlePageClient";
@@ -186,6 +186,14 @@ export default async function ArticlePage({
   // with fabricated NewsArticle structured data (AdSense/indexing killer).
   if (!article) {
     notFound();
+  }
+
+  // One canonical URL per article: if the URL's category segment doesn't
+  // match the article's real category, 301 to the canonical path (otherwise
+  // every article is reachable at unlimited duplicate URLs).
+  const realCategory = (article.category || "news").toLowerCase().replace(/\s+/g, "-");
+  if (realCategory !== params.category) {
+    redirect(`/${realCategory}/${params.slug}`);
   }
 
   const categoryLabel = params.category.replace(/-/g, " ").replace(/\b\w/g, (c: string) => c.toUpperCase());

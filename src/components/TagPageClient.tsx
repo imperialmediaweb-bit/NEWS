@@ -114,7 +114,7 @@ export default function TagPageClient({ site, tag, tagLabel }: TagPageClientProp
 
           <div className="lg:col-span-4">
             <div className="lg:sticky lg:top-[140px]">
-              <Sidebar trending={content.trending} latest={content.sidebarLatest} newsletter={content.sidebarNewsletter} />
+              <Sidebar trending={articles.slice(0, 5)} newsletter={{ title: `Subscribe to ${site.name}`, description: `Get the latest ${site.city} news delivered to your inbox` }} />
             </div>
           </div>
         </div>

@@ -75,6 +75,12 @@ export default function CategoryPageClient({ site, categorySlug, categoryLabel }
       <div className="max-w-[1300px] mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           <div className="lg:col-span-8">
+            {!loading && articles.length === 0 && (
+              <div className="bg-white rounded-xl shadow-sm p-12 text-center text-gray-500 mb-8">
+                No {categoryLabel.toLowerCase()} articles published yet. Check back soon.
+              </div>
+            )}
+
             {leadArticle && (
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mb-8">
                 <Link href={`/${categorySlug}/${makeSlug(leadArticle)}`}
@@ -196,7 +202,7 @@ export default function CategoryPageClient({ site, categorySlug, categoryLabel }
 
           <div className="lg:col-span-4">
             <div className="lg:sticky lg:top-[140px]">
-              <Sidebar trending={content.trending} latest={content.sidebarLatest} newsletter={content.sidebarNewsletter} />
+              <Sidebar trending={articles.slice(0, 5)} newsletter={{ title: `Subscribe to ${site.name}`, description: `Get the latest ${site.city} news delivered to your inbox` }} />
             </div>
           </div>
         </div>

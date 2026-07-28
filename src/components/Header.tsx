@@ -3,16 +3,13 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { Search, Menu, X, AlertTriangle } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { SiteConfig } from "@/config/site-config";
 
-const navItems = ["Local News", "Politics", "US News", "World", "Sports", "Entertainment", "Scandals", "Web Stories"];
-const breakingHeadlines = [
-  "BREAKING: Governor faces calls to resign",
-  "Housing market in freefall — worst crash since 2008",
-  "NFL BOMBSHELL: $120M trade deal CONFIRMED",
-  "Shutdown looms as Congress deadlocks",
-];
+// Nav items map to real category routes via toLowerCase + dashes.
+// NOTE: no fake "breaking" ticker here — every headline shown to users
+// must be a real article (AdSense misrepresentation rule).
+const navItems = ["Local News", "Politics", "US News", "World News", "Sports", "Entertainment", "Business", "Web Stories"];
 
 interface HeaderProps {
   site: SiteConfig;
@@ -23,26 +20,10 @@ export default function Header({ site }: HeaderProps) {
 
   return (
     <header className="sticky top-0 z-50">
-      {/* Breaking news ticker — red hot */}
-      <div className="bg-[#c1121f] text-white overflow-hidden">
-        <div className="flex items-center">
-          <div className="bg-[#8b0000] px-4 py-2 flex items-center gap-1.5 font-black text-[11px] uppercase tracking-widest shrink-0 z-10" style={{ fontFamily: "'Oswald', sans-serif" }}>
-            <AlertTriangle className="w-3.5 h-3.5" /> BREAKING
-          </div>
-          <div className="overflow-hidden flex-1">
-            <div className="animate-ticker flex whitespace-nowrap py-2">
-              {[...breakingHeadlines, ...breakingHeadlines].map((h, i) => (
-                <span key={i} className="mx-8 text-[12px] font-bold cursor-pointer hover:underline">{h}</span>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* MASTHEAD — bold tabloid banner */}
       <div className="bg-black text-white">
         <div className="max-w-[1300px] mx-auto px-4 py-4 md:py-5 flex items-center justify-between">
-          <button className="md:hidden text-white" onClick={() => setMenuOpen(!menuOpen)}>
+          <button className="md:hidden text-white" onClick={() => setMenuOpen(!menuOpen)} aria-label="Menu">
             {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
 
@@ -70,7 +51,8 @@ export default function Header({ site }: HeaderProps) {
             </div>
           </div>
 
-          <Search className="w-5 h-5 text-gray-400 hover:text-[#c1121f] cursor-pointer transition-colors" />
+          {/* spacer keeps masthead centered on mobile (mirrors menu button) */}
+          <span className="md:hidden w-6" />
         </div>
       </div>
 

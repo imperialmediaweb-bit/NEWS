@@ -1,17 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import {
-  Clock,
-  User,
-  Share2,
-  Facebook,
-  Twitter,
-  ChevronRight,
-  Eye,
-  MessageCircle,
-  BookOpen,
-} from "lucide-react";
+import { Clock, User, ChevronRight, BookOpen } from "lucide-react";
 import { SiteConfig } from "@/config/site-config";
 import { generateContent, Article } from "@/data/generate-content";
 import Header from "@/components/Header";
@@ -72,6 +62,10 @@ export default function ArticlePageClient({ site, article, related, categorySlug
 
   // Real related articles only — if none exist, the section simply renders empty.
   const displayRelated: (RelatedArticle | Article)[] = related;
+
+  // Real reading time from actual word count (~220 wpm)
+  const wordCount = displayContent.replace(/<[^>]+>/g, " ").trim().split(/\s+/).length;
+  const readMinutes = Math.max(1, Math.round(wordCount / 220));
 
   return (
     <div className="min-h-screen bg-[#f5f5f5]">
@@ -155,14 +149,7 @@ export default function ArticlePageClient({ site, article, related, categorySlug
                   </div>
                 </div>
                 {displayDate && <div className="flex items-center gap-1 text-gray-400"><Clock size={14} /><span>{displayDate}</span></div>}
-                <div className="flex items-center gap-1 text-gray-400"><BookOpen size={14} /><span>5 min read</span></div>
-                <div className="flex items-center gap-1 text-gray-400"><Eye size={14} /><span>Views</span></div>
-                <div className="flex items-center gap-1 text-gray-400"><MessageCircle size={14} /><span>Comments</span></div>
-                <div className="ml-auto flex gap-2">
-                  <button className="p-2 rounded-full bg-[#1877f2] text-white hover:opacity-80 transition-opacity"><Facebook size={16} /></button>
-                  <button className="p-2 rounded-full bg-[#1da1f2] text-white hover:opacity-80 transition-opacity"><Twitter size={16} /></button>
-                  <button className="p-2 rounded-full bg-gray-200 text-gray-600 hover:bg-gray-300 transition-colors"><Share2 size={16} /></button>
-                </div>
+                <div className="flex items-center gap-1 text-gray-400"><BookOpen size={14} /><span>{readMinutes} min read</span></div>
               </div>
             </div>
 
@@ -184,7 +171,7 @@ export default function ArticlePageClient({ site, article, related, categorySlug
             <div className="bg-white rounded-xl shadow-sm p-5 mb-6">
               <h3 className="text-sm font-bold uppercase tracking-wider text-gray-500 mb-3" style={{ fontFamily: "'Oswald', sans-serif" }}>Tags</h3>
               <div className="flex flex-wrap gap-2">
-                {[categoryLabel, site.state, site.city, "Breaking News"].map((tag) => (
+                {[categoryLabel, site.state, site.city].map((tag) => (
                   <Link key={tag} href={`/tag/${tag.toLowerCase().replace(/\s+/g, "-")}`}
                     className="px-3 py-1 text-sm bg-gray-100 text-gray-600 rounded-full hover:bg-[#c1121f] hover:text-white transition-colors">
                     {tag}
@@ -238,7 +225,7 @@ export default function ArticlePageClient({ site, article, related, categorySlug
 
           <div className="lg:col-span-4">
             <div className="lg:sticky lg:top-[140px]">
-              <Sidebar trending={content.trending} latest={content.sidebarLatest} newsletter={content.sidebarNewsletter} />
+              <Sidebar latest={displayRelated as Article[]} newsletter={{ title: `Subscribe to ${site.name}`, description: `Get the latest ${site.city} news delivered to your inbox` }} />
             </div>
           </div>
         </div>

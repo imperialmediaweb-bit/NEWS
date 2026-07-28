@@ -6,9 +6,10 @@ import { Article } from "@/data/generate-content";
 import { Clock } from "lucide-react";
 
 function articleHref(article: Article) {
-  const categorySlug = article.category.toLowerCase().replace(/\s+/g, '-');
-  const titleSlug = article.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-  return `/${categorySlug}/${titleSlug}`;
+  const categorySlug = (article.category || "news").toLowerCase().replace(/\s+/g, '-');
+  // Prefer the real DB slug — rebuilding from the title 404s when they differ.
+  const slug = article.slug || article.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  return `/${categorySlug}/${slug}`;
 }
 
 interface CategoryBlockProps {

@@ -165,6 +165,16 @@ interface PublishOptions {
  * Returns 1 on success, 0 on failure/duplicate.
  */
 export async function publishArticle(opts: PublishOptions): Promise<number> {
+  // Quality gate — never publish thin/empty articles. A malformed LLM
+  // response must not become a live, sitemap-included NewsArticle page.
+  const plainText = (opts.rewrite.content || "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+  if (!opts.rewrite.title || opts.rewrite.title.trim().length < 15 || plainText.length < 1500) {
+    console.error(
+      `Rejected thin article (title ${opts.rewrite.title?.length || 0} chars, body ${plainText.length} chars) for state: ${opts.state}`
+    );
+    return 0;
+  }
+
   const slug = slugify(opts.rewrite.title);
   const author = opts.author || getReporter(opts.category);
   const now = new Date().toISOString();

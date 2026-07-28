@@ -3,12 +3,12 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { Article } from "@/data/generate-content";
-import { ChevronRight } from "lucide-react";
 
 function articleHref(article: Article) {
-  const categorySlug = article.category.toLowerCase().replace(/\s+/g, '-');
-  const titleSlug = article.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-  return `/${categorySlug}/${titleSlug}`;
+  const categorySlug = (article.category || "news").toLowerCase().replace(/\s+/g, '-');
+  // Prefer the real DB slug — rebuilding from the title 404s when they differ.
+  const slug = article.slug || article.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  return `/${categorySlug}/${slug}`;
 }
 
 interface ThreeColumnSectionProps {
@@ -86,10 +86,6 @@ export default function ThreeColumnSection({ columns }: ThreeColumnSectionProps)
               ))}
             </div>
 
-            {/* More button */}
-            <a href="#" className="flex items-center gap-1 mt-3 text-[11px] font-bold uppercase tracking-wider hover:underline" style={{ color: col.accent, fontFamily: "'Oswald', sans-serif" }}>
-              More {col.title} <ChevronRight className="w-3 h-3" />
-            </a>
           </div>
         ))}
       </div>

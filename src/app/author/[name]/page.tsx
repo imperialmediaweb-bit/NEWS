@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import { headers } from "next/headers";
+import { notFound } from "next/navigation";
 import { getSiteByDomain, getActiveSite } from "@/config/sites";
 import pool from "@/lib/db";
 import Link from "next/link";
@@ -65,10 +66,16 @@ export default async function AuthorPage({
   const { rows: articles } = await pool.query(
     `SELECT title, slug, category, summary, featured_image, published_at, author
      FROM articles
-     WHERE site_id = $1 AND LOWER(author) LIKE $2
+     WHERE site_id = $1 AND LOWER(REPLACE(author, '''', '')) LIKE $2
      ORDER BY published_at DESC LIMIT 50`,
-    [siteId, `${authorName.toLowerCase()}%`]
+    [siteId, `${authorName.toLowerCase().replace(/'/g, "")}%`]
   );
+
+  // Real 404 for unknown authors — never render a fabricated profile page
+  // (soft-404 farm + E-E-A-T misrepresentation risk).
+  if (articles.length === 0) {
+    notFound();
+  }
 
   // Extract title from first article's author field
   const authorFull = articles.length > 0 ? articles[0].author : authorName;
@@ -77,16 +84,11 @@ export default async function AuthorPage({
   const displayTitle = parts[1]?.trim() || "Staff Reporter";
 
   // Person schema for Google
+  // Minimal Person schema — no jobTitle/credentials claims for bylines.
   const personJsonLd = {
     "@context": "https://schema.org",
     "@type": "Person",
     name: displayName,
-    jobTitle: displayTitle,
-    worksFor: {
-      "@type": "NewsMediaOrganization",
-      name: site.name,
-      url: `https://${site.domain}`,
-    },
     url: `https://${site.domain}/author/${params.name}`,
   };
 
@@ -114,11 +116,7 @@ export default async function AuthorPage({
               </p>
             </div>
           </div>
-          <p className="mt-6 text-gray-600">
-            {displayName} is a {displayTitle.toLowerCase()} at {site.name},
-            covering news from {site.city}, {site.state} and surrounding areas.
-          </p>
-          <p className="mt-2 text-sm text-gray-400">
+          <p className="mt-6 text-sm text-gray-400">
             {articles.length} article{articles.length !== 1 ? "s" : ""} published
           </p>
         </div>
