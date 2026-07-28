@@ -17,62 +17,30 @@ interface CategoryPageClientProps {
 
 export default function CategoryPageClient({ site, categorySlug, categoryLabel }: CategoryPageClientProps) {
   const [articles, setArticles] = useState<Article[]>([]);
-  const [content, setContent] = useState(() => generateContent(site));
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
+  const content = generateContent(site);
 
   function loadArticles(pageNum: number, append = false) {
     setLoading(true);
     fetch(`/api/category?site=${site.slug}&category=${categorySlug}&page=${pageNum}`)
       .then((r) => r.json())
       .then((data) => {
+        // Real articles only — never substitute fabricated placeholder news.
         if (data.articles && data.articles.length > 0) {
           setArticles((prev) => append ? [...prev, ...data.articles] : data.articles);
           setTotalPages(data.totalPages || 1);
           setPage(pageNum);
-        } else if (!append) {
-          const mockContent = generateContent(site);
-          const categoryMap: Record<string, Article[]> = {
-            "local-news": mockContent.localNews,
-            "us-news": mockContent.usNews,
-            "world-news": mockContent.worldNews,
-            politics: mockContent.politics,
-            sports: mockContent.sports,
-            entertainment: mockContent.entertainment,
-            business: mockContent.business,
-            technology: mockContent.technology,
-            opinion: mockContent.opinion,
-            celebrity: mockContent.celebrity,
-          };
-          setArticles(categoryMap[categorySlug] || mockContent.usNews);
         }
         setLoading(false);
       })
       .catch(() => {
-        if (!append) {
-          const mockContent = generateContent(site);
-          const categoryMap: Record<string, Article[]> = {
-            "local-news": mockContent.localNews,
-            "us-news": mockContent.usNews,
-            "world-news": mockContent.worldNews,
-            politics: mockContent.politics,
-            sports: mockContent.sports,
-            entertainment: mockContent.entertainment,
-            business: mockContent.business,
-            technology: mockContent.technology,
-            opinion: mockContent.opinion,
-            celebrity: mockContent.celebrity,
-          };
-          setArticles(categoryMap[categorySlug] || mockContent.usNews);
-        }
         setLoading(false);
       });
   }
 
   useEffect(() => {
-    const mockContent = generateContent(site);
-    setContent(mockContent);
     loadArticles(1);
   }, [site, categorySlug]);
 

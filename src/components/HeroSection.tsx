@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { Article } from "@/data/generate-content";
-import { Clock, MessageCircle, TrendingUp } from "lucide-react";
+import { Clock, TrendingUp } from "lucide-react";
 
 function articleHref(article: Article) {
   const categorySlug = article.category.toLowerCase().replace(/\s+/g, '-');
@@ -55,7 +55,6 @@ export default function HeroSection({ main, side }: HeroSectionProps) {
                 <div className="flex items-center gap-4 text-gray-400 text-xs">
                   <span className="font-bold text-white">{main.author}</span>
                   <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {main.date}</span>
-                  <span className="flex items-center gap-1"><MessageCircle className="w-3 h-3" /> 1,247 comments</span>
                 </div>
               </div>
             </div>

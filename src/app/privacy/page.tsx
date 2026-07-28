@@ -108,6 +108,22 @@ export default function PrivacyPage() {
             </p>
 
             <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+              4a. Google AdSense &amp; Third-Party Advertising
+            </h2>
+            <p>
+              We use Google AdSense, an advertising service provided by Google LLC, to display advertisements on {site.name}. Google is a third-party vendor that uses cookies to serve ads on our site.
+            </p>
+            <ul>
+              <li><strong>Google Advertising Cookies:</strong> Google uses advertising cookies (including the DoubleClick DART cookie) to serve ads to our visitors based on their visit to {site.name} and/or other websites on the Internet.</li>
+              <li><strong>Personalized Advertising:</strong> Third-party vendors, including Google, use cookies to serve ads based on your prior visits to this website or other websites.</li>
+              <li><strong>Opting Out:</strong> You may opt out of personalized advertising by visiting <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer" style={{ color: "#c1121f", textDecoration: "underline" }}>Google Ads Settings</a> (adssettings.google.com). You can also opt out of some third-party vendor cookies at <a href="https://optout.aboutads.info" target="_blank" rel="noopener noreferrer" style={{ color: "#c1121f", textDecoration: "underline" }}>aboutads.info</a>.</li>
+              <li><strong>More Information:</strong> For details on how Google uses data when you use our site, visit <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer" style={{ color: "#c1121f", textDecoration: "underline" }}>How Google uses data from sites that use its services</a>.</li>
+            </ul>
+            <p>
+              For visitors in the European Economic Area (EEA), the United Kingdom and Switzerland, we display a consent message and process advertising cookies only in accordance with your consent choices.
+            </p>
+
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
               5. Third-Party Sharing
             </h2>
             <p>We may share your information with the following categories of third parties:</p>

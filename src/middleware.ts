@@ -142,11 +142,17 @@ if (typeof globalThis !== "undefined") {
   }
 }
 
+// Google's own crawlers (search + AdSense review/serving). They must NEVER
+// be geo-blocked or rate-limited — a 403/429 to Mediapartners-Google breaks
+// ad serving and AdSense approval.
+const GOOGLE_CRAWLER = /Googlebot|Mediapartners-Google|AdsBot-Google|Google-InspectionTool|Storebot-Google|bingbot/i;
+
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const ua = req.headers.get("user-agent") || "";
   const ip = getClientIp(req);
   const host = req.headers.get("host") || "";
+  const isGoogleCrawler = GOOGLE_CRAWLER.test(ua);
 
   // ─── 0. Redirect www → non-www (SEO canonical) ───
   if (host.startsWith("www.")) {
@@ -165,8 +171,10 @@ export function middleware(req: NextRequest) {
   }
 
   // ─── 0c. Block traffic from bot countries (via Cloudflare cf-ipcountry) ───
+  // Google/Bing crawlers are exempt — their review teams and crawl nodes
+  // operate globally, including from otherwise-blocked regions.
   const country = req.headers.get("cf-ipcountry") || "";
-  if (country && BLOCKED_COUNTRIES.has(country)) {
+  if (!isGoogleCrawler && country && BLOCKED_COUNTRIES.has(country)) {
     return new NextResponse("Access Denied", { status: 403 });
   }
 
@@ -190,9 +198,10 @@ export function middleware(req: NextRequest) {
     return new NextResponse("Not Found", { status: 404 });
   }
 
-  // ─── 3. Rate limiting ───
+  // ─── 3. Rate limiting ─── (Google/Bing crawlers exempt — 429s to
+  // Mediapartners-Google degrade AdSense serving)
   const isApi = pathname.startsWith("/api/");
-  if (isRateLimited(ip, isApi)) {
+  if (!isGoogleCrawler && isRateLimited(ip, isApi)) {
     return new NextResponse("Too Many Requests", {
       status: 429,
       headers: {

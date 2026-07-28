@@ -70,8 +70,8 @@ export default function ArticlePageClient({ site, article, related, categorySlug
         .map((p) => `<p>${p.trim()}</p>`)
         .join("\n");
 
-  const allMockArticles = [...content.usNews, ...content.localNews, ...content.worldNews, ...content.politics];
-  const displayRelated: (RelatedArticle | Article)[] = related.length > 0 ? related : allMockArticles.slice(0, 3);
+  // Real related articles only — if none exist, the section simply renders empty.
+  const displayRelated: (RelatedArticle | Article)[] = related;
 
   return (
     <div className="min-h-screen bg-[#f5f5f5]">

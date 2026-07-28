@@ -18,34 +18,18 @@ interface TagPageClientProps {
 
 export default function TagPageClient({ site, tag, tagLabel }: TagPageClientProps) {
   const [articles, setArticles] = useState<Article[]>([]);
-  const [content, setContent] = useState(() => generateContent(site));
+  const content = generateContent(site);
 
   useEffect(() => {
-    const mockContent = generateContent(site);
-    setContent(mockContent);
-
+    // Real articles only — never substitute fabricated placeholder news.
     fetch(`/api/tag?site=${site.slug}&tag=${tag}`)
       .then((r) => r.json())
       .then((data) => {
         if (data.articles && data.articles.length > 0) {
           setArticles(data.articles);
-        } else {
-          setArticles([
-            ...mockContent.localNews,
-            ...mockContent.usNews,
-            ...mockContent.worldNews,
-            ...mockContent.politics,
-          ].slice(0, 12));
         }
       })
-      .catch(() => {
-        setArticles([
-          ...mockContent.localNews,
-          ...mockContent.usNews,
-          ...mockContent.worldNews,
-          ...mockContent.politics,
-        ].slice(0, 12));
-      });
+      .catch(() => {});
   }, [site, tag]);
 
   const makeSlug = (a: Article) =>

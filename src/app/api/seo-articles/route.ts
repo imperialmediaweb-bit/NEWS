@@ -1,3 +1,4 @@
+import { PLACEHOLDER_IMG } from "@/lib/homepage-data";
 import { NextRequest, NextResponse } from "next/server";
 import pool from "@/lib/db";
 
@@ -104,7 +105,7 @@ export async function GET(request: NextRequest) {
     const articles = rows.map((row: Record<string, unknown>) => ({
       img:
         (row.featured_image as string) ||
-        `https://picsum.photos/800/500?random=${row.id}`,
+        PLACEHOLDER_IMG,
       title: row.title as string,
       summary: (row.summary as string) || "",
       category: (row.category as string) || "News",

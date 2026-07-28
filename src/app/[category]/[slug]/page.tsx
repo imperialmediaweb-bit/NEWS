@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import { headers } from "next/headers";
+import { notFound } from "next/navigation";
 import { getSiteByDomain, getActiveSite } from "@/config/sites";
 import pool from "@/lib/db";
 import ArticlePageClient from "@/components/ArticlePageClient";
@@ -180,6 +181,12 @@ export default async function ArticlePage({
 }) {
   const site = getSiteFromHeaders();
   const { article, related } = await getArticleData(site.slug, params.slug, site.domain);
+
+  // Real 404 for missing articles — never serve a 200 "thin content" shell
+  // with fabricated NewsArticle structured data (AdSense/indexing killer).
+  if (!article) {
+    notFound();
+  }
 
   const categoryLabel = params.category.replace(/-/g, " ").replace(/\b\w/g, (c: string) => c.toUpperCase());
   const displayTitle = article?.title || `${categoryLabel} — ${params.slug.replace(/-/g, " ")}`;

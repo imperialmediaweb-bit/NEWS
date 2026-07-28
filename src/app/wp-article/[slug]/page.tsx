@@ -1,9 +1,8 @@
 import { Metadata } from "next";
 import { headers } from "next/headers";
-import { redirect } from "next/navigation";
+import { redirect, notFound } from "next/navigation";
 import { getSiteByDomain, getActiveSite } from "@/config/sites";
 import pool from "@/lib/db";
-import ArticlePageClient from "@/components/ArticlePageClient";
 
 function getSiteFromHeaders() {
   try {
@@ -108,7 +107,7 @@ export default async function WpArticlePage({
   params: { slug: string };
 }) {
   const site = getSiteFromHeaders();
-  const { article, related } = await getArticleBySlug(site.slug, params.slug);
+  const { article } = await getArticleBySlug(site.slug, params.slug);
 
   // Redirect to canonical URL if article exists
   if (article) {
@@ -116,53 +115,7 @@ export default async function WpArticlePage({
     redirect(`/${cat}/${params.slug}`);
   }
 
-  // Article not found — show 404-style page
-  const categorySlug = "news";
-  const categoryLabel = "News";
-  const displayTitle = params.slug.replace(/-/g, " ");
-  const description = `Read ${displayTitle} on ${site.name}`;
-  const image = "";
-  const url = `https://${site.domain}/${categorySlug}/${params.slug}`;
-
-  const newsArticleJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "NewsArticle",
-    headline: displayTitle,
-    description,
-    image: image ? [image] : [],
-    datePublished: "",
-    dateModified: "",
-    author: { "@type": "Person", name: "Staff Reporter" },
-    publisher: {
-      "@type": "NewsMediaOrganization",
-      name: site.name,
-      logo: { "@type": "ImageObject", url: `https://${site.domain}/api/favicon?site=${site.slug}` },
-      parentOrganization: { "@type": "Organization", name: "MediaChief" },
-    },
-    mainEntityOfPage: { "@type": "WebPage", "@id": url },
-  };
-
-  const breadcrumbJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: `https://${site.domain}` },
-      { "@type": "ListItem", position: 2, name: categoryLabel, item: `https://${site.domain}/${categorySlug}` },
-      { "@type": "ListItem", position: 3, name: displayTitle, item: url },
-    ],
-  };
-
-  return (
-    <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(newsArticleJsonLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
-      <ArticlePageClient
-        site={site}
-        article={article}
-        related={related}
-        categorySlug={categorySlug}
-        slug={params.slug}
-      />
-    </>
-  );
+  // Article not found — return a real 404, never a 200 shell with
+  // fabricated NewsArticle structured data.
+  notFound();
 }

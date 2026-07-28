@@ -1,7 +1,7 @@
 "use client";
 
 import { SiteConfig } from "@/config/site-config";
-import { Facebook, Twitter, Instagram, Youtube, Mail } from "lucide-react";
+import { Mail } from "lucide-react";
 import Link from "next/link";
 
 const categories = ["Home", "Local News", "US News", "World", "Politics", "Sports", "Technology", "Entertainment", "Lifestyle", "Opinion"];
@@ -39,13 +39,8 @@ export default function Footer({ site, about }: FooterProps) {
               </span>
             </h3>
             <p className="text-gray-400 text-sm leading-relaxed mb-5">{about}</p>
-            <div className="flex items-center gap-3">
-              {[Facebook, Twitter, Instagram, Youtube].map((Icon, i) => (
-                <a key={i} href="#" className="w-9 h-9 bg-white/10 rounded-full flex items-center justify-center hover:bg-[#c1121f] transition-colors">
-                  <Icon className="w-4 h-4" />
-                </a>
-              ))}
-            </div>
+            {/* Social icons removed — dead "#" links hurt AdSense site-quality review.
+                Re-add only with real per-site social profile URLs. */}
           </div>
 
           {/* Categories */}

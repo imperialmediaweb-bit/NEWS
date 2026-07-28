@@ -16,7 +16,6 @@ export async function GET(request: NextRequest) {
   const text = `User-agent: *
 Allow: /
 Disallow: /admin/
-Disallow: /api/
 
 Sitemap: ${baseUrl}/sitemap.xml
 Sitemap: ${baseUrl}/news-sitemap.xml
