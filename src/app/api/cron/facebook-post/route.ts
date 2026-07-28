@@ -100,6 +100,20 @@ async function postOneArticleForSite(siteSlug: string, maxPerHour: number): Prom
   }
 }
 
+/**
+ * Deterministic per-site slot (0-11) inside the hour.
+ * Spreads the 50 pages across twelve 5-minute buckets so they never post
+ * simultaneously — simultaneous network-wide posting is the strongest
+ * "coordinated inauthentic behavior" signal Facebook looks for.
+ */
+function siteSlot(slug: string): number {
+  let h = 0;
+  for (let i = 0; i < slug.length; i++) {
+    h = (h * 31 + slug.charCodeAt(i)) >>> 0;
+  }
+  return h % 12;
+}
+
 export async function GET(req: NextRequest) {
   const key = req.nextUrl.searchParams.get("key");
   const secret = process.env.CRON_SECRET;
@@ -128,6 +142,15 @@ export async function GET(req: NextRequest) {
       `SELECT DISTINCT site_slug FROM facebook_pages WHERE site_slug IS NOT NULL AND site_slug <> ''`
     );
     targetSites = r.rows.map((row: { site_slug: string }) => row.site_slug);
+
+    // Anti-ban stagger: each site only posts during its own 5-minute slot in
+    // the hour (slot = hash(slug) % 12). The cron should run every 5 minutes;
+    // each run posts only the ~4 pages whose slot matches, so the 50 pages
+    // publish spread across the whole hour instead of all at once.
+    if (!forceAll) {
+      const currentSlot = Math.floor(new Date().getUTCMinutes() / 5);
+      targetSites = targetSites.filter((slug) => siteSlot(slug) === currentSlot);
+    }
   }
 
   const results: Record<string, { ok: boolean; reason: string; details?: unknown }> = {};
