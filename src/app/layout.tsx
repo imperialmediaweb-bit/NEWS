@@ -7,6 +7,9 @@ import AnalyticsTracker from "@/components/AnalyticsTracker";
 import CookieConsent from "@/components/CookieConsent";
 import PushNotification from "@/components/PushNotification";
 
+// Google AdSense publisher ID — shared across the whole network
+const ADSENSE_CLIENT = "ca-pub-3341252465268510";
+
 function getSiteFromHeaders() {
   try {
     const headersList = headers();
@@ -123,6 +126,12 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
+        {/* Google AdSense — one publisher ID across all 50 sites */}
+        <script
+          async
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
+          crossOrigin="anonymous"
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
