@@ -62,10 +62,12 @@ export async function GET(request: NextRequest) {
     const { rows: siteRows } = await pool.query("SELECT id FROM sites WHERE slug = $1", [site.slug]);
     if (siteRows.length > 0) {
       const siteId = siteRows[0].id;
-      // Google allows up to 50,000 URLs per sitemap file. Use that as the cap
-      // so every article is included (minus the 22 static/hub pages above).
+      // 10k most recent articles. Building 49k URLs meant a ~10MB string in
+      // memory on every crawler hit (RAM spikes) plus a large response body.
+      // Sites currently have only ~1k pages actually indexed, so deeper
+      // coverage buys nothing while costing memory and egress.
       const { rows: articles } = await pool.query(
-        "SELECT slug, category, published_at FROM articles WHERE site_id = $1 ORDER BY published_at DESC LIMIT 49000",
+        "SELECT slug, category, published_at FROM articles WHERE site_id = $1 ORDER BY published_at DESC LIMIT 10000",
         [siteId]
       );
       const articlePages: SitemapEntry[] = articles.map((row: Record<string, unknown>) => ({

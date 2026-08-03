@@ -103,7 +103,7 @@ export async function getHomepageArticles(config: SiteConfig): Promise<HomeArtic
 
     const { rows } = await pool.query<ArticleRow>(
       `SELECT id, title, slug, summary, featured_image, category, author, published_at, views
-       FROM articles WHERE site_id = $1 ORDER BY published_at DESC LIMIT 200`,
+       FROM articles WHERE site_id = $1 ORDER BY published_at DESC LIMIT 120`,
       [siteId]
     );
     if (rows.length === 0) return null;
