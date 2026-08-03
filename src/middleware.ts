@@ -273,6 +273,25 @@ export function middleware(req: NextRequest) {
   // ─── 6. Security headers ───
   const response = NextResponse.next();
 
+  // ─── 6a. CDN caching for public HTML ───
+  // Cloudflare does NOT cache HTML by default, so every crawler hit was
+  // reaching the origin (the main Railway egress cost). Public pages are
+  // identical for all visitors, so let the edge serve them for 10 minutes
+  // and keep serving stale copies for an hour while revalidating.
+  const isPrivatePath =
+    pathname.startsWith("/admin") ||
+    pathname.startsWith("/api/") ||
+    pathname.startsWith("/_next/");
+  if (!isPrivatePath) {
+    response.headers.set(
+      "Cache-Control",
+      "public, max-age=0, s-maxage=600, stale-while-revalidate=3600"
+    );
+    response.headers.set("CDN-Cache-Control", "public, max-age=600");
+    // Same URL on 50 different hosts must not share a cache entry.
+    response.headers.set("Vary", "Host, Accept-Encoding");
+  }
+
   // Prevent XSS
   response.headers.set("X-Content-Type-Options", "nosniff");
   response.headers.set("X-XSS-Protection", "1; mode=block");
