@@ -112,9 +112,11 @@ export async function GET(req: NextRequest) {
 }
 
 function getBaseUrl(req: NextRequest): string {
-  const proto = req.headers.get("x-forwarded-proto") || "https";
-  const host = req.headers.get("host") || "localhost:3000";
-  return `${proto}://${host}`;
+  // Dispatch pipeline stages to ourselves over loopback. Using the public
+  // hostname sent every internal call out through Cloudflare and back —
+  // billable egress + ingress + a TLS handshake for a same-process call.
+  void req;
+  return `http://127.0.0.1:${process.env.PORT || 3000}`;
 }
 
 /**

@@ -49,7 +49,22 @@ export interface FbPageRow {
   connected_at: string;
 }
 
-export async function ensureSchema(): Promise<void> {
+// The cron hits this every 5 minutes and the admin routes on every call,
+// re-issuing 6 DDL statements (each taking catalog locks) for tables that
+// already exist. Run it at most once per process.
+let schemaReady: Promise<void> | null = null;
+
+export function ensureSchema(): Promise<void> {
+  if (!schemaReady) {
+    schemaReady = createSchema().catch((e) => {
+      schemaReady = null; // allow a retry if it genuinely failed
+      throw e;
+    });
+  }
+  return schemaReady;
+}
+
+async function createSchema(): Promise<void> {
   await query(`
     CREATE TABLE IF NOT EXISTS facebook_pages (
       id SERIAL PRIMARY KEY,

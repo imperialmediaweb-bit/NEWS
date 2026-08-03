@@ -34,7 +34,9 @@ export async function GET(request: NextRequest) {
 
     const [articlesRes, countRes] = await Promise.all([
       pool.query(
-        `SELECT a.*, s.name as site_name FROM articles a
+        `SELECT a.id, a.title, a.slug, a.summary, a.category, a.author,
+              a.featured_image, a.published_at, a.views, a.site_id,
+              s.name as site_name FROM articles a
          JOIN sites s ON a.site_id = s.id
          ${where}
          ORDER BY a.published_at DESC

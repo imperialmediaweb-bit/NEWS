@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { feeds, STATE_BATCHES, isPublishingHours } from "@/config/feeds";
 import { parseFeed } from "@/lib/pipeline/rss-parser";
-import { isDuplicate, insertFeedItem } from "@/lib/pipeline/dedup";
+import { isDuplicate, insertFeedItem, loadDedupContext } from "@/lib/pipeline/dedup";
 import {
   logRunStart,
   logRunEnd,
@@ -57,6 +57,9 @@ export async function POST(req: NextRequest) {
     statesToProcess.includes(s.state)
   );
 
+  // Load the dedup lookback window ONCE for the whole run.
+  const dedupCtx = await loadDedupContext();
+
   for (const site of siteEntries) {
     const runId = await logRunStart("fetch", site.state);
     let siteFetched = 0;
@@ -74,7 +77,7 @@ export async function POST(req: NextRequest) {
         const limited = items.slice(0, feed.maxItems);
 
         for (const item of limited) {
-          if (await isDuplicate(item)) {
+          if (await isDuplicate(item, dedupCtx)) {
             totalSkipped++;
             continue;
           }

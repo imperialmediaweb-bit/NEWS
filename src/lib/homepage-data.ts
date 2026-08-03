@@ -1,4 +1,5 @@
 import pool from "@/lib/db";
+import { getOrCreateSiteId } from "@/lib/site-id";
 import type { SiteConfig } from "@/config/site-config";
 
 /**
@@ -76,24 +77,11 @@ const BUCKETS: Record<string, string[]> = {
   opinion: ["opinion", "editorial", "op-ed"],
 };
 
-// Ensure the site row exists (self-heal if the sites table was never seeded)
+// Ensure the site row exists (self-heal if the sites table was never seeded).
+// Backed by an in-process slug -> id cache, so this costs nothing after the
+// first request per site.
 export async function ensureSiteId(config: SiteConfig): Promise<number | null> {
-  const { rows } = await pool.query("SELECT id FROM sites WHERE slug = $1", [config.slug]);
-  if (rows.length > 0) return rows[0].id;
-  try {
-    const { rows: created } = await pool.query(
-      `INSERT INTO sites (slug, domain, name, logo_first, logo_second, city, state, state_abbr, tagline)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-       ON CONFLICT (slug) DO UPDATE SET domain = EXCLUDED.domain
-       RETURNING id`,
-      [config.slug, config.domain, config.name, config.logoFirst, config.logoSecond,
-       config.city, config.state, config.stateAbbr, config.tagline]
-    );
-    return created[0]?.id ?? null;
-  } catch (e) {
-    console.error("ensureSiteId failed:", e instanceof Error ? e.message : e);
-    return null;
-  }
+  return getOrCreateSiteId(config);
 }
 
 export async function getHomepageArticles(config: SiteConfig): Promise<HomeArticles | null> {

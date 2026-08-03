@@ -47,7 +47,7 @@ function jaccardSimilarity(a: Set<string>, b: Set<string>): number {
  * Check if a feed item is a duplicate.
  * Returns true if duplicate (should be skipped).
  */
-export async function isDuplicate(item: FeedItem): Promise<boolean> {
+export async function isDuplicate(item: FeedItem, ctx?: DedupContext): Promise<boolean> {
   const guid = generateGuid(item);
 
   // Layer 1: GUID check
@@ -57,22 +57,39 @@ export async function isDuplicate(item: FeedItem): Promise<boolean> {
   );
   if (guidRows.length > 0) return true;
 
-  // Layer 2: Title similarity check against recent items (48h)
-  const { rows: recentItems } = await pool.query(
-    `SELECT title FROM feed_items
-     WHERE created_at > NOW() - INTERVAL '48 hours'
-     ORDER BY created_at DESC LIMIT 200`
-  );
+  // Layer 2: title similarity against recent items. Callers should pass a
+  // DedupContext so the 48h lookback is fetched and normalized ONCE per run
+  // instead of per item (it used to be a full scan + 200 re-normalizations
+  // for every single feed item — ~79k queries and ~8M string ops a day).
+  const context = ctx ?? (await loadDedupContext());
 
   const itemWords = normalizeTitle(item.title);
-  for (const recent of recentItems) {
-    const recentWords = normalizeTitle(recent.title);
+  for (const recentWords of context.recentTitleWords) {
     if (jaccardSimilarity(itemWords, recentWords) > 0.7) {
       return true;
     }
   }
 
+  // Keep the current title in play so duplicates *within* this run are caught.
+  context.recentTitleWords.push(itemWords);
+
   return false;
+}
+
+export interface DedupContext {
+  recentTitleWords: Set<string>[];
+}
+
+/** Fetch + normalize the 48h title window once, for reuse across a fetch run. */
+export async function loadDedupContext(): Promise<DedupContext> {
+  const { rows } = await pool.query(
+    `SELECT title FROM feed_items
+     WHERE created_at > NOW() - INTERVAL '48 hours'
+     ORDER BY created_at DESC LIMIT 200`
+  );
+  return {
+    recentTitleWords: rows.map((r: { title: string }) => normalizeTitle(r.title)),
+  };
 }
 
 /**

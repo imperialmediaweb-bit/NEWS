@@ -29,8 +29,11 @@ async function getArticleBySlug(siteSlug: string, articleSlug: string) {
     if (articleRows.length === 0) return { article: null, related: [] };
     const article = articleRows[0];
 
+    // List columns only — SELECT * pulled five full article bodies.
     const { rows: relatedRows } = await pool.query(
-      "SELECT * FROM articles WHERE site_id = $1 AND category = $2 AND id != $3 ORDER BY published_at DESC LIMIT 5",
+      `SELECT title, slug, summary, featured_image, category, author, published_at
+       FROM articles WHERE site_id = $1 AND category = $2 AND id != $3
+       ORDER BY published_at DESC LIMIT 5`,
       [siteId, article.category, article.id]
     );
 

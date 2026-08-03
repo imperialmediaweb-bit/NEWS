@@ -1,8 +1,10 @@
+import { cache } from "react";
 import { Metadata } from "next";
 import { headers } from "next/headers";
 import { notFound, redirect } from "next/navigation";
 import { getSiteByDomain, getActiveSite } from "@/config/sites";
 import pool from "@/lib/db";
+import { getSiteId } from "@/lib/site-id";
 import ArticlePageClient from "@/components/ArticlePageClient";
 
 function getSiteFromHeaders() {
@@ -69,11 +71,12 @@ function injectInternalLinks(
   return result.join("");
 }
 
-async function getArticleData(siteSlug: string, articleSlug: string, domain: string) {
+// React cache() dedupes within a single request: generateMetadata and the
+// page component both call this, which previously ran all four queries twice.
+const getArticleData = cache(async (siteSlug: string, articleSlug: string, domain: string) => {
   try {
-    const { rows: siteRows } = await pool.query("SELECT id FROM sites WHERE slug = $1", [siteSlug]);
-    if (siteRows.length === 0) return { article: null, related: [] };
-    const siteId = siteRows[0].id;
+    const siteId = await getSiteId(siteSlug);
+    if (siteId === null) return { article: null, related: [] };
 
     const { rows: articleRows } = await pool.query(
       "SELECT * FROM articles WHERE site_id = $1 AND slug = $2 LIMIT 1",
@@ -83,9 +86,12 @@ async function getArticleData(siteSlug: string, articleSlug: string, domain: str
     if (articleRows.length === 0) return { article: null, related: [] };
     const article = articleRows[0];
 
-    // Get related articles from same category (for sidebar)
+    // Related articles for the sidebar — list columns only. SELECT * pulled
+    // five full article bodies (~50KB of unused HTML) on every article view.
     const { rows: relatedRows } = await pool.query(
-      "SELECT * FROM articles WHERE site_id = $1 AND category = $2 AND id != $3 ORDER BY published_at DESC LIMIT 5",
+      `SELECT title, slug, summary, featured_image, category, author, published_at
+       FROM articles WHERE site_id = $1 AND category = $2 AND id != $3
+       ORDER BY published_at DESC LIMIT 5`,
       [siteId, article.category, article.id]
     );
 
@@ -131,7 +137,7 @@ async function getArticleData(siteSlug: string, articleSlug: string, domain: str
   } catch {
     return { article: null, related: [] };
   }
-}
+});
 
 export async function generateMetadata({
   params,
