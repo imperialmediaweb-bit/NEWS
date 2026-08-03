@@ -3,8 +3,15 @@ import pool from "@/lib/db";
 import { logRunStart, logRunEnd } from "@/lib/pipeline/scheduler";
 
 function authCheck(req: NextRequest): boolean {
-  const token = req.headers.get("authorization")?.replace("Bearer ", "");
+  const token =
+    req.headers.get("authorization")?.replace("Bearer ", "") ||
+    req.nextUrl.searchParams.get("key");
   return token === process.env.CRON_SECRET;
+}
+
+// Allow triggering from a browser (?key=<CRON_SECRET>) for a manual purge.
+export async function GET(req: NextRequest) {
+  return POST(req);
 }
 
 /**
