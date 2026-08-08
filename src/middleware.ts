@@ -145,7 +145,7 @@ if (typeof globalThis !== "undefined") {
 // Google's own crawlers (search + AdSense review/serving). They must NEVER
 // be geo-blocked or rate-limited — a 403/429 to Mediapartners-Google breaks
 // ad serving and AdSense approval.
-const GOOGLE_CRAWLER = /Googlebot|Mediapartners-Google|AdsBot-Google|Google-InspectionTool|Storebot-Google|bingbot/i;
+const GOOGLE_CRAWLER = /Googlebot|Mediapartners-Google|AdsBot-Google|Google-Adstxt|Google-Safety|Google-InspectionTool|Storebot-Google|APIs-Google|bingbot/i;
 
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
