@@ -76,12 +76,15 @@ export async function GET(
   <style amp-boilerplate>body{-webkit-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-moz-animation:-amp-start 8s steps(1,end) 0s 1 normal both;animation:-amp-start 8s steps(1,end) 0s 1 normal both}@-webkit-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-moz-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}</style><noscript><style amp-boilerplate>body{-webkit-animation:none;-moz-animation:none;animation:none}</style></noscript>
 
   <style amp-custom>
+    /* Standalone AMP document — the site's state colour must be declared
+       here, it cannot inherit the CSS variable from the main layout. */
+    :root { --accent: ${site.accent}; --accent-dark: ${site.accentDark}; }
     body { font-family: Georgia, serif; margin: 0; padding: 0; background: #fff; color: #222; }
     .header { background: #000; padding: 12px 20px; text-align: center; }
     .header a { color: #fff; text-decoration: none; font-family: 'Helvetica Neue', sans-serif; font-size: 22px; font-weight: 900; letter-spacing: 2px; }
-    .header span { color: #c1121f; }
+    .header span { color: var(--accent); }
     .article { max-width: 700px; margin: 0 auto; padding: 20px; }
-    .category { display: inline-block; background: #c1121f; color: #fff; padding: 4px 12px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; font-family: sans-serif; }
+    .category { display: inline-block; background: var(--accent); color: #fff; padding: 4px 12px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; font-family: sans-serif; }
     h1 { font-size: 28px; line-height: 1.3; margin: 0 0 12px; }
     .meta { color: #666; font-size: 14px; margin-bottom: 20px; font-family: sans-serif; border-bottom: 1px solid #eee; padding-bottom: 12px; }
     .meta strong { color: #333; }
@@ -89,11 +92,11 @@ export async function GET(
     .content p { margin: 0 0 18px; }
     .content h2 { font-size: 22px; margin: 28px 0 12px; }
     .content h3 { font-size: 18px; margin: 24px 0 10px; }
-    .content a { color: #c1121f; }
+    .content a { color: var(--accent); }
     .content amp-img { margin: 16px 0; border-radius: 4px; }
     .share { margin: 24px 0; display: flex; gap: 8px; }
     .footer { background: #111; color: #666; text-align: center; padding: 20px; font-size: 13px; font-family: sans-serif; margin-top: 40px; }
-    .footer a { color: #c1121f; text-decoration: none; }
+    .footer a { color: var(--accent); text-decoration: none; }
   </style>
 
   <script type="application/ld+json">

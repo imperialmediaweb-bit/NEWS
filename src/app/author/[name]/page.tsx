@@ -102,7 +102,7 @@ export default async function AuthorPage({
         {/* Author Header */}
         <div className="bg-white rounded-xl shadow-sm p-8 mb-8">
           <div className="flex items-center gap-6">
-            <div className="w-20 h-20 bg-[#c1121f] rounded-full flex items-center justify-center text-white text-2xl font-bold">
+            <div className="w-20 h-20 bg-[var(--accent)] rounded-full flex items-center justify-center text-white text-2xl font-bold">
               {displayName
                 .split(" ")
                 .map((n: string) => n[0])
@@ -141,7 +141,7 @@ export default async function AuthorPage({
                   />
                 ) : null}
                 <div className="flex-1">
-                  <span className="text-xs font-medium text-[#c1121f] uppercase">
+                  <span className="text-xs font-medium text-[var(--accent)] uppercase">
                     {(article.category as string).replace(/-/g, " ")}
                   </span>
                   <h3 className="font-bold mt-1">{article.title as string}</h3>

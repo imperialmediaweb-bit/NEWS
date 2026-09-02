@@ -20,7 +20,7 @@ export default function PopularSection({ articles }: PopularSectionProps) {
     <section className="py-6">
       {/* Red bar header */}
       <div className="flex items-center gap-3 mb-5">
-        <div className="bg-[#c1121f] text-white px-4 py-2">
+        <div className="bg-[var(--accent)] text-white px-4 py-2">
           <h2 className="text-sm md:text-base font-black uppercase tracking-widest" style={{ fontFamily: "'Oswald', sans-serif" }}>
             Popular
           </h2>
@@ -46,12 +46,12 @@ export default function PopularSection({ articles }: PopularSectionProps) {
                   className="w-full h-[120px] md:h-[150px] object-cover group-hover:scale-110 transition-transform duration-500"
                 />
                 <div className="absolute top-1.5 left-1.5">
-                  <span className="bg-[#c1121f] text-white text-[7px] font-bold uppercase tracking-widest px-1.5 py-0.5" style={{ fontFamily: "'Oswald', sans-serif" }}>
+                  <span className="bg-[var(--accent)] text-white text-[7px] font-bold uppercase tracking-widest px-1.5 py-0.5" style={{ fontFamily: "'Oswald', sans-serif" }}>
                     {article.category}
                   </span>
                 </div>
               </div>
-              <h4 className="mt-1.5 text-[11px] md:text-[12px] font-bold leading-tight group-hover:text-[#c1121f] transition-colors line-clamp-3" style={{ fontFamily: "'Source Serif 4', serif" }}>
+              <h4 className="mt-1.5 text-[11px] md:text-[12px] font-bold leading-tight group-hover:text-[var(--accent)] transition-colors line-clamp-3" style={{ fontFamily: "'Source Serif 4', serif" }}>
                 {article.title}
               </h4>
             </motion.article>

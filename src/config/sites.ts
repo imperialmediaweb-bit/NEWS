@@ -17,6 +17,8 @@ export const sites: Record<string, SiteConfig> = {
     state: "Alabama",
     stateAbbr: "AL",
     tagline: "Alabama's #1 News Source",
+    accent: "#A6192E",
+    accentDark: "#811323",
   },
   "alaska-express": {
     slug: "alaska-express",
@@ -28,6 +30,8 @@ export const sites: Record<string, SiteConfig> = {
     state: "Alaska",
     stateAbbr: "AK",
     tagline: "Alaska's #1 News Source",
+    accent: "#0A3161",
+    accentDark: "#07264B",
   },
   "arizona-express": {
     slug: "arizona-express",
@@ -39,6 +43,8 @@ export const sites: Record<string, SiteConfig> = {
     state: "Arizona",
     stateAbbr: "AZ",
     tagline: "Arizona's #1 News Source",
+    accent: "#B5461E",
+    accentDark: "#8D3617",
   },
   "arkansas-express": {
     slug: "arkansas-express",
@@ -50,6 +56,8 @@ export const sites: Record<string, SiteConfig> = {
     state: "Arkansas",
     stateAbbr: "AR",
     tagline: "Arkansas' #1 News Source",
+    accent: "#9D2235",
+    accentDark: "#7A1A29",
   },
   "california-express": {
     slug: "california-express",
@@ -61,6 +69,8 @@ export const sites: Record<string, SiteConfig> = {
     state: "California",
     stateAbbr: "CA",
     tagline: "California's #1 News Source",
+    accent: "#A63A2A",
+    accentDark: "#812D20",
   },
   "colorado-express": {
     slug: "colorado-express",
@@ -72,6 +82,8 @@ export const sites: Record<string, SiteConfig> = {
     state: "Colorado",
     stateAbbr: "CO",
     tagline: "Colorado's #1 News Source",
+    accent: "#1E4B8F",
+    accentDark: "#173A6F",
   },
   "connecticut-express": {
     slug: "connecticut-express",
@@ -83,6 +95,8 @@ export const sites: Record<string, SiteConfig> = {
     state: "Connecticut",
     stateAbbr: "CT",
     tagline: "Connecticut's #1 News Source",
+    accent: "#003B5C",
+    accentDark: "#002E47",
   },
   "delaware-express": {
     slug: "delaware-express",
@@ -94,6 +108,8 @@ export const sites: Record<string, SiteConfig> = {
     state: "Delaware",
     stateAbbr: "DE",
     tagline: "Delaware's #1 News Source",
+    accent: "#00539B",
+    accentDark: "#004078",
   },
   "florida-express": {
     slug: "florida-express",
@@ -105,6 +121,8 @@ export const sites: Record<string, SiteConfig> = {
     state: "Florida",
     stateAbbr: "FL",
     tagline: "Florida's #1 News Source",
+    accent: "#C74A26",
+    accentDark: "#9B391D",
   },
   "georgia-express": {
     slug: "georgia-express",
@@ -116,6 +134,8 @@ export const sites: Record<string, SiteConfig> = {
     state: "Georgia",
     stateAbbr: "GA",
     tagline: "Georgia's #1 News Source",
+    accent: "#7B2D26",
+    accentDark: "#5F231D",
   },
   "hawaii-express": {
     slug: "hawaii-express",
@@ -127,6 +147,8 @@ export const sites: Record<string, SiteConfig> = {
     state: "Hawaii",
     stateAbbr: "HI",
     tagline: "Hawaii's #1 News Source",
+    accent: "#00857D",
+    accentDark: "#006761",
   },
   "idaho-express": {
     slug: "idaho-express",
@@ -138,6 +160,8 @@ export const sites: Record<string, SiteConfig> = {
     state: "Idaho",
     stateAbbr: "ID",
     tagline: "Idaho's #1 News Source",
+    accent: "#2E5339",
+    accentDark: "#23402C",
   },
   "illinois-express": {
     slug: "illinois-express",
@@ -149,6 +173,8 @@ export const sites: Record<string, SiteConfig> = {
     state: "Illinois",
     stateAbbr: "IL",
     tagline: "Illinois' #1 News Source",
+    accent: "#13294B",
+    accentDark: "#0E1F3A",
   },
   "indiana-express": {
     slug: "indiana-express",
@@ -160,6 +186,8 @@ export const sites: Record<string, SiteConfig> = {
     state: "Indiana",
     stateAbbr: "IN",
     tagline: "Indiana's #1 News Source",
+    accent: "#0C2340",
+    accentDark: "#091B31",
   },
   "iowa-express": {
     slug: "iowa-express",
@@ -171,6 +199,8 @@ export const sites: Record<string, SiteConfig> = {
     state: "Iowa",
     stateAbbr: "IA",
     tagline: "Iowa's #1 News Source",
+    accent: "#8C6D31",
+    accentDark: "#6D5526",
   },
   "kansas-express": {
     slug: "kansas-express",
@@ -182,6 +212,8 @@ export const sites: Record<string, SiteConfig> = {
     state: "Kansas",
     stateAbbr: "KS",
     tagline: "Kansas' #1 News Source",
+    accent: "#0051BA",
+    accentDark: "#003F91",
   },
   "kentucky-express": {
     slug: "kentucky-express",
@@ -193,6 +225,8 @@ export const sites: Record<string, SiteConfig> = {
     state: "Kentucky",
     stateAbbr: "KY",
     tagline: "Kentucky's #1 News Source",
+    accent: "#4B3F72",
+    accentDark: "#3A3158",
   },
   "louisiana-express": {
     slug: "louisiana-express",
@@ -204,6 +238,8 @@ export const sites: Record<string, SiteConfig> = {
     state: "Louisiana",
     stateAbbr: "LA",
     tagline: "Louisiana's #1 News Source",
+    accent: "#4A1D6E",
+    accentDark: "#391655",
   },
   "maine-express": {
     slug: "maine-express",
@@ -215,6 +251,8 @@ export const sites: Record<string, SiteConfig> = {
     state: "Maine",
     stateAbbr: "ME",
     tagline: "Maine's #1 News Source",
+    accent: "#14584C",
+    accentDark: "#0F443B",
   },
   "maryland-express": {
     slug: "maryland-express",
@@ -226,6 +264,8 @@ export const sites: Record<string, SiteConfig> = {
     state: "Maryland",
     stateAbbr: "MD",
     tagline: "Maryland's #1 News Source",
+    accent: "#B06A00",
+    accentDark: "#895200",
   },
   "massachusetts-express": {
     slug: "massachusetts-express",
@@ -237,6 +277,8 @@ export const sites: Record<string, SiteConfig> = {
     state: "Massachusetts",
     stateAbbr: "MA",
     tagline: "Massachusetts' #1 News Source",
+    accent: "#12395B",
+    accentDark: "#0E2C46",
   },
   "michigan-express": {
     slug: "michigan-express",
@@ -248,6 +290,8 @@ export const sites: Record<string, SiteConfig> = {
     state: "Michigan",
     stateAbbr: "MI",
     tagline: "Michigan's #1 News Source",
+    accent: "#00274C",
+    accentDark: "#001E3B",
   },
   "minnesota-express": {
     slug: "minnesota-express",
@@ -259,6 +303,8 @@ export const sites: Record<string, SiteConfig> = {
     state: "Minnesota",
     stateAbbr: "MN",
     tagline: "Minnesota's #1 News Source",
+    accent: "#236192",
+    accentDark: "#1B4B71",
   },
   "mississippi-express": {
     slug: "mississippi-express",
@@ -270,6 +316,8 @@ export const sites: Record<string, SiteConfig> = {
     state: "Mississippi",
     stateAbbr: "MS",
     tagline: "Mississippi's #1 News Source",
+    accent: "#8B2942",
+    accentDark: "#6C1F33",
   },
   "missouri-express": {
     slug: "missouri-express",
@@ -281,6 +329,8 @@ export const sites: Record<string, SiteConfig> = {
     state: "Missouri",
     stateAbbr: "MO",
     tagline: "Missouri's #1 News Source",
+    accent: "#B5322E",
+    accentDark: "#8D2723",
   },
   "montana-express": {
     slug: "montana-express",
@@ -292,6 +342,8 @@ export const sites: Record<string, SiteConfig> = {
     state: "Montana",
     stateAbbr: "MT",
     tagline: "Montana's #1 News Source",
+    accent: "#1F4E5F",
+    accentDark: "#183C4A",
   },
   "nebraska-express": {
     slug: "nebraska-express",
@@ -303,6 +355,8 @@ export const sites: Record<string, SiteConfig> = {
     state: "Nebraska",
     stateAbbr: "NE",
     tagline: "Nebraska's #1 News Source",
+    accent: "#9B7E46",
+    accentDark: "#786236",
   },
   "nevada-express": {
     slug: "nevada-express",
@@ -314,6 +368,8 @@ export const sites: Record<string, SiteConfig> = {
     state: "Nevada",
     stateAbbr: "NV",
     tagline: "Nevada's #1 News Source",
+    accent: "#1E4D6B",
+    accentDark: "#173C53",
   },
   "new-hampshire-express": {
     slug: "new-hampshire-express",
@@ -325,6 +381,8 @@ export const sites: Record<string, SiteConfig> = {
     state: "New Hampshire",
     stateAbbr: "NH",
     tagline: "New Hampshire's #1 News Source",
+    accent: "#2E4A62",
+    accentDark: "#23394C",
   },
   "new-jersey-express": {
     slug: "new-jersey-express",
@@ -336,6 +394,8 @@ export const sites: Record<string, SiteConfig> = {
     state: "New Jersey",
     stateAbbr: "NJ",
     tagline: "New Jersey's #1 News Source",
+    accent: "#A67C2E",
+    accentDark: "#816023",
   },
   "new-mexico-express": {
     slug: "new-mexico-express",
@@ -347,6 +407,8 @@ export const sites: Record<string, SiteConfig> = {
     state: "New Mexico",
     stateAbbr: "NM",
     tagline: "New Mexico's #1 News Source",
+    accent: "#D2492A",
+    accentDark: "#A33820",
   },
   "new-york-express": {
     slug: "new-york-express",
@@ -358,6 +420,8 @@ export const sites: Record<string, SiteConfig> = {
     state: "New York",
     stateAbbr: "NY",
     tagline: "New York's #1 News Source",
+    accent: "#C4530F",
+    accentDark: "#98400B",
   },
   "north-carolina-express": {
     slug: "north-carolina-express",
@@ -369,6 +433,8 @@ export const sites: Record<string, SiteConfig> = {
     state: "North Carolina",
     stateAbbr: "NC",
     tagline: "North Carolina's #1 News Source",
+    accent: "#1B3F73",
+    accentDark: "#153159",
   },
   "north-dakota-express": {
     slug: "north-dakota-express",
@@ -380,6 +446,8 @@ export const sites: Record<string, SiteConfig> = {
     state: "North Dakota",
     stateAbbr: "ND",
     tagline: "North Dakota's #1 News Source",
+    accent: "#2D5D3A",
+    accentDark: "#23482D",
   },
   "ohio-express": {
     slug: "ohio-express",
@@ -391,6 +459,8 @@ export const sites: Record<string, SiteConfig> = {
     state: "Ohio",
     stateAbbr: "OH",
     tagline: "Ohio's #1 News Source",
+    accent: "#BB0000",
+    accentDark: "#910000",
   },
   "oklahoma-express": {
     slug: "oklahoma-express",
@@ -402,6 +472,8 @@ export const sites: Record<string, SiteConfig> = {
     state: "Oklahoma",
     stateAbbr: "OK",
     tagline: "Oklahoma's #1 News Source",
+    accent: "#8C1D40",
+    accentDark: "#6D1631",
   },
   "oregon-express": {
     slug: "oregon-express",
@@ -413,6 +485,8 @@ export const sites: Record<string, SiteConfig> = {
     state: "Oregon",
     stateAbbr: "OR",
     tagline: "Oregon's #1 News Source",
+    accent: "#154734",
+    accentDark: "#103728",
   },
   "pennsylvania-express": {
     slug: "pennsylvania-express",
@@ -424,6 +498,8 @@ export const sites: Record<string, SiteConfig> = {
     state: "Pennsylvania",
     stateAbbr: "PA",
     tagline: "Pennsylvania's #1 News Source",
+    accent: "#862633",
+    accentDark: "#681D27",
   },
   "rhode-island-express": {
     slug: "rhode-island-express",
@@ -435,6 +511,8 @@ export const sites: Record<string, SiteConfig> = {
     state: "Rhode Island",
     stateAbbr: "RI",
     tagline: "Rhode Island's #1 News Source",
+    accent: "#1D4E89",
+    accentDark: "#163C6A",
   },
   "south-carolina-express": {
     slug: "south-carolina-express",
@@ -446,6 +524,8 @@ export const sites: Record<string, SiteConfig> = {
     state: "South Carolina",
     stateAbbr: "SC",
     tagline: "South Carolina's #1 News Source",
+    accent: "#012169",
+    accentDark: "#001951",
   },
   "south-dakota-express": {
     slug: "south-dakota-express",
@@ -457,6 +537,8 @@ export const sites: Record<string, SiteConfig> = {
     state: "South Dakota",
     stateAbbr: "SD",
     tagline: "South Dakota's #1 News Source",
+    accent: "#3E5C76",
+    accentDark: "#30475C",
   },
   "tennessee-express": {
     slug: "tennessee-express",
@@ -468,6 +550,8 @@ export const sites: Record<string, SiteConfig> = {
     state: "Tennessee",
     stateAbbr: "TN",
     tagline: "Tennessee's #1 News Source",
+    accent: "#D96D00",
+    accentDark: "#A95500",
   },
   "texas-express": {
     slug: "texas-express",
@@ -479,6 +563,8 @@ export const sites: Record<string, SiteConfig> = {
     state: "Texas",
     stateAbbr: "TX",
     tagline: "Texas' #1 News Source",
+    accent: "#BF0A30",
+    accentDark: "#940725",
   },
   "utah-express": {
     slug: "utah-express",
@@ -490,6 +576,8 @@ export const sites: Record<string, SiteConfig> = {
     state: "Utah",
     stateAbbr: "UT",
     tagline: "Utah's #1 News Source",
+    accent: "#B85C38",
+    accentDark: "#8F472B",
   },
   "vermont-express": {
     slug: "vermont-express",
@@ -501,6 +589,8 @@ export const sites: Record<string, SiteConfig> = {
     state: "Vermont",
     stateAbbr: "VT",
     tagline: "Vermont's #1 News Source",
+    accent: "#007A33",
+    accentDark: "#005F27",
   },
   "virginia-express": {
     slug: "virginia-express",
@@ -512,6 +602,8 @@ export const sites: Record<string, SiteConfig> = {
     state: "Virginia",
     stateAbbr: "VA",
     tagline: "Virginia's #1 News Source",
+    accent: "#232D4B",
+    accentDark: "#1B233A",
   },
   "washington-express": {
     slug: "washington-express",
@@ -523,6 +615,8 @@ export const sites: Record<string, SiteConfig> = {
     state: "Washington",
     stateAbbr: "WA",
     tagline: "Washington's #1 News Source",
+    accent: "#046A38",
+    accentDark: "#03522B",
   },
   "west-virginia-express": {
     slug: "west-virginia-express",
@@ -534,6 +628,8 @@ export const sites: Record<string, SiteConfig> = {
     state: "West Virginia",
     stateAbbr: "WV",
     tagline: "West Virginia's #1 News Source",
+    accent: "#002855",
+    accentDark: "#001F42",
   },
   "wisconsin-express": {
     slug: "wisconsin-express",
@@ -545,6 +641,8 @@ export const sites: Record<string, SiteConfig> = {
     state: "Wisconsin",
     stateAbbr: "WI",
     tagline: "Wisconsin's #1 News Source",
+    accent: "#C5050C",
+    accentDark: "#990309",
   },
   "wyoming-express": {
     slug: "wyoming-express",
@@ -556,6 +654,8 @@ export const sites: Record<string, SiteConfig> = {
     state: "Wyoming",
     stateAbbr: "WY",
     tagline: "Wyoming's #1 News Source",
+    accent: "#7C4D3A",
+    accentDark: "#603C2D",
   },
 };
 

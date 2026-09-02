@@ -95,7 +95,7 @@ export default function SettingsPage() {
           <div className="bg-white rounded-xl shadow-sm p-6">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
-                <BarChart3 size={20} className="text-[#c1121f]" />
+                <BarChart3 size={20} className="text-[var(--accent)]" />
                 <h2 className="font-bold">Google Analytics Codes</h2>
               </div>
               <span className="text-sm text-gray-500">
@@ -138,7 +138,7 @@ export default function SettingsPage() {
                       value={site.gaId}
                       onChange={(e) => updateGa(site.slug, e.target.value.trim())}
                       placeholder="G-XXXXXXXXXX"
-                      className="flex-1 px-3 py-1.5 border rounded-lg text-sm font-mono outline-none focus:ring-2 focus:ring-[#c1121f] focus:border-transparent"
+                      className="flex-1 px-3 py-1.5 border rounded-lg text-sm font-mono outline-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent"
                     />
                   </div>
                 ))}
@@ -149,7 +149,7 @@ export default function SettingsPage() {
               <button
                 onClick={handleSaveAll}
                 disabled={saving || unsaved === 0}
-                className="px-6 py-3 rounded-xl font-bold text-white bg-[#c1121f] hover:bg-[#8b0000] disabled:bg-gray-300 flex items-center gap-2 transition-colors"
+                className="px-6 py-3 rounded-xl font-bold text-white bg-[var(--accent)] hover:bg-[var(--accent-dark)] disabled:bg-gray-300 flex items-center gap-2 transition-colors"
               >
                 {saving ? (
                   <><Loader2 size={18} className="animate-spin" /> Saving...</>

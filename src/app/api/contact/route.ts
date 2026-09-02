@@ -1,11 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
+import { sites as siteConfigs } from "@/config/sites";
 
 const CONTACT_EMAIL = "ainewss2023@gmail.com";
 
 export async function POST(req: NextRequest) {
   try {
     const { name, email, department, subject, message, siteName, siteDomain } = await req.json();
+
+    // Email clients do not support CSS variables, so resolve the site's
+    // state colour to a literal here.
+    const accent =
+      Object.values(siteConfigs).find((s) => s.domain === siteDomain)?.accent || "#C1121F";
 
     if (!name || !email || !department || !subject || !message) {
       return NextResponse.json({ error: "All fields are required." }, { status: 400 });
@@ -25,10 +31,10 @@ export async function POST(req: NextRequest) {
           <div style="background: #111; padding: 20px; text-align: center;">
             <h1 style="color: #fff; margin: 0; font-size: 24px;">
               <span style="color: #fff;">${siteName.split(" ")[0]}</span>
-              <span style="color: #c1121f;"> ${siteName.split(" ").slice(1).join(" ")}</span>
+              <span style="color: ${accent};"> ${siteName.split(" ").slice(1).join(" ")}</span>
             </h1>
           </div>
-          <div style="background: #c1121f; color: #fff; padding: 10px 20px; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; text-align: center;">
+          <div style="background: ${accent}; color: #fff; padding: 10px 20px; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; text-align: center;">
             New Contact Form Submission
           </div>
           <div style="padding: 30px 20px; background: #f9f9f9;">
@@ -39,7 +45,7 @@ export async function POST(req: NextRequest) {
               </tr>
               <tr>
                 <td style="padding: 8px 0; color: #666; font-size: 13px;"><strong>Department:</strong></td>
-                <td style="padding: 8px 0; font-size: 13px;"><span style="background: #c1121f; color: #fff; padding: 2px 8px; border-radius: 3px; font-size: 12px; font-weight: bold;">${department}</span></td>
+                <td style="padding: 8px 0; font-size: 13px;"><span style="background: ${accent}; color: #fff; padding: 2px 8px; border-radius: 3px; font-size: 12px; font-weight: bold;">${department}</span></td>
               </tr>
               <tr>
                 <td style="padding: 8px 0; color: #666; font-size: 13px;"><strong>Name:</strong></td>
@@ -54,7 +60,7 @@ export async function POST(req: NextRequest) {
                 <td style="padding: 8px 0; font-size: 13px;">${subject}</td>
               </tr>
             </table>
-            <div style="margin-top: 20px; padding: 15px; background: #fff; border-left: 3px solid #c1121f; border-radius: 4px;">
+            <div style="margin-top: 20px; padding: 15px; background: #fff; border-left: 3px solid ${accent}; border-radius: 4px;">
               <p style="margin: 0 0 5px; color: #666; font-size: 12px; text-transform: uppercase; letter-spacing: 1px;"><strong>Message:</strong></p>
               <p style="margin: 0; font-size: 14px; line-height: 1.6; white-space: pre-wrap;">${message}</p>
             </div>

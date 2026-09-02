@@ -129,7 +129,7 @@ export default function DomainsPage() {
             <button
               onClick={handleStart}
               disabled={running || !token || !serviceId || !environmentId}
-              className="w-full py-3 rounded-xl font-bold text-white bg-[#c1121f] hover:bg-[#8b0000] disabled:bg-gray-300 flex items-center justify-center gap-2 transition-colors"
+              className="w-full py-3 rounded-xl font-bold text-white bg-[var(--accent)] hover:bg-[var(--accent-dark)] disabled:bg-gray-300 flex items-center justify-center gap-2 transition-colors"
             >
               {running ? (
                 <><Loader2 size={18} className="animate-spin" /> Adding {totalDone}/{siteList.length}...</>

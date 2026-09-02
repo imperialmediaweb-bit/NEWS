@@ -206,7 +206,7 @@ export default function SeoTopicPage() {
           <p className="text-gray-500">
             The requested page does not exist.
           </p>
-          <Link href="/" className="text-[#c1121f] mt-4 inline-block hover:underline">
+          <Link href="/" className="text-[var(--accent)] mt-4 inline-block hover:underline">
             Return to homepage
           </Link>
         </div>
@@ -251,7 +251,7 @@ export default function SeoTopicPage() {
             <ChevronRight size={14} />
             <span className="text-gray-300">{stateConfig.state}</span>
             <ChevronRight size={14} />
-            <span className="text-[#c1121f]">{topicLabel}</span>
+            <span className="text-[var(--accent)]">{topicLabel}</span>
           </nav>
           <h1
             className="text-3xl md:text-5xl"
@@ -280,7 +280,7 @@ export default function SeoTopicPage() {
               <span
                 className="px-3 py-1 text-sm font-bold uppercase tracking-wider text-white"
                 style={{
-                  backgroundColor: "#c1121f",
+                  backgroundColor: "var(--accent)",
                   fontFamily: "'Oswald', sans-serif",
                 }}
               >
@@ -344,7 +344,7 @@ export default function SeoTopicPage() {
                       <span
                         className="absolute top-4 left-4 px-3 py-1 text-xs font-bold uppercase tracking-wider text-white rounded"
                         style={{
-                          backgroundColor: "#c1121f",
+                          backgroundColor: "var(--accent)",
                           fontFamily: "'Oswald', sans-serif",
                         }}
                       >
@@ -353,7 +353,7 @@ export default function SeoTopicPage() {
                     </div>
                     <div className="lg:col-span-5 p-6 flex flex-col justify-center">
                       <h2
-                        className="text-xl lg:text-2xl leading-tight group-hover:text-[#c1121f] transition-colors mb-4"
+                        className="text-xl lg:text-2xl leading-tight group-hover:text-[var(--accent)] transition-colors mb-4"
                         style={{
                           fontFamily: "'Playfair Display', serif",
                           fontWeight: 900,
@@ -393,7 +393,7 @@ export default function SeoTopicPage() {
                           <span
                             className="absolute top-3 left-3 px-2 py-0.5 text-[10px] font-bold uppercase text-white rounded"
                             style={{
-                              backgroundColor: "#c1121f",
+                              backgroundColor: "var(--accent)",
                               fontFamily: "'Oswald', sans-serif",
                             }}
                           >
@@ -402,7 +402,7 @@ export default function SeoTopicPage() {
                         </div>
                         <div className="p-4">
                           <h3
-                            className="text-sm font-bold leading-snug group-hover:text-[#c1121f] transition-colors line-clamp-2 mb-2"
+                            className="text-sm font-bold leading-snug group-hover:text-[var(--accent)] transition-colors line-clamp-2 mb-2"
                             style={{
                               fontFamily: "'Source Serif 4', serif",
                               fontWeight: 700,
@@ -444,7 +444,7 @@ export default function SeoTopicPage() {
                         </div>
                         <div className="flex flex-col justify-center">
                           <span
-                            className="text-[10px] font-bold uppercase text-[#c1121f] tracking-wider mb-1"
+                            className="text-[10px] font-bold uppercase text-[var(--accent)] tracking-wider mb-1"
                             style={{
                               fontFamily: "'Oswald', sans-serif",
                             }}
@@ -452,7 +452,7 @@ export default function SeoTopicPage() {
                             {article.category}
                           </span>
                           <h3
-                            className="text-sm font-bold leading-snug group-hover:text-[#c1121f] transition-colors line-clamp-2 mb-1"
+                            className="text-sm font-bold leading-snug group-hover:text-[var(--accent)] transition-colors line-clamp-2 mb-1"
                             style={{
                               fontFamily: "'Source Serif 4', serif",
                               fontWeight: 700,
@@ -480,7 +480,7 @@ export default function SeoTopicPage() {
               {/* Related Topics for this State */}
               <div className="bg-white rounded-xl shadow-sm p-5">
                 <h3
-                  className="text-lg mb-4 pb-3 border-b-2 border-[#c1121f]"
+                  className="text-lg mb-4 pb-3 border-b-2 border-[var(--accent)]"
                   style={{
                     fontFamily: "'Playfair Display', serif",
                     fontWeight: 900,
@@ -497,7 +497,7 @@ export default function SeoTopicPage() {
                       <li key={p.topicSlug}>
                         <Link
                           href={`/seo/${stateSlug}/${p.topicSlug}`}
-                          className="flex items-center gap-2 py-2 px-3 rounded-lg text-sm hover:bg-[#f5f5f5] hover:text-[#c1121f] transition-colors"
+                          className="flex items-center gap-2 py-2 px-3 rounded-lg text-sm hover:bg-[#f5f5f5] hover:text-[var(--accent)] transition-colors"
                           style={{
                             fontFamily: "'Source Serif 4', serif",
                             fontWeight: 600,
@@ -505,7 +505,7 @@ export default function SeoTopicPage() {
                         >
                           <ChevronRight
                             size={14}
-                            className="text-[#c1121f] flex-shrink-0"
+                            className="text-[var(--accent)] flex-shrink-0"
                           />
                           {label}
                         </Link>
@@ -534,7 +534,7 @@ export default function SeoTopicPage() {
                 </p>
                 <Link
                   href="/"
-                  className="inline-block px-4 py-2 bg-[#c1121f] text-white text-sm font-bold rounded hover:bg-[#9b111e] transition-colors"
+                  className="inline-block px-4 py-2 bg-[var(--accent)] text-white text-sm font-bold rounded hover:bg-[var(--accent-dark)] transition-colors"
                   style={{ fontFamily: "'Oswald', sans-serif" }}
                 >
                   Visit Homepage
@@ -549,7 +549,7 @@ export default function SeoTopicPage() {
       <div className="max-w-[1300px] mx-auto px-4 pb-8">
         <div className="bg-white rounded-xl shadow-sm p-6">
           <h2
-            className="text-2xl mb-6 pb-3 border-b-2 border-[#c1121f]"
+            className="text-2xl mb-6 pb-3 border-b-2 border-[var(--accent)]"
             style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900 }}
           >
             Frequently Asked Questions

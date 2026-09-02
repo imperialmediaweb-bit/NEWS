@@ -68,7 +68,7 @@ export default function ContactPage() {
               <div className="space-y-5">
                 <div className="flex items-start gap-4">
                   <div className="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center shrink-0">
-                    <MapPin className="w-5 h-5 text-[#c1121f]" />
+                    <MapPin className="w-5 h-5 text-[var(--accent)]" />
                   </div>
                   <div>
                     <h3 className="font-bold text-sm" style={{ fontFamily: "'Oswald', sans-serif", textTransform: "uppercase" }}>Location</h3>
@@ -78,7 +78,7 @@ export default function ContactPage() {
                 </div>
                 <div className="flex items-start gap-4">
                   <div className="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center shrink-0">
-                    <Clock className="w-5 h-5 text-[#c1121f]" />
+                    <Clock className="w-5 h-5 text-[var(--accent)]" />
                   </div>
                   <div>
                     <h3 className="font-bold text-sm" style={{ fontFamily: "'Oswald', sans-serif", textTransform: "uppercase" }}>Response Time</h3>

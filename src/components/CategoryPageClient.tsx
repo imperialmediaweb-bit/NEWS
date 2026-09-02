@@ -61,7 +61,7 @@ export default function CategoryPageClient({ site, categorySlug, categoryLabel }
           <nav className="flex items-center gap-2 text-sm text-gray-400 mb-4">
             <Link href="/" className="hover:text-white transition-colors">Home</Link>
             <span className="text-gray-600">&rsaquo;</span>
-            <span className="text-[#c1121f]">{categoryLabel}</span>
+            <span className="text-[var(--accent)]">{categoryLabel}</span>
           </nav>
           <h1 className="text-3xl md:text-5xl" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900 }}>
             {categoryLabel}
@@ -90,12 +90,12 @@ export default function CategoryPageClient({ site, categorySlug, categoryLabel }
                       <img src={leadArticle.img} alt={leadArticle.title}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                       <span className="absolute top-4 left-4 px-3 py-1 text-xs font-bold uppercase tracking-wider text-white rounded"
-                        style={{ backgroundColor: "#c1121f", fontFamily: "'Oswald', sans-serif" }}>
+                        style={{ backgroundColor: "var(--accent)", fontFamily: "'Oswald', sans-serif" }}>
                         {leadArticle.category}
                       </span>
                     </div>
                     <div className="lg:col-span-5 p-6 flex flex-col justify-center">
-                      <h2 className="text-xl lg:text-2xl leading-tight group-hover:text-[#c1121f] transition-colors mb-4"
+                      <h2 className="text-xl lg:text-2xl leading-tight group-hover:text-[var(--accent)] transition-colors mb-4"
                         style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900 }}>
                         {leadArticle.title}
                       </h2>
@@ -115,7 +115,7 @@ export default function CategoryPageClient({ site, categorySlug, categoryLabel }
 
             <div className="flex items-center gap-3 mb-5">
               <span className="px-3 py-1 text-sm font-bold uppercase tracking-wider text-white"
-                style={{ backgroundColor: "#c1121f", fontFamily: "'Oswald', sans-serif" }}>
+                style={{ backgroundColor: "var(--accent)", fontFamily: "'Oswald', sans-serif" }}>
                 Latest
               </span>
               <div className="flex-1 h-[2px] bg-gray-200" />
@@ -131,12 +131,12 @@ export default function CategoryPageClient({ site, categorySlug, categoryLabel }
                       <img src={article.img} alt={article.title} loading="lazy"
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                       <span className="absolute top-3 left-3 px-2 py-0.5 text-[10px] font-bold uppercase text-white rounded"
-                        style={{ backgroundColor: "#c1121f", fontFamily: "'Oswald', sans-serif" }}>
+                        style={{ backgroundColor: "var(--accent)", fontFamily: "'Oswald', sans-serif" }}>
                         {article.category}
                       </span>
                     </div>
                     <div className="p-4">
-                      <h3 className="text-sm font-bold leading-snug group-hover:text-[#c1121f] transition-colors line-clamp-2 mb-2"
+                      <h3 className="text-sm font-bold leading-snug group-hover:text-[var(--accent)] transition-colors line-clamp-2 mb-2"
                         style={{ fontFamily: "'Source Serif 4', serif", fontWeight: 700 }}>
                         {article.title}
                       </h3>
@@ -166,11 +166,11 @@ export default function CategoryPageClient({ site, categorySlug, categoryLabel }
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                       </div>
                       <div className="flex flex-col justify-center">
-                        <span className="text-[10px] font-bold uppercase text-[#c1121f] tracking-wider mb-1"
+                        <span className="text-[10px] font-bold uppercase text-[var(--accent)] tracking-wider mb-1"
                           style={{ fontFamily: "'Oswald', sans-serif" }}>
                           {article.category}
                         </span>
-                        <h3 className="text-sm font-bold leading-snug group-hover:text-[#c1121f] transition-colors line-clamp-2 mb-1"
+                        <h3 className="text-sm font-bold leading-snug group-hover:text-[var(--accent)] transition-colors line-clamp-2 mb-1"
                           style={{ fontFamily: "'Source Serif 4', serif", fontWeight: 700 }}>
                           {article.title}
                         </h3>
@@ -191,7 +191,7 @@ export default function CategoryPageClient({ site, categorySlug, categoryLabel }
                 <button
                   onClick={() => loadArticles(page + 1, true)}
                   disabled={loading}
-                  className="px-8 py-3 bg-[#c1121f] text-white font-bold rounded-lg hover:bg-[#9b111e] transition-colors disabled:opacity-50"
+                  className="px-8 py-3 bg-[var(--accent)] text-white font-bold rounded-lg hover:bg-[var(--accent-dark)] transition-colors disabled:opacity-50"
                   style={{ fontFamily: "'Oswald', sans-serif", letterSpacing: "1px", textTransform: "uppercase" }}
                 >
                   {loading ? "Loading..." : "Load More Articles"}

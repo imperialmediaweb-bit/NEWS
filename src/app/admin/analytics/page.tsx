@@ -66,7 +66,7 @@ export default function AnalyticsDashboard() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold flex items-center gap-2">
-            <BarChart3 className="w-6 h-6 text-[#c1121f]" />
+            <BarChart3 className="w-6 h-6 text-[var(--accent)]" />
             Traffic Analytics
           </h1>
           <p className="text-gray-500 text-sm mt-1">

@@ -51,7 +51,7 @@ export default function TermsPage() {
         <div className="bg-white rounded-xl shadow-sm p-6 md:p-10">
           <div className="prose prose-lg max-w-none" style={{ fontFamily: "'Source Serif 4', serif", lineHeight: 1.8 }}>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               1. Acceptance of Terms
             </h2>
             <p>
@@ -61,7 +61,7 @@ export default function TermsPage() {
               {site.name} reserves the right to update or modify these Terms at any time without prior notice. Your continued use of the website following any changes constitutes your acceptance of such changes. We encourage you to review these Terms periodically.
             </p>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               2. Intellectual Property &amp; Content Ownership
             </h2>
             <p>
@@ -77,7 +77,7 @@ export default function TermsPage() {
               <li>You may share links to our articles via social media, provided you do not modify the content.</li>
             </ul>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               3. Prohibited Uses
             </h2>
             <p>You agree not to use {site.name} for any purpose that is unlawful or prohibited by these Terms. Specifically, you agree not to:</p>
@@ -92,7 +92,7 @@ export default function TermsPage() {
               <li>Use the website in any manner that could disable, overburden, damage, or impair the site.</li>
             </ul>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               4. User-Generated Content
             </h2>
             <p>
@@ -102,7 +102,7 @@ export default function TermsPage() {
               You represent and warrant that: (a) you own or control all rights in and to the User Content; (b) the User Content is accurate; (c) the User Content does not violate these Terms; and (d) the User Content will not cause injury to any person or entity.
             </p>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               5. Disclaimer of Warranties
             </h2>
             <p>
@@ -112,7 +112,7 @@ export default function TermsPage() {
               {site.name} does not warrant the accuracy, completeness, or usefulness of any information on the website. Any reliance you place on such information is strictly at your own risk. We disclaim all liability and responsibility arising from any reliance placed on such materials by you or any other visitor to the website.
             </p>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               6. Limitation of Liability
             </h2>
             <p>
@@ -128,28 +128,28 @@ export default function TermsPage() {
               IN NO EVENT SHALL OUR TOTAL LIABILITY TO YOU FOR ALL CLAIMS EXCEED THE AMOUNT OF ONE HUNDRED DOLLARS ($100.00).
             </p>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               7. Indemnification
             </h2>
             <p>
               You agree to indemnify, defend, and hold harmless MediaChief, {site.name}, and their officers, directors, employees, agents, licensors, and suppliers from and against all claims, losses, expenses, damages, and costs, including reasonable attorneys&apos; fees, resulting from any violation of these Terms or any activity related to your account (including negligent or wrongful conduct).
             </p>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               8. Third-Party Links
             </h2>
             <p>
               {site.name} may contain links to third-party websites or services that are not owned or controlled by MediaChief. We have no control over, and assume no responsibility for, the content, privacy policies, or practices of any third-party websites or services. You acknowledge and agree that {site.name} shall not be responsible or liable, directly or indirectly, for any damage or loss caused or alleged to be caused by or in connection with the use of or reliance on any such content, goods, or services available on or through any such websites or services.
             </p>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               9. Copyright Complaints (DMCA)
             </h2>
             <p>
-              If you believe that any content on {site.name} infringes your copyright, please see our <Link href="/dmca" className="text-[#c1121f] underline">DMCA Policy</Link> for instructions on sending us a notice of copyright infringement. It is our policy to respond to clear notices of alleged copyright infringement that comply with the Digital Millennium Copyright Act.
+              If you believe that any content on {site.name} infringes your copyright, please see our <Link href="/dmca" className="text-[var(--accent)] underline">DMCA Policy</Link> for instructions on sending us a notice of copyright infringement. It is our policy to respond to clear notices of alleged copyright infringement that comply with the Digital Millennium Copyright Act.
             </p>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               10. Governing Law &amp; Dispute Resolution
             </h2>
             <p>
@@ -159,21 +159,21 @@ export default function TermsPage() {
               Any cause of action or claim you may have arising out of or relating to these Terms or the website must be commenced within one (1) year after the cause of action accrues. Otherwise, such cause of action or claim is permanently barred.
             </p>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               11. Age Requirement
             </h2>
             <p>
               You must be at least 13 years of age to use this website. By using {site.name}, you represent and warrant that you are at least 13 years old. If you are under 18, you may use the website only with the involvement and consent of a parent or guardian.
             </p>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               12. Severability
             </h2>
             <p>
               If any provision of these Terms is held to be unenforceable or invalid, such provision will be changed and interpreted to accomplish the objectives of such provision to the greatest extent possible under applicable law, and the remaining provisions will continue in full force and effect.
             </p>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               13. Contact Information
             </h2>
             <p>
@@ -181,7 +181,7 @@ export default function TermsPage() {
             </p>
             <p>
               <strong>{site.name}</strong> — A MediaChief Publication<br />
-              Visit our <Link href="/contact" className="text-[#c1121f] underline">Contact Page</Link>
+              Visit our <Link href="/contact" className="text-[var(--accent)] underline">Contact Page</Link>
             </p>
 
           </div>

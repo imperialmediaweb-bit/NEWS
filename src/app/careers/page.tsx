@@ -51,14 +51,14 @@ export default function CareersPage() {
         <div className="bg-white rounded-xl shadow-sm p-6 md:p-10">
           <div className="prose prose-lg max-w-none" style={{ fontFamily: "'Source Serif 4', serif", lineHeight: 1.8 }}>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               About MediaChief
             </h2>
             <p>
               MediaChief is the largest digital newspaper trust in the United States, operating 50 state-based news publications — including {site.name}. We are dedicated to revitalizing local journalism through modern technology, innovative storytelling, and a commitment to serving every community in America.
             </p>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               Why Work With Us
             </h2>
             <ul>
@@ -69,7 +69,7 @@ export default function CareersPage() {
               <li><strong>Diverse Team:</strong> We value diversity of perspective, background, and experience in our newsrooms.</li>
             </ul>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               Departments
             </h2>
 
@@ -93,7 +93,7 @@ export default function CareersPage() {
               Finance, HR, legal, and operations professionals supporting the day-to-day operations of our 50-publication network.
             </p>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               How to Apply
             </h2>
             <p>
@@ -107,7 +107,7 @@ export default function CareersPage() {
               Please include your resume, a brief cover letter, and any relevant portfolio or writing samples.
             </p>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               Equal Opportunity Employer
             </h2>
             <p>

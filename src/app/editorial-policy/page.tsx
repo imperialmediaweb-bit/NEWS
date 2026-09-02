@@ -51,7 +51,7 @@ export default function EditorialPolicyPage() {
         <div className="bg-white rounded-xl shadow-sm p-6 md:p-10">
           <div className="prose prose-lg max-w-none" style={{ fontFamily: "'Source Serif 4', serif", lineHeight: 1.8 }}>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               1. Content Creation Standards
             </h2>
             <p>
@@ -64,10 +64,10 @@ export default function EditorialPolicyPage() {
               <li>Direct quotes are used accurately and in proper context.</li>
             </ul>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               2. AI Content Disclosure
             </h2>
-            <div style={{ background: "#fff3f3", padding: "1.5rem", borderLeft: "4px solid #c1121f", margin: "1rem 0", borderRadius: "0 8px 8px 0" }}>
+            <div style={{ background: "#fff3f3", padding: "1.5rem", borderLeft: "4px solid var(--accent)", margin: "1rem 0", borderRadius: "0 8px 8px 0" }}>
               <p style={{ margin: 0, fontWeight: 600 }}>
                 Some content on {site.name} may be created with the assistance of artificial intelligence (AI) technology. We believe in full transparency about our content creation process.
               </p>
@@ -89,7 +89,7 @@ export default function EditorialPolicyPage() {
               <li>When an article has been substantially created by AI, this is disclosed in the byline (e.g., &quot;Staff Report&quot; or &quot;AI-Assisted&quot;).</li>
             </ul>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               3. Fact-Checking Process
             </h2>
             <ul>
@@ -99,7 +99,7 @@ export default function EditorialPolicyPage() {
               <li>Breaking news is updated as new information becomes available, with timestamps noting updates.</li>
             </ul>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               4. Attribution &amp; Sourcing
             </h2>
             <ul>
@@ -111,7 +111,7 @@ export default function EditorialPolicyPage() {
               <li>When citing other news organizations, we provide attribution and link to the original report.</li>
             </ul>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               5. Sponsored Content &amp; FTC Compliance
             </h2>
             <p>
@@ -125,7 +125,7 @@ export default function EditorialPolicyPage() {
               <li>Advertisers do not have editorial control over sponsored content. All sponsored content is reviewed by editorial staff.</li>
             </ul>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               6. Byline Standards
             </h2>
             <ul>
@@ -135,7 +135,7 @@ export default function EditorialPolicyPage() {
               <li><strong>Contributing Writers:</strong> Guest contributors and freelancers are identified as such.</li>
             </ul>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               7. Image &amp; Media Usage
             </h2>
             <ul>
@@ -145,7 +145,7 @@ export default function EditorialPolicyPage() {
               <li>Photo credits are provided when required by the license or source.</li>
             </ul>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               8. Pre-Publication Compliance Checklist
             </h2>
             <p>Every article published on {site.name} must satisfy the following before publication:</p>
@@ -164,22 +164,22 @@ export default function EditorialPolicyPage() {
               </ul>
             </div>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               9. Corrections &amp; Updates
             </h2>
             <p>
-              When errors are identified after publication, we follow our <Link href="/corrections" className="text-[#c1121f] underline">Corrections Policy</Link>. Significant corrections are noted at the top of the article with the date of correction. We do not silently alter published content.
+              When errors are identified after publication, we follow our <Link href="/corrections" className="text-[var(--accent)] underline">Corrections Policy</Link>. Significant corrections are noted at the top of the article with the date of correction. We do not silently alter published content.
             </p>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               10. Contact
             </h2>
             <p>
               Questions about our editorial practices? Contact our editorial team at:
             </p>
             <p>
-              Visit our <Link href="/contact" className="text-[#c1121f] underline">Contact Page</Link><br />
-              See also: <Link href="/ethics" className="text-[#c1121f] underline">Ethics Policy</Link> | <Link href="/corrections" className="text-[#c1121f] underline">Corrections Policy</Link>
+              Visit our <Link href="/contact" className="text-[var(--accent)] underline">Contact Page</Link><br />
+              See also: <Link href="/ethics" className="text-[var(--accent)] underline">Ethics Policy</Link> | <Link href="/corrections" className="text-[var(--accent)] underline">Corrections Policy</Link>
             </p>
 
           </div>

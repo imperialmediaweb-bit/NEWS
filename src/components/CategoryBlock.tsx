@@ -19,7 +19,7 @@ interface CategoryBlockProps {
   layout?: "grid3" | "lead-side" | "list";
 }
 
-export default function CategoryBlock({ title, articles, accent = "#c1121f", layout = "grid3" }: CategoryBlockProps) {
+export default function CategoryBlock({ title, articles, accent = "var(--accent)", layout = "grid3" }: CategoryBlockProps) {
   if (layout === "list") {
     return <ListLayout title={title} articles={articles} accent={accent} />;
   }
@@ -35,7 +35,7 @@ function Grid3Layout({ title, articles, accent }: { title: string; articles: Art
     <section className="py-6">
       {/* Red bar section header */}
       <div className="flex items-center gap-3 mb-5">
-        <div className="bg-[#c1121f] text-white px-4 py-2" style={{ backgroundColor: accent }}>
+        <div className="bg-[var(--accent)] text-white px-4 py-2" style={{ backgroundColor: accent }}>
           <h2 className="text-sm md:text-base font-black uppercase tracking-widest" style={{ fontFamily: "'Oswald', sans-serif" }}>
             {title}
           </h2>
@@ -94,7 +94,7 @@ function Grid3Layout({ title, articles, accent }: { title: string; articles: Art
                 <div className="relative overflow-hidden">
                   <img src={article.img} alt={article.title} loading="lazy" className="w-full h-[150px] md:h-[200px] object-cover group-hover:scale-110 transition-transform duration-500" />
                 </div>
-                <h4 className="mt-2 text-[13px] font-bold leading-tight group-hover:text-[#c1121f] transition-colors line-clamp-2" style={{ fontFamily: "'Source Serif 4', serif" }}>
+                <h4 className="mt-2 text-[13px] font-bold leading-tight group-hover:text-[var(--accent)] transition-colors line-clamp-2" style={{ fontFamily: "'Source Serif 4', serif" }}>
                   {article.title}
                 </h4>
                 <span className="text-[10px] text-gray-400 mt-0.5 block">{article.date}</span>
@@ -115,7 +115,7 @@ function LeadSideLayout({ title, articles, accent }: { title: string; articles: 
   return (
     <section className="py-6">
       <div className="flex items-center gap-3 mb-5">
-        <div className="bg-[#c1121f] text-white px-4 py-2" style={{ backgroundColor: accent }}>
+        <div className="bg-[var(--accent)] text-white px-4 py-2" style={{ backgroundColor: accent }}>
           <h2 className="text-sm md:text-base font-black uppercase tracking-widest" style={{ fontFamily: "'Oswald', sans-serif" }}>
             {title}
           </h2>
@@ -162,7 +162,7 @@ function LeadSideLayout({ title, articles, accent }: { title: string; articles: 
                 <img src={article.img} alt={article.title} loading="lazy" className="w-[100px] h-[75px] md:w-[140px] md:h-[100px] object-cover shrink-0 group-hover:opacity-90 transition-opacity" />
                 <div className="min-w-0">
                   <span className="text-[9px] font-bold uppercase tracking-widest" style={{ color: accent, fontFamily: "'Oswald', sans-serif" }}>{article.category}</span>
-                  <h4 className="text-[14px] font-bold leading-tight group-hover:text-[#c1121f] transition-colors line-clamp-2 mt-0.5" style={{ fontFamily: "'Source Serif 4', serif" }}>{article.title}</h4>
+                  <h4 className="text-[14px] font-bold leading-tight group-hover:text-[var(--accent)] transition-colors line-clamp-2 mt-0.5" style={{ fontFamily: "'Source Serif 4', serif" }}>{article.title}</h4>
                   <span className="text-[10px] text-gray-400 mt-1 block">{article.date}</span>
                 </div>
               </motion.article>
@@ -179,7 +179,7 @@ function ListLayout({ title, articles, accent }: { title: string; articles: Arti
   return (
     <section className="py-6">
       <div className="flex items-center gap-3 mb-5">
-        <div className="bg-[#c1121f] text-white px-4 py-2" style={{ backgroundColor: accent }}>
+        <div className="bg-[var(--accent)] text-white px-4 py-2" style={{ backgroundColor: accent }}>
           <h2 className="text-sm md:text-base font-black uppercase tracking-widest" style={{ fontFamily: "'Oswald', sans-serif" }}>
             {title}
           </h2>
@@ -200,7 +200,7 @@ function ListLayout({ title, articles, accent }: { title: string; articles: Arti
               <img src={article.img} alt={article.title} loading="lazy" className="w-[110px] h-[80px] md:w-[160px] md:h-[115px] object-cover shrink-0 group-hover:opacity-90 transition-opacity" />
               <div className="min-w-0">
                 <span className="text-[9px] font-bold uppercase tracking-widest" style={{ color: accent, fontFamily: "'Oswald', sans-serif" }}>{article.category}</span>
-                <h4 className="text-[14px] md:text-[17px] font-bold leading-snug group-hover:text-[#c1121f] transition-colors line-clamp-2 mt-0.5" style={{ fontFamily: "'Source Serif 4', serif", fontWeight: 700 }}>
+                <h4 className="text-[14px] md:text-[17px] font-bold leading-snug group-hover:text-[var(--accent)] transition-colors line-clamp-2 mt-0.5" style={{ fontFamily: "'Source Serif 4', serif", fontWeight: 700 }}>
                   {article.title}
                 </h4>
                 {article.summary && <p className="text-gray-500 text-[13px] line-clamp-2 mt-1 leading-relaxed">{article.summary}</p>}

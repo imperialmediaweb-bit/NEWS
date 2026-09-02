@@ -37,7 +37,7 @@ export default function FeaturedStory({ article }: FeaturedStoryProps) {
         {/* Badge */}
         <div className="absolute top-5 left-5">
           <span
-            className="bg-[#c1121f] text-white text-[11px] font-bold uppercase tracking-widest px-3 py-1.5 rounded shadow-lg"
+            className="bg-[var(--accent)] text-white text-[11px] font-bold uppercase tracking-widest px-3 py-1.5 rounded shadow-lg"
             style={{ fontFamily: "'Oswald', sans-serif" }}
           >
             {article.category}
@@ -60,7 +60,7 @@ export default function FeaturedStory({ article }: FeaturedStoryProps) {
           <div className="flex items-center gap-4 text-gray-300 text-xs">
             {article.author && <span className="font-semibold text-white">{article.author}</span>}
             <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {article.date}</span>
-            <span className="flex items-center gap-1 text-[#c1121f] font-bold uppercase tracking-wider group-hover:underline">
+            <span className="flex items-center gap-1 text-[var(--accent)] font-bold uppercase tracking-wider group-hover:underline">
               Read Full Story <ArrowRight className="w-3 h-3" />
             </span>
           </div>

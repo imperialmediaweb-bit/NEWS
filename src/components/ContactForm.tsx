@@ -53,7 +53,7 @@ export default function ContactForm({ siteName, siteDomain }: ContactFormProps) 
         </p>
         <button
           onClick={() => setStatus("idle")}
-          className="bg-[#c1121f] text-white px-6 py-2.5 rounded-lg text-sm font-bold uppercase tracking-wider hover:bg-[#9b111e] transition-colors"
+          className="bg-[var(--accent)] text-white px-6 py-2.5 rounded-lg text-sm font-bold uppercase tracking-wider hover:bg-[var(--accent-dark)] transition-colors"
           style={{ fontFamily: "'Oswald', sans-serif" }}
         >
           Send Another Message
@@ -85,7 +85,7 @@ export default function ContactForm({ siteName, siteDomain }: ContactFormProps) 
             required
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-[#c1121f] focus:ring-1 focus:ring-[#c1121f] transition-colors"
+            className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] transition-colors"
             placeholder="John Doe"
           />
         </div>
@@ -99,7 +99,7 @@ export default function ContactForm({ siteName, siteDomain }: ContactFormProps) 
             required
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-[#c1121f] focus:ring-1 focus:ring-[#c1121f] transition-colors"
+            className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] transition-colors"
             placeholder="john@example.com"
           />
         </div>
@@ -112,7 +112,7 @@ export default function ContactForm({ siteName, siteDomain }: ContactFormProps) 
             required
             value={formData.department}
             onChange={(e) => setFormData({ ...formData, department: e.target.value })}
-            className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-[#c1121f] focus:ring-1 focus:ring-[#c1121f] transition-colors bg-white"
+            className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] transition-colors bg-white"
           >
             <option value="" disabled>Select a department...</option>
             <option value="General Inquiries">General Inquiries</option>
@@ -133,7 +133,7 @@ export default function ContactForm({ siteName, siteDomain }: ContactFormProps) 
             required
             value={formData.subject}
             onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-            className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-[#c1121f] focus:ring-1 focus:ring-[#c1121f] transition-colors"
+            className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] transition-colors"
             placeholder="What is this about?"
           />
         </div>
@@ -147,7 +147,7 @@ export default function ContactForm({ siteName, siteDomain }: ContactFormProps) 
             rows={5}
             value={formData.message}
             onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-            className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-[#c1121f] focus:ring-1 focus:ring-[#c1121f] transition-colors resize-none"
+            className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] transition-colors resize-none"
             placeholder="Write your message here..."
           />
         </div>
@@ -155,7 +155,7 @@ export default function ContactForm({ siteName, siteDomain }: ContactFormProps) 
         <button
           type="submit"
           disabled={status === "sending"}
-          className="w-full bg-[#c1121f] text-white px-6 py-3 rounded-lg text-sm font-bold uppercase tracking-wider hover:bg-[#9b111e] transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full bg-[var(--accent)] text-white px-6 py-3 rounded-lg text-sm font-bold uppercase tracking-wider hover:bg-[var(--accent-dark)] transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           style={{ fontFamily: "'Oswald', sans-serif" }}
         >
           {status === "sending" ? (

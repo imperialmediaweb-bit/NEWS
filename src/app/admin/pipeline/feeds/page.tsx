@@ -10,7 +10,7 @@ export default function FeedsPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold flex items-center gap-2">
-          <Rss className="w-6 h-6 text-[#c1121f]" />
+          <Rss className="w-6 h-6 text-[var(--accent)]" />
           Feed Configuration
         </h1>
         <p className="text-gray-500 text-sm mt-1">

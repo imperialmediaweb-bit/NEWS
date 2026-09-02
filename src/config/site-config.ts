@@ -9,4 +9,8 @@ export interface SiteConfig {
   stateAbbr: string;
   tagline: string;
   gaMeasurementId?: string;
+  /** State identity colour — drives the whole site theme via CSS vars. */
+  accent: string;
+  /** Darker shade of accent, used for hovers and active nav. */
+  accentDark: string;
 }

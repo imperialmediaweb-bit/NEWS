@@ -198,7 +198,7 @@ export default async function HubPage({
                 Home
               </Link>
               <span>/</span>
-              <span className="text-[#c1121f]">{label} Hub</span>
+              <span className="text-[var(--accent)]">{label} Hub</span>
             </nav>
             <h1
               className="text-3xl md:text-5xl mb-4"
@@ -240,7 +240,7 @@ export default async function HubPage({
                       )}
                       <div className="p-4">
                         <h2
-                          className="font-bold text-sm leading-snug group-hover:text-[#c1121f] transition-colors line-clamp-2 mb-2"
+                          className="font-bold text-sm leading-snug group-hover:text-[var(--accent)] transition-colors line-clamp-2 mb-2"
                           style={{
                             fontFamily: "'Playfair Display', serif",
                             fontWeight: 900,
@@ -268,7 +268,7 @@ export default async function HubPage({
 
               {/* All articles list */}
               <h2
-                className="text-xl font-bold mb-4 pb-2 border-b-2 border-[#c1121f]"
+                className="text-xl font-bold mb-4 pb-2 border-b-2 border-[var(--accent)]"
                 style={{
                   fontFamily: "'Playfair Display', serif",
                   fontWeight: 900,
@@ -291,7 +291,7 @@ export default async function HubPage({
                       />
                     ) : null}
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-bold text-sm group-hover:text-[#c1121f] transition-colors line-clamp-2">
+                      <h3 className="font-bold text-sm group-hover:text-[var(--accent)] transition-colors line-clamp-2">
                         {a.title as string}
                       </h3>
                       <p className="text-xs text-gray-500 mt-1 line-clamp-2">
@@ -325,7 +325,7 @@ export default async function HubPage({
                 {topAuthors.length > 0 && (
                   <div className="bg-white rounded-xl shadow-sm p-5">
                     <h3
-                      className="text-lg mb-4 pb-3 border-b-2 border-[#c1121f]"
+                      className="text-lg mb-4 pb-3 border-b-2 border-[var(--accent)]"
                       style={{
                         fontFamily: "'Playfair Display', serif",
                         fontWeight: 900,
@@ -356,7 +356,7 @@ export default async function HubPage({
                               href={`/author/${slug}`}
                               className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 transition-colors"
                             >
-                              <div className="w-10 h-10 bg-[#c1121f] rounded-full flex items-center justify-center text-white text-xs font-bold">
+                              <div className="w-10 h-10 bg-[var(--accent)] rounded-full flex items-center justify-center text-white text-xs font-bold">
                                 {name
                                   .split(" ")
                                   .map((n: string) => n[0])
@@ -382,7 +382,7 @@ export default async function HubPage({
                 {/* Related Topic Hubs */}
                 <div className="bg-white rounded-xl shadow-sm p-5">
                   <h3
-                    className="text-lg mb-4 pb-3 border-b-2 border-[#c1121f]"
+                    className="text-lg mb-4 pb-3 border-b-2 border-[var(--accent)]"
                     style={{
                       fontFamily: "'Playfair Display', serif",
                       fontWeight: 900,
@@ -428,7 +428,7 @@ export default async function HubPage({
                   <div className="flex flex-wrap gap-2">
                     <Link
                       href={`/${params.category}`}
-                      className="px-3 py-1 text-xs bg-[#c1121f] rounded hover:bg-[#9b111e] transition-colors"
+                      className="px-3 py-1 text-xs bg-[var(--accent)] rounded hover:bg-[var(--accent-dark)] transition-colors"
                     >
                       Latest {label}
                     </Link>

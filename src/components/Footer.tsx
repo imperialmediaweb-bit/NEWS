@@ -34,7 +34,7 @@ export default function Footer({ site, about }: FooterProps) {
               <span className="text-2xl md:text-3xl text-white" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900 }}>
                 {site.logoFirst}
               </span>
-              <span className="text-2xl md:text-3xl text-[#c1121f]" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900 }}>
+              <span className="text-2xl md:text-3xl text-[var(--accent)]" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900 }}>
                 {site.logoSecond}
               </span>
             </h3>
@@ -45,7 +45,7 @@ export default function Footer({ site, about }: FooterProps) {
 
           {/* Categories */}
           <div className="md:col-span-3">
-            <h4 className="text-sm font-bold uppercase tracking-wider mb-4 text-[#c1121f]" style={{ fontFamily: "'Oswald', sans-serif" }}>
+            <h4 className="text-sm font-bold uppercase tracking-wider mb-4 text-[var(--accent)]" style={{ fontFamily: "'Oswald', sans-serif" }}>
               Categories
             </h4>
             <ul className="space-y-2">
@@ -64,7 +64,7 @@ export default function Footer({ site, about }: FooterProps) {
 
           {/* Quick Links */}
           <div className="md:col-span-2">
-            <h4 className="text-sm font-bold uppercase tracking-wider mb-4 text-[#c1121f]" style={{ fontFamily: "'Oswald', sans-serif" }}>
+            <h4 className="text-sm font-bold uppercase tracking-wider mb-4 text-[var(--accent)]" style={{ fontFamily: "'Oswald', sans-serif" }}>
               Company
             </h4>
             <ul className="space-y-2">
@@ -80,7 +80,7 @@ export default function Footer({ site, about }: FooterProps) {
 
           {/* Newsletter */}
           <div className="md:col-span-3">
-            <h4 className="text-sm font-bold uppercase tracking-wider mb-4 text-[#c1121f]" style={{ fontFamily: "'Oswald', sans-serif" }}>
+            <h4 className="text-sm font-bold uppercase tracking-wider mb-4 text-[var(--accent)]" style={{ fontFamily: "'Oswald', sans-serif" }}>
               Newsletter
             </h4>
             <p className="text-gray-400 text-sm mb-4">Get breaking news and top stories delivered to your inbox every morning.</p>
@@ -88,9 +88,9 @@ export default function Footer({ site, about }: FooterProps) {
               <input
                 type="email"
                 placeholder="Your email"
-                className="flex-1 px-3 py-2.5 rounded text-sm bg-white/10 border border-white/20 text-white placeholder:text-gray-500 focus:outline-none focus:border-[#c1121f]"
+                className="flex-1 px-3 py-2.5 rounded text-sm bg-white/10 border border-white/20 text-white placeholder:text-gray-500 focus:outline-none focus:border-[var(--accent)]"
               />
-              <button className="bg-[#c1121f] hover:bg-[#9b111e] px-4 py-2.5 rounded transition-colors">
+              <button className="bg-[var(--accent)] hover:bg-[var(--accent-dark)] px-4 py-2.5 rounded transition-colors">
                 <Mail className="w-4 h-4" />
               </button>
             </div>

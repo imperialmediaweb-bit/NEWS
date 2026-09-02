@@ -356,7 +356,7 @@ export default function ImportPage() {
         <button
           onClick={() => setMode("auto")}
           className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
-            mode === "auto" ? "bg-[#c1121f] text-white" : "bg-white text-gray-600 hover:bg-gray-50"
+            mode === "auto" ? "bg-[var(--accent)] text-white" : "bg-white text-gray-600 hover:bg-gray-50"
           }`}
         >
           <Zap size={16} className="inline mr-2" />
@@ -365,7 +365,7 @@ export default function ImportPage() {
         <button
           onClick={() => setMode("xml")}
           className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
-            mode === "xml" ? "bg-[#c1121f] text-white" : "bg-white text-gray-600 hover:bg-gray-50"
+            mode === "xml" ? "bg-[var(--accent)] text-white" : "bg-white text-gray-600 hover:bg-gray-50"
           }`}
         >
           <Upload size={16} className="inline mr-2" />
@@ -397,7 +397,7 @@ export default function ImportPage() {
               <button
                 onClick={handleAutoImport}
                 disabled={importing}
-                className="w-full py-3 rounded-xl font-bold text-white bg-[#c1121f] hover:bg-[#8b0000] disabled:bg-gray-300 flex items-center justify-center gap-2 transition-colors"
+                className="w-full py-3 rounded-xl font-bold text-white bg-[var(--accent)] hover:bg-[var(--accent-dark)] disabled:bg-gray-300 flex items-center justify-center gap-2 transition-colors"
               >
                 {importing ? (
                   <><Loader2 size={18} className="animate-spin" /> Importing {totalDone}/{results.length}...</>
@@ -452,7 +452,7 @@ export default function ImportPage() {
               </select>
               <div
                 onClick={() => fileRef.current?.click()}
-                className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center cursor-pointer hover:border-[#c1121f] hover:bg-red-50 transition-colors"
+                className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center cursor-pointer hover:border-[var(--accent)] hover:bg-red-50 transition-colors"
               >
                 <Upload size={32} className="mx-auto mb-2 text-gray-400" />
                 <p className="text-sm text-gray-500">Click to select XML file(s)</p>
@@ -471,7 +471,7 @@ export default function ImportPage() {
                 </div>
               )}
               <button onClick={handleXmlImport} disabled={xmlFiles.length === 0 || importing}
-                className="w-full mt-4 py-3 rounded-xl font-bold text-white bg-[#c1121f] hover:bg-[#8b0000] disabled:bg-gray-300 flex items-center justify-center gap-2 transition-colors">
+                className="w-full mt-4 py-3 rounded-xl font-bold text-white bg-[var(--accent)] hover:bg-[var(--accent-dark)] disabled:bg-gray-300 flex items-center justify-center gap-2 transition-colors">
                 {importing ? <><Loader2 size={18} className="animate-spin" /> Importing...</> : <><Upload size={18} /> Import XML</>}
               </button>
             </div>

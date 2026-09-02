@@ -38,7 +38,7 @@ export default function CookieConsent() {
         right: 0,
         zIndex: 9999,
         background: "#111",
-        borderTop: "2px solid #c1121f",
+        borderTop: "2px solid var(--accent)",
         padding: "16px 20px",
         display: "flex",
         flexWrap: "wrap",
@@ -62,14 +62,14 @@ export default function CookieConsent() {
         Read our{" "}
         <a
           href="/privacy"
-          style={{ color: "#c1121f", textDecoration: "underline" }}
+          style={{ color: "var(--accent)", textDecoration: "underline" }}
         >
           Privacy Policy
         </a>{" "}
         and{" "}
         <a
           href="/terms"
-          style={{ color: "#c1121f", textDecoration: "underline" }}
+          style={{ color: "var(--accent)", textDecoration: "underline" }}
         >
           Terms of Service
         </a>
@@ -96,7 +96,7 @@ export default function CookieConsent() {
           onClick={accept}
           style={{
             padding: "10px 24px",
-            background: "#c1121f",
+            background: "var(--accent)",
             border: "none",
             color: "#fff",
             borderRadius: "6px",

@@ -75,7 +75,7 @@ export default function ContentEditor({ value, onChange }: ContentEditorProps) {
   return (
     <div>
       <label className="block text-sm font-medium mb-1">Content</label>
-      <div className="border rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-[#c1121f] focus-within:border-transparent">
+      <div className="border rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-[var(--accent)] focus-within:border-transparent">
         {/* Toolbar */}
         <div className="flex flex-wrap items-center gap-1 px-2 py-1.5 bg-gray-50 border-b">
           {tools.map((tool, i) => (

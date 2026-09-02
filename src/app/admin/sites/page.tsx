@@ -20,7 +20,7 @@ export default function SitesPage() {
               <div>
                 <h2 className="font-bold text-lg">
                   <span>{site.logoFirst}</span>{" "}
-                  <span className="text-[#c1121f]">{site.logoSecond}</span>
+                  <span className="text-[var(--accent)]">{site.logoSecond}</span>
                 </h2>
                 <p className="text-xs text-gray-400 mt-1">{site.tagline}</p>
               </div>

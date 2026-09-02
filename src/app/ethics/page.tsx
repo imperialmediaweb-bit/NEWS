@@ -51,14 +51,14 @@ export default function EthicsPage() {
         <div className="bg-white rounded-xl shadow-sm p-6 md:p-10">
           <div className="prose prose-lg max-w-none" style={{ fontFamily: "'Source Serif 4', serif", lineHeight: 1.8 }}>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               1. Our Mission
             </h2>
             <p>
               {site.name}, a MediaChief publication, is dedicated to providing accurate, fair, and comprehensive news coverage to the residents of {site.state}. We believe that ethical journalism is the foundation of a well-informed society and a functioning democracy. This Ethics Policy outlines the principles that guide our newsroom.
             </p>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               2. Accuracy &amp; Fact-Checking
             </h2>
             <ul>
@@ -69,7 +69,7 @@ export default function EthicsPage() {
               <li>When information is uncertain or developing, we clearly communicate this to readers using language such as &quot;according to preliminary reports&quot; or &quot;details are still emerging.&quot;</li>
             </ul>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               3. Fairness &amp; Impartiality
             </h2>
             <ul>
@@ -80,7 +80,7 @@ export default function EthicsPage() {
               <li>When reporting on legal matters, we distinguish between charges, indictments, arrests, and convictions.</li>
             </ul>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               4. Independence &amp; Conflicts of Interest
             </h2>
             <ul>
@@ -90,7 +90,7 @@ export default function EthicsPage() {
               <li>We do not accept gifts, favors, or special treatment from sources, subjects, or interested parties that could compromise our independence.</li>
             </ul>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               5. Advertising &amp; Editorial Separation
             </h2>
             <ul>
@@ -100,7 +100,7 @@ export default function EthicsPage() {
               <li>We comply with FTC 16 CFR Part 255 (Guides Concerning the Use of Endorsements and Testimonials in Advertising).</li>
             </ul>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               6. Source Protection
             </h2>
             <ul>
@@ -110,7 +110,7 @@ export default function EthicsPage() {
               <li>We do not reveal the identity of victims of sexual assault unless the victim consents.</li>
             </ul>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               7. Defamation Prevention
             </h2>
             <ul>
@@ -121,7 +121,7 @@ export default function EthicsPage() {
               <li>We rely on privileged sources (official government records, court documents, legislative proceedings) whenever possible, as these carry legal protection.</li>
             </ul>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               8. Privacy
             </h2>
             <ul>
@@ -131,21 +131,21 @@ export default function EthicsPage() {
               <li>We do not identify juvenile suspects unless they are charged as adults, in accordance with applicable state law.</li>
             </ul>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               9. Corrections &amp; Accountability
             </h2>
             <p>
-              When we make an error, we correct it promptly and transparently. See our <Link href="/corrections" className="text-[#c1121f] underline">Corrections Policy</Link> for details on how we handle corrections, clarifications, and retractions. We take responsibility for our mistakes and view corrections as an essential part of maintaining public trust.
+              When we make an error, we correct it promptly and transparently. See our <Link href="/corrections" className="text-[var(--accent)] underline">Corrections Policy</Link> for details on how we handle corrections, clarifications, and retractions. We take responsibility for our mistakes and view corrections as an essential part of maintaining public trust.
             </p>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               10. Complaints &amp; Concerns
             </h2>
             <p>
               If you believe {site.name} has violated any principle in this Ethics Policy, we encourage you to contact us:
             </p>
             <p>
-              Please visit our <Link href="/contact" className="text-[#c1121f] underline">Contact Page</Link> to reach us.
+              Please visit our <Link href="/contact" className="text-[var(--accent)] underline">Contact Page</Link> to reach us.
               We review all complaints and take appropriate action.
             </p>
 

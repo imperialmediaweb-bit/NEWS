@@ -50,7 +50,7 @@ export default function AdminDashboard() {
       label: "Published Today",
       value: stats?.todayArticles ?? 0,
       icon: TrendingUp,
-      color: "bg-[#c1121f]",
+      color: "bg-[var(--accent)]",
     },
     {
       label: "Total Views",
@@ -89,7 +89,7 @@ export default function AdminDashboard() {
           <div className="space-y-3">
             <a
               href="/admin/publish"
-              className="block px-4 py-3 bg-[#c1121f] text-white rounded-lg text-center font-medium hover:bg-[#8b0000] transition-colors"
+              className="block px-4 py-3 bg-[var(--accent)] text-white rounded-lg text-center font-medium hover:bg-[var(--accent-dark)] transition-colors"
             >
               Publish New Article
             </a>

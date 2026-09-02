@@ -36,7 +36,7 @@ export default function Header({ site }: HeaderProps) {
                 {site.logoFirst}
               </span>
               <span
-                className="text-3xl md:text-5xl lg:text-6xl text-[#c1121f]"
+                className="text-3xl md:text-5xl lg:text-6xl text-[var(--accent)]"
                 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, letterSpacing: "-0.02em" }}
               >
                 {site.logoSecond}
@@ -57,7 +57,7 @@ export default function Header({ site }: HeaderProps) {
       </div>
 
       {/* Navigation — red bar, white text, tabloid feel */}
-      <nav className="bg-[#c1121f]">
+      <nav className="bg-[var(--accent)]">
         <div className="max-w-[1300px] mx-auto px-4">
           <ul className="hidden md:flex items-center justify-center">
             {navItems.map((item, i) => (
@@ -65,7 +65,7 @@ export default function Header({ site }: HeaderProps) {
                 <Link
                   href={`/${item.toLowerCase().replace(/\s+/g, '-')}`}
                   className={`block px-4 lg:px-6 py-3 text-[14px] font-bold uppercase tracking-wider transition-colors cursor-pointer ${
-                    i === 0 ? "text-white bg-[#8b0000]" : "text-white/90 hover:text-white hover:bg-[#a00f1c]"
+                    i === 0 ? "text-white bg-[var(--accent-dark)]" : "text-white/90 hover:text-white hover:bg-[var(--accent-dark)]"
                   }`}
                   style={{ fontFamily: "'Oswald', sans-serif" }}
                 >
@@ -87,7 +87,7 @@ export default function Header({ site }: HeaderProps) {
             <ul className="py-2">
               {navItems.map((item) => (
                 <li key={item}>
-                  <Link href={`/${item.toLowerCase().replace(/\s+/g, '-')}`} className="block px-6 py-3 text-sm font-bold uppercase tracking-wide text-white hover:text-[#c1121f] hover:bg-gray-900 transition-colors cursor-pointer"
+                  <Link href={`/${item.toLowerCase().replace(/\s+/g, '-')}`} className="block px-6 py-3 text-sm font-bold uppercase tracking-wide text-white hover:text-[var(--accent)] hover:bg-gray-900 transition-colors cursor-pointer"
                     style={{ fontFamily: "'Oswald', sans-serif" }}>{item}</Link>
                 </li>
               ))}

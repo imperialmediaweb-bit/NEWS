@@ -51,7 +51,7 @@ export default function AdvertisePage() {
         <div className="bg-white rounded-xl shadow-sm p-6 md:p-10">
           <div className="prose prose-lg max-w-none" style={{ fontFamily: "'Source Serif 4', serif", lineHeight: 1.8 }}>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               Why Advertise With {site.name}?
             </h2>
             <p>
@@ -60,20 +60,20 @@ export default function AdvertisePage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 not-prose my-8">
               <div className="bg-gray-50 rounded-lg p-5 text-center">
-                <div className="text-3xl font-black text-[#c1121f]" style={{ fontFamily: "'Oswald', sans-serif" }}>50</div>
+                <div className="text-3xl font-black text-[var(--accent)]" style={{ fontFamily: "'Oswald', sans-serif" }}>50</div>
                 <div className="text-sm text-gray-600 mt-1">State Publications</div>
               </div>
               <div className="bg-gray-50 rounded-lg p-5 text-center">
-                <div className="text-3xl font-black text-[#c1121f]" style={{ fontFamily: "'Oswald', sans-serif" }}>Local</div>
+                <div className="text-3xl font-black text-[var(--accent)]" style={{ fontFamily: "'Oswald', sans-serif" }}>Local</div>
                 <div className="text-sm text-gray-600 mt-1">Targeted Audiences</div>
               </div>
               <div className="bg-gray-50 rounded-lg p-5 text-center">
-                <div className="text-3xl font-black text-[#c1121f]" style={{ fontFamily: "'Oswald', sans-serif" }}>24/7</div>
+                <div className="text-3xl font-black text-[var(--accent)]" style={{ fontFamily: "'Oswald', sans-serif" }}>24/7</div>
                 <div className="text-sm text-gray-600 mt-1">News Coverage</div>
               </div>
             </div>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               Advertising Options
             </h2>
 
@@ -97,7 +97,7 @@ export default function AdvertisePage() {
               Through the MediaChief network, you can run campaigns across multiple states or go nationwide with a single buy. Ideal for national brands seeking local relevance.
             </p>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               Advertising Guidelines
             </h2>
             <p>To maintain the trust of our readers, all advertising on {site.name} must comply with the following guidelines:</p>
@@ -109,14 +109,14 @@ export default function AdvertisePage() {
               <li>All advertisements must comply with applicable federal, state, and local laws.</li>
             </ul>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               Get Started
             </h2>
             <p>
               Ready to reach {site.state} readers? Contact our advertising team:
             </p>
             <p>
-              Visit our <Link href="/contact" className="text-[#c1121f] underline">Contact Page</Link> with subject <strong>&quot;Advertising Inquiry — {site.name}&quot;</strong>
+              Visit our <Link href="/contact" className="text-[var(--accent)] underline">Contact Page</Link> with subject <strong>&quot;Advertising Inquiry — {site.name}&quot;</strong>
             </p>
             <p>
               We&apos;ll respond within 1-2 business days with a media kit, rate card, and custom proposal tailored to your goals.

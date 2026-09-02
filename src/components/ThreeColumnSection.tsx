@@ -53,7 +53,7 @@ export default function ThreeColumnSection({ columns }: ThreeColumnSectionProps)
                     />
                   </div>
                   <h3
-                    className="mt-2 text-[15px] font-bold leading-snug group-hover:text-[#c1121f] transition-colors line-clamp-3"
+                    className="mt-2 text-[15px] font-bold leading-snug group-hover:text-[var(--accent)] transition-colors line-clamp-3"
                     style={{ fontFamily: "'Source Serif 4', serif", fontWeight: 700 }}
                   >
                     {col.articles[0].title}
@@ -76,7 +76,7 @@ export default function ThreeColumnSection({ columns }: ThreeColumnSectionProps)
                   >
                     <img src={article.img} alt={article.title} loading="lazy" className="w-[80px] h-[60px] md:w-[100px] md:h-[75px] object-cover shrink-0" />
                     <div className="min-w-0">
-                      <h4 className="text-[13px] font-bold leading-tight group-hover:text-[#c1121f] transition-colors line-clamp-2" style={{ fontFamily: "'Source Serif 4', serif" }}>
+                      <h4 className="text-[13px] font-bold leading-tight group-hover:text-[var(--accent)] transition-colors line-clamp-2" style={{ fontFamily: "'Source Serif 4', serif" }}>
                         {article.title}
                       </h4>
                       <span className="text-[10px] text-gray-400 mt-0.5 block">{article.date}</span>

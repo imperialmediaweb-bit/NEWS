@@ -50,14 +50,14 @@ export default function ImageUpload({ value, onChange }: ImageUploadProps) {
         <button
           type="button"
           onClick={() => setMode("upload")}
-          className={`text-xs px-3 py-1 rounded-full transition-colors ${mode === "upload" ? "bg-[#c1121f] text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}
+          className={`text-xs px-3 py-1 rounded-full transition-colors ${mode === "upload" ? "bg-[var(--accent)] text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}
         >
           <Upload size={12} className="inline mr-1" /> Upload
         </button>
         <button
           type="button"
           onClick={() => setMode("url")}
-          className={`text-xs px-3 py-1 rounded-full transition-colors ${mode === "url" ? "bg-[#c1121f] text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}
+          className={`text-xs px-3 py-1 rounded-full transition-colors ${mode === "url" ? "bg-[var(--accent)] text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}
         >
           <LinkIcon size={12} className="inline mr-1" /> URL
         </button>
@@ -72,7 +72,7 @@ export default function ImageUpload({ value, onChange }: ImageUploadProps) {
           onClick={() => fileRef.current?.click()}
           onDrop={handleDrop}
           onDragOver={(e) => e.preventDefault()}
-          className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:border-[#c1121f] transition-colors"
+          className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:border-[var(--accent)] transition-colors"
         >
           <input
             ref={fileRef}
@@ -103,7 +103,7 @@ export default function ImageUpload({ value, onChange }: ImageUploadProps) {
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder="https://..."
-          className="w-full px-4 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-[#c1121f] focus:border-transparent"
+          className="w-full px-4 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent"
         />
       )}
 

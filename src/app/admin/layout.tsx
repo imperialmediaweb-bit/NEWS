@@ -48,7 +48,7 @@ export default function AdminLayout({
         <div className="p-6 border-b border-gray-800">
           <h1 className="text-xl font-bold">
             <span className="text-white">NEWS</span>
-            <span className="text-[#c1121f]"> ADMIN</span>
+            <span className="text-[var(--accent)]"> ADMIN</span>
           </h1>
           <p className="text-gray-500 text-xs mt-1">50-Site Control Panel</p>
         </div>
@@ -64,7 +64,7 @@ export default function AdminLayout({
                 onClick={() => setMobileOpen(false)}
                 className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
                   active
-                    ? "bg-[#c1121f] text-white"
+                    ? "bg-[var(--accent)] text-white"
                     : "text-gray-400 hover:text-white hover:bg-gray-800"
                 }`}
               >
@@ -92,7 +92,7 @@ export default function AdminLayout({
           </button>
           <h1 className="font-bold">
             <span>NEWS</span>
-            <span className="text-[#c1121f]"> ADMIN</span>
+            <span className="text-[var(--accent)]"> ADMIN</span>
           </h1>
         </header>
         <main className="flex-1 p-6">{children}</main>

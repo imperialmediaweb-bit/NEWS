@@ -115,7 +115,15 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="en">
+    <html
+      lang="en"
+      style={{
+        // Per-site theme: each of the 50 states has its own identity colour,
+        // so the network does not render as 50 identical clones.
+        ["--accent" as string]: site.accent,
+        ["--accent-dark" as string]: site.accentDark,
+      } as React.CSSProperties}
+    >
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <meta name="theme-color" content="#000000" />

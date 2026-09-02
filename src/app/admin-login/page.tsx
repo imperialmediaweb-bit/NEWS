@@ -45,7 +45,7 @@ function LoginForm() {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-white">
-            NEWS <span className="text-[#c1121f]">ADMIN</span>
+            NEWS <span className="text-[var(--accent)]">ADMIN</span>
           </h1>
           <p className="text-gray-500 text-sm mt-2">
             Secure access required
@@ -68,7 +68,7 @@ function LoginForm() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-3 bg-[#222] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-[#c1121f] transition-colors"
+              className="w-full px-4 py-3 bg-[#222] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-[var(--accent)] transition-colors"
               placeholder="Enter admin secret"
               autoFocus
               required
@@ -84,7 +84,7 @@ function LoginForm() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-[#c1121f] text-white font-bold rounded-lg hover:bg-[#9b111e] transition-colors disabled:opacity-50"
+            className="w-full py-3 bg-[var(--accent)] text-white font-bold rounded-lg hover:bg-[var(--accent-dark)] transition-colors disabled:opacity-50"
           >
             {loading ? "Checking..." : "Login"}
           </button>

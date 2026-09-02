@@ -51,14 +51,14 @@ export default function PrivacyPage() {
         <div className="bg-white rounded-xl shadow-sm p-6 md:p-10">
           <div className="prose prose-lg max-w-none" style={{ fontFamily: "'Source Serif 4', serif", lineHeight: 1.8 }}>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               1. Introduction
             </h2>
             <p>
               {site.name} (&quot;{site.domain}&quot;), a publication of MediaChief (&quot;we,&quot; &quot;us,&quot; or &quot;our&quot;), is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website. Please read this Privacy Policy carefully. By using {site.name}, you consent to the data practices described in this policy.
             </p>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               2. Information We Collect
             </h2>
             <h3 style={{ fontFamily: "'Oswald', sans-serif", textTransform: "uppercase", fontSize: "1rem" }}>2.1 Information Automatically Collected</h3>
@@ -78,7 +78,7 @@ export default function PrivacyPage() {
               <li><strong>Comments:</strong> Name, email address, and comment content if you engage with our content.</li>
             </ul>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               3. How We Use Your Information
             </h2>
             <p>We use the information we collect to:</p>
@@ -91,7 +91,7 @@ export default function PrivacyPage() {
               <li>Comply with legal obligations and enforce our Terms of Use.</li>
             </ul>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               4. Cookies &amp; Tracking Technologies
             </h2>
             <p>
@@ -107,7 +107,7 @@ export default function PrivacyPage() {
               You can control cookies through your browser settings. Disabling cookies may affect the functionality of certain features on our website.
             </p>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               4a. Google AdSense &amp; Third-Party Advertising
             </h2>
             <p>
@@ -116,14 +116,14 @@ export default function PrivacyPage() {
             <ul>
               <li><strong>Google Advertising Cookies:</strong> Google uses advertising cookies (including the DoubleClick DART cookie) to serve ads to our visitors based on their visit to {site.name} and/or other websites on the Internet.</li>
               <li><strong>Personalized Advertising:</strong> Third-party vendors, including Google, use cookies to serve ads based on your prior visits to this website or other websites.</li>
-              <li><strong>Opting Out:</strong> You may opt out of personalized advertising by visiting <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer" style={{ color: "#c1121f", textDecoration: "underline" }}>Google Ads Settings</a> (adssettings.google.com). You can also opt out of some third-party vendor cookies at <a href="https://optout.aboutads.info" target="_blank" rel="noopener noreferrer" style={{ color: "#c1121f", textDecoration: "underline" }}>aboutads.info</a>.</li>
-              <li><strong>More Information:</strong> For details on how Google uses data when you use our site, visit <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer" style={{ color: "#c1121f", textDecoration: "underline" }}>How Google uses data from sites that use its services</a>.</li>
+              <li><strong>Opting Out:</strong> You may opt out of personalized advertising by visiting <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer" style={{ color: "var(--accent)", textDecoration: "underline" }}>Google Ads Settings</a> (adssettings.google.com). You can also opt out of some third-party vendor cookies at <a href="https://optout.aboutads.info" target="_blank" rel="noopener noreferrer" style={{ color: "var(--accent)", textDecoration: "underline" }}>aboutads.info</a>.</li>
+              <li><strong>More Information:</strong> For details on how Google uses data when you use our site, visit <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer" style={{ color: "var(--accent)", textDecoration: "underline" }}>How Google uses data from sites that use its services</a>.</li>
             </ul>
             <p>
               For visitors in the European Economic Area (EEA), the United Kingdom and Switzerland, we display a consent message and process advertising cookies only in accordance with your consent choices.
             </p>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               5. Third-Party Sharing
             </h2>
             <p>We may share your information with the following categories of third parties:</p>
@@ -135,21 +135,21 @@ export default function PrivacyPage() {
             </ul>
             <p>We do not sell your personal information to third parties for monetary consideration. For information about sharing for targeted advertising and your opt-out rights, see Section 8 below.</p>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               6. Data Retention
             </h2>
             <p>
               We retain your personal information only for as long as necessary to fulfill the purposes outlined in this Privacy Policy, unless a longer retention period is required or permitted by law. Analytics data is retained in aggregate form. Newsletter subscriber information is retained until you unsubscribe.
             </p>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               7. Data Security
             </h2>
             <p>
               We implement appropriate technical and organizational security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction. However, no method of transmission over the Internet or electronic storage is 100% secure. While we strive to protect your information, we cannot guarantee its absolute security.
             </p>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               8. Your Privacy Rights
             </h2>
 
@@ -163,7 +163,7 @@ export default function PrivacyPage() {
               <li><strong>Right to Correct:</strong> You may request that we correct inaccurate personal information.</li>
               <li><strong>Right to Limit Use of Sensitive Information:</strong> You may limit the use of sensitive personal information to purposes necessary for providing our services.</li>
             </ul>
-            <p>To exercise these rights, please visit our <Link href="/contact" className="text-[#c1121f] underline">Contact Page</Link>.</p>
+            <p>To exercise these rights, please visit our <Link href="/contact" className="text-[var(--accent)] underline">Contact Page</Link>.</p>
 
             <h3 style={{ fontFamily: "'Oswald', sans-serif", textTransform: "uppercase", fontSize: "1rem" }}>8.2 Virginia Residents (VCDPA)</h3>
             <p>Virginia residents have the right to access, correct, delete, and obtain a copy of their personal data, and to opt out of targeted advertising, sale of personal data, and profiling.</p>
@@ -179,24 +179,24 @@ export default function PrivacyPage() {
 
             <h3 style={{ fontFamily: "'Oswald', sans-serif", textTransform: "uppercase", fontSize: "1rem" }}>8.6 Do Not Sell My Personal Information</h3>
             <p>
-              To opt out of the sale or sharing of your personal information for targeted advertising purposes, please visit our <Link href="/contact" className="text-[#c1121f] underline">Contact Page</Link> and include &quot;Do Not Sell My Personal Information&quot; in your message. We will process your request within 15 business days.
+              To opt out of the sale or sharing of your personal information for targeted advertising purposes, please visit our <Link href="/contact" className="text-[var(--accent)] underline">Contact Page</Link> and include &quot;Do Not Sell My Personal Information&quot; in your message. We will process your request within 15 business days.
             </p>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               9. Children&apos;s Privacy
             </h2>
             <p>
-              {site.name} does not knowingly collect personal information from children under 13 years of age. If we learn that we have collected personal information from a child under 13, we will take steps to delete such information as soon as possible. If you believe that we have collected information from a child under 13, please reach out via our <Link href="/contact" className="text-[#c1121f] underline">Contact Page</Link>.
+              {site.name} does not knowingly collect personal information from children under 13 years of age. If we learn that we have collected personal information from a child under 13, we will take steps to delete such information as soon as possible. If you believe that we have collected information from a child under 13, please reach out via our <Link href="/contact" className="text-[var(--accent)] underline">Contact Page</Link>.
             </p>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               10. Changes to This Privacy Policy
             </h2>
             <p>
               We may update this Privacy Policy from time to time. We will notify you of any material changes by posting the new Privacy Policy on this page and updating the &quot;Last updated&quot; date. You are advised to review this Privacy Policy periodically for any changes. Your continued use of {site.name} after any modifications constitutes your acknowledgment and consent to the updated policy.
             </p>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               11. Contact Us
             </h2>
             <p>
@@ -205,7 +205,7 @@ export default function PrivacyPage() {
             <p>
               <strong>{site.name}</strong> — A MediaChief Publication<br />
               Privacy Officer<br />
-              Visit our <Link href="/contact" className="text-[#c1121f] underline">Contact Page</Link>
+              Visit our <Link href="/contact" className="text-[var(--accent)] underline">Contact Page</Link>
             </p>
 
           </div>

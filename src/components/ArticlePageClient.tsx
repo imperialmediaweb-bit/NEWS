@@ -75,9 +75,9 @@ export default function ArticlePageClient({ site, article, related, categorySlug
       <div className="bg-white border-b">
         <div className="max-w-[1300px] mx-auto px-4 py-3">
           <nav className="flex items-center gap-2 text-sm text-gray-500">
-            <Link href="/" className="hover:text-[#c1121f] transition-colors">Home</Link>
+            <Link href="/" className="hover:text-[var(--accent)] transition-colors">Home</Link>
             <ChevronRight size={14} />
-            <Link href={`/${categorySlug}`} className="hover:text-[#c1121f] transition-colors">{categoryLabel}</Link>
+            <Link href={`/${categorySlug}`} className="hover:text-[var(--accent)] transition-colors">{categoryLabel}</Link>
             <ChevronRight size={14} />
             <span className="text-gray-400 line-clamp-1">{displayTitle}</span>
           </nav>
@@ -97,7 +97,7 @@ export default function ArticlePageClient({ site, article, related, categorySlug
           <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10">
             <div className="max-w-[1300px] mx-auto">
               <span className="inline-block px-3 py-1 text-xs font-bold uppercase tracking-wider text-white rounded mb-4"
-                style={{ backgroundColor: "#c1121f", fontFamily: "'Oswald', sans-serif" }}>
+                style={{ backgroundColor: "var(--accent)", fontFamily: "'Oswald', sans-serif" }}>
                 {categoryLabel}
               </span>
               <h1 className="text-2xl md:text-4xl lg:text-5xl text-white leading-tight max-w-[900px]"
@@ -111,7 +111,7 @@ export default function ArticlePageClient({ site, article, related, categorySlug
         <div className="bg-black text-white">
           <div className="max-w-[1300px] mx-auto px-4 py-8 md:py-12">
             <span className="inline-block px-3 py-1 text-xs font-bold uppercase tracking-wider text-white rounded mb-4"
-              style={{ backgroundColor: "#c1121f", fontFamily: "'Oswald', sans-serif" }}>
+              style={{ backgroundColor: "var(--accent)", fontFamily: "'Oswald', sans-serif" }}>
               {categoryLabel}
             </span>
             <h1 className="text-2xl md:text-4xl lg:text-5xl text-white leading-tight max-w-[900px]"
@@ -141,7 +141,7 @@ export default function ArticlePageClient({ site, article, related, categorySlug
                   <div>
                     <Link
                       href={`/author/${displayAuthor.split(",")[0].trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}`}
-                      className="font-bold text-gray-900 hover:text-[#c1121f] transition-colors"
+                      className="font-bold text-gray-900 hover:text-[var(--accent)] transition-colors"
                     >
                       {displayAuthor}
                     </Link>
@@ -173,7 +173,7 @@ export default function ArticlePageClient({ site, article, related, categorySlug
               <div className="flex flex-wrap gap-2">
                 {[categoryLabel, site.state, site.city].map((tag) => (
                   <Link key={tag} href={`/tag/${tag.toLowerCase().replace(/\s+/g, "-")}`}
-                    className="px-3 py-1 text-sm bg-gray-100 text-gray-600 rounded-full hover:bg-[#c1121f] hover:text-white transition-colors">
+                    className="px-3 py-1 text-sm bg-gray-100 text-gray-600 rounded-full hover:bg-[var(--accent)] hover:text-white transition-colors">
                     {tag}
                   </Link>
                 ))}
@@ -185,7 +185,7 @@ export default function ArticlePageClient({ site, article, related, categorySlug
               <div className="mb-6">
                 <div className="flex items-center gap-3 mb-5">
                   <span className="px-3 py-1 text-sm font-bold uppercase tracking-wider text-white"
-                    style={{ backgroundColor: "#c1121f", fontFamily: "'Oswald', sans-serif" }}>
+                    style={{ backgroundColor: "var(--accent)", fontFamily: "'Oswald', sans-serif" }}>
                     Related Stories
                   </span>
                   <div className="flex-1 h-[2px] bg-gray-200" />
@@ -202,13 +202,13 @@ export default function ArticlePageClient({ site, article, related, categorySlug
                             <div className="relative h-[180px] overflow-hidden">
                               <img src={relImg} alt={rel.title} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                               <span className="absolute top-3 left-3 px-2 py-0.5 text-[10px] font-bold uppercase text-white rounded"
-                                style={{ backgroundColor: "#c1121f", fontFamily: "'Oswald', sans-serif" }}>
+                                style={{ backgroundColor: "var(--accent)", fontFamily: "'Oswald', sans-serif" }}>
                                 {rel.category}
                               </span>
                             </div>
                           )}
                           <div className="p-4">
-                            <h3 className="text-sm font-bold leading-snug group-hover:text-[#c1121f] transition-colors line-clamp-2"
+                            <h3 className="text-sm font-bold leading-snug group-hover:text-[var(--accent)] transition-colors line-clamp-2"
                               style={{ fontFamily: "'Source Serif 4', serif", fontWeight: 700 }}>
                               {rel.title}
                             </h3>

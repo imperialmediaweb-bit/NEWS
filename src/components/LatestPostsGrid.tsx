@@ -14,10 +14,10 @@ export default function LatestPostsGrid({ articles }: LatestPostsGridProps) {
       {/* Section header */}
       <div className="flex items-center justify-between mb-5 border-b-[3px] border-[#1a1a1a] pb-2">
         <h2 className="text-xl font-black uppercase tracking-tight flex items-center gap-2" style={{ fontFamily: "'Oswald', sans-serif" }}>
-          <span className="w-1 h-6 rounded-full bg-[#c1121f]" />
+          <span className="w-1 h-6 rounded-full bg-[var(--accent)]" />
           Latest Posts
         </h2>
-        <a href="#" className="text-[12px] font-bold uppercase tracking-wider text-[#c1121f] hover:underline flex items-center gap-0.5" style={{ fontFamily: "'Oswald', sans-serif" }}>
+        <a href="#" className="text-[12px] font-bold uppercase tracking-wider text-[var(--accent)] hover:underline flex items-center gap-0.5" style={{ fontFamily: "'Oswald', sans-serif" }}>
           See All <ChevronRight className="w-3.5 h-3.5" />
         </a>
       </div>
@@ -40,7 +40,7 @@ export default function LatestPostsGrid({ articles }: LatestPostsGridProps) {
               />
               <div className="absolute top-2.5 left-2.5">
                 <span
-                  className="bg-[#c1121f] text-white text-[8px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-sm"
+                  className="bg-[var(--accent)] text-white text-[8px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-sm"
                   style={{ fontFamily: "'Oswald', sans-serif" }}
                 >
                   {article.category}
@@ -48,7 +48,7 @@ export default function LatestPostsGrid({ articles }: LatestPostsGridProps) {
               </div>
             </div>
             <h3
-              className="mt-3 text-[15px] font-bold leading-tight group-hover:text-[#c1121f] transition-colors line-clamp-2"
+              className="mt-3 text-[15px] font-bold leading-tight group-hover:text-[var(--accent)] transition-colors line-clamp-2"
               style={{ fontFamily: "'Source Serif 4', serif" }}
             >
               {article.title}

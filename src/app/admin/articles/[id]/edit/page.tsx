@@ -102,7 +102,7 @@ export default function EditArticlePage() {
     return (
       <div className="text-center py-20">
         <p className="text-red-500 mb-4">{error}</p>
-        <button onClick={() => router.push("/admin/articles")} className="text-[#c1121f] hover:underline">
+        <button onClick={() => router.push("/admin/articles")} className="text-[var(--accent)] hover:underline">
           Back to Articles
         </button>
       </div>
@@ -133,7 +133,7 @@ export default function EditArticlePage() {
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#c1121f] focus:border-transparent outline-none text-lg"
+              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent outline-none text-lg"
             />
             {slug && <p className="text-xs text-gray-400 mt-1">Slug: {slug}</p>}
           </div>
@@ -144,7 +144,7 @@ export default function EditArticlePage() {
               type="text"
               value={summary}
               onChange={(e) => setSummary(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#c1121f] focus:border-transparent outline-none"
+              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent outline-none"
             />
           </div>
 
@@ -187,7 +187,7 @@ export default function EditArticlePage() {
           onClick={handleSave}
           disabled={!title || saving}
           className={`w-full py-3 rounded-xl font-bold text-white flex items-center justify-center gap-2 transition-colors ${
-            saved ? "bg-green-500" : "bg-[#c1121f] hover:bg-[#8b0000] disabled:bg-gray-300"
+            saved ? "bg-green-500" : "bg-[var(--accent)] hover:bg-[var(--accent-dark)] disabled:bg-gray-300"
           }`}
         >
           {saved ? (

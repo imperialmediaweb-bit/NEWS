@@ -83,7 +83,7 @@ export default function PublishPage() {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="Article headline..."
-                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#c1121f] focus:border-transparent outline-none text-lg"
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent outline-none text-lg"
               />
               {slug && (
                 <p className="text-xs text-gray-400 mt-1">Slug: {slug}</p>
@@ -97,7 +97,7 @@ export default function PublishPage() {
                 value={summary}
                 onChange={(e) => setSummary(e.target.value)}
                 placeholder="Brief summary..."
-                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#c1121f] focus:border-transparent outline-none"
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent outline-none"
               />
             </div>
 
@@ -148,7 +148,7 @@ export default function PublishPage() {
               </h2>
               <button
                 onClick={selectAll}
-                className="text-xs text-[#c1121f] font-medium hover:underline"
+                className="text-xs text-[var(--accent)] font-medium hover:underline"
               >
                 {selectedSites.length === siteList.length
                   ? "Deselect All"
@@ -162,7 +162,7 @@ export default function PublishPage() {
                   key={site.slug}
                   className={`flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition-colors ${
                     selectedSites.includes(site.slug)
-                      ? "bg-red-50 border border-[#c1121f]"
+                      ? "bg-red-50 border border-[var(--accent)]"
                       : "hover:bg-gray-50 border border-transparent"
                   }`}
                 >
@@ -170,7 +170,7 @@ export default function PublishPage() {
                     type="checkbox"
                     checked={selectedSites.includes(site.slug)}
                     onChange={() => toggleSite(site.slug)}
-                    className="accent-[#c1121f]"
+                    className="accent-[var(--accent)]"
                   />
                   <div>
                     <p className="text-sm font-medium">{site.name}</p>
@@ -187,7 +187,7 @@ export default function PublishPage() {
             className={`w-full py-3 rounded-xl font-bold text-white flex items-center justify-center gap-2 transition-colors ${
               published
                 ? "bg-green-500"
-                : "bg-[#c1121f] hover:bg-[#8b0000] disabled:bg-gray-300"
+                : "bg-[var(--accent)] hover:bg-[var(--accent-dark)] disabled:bg-gray-300"
             }`}
           >
             {published ? (

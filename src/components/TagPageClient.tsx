@@ -44,12 +44,12 @@ export default function TagPageClient({ site, tag, tagLabel }: TagPageClientProp
           <nav className="flex items-center gap-2 text-sm text-gray-400 mb-4">
             <Link href="/" className="hover:text-white transition-colors">Home</Link>
             <ChevronRight size={14} />
-            <span className="text-[#c1121f]">Tag</span>
+            <span className="text-[var(--accent)]">Tag</span>
             <ChevronRight size={14} />
             <span className="text-white">{tagLabel}</span>
           </nav>
           <div className="flex items-center gap-3">
-            <Tag size={28} className="text-[#c1121f]" />
+            <Tag size={28} className="text-[var(--accent)]" />
             <h1 className="text-3xl md:text-5xl" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900 }}>
               {tagLabel}
             </h1>
@@ -76,11 +76,11 @@ export default function TagPageClient({ site, tag, tagLabel }: TagPageClientProp
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                       </div>
                       <div className="flex flex-col justify-center">
-                        <span className="text-[10px] font-bold uppercase text-[#c1121f] tracking-wider mb-1"
+                        <span className="text-[10px] font-bold uppercase text-[var(--accent)] tracking-wider mb-1"
                           style={{ fontFamily: "'Oswald', sans-serif" }}>
                           {article.category}
                         </span>
-                        <h3 className="text-sm font-bold leading-snug group-hover:text-[#c1121f] transition-colors line-clamp-2 mb-1"
+                        <h3 className="text-sm font-bold leading-snug group-hover:text-[var(--accent)] transition-colors line-clamp-2 mb-1"
                           style={{ fontFamily: "'Source Serif 4', serif", fontWeight: 700 }}>
                           {article.title}
                         </h3>
@@ -102,8 +102,8 @@ export default function TagPageClient({ site, tag, tagLabel }: TagPageClientProp
                   <Link key={t} href={`/tag/${t.toLowerCase().replace(/\s+/g, "-")}`}
                     className={`px-3 py-1 text-sm rounded-full transition-colors ${
                       t.toLowerCase().replace(/\s+/g, "-") === tag
-                        ? "bg-[#c1121f] text-white"
-                        : "bg-gray-100 text-gray-600 hover:bg-[#c1121f] hover:text-white"
+                        ? "bg-[var(--accent)] text-white"
+                        : "bg-gray-100 text-gray-600 hover:bg-[var(--accent)] hover:text-white"
                     }`}>
                     {t}
                   </Link>

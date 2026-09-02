@@ -21,7 +21,7 @@ export default function NotFound() {
           fontSize: "120px",
           fontWeight: 900,
           margin: 0,
-          color: "#c1121f",
+          color: "var(--accent)",
           lineHeight: 1,
         }}
       >
@@ -39,7 +39,7 @@ export default function NotFound() {
           href="/"
           style={{
             padding: "12px 28px",
-            background: "#c1121f",
+            background: "var(--accent)",
             color: "#fff",
             borderRadius: "6px",
             textDecoration: "none",

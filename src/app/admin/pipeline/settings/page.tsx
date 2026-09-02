@@ -115,7 +115,7 @@ export default function PipelineSettingsPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold flex items-center gap-2">
-          <Settings className="w-6 h-6 text-[#c1121f]" />
+          <Settings className="w-6 h-6 text-[var(--accent)]" />
           Pipeline Settings
         </h1>
         <p className="text-gray-500 text-sm mt-1">
@@ -177,7 +177,7 @@ export default function PipelineSettingsPage() {
                 <button
                   onClick={() => saveConfig(field.key, config[field.key] || "")}
                   disabled={saving}
-                  className="px-3 py-2 bg-[#c1121f] text-white rounded-lg text-sm hover:bg-[#9b111e] transition-colors disabled:opacity-50"
+                  className="px-3 py-2 bg-[var(--accent)] text-white rounded-lg text-sm hover:bg-[var(--accent-dark)] transition-colors disabled:opacity-50"
                 >
                   <Save className="w-4 h-4" />
                 </button>

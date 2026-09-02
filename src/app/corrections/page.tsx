@@ -51,14 +51,14 @@ export default function CorrectionsPage() {
         <div className="bg-white rounded-xl shadow-sm p-6 md:p-10">
           <div className="prose prose-lg max-w-none" style={{ fontFamily: "'Source Serif 4', serif", lineHeight: 1.8 }}>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               1. Our Commitment
             </h2>
             <p>
               {site.name} is committed to accuracy in all of our reporting. When we make an error — whether in fact, context, or presentation — we correct it promptly, transparently, and in a manner proportionate to the original error. We believe that corrections strengthen our credibility and the trust our readers place in us.
             </p>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               2. Types of Corrections
             </h2>
 
@@ -82,7 +82,7 @@ export default function CorrectionsPage() {
               In rare cases where an article is found to be fundamentally flawed — based on false information, fabricated sources, or serious journalistic misconduct — the article may be retracted. Retracted articles are replaced with a retraction notice explaining why the article was removed.
             </p>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               3. How Corrections Are Displayed
             </h2>
             <ul>
@@ -92,13 +92,13 @@ export default function CorrectionsPage() {
               <li>For significant corrections, the headline may be updated if the original headline was misleading.</li>
             </ul>
             <p><strong>Example format:</strong></p>
-            <div style={{ background: "#f9f9f9", padding: "1rem 1.5rem", borderLeft: "4px solid #c1121f", margin: "1rem 0" }}>
+            <div style={{ background: "#f9f9f9", padding: "1rem 1.5rem", borderLeft: "4px solid var(--accent)", margin: "1rem 0" }}>
               <p style={{ margin: 0, fontStyle: "italic" }}>
                 <strong>Correction (March 15, 2026):</strong> An earlier version of this article incorrectly stated that [incorrect information]. The article has been updated to reflect that [correct information]. We regret the error.
               </p>
             </div>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               4. How to Report an Error
             </h2>
             <p>
@@ -110,10 +110,10 @@ export default function CorrectionsPage() {
               <li>If possible, a source for the correct information.</li>
             </ul>
             <p>
-              Visit our <Link href="/contact" className="text-[#c1121f] underline">Contact Page</Link> with subject <strong>&quot;Correction Request — [Article Title]&quot;</strong>
+              Visit our <Link href="/contact" className="text-[var(--accent)] underline">Contact Page</Link> with subject <strong>&quot;Correction Request — [Article Title]&quot;</strong>
             </p>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               5. Response Timeline
             </h2>
             <ul>
@@ -122,15 +122,15 @@ export default function CorrectionsPage() {
               <li><strong>Action:</strong> If the error is confirmed, the correction is made within 48 hours. Urgent corrections (those affecting legal matters, safety, or public figures) are prioritized and may be corrected within hours.</li>
             </ul>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               6. Contact
             </h2>
             <p>
               For correction requests or questions about our corrections process:
             </p>
             <p>
-              Visit our <Link href="/contact" className="text-[#c1121f] underline">Contact Page</Link><br />
-              See also: <Link href="/ethics" className="text-[#c1121f] underline">Ethics Policy</Link> | <Link href="/editorial-policy" className="text-[#c1121f] underline">Editorial Policy</Link>
+              Visit our <Link href="/contact" className="text-[var(--accent)] underline">Contact Page</Link><br />
+              See also: <Link href="/ethics" className="text-[var(--accent)] underline">Ethics Policy</Link> | <Link href="/editorial-policy" className="text-[var(--accent)] underline">Editorial Policy</Link>
             </p>
 
           </div>

@@ -39,7 +39,7 @@ export default function HeroSection({ main, side }: HeroSectionProps) {
               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
               {/* Category badge */}
               <div className="absolute top-4 left-4">
-                <span className="bg-[#c1121f] text-white text-[11px] font-black uppercase tracking-widest px-3 py-1.5 animate-pulse"
+                <span className="bg-[var(--accent)] text-white text-[11px] font-black uppercase tracking-widest px-3 py-1.5 animate-pulse"
                   style={{ fontFamily: "'Oswald', sans-serif" }}>{main.category}</span>
               </div>
               {/* HEADLINE — big, bold, tabloid */}
@@ -66,7 +66,7 @@ export default function HeroSection({ main, side }: HeroSectionProps) {
         <div className="lg:col-span-4 flex flex-col gap-3">
           {/* Trending label */}
           <div className="bg-black text-white px-3 py-1.5 flex items-center gap-1.5">
-            <TrendingUp className="w-3.5 h-3.5 text-[#c1121f]" />
+            <TrendingUp className="w-3.5 h-3.5 text-[var(--accent)]" />
             <span className="text-[10px] font-black uppercase tracking-widest" style={{ fontFamily: "'Oswald', sans-serif" }}>Trending Now</span>
           </div>
           {side.map((article, i) => (
@@ -86,7 +86,7 @@ export default function HeroSection({ main, side }: HeroSectionProps) {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
                   <div className="absolute top-2 left-2">
-                    <span className="bg-[#c1121f] text-white text-[7px] md:text-[8px] font-black uppercase tracking-widest px-1.5 md:px-2 py-0.5"
+                    <span className="bg-[var(--accent)] text-white text-[7px] md:text-[8px] font-black uppercase tracking-widest px-1.5 md:px-2 py-0.5"
                       style={{ fontFamily: "'Oswald', sans-serif" }}>{article.category}</span>
                   </div>
                   <div className="absolute bottom-0 left-0 right-0 p-3">

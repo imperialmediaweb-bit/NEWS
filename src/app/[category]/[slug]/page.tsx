@@ -62,7 +62,7 @@ function injectInternalLinks(
     ) {
       const link = linksToInsert[linkIndex];
       const href = `https://${domain}/${link.category}/${link.slug}`;
-      const relatedBox = `<p style="margin:16px 0;padding:12px 16px;background:#f8f8f8;border-left:3px solid #c1121f;font-size:0.95em;"><strong>Related:</strong> <a href="${href}" style="color:#c1121f;text-decoration:underline;">${link.title}</a></p>`;
+      const relatedBox = `<p style="margin:16px 0;padding:12px 16px;background:#f8f8f8;border-left:3px solid var(--accent);font-size:0.95em;"><strong>Related:</strong> <a href="${href}" style="color:var(--accent);text-decoration:underline;">${link.title}</a></p>`;
       result.push(relatedBox);
       linkIndex++;
     }

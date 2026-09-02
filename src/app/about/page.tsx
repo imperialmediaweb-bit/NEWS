@@ -51,14 +51,14 @@ export default function AboutPage() {
         <div className="bg-white rounded-xl shadow-sm p-6 md:p-10">
           <div className="prose prose-lg max-w-none" style={{ fontFamily: "'Source Serif 4', serif", lineHeight: 1.8 }}>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               Who We Are
             </h2>
             <p>
               {site.name} is {site.state}&apos;s premier digital news publication, delivering breaking news, in-depth reporting, and essential local coverage to readers across {site.state}. Based in {site.city}, we cover the stories that matter most to {site.state} residents — from local politics and crime to sports, entertainment, business, and community events.
             </p>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               Part of the MediaChief Network
             </h2>
             <p>
@@ -68,14 +68,14 @@ export default function AboutPage() {
               Each MediaChief publication is tailored to its state and community, with content focused on local issues, local government, local businesses, and the people who make each state unique. While we share resources and infrastructure, our editorial voice is distinctly {site.state}.
             </p>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               Our Mission
             </h2>
             <p>
               Our mission is simple: <strong>to inform, engage, and empower the residents of {site.state}</strong> through accurate, timely, and fearless journalism. We believe every community deserves access to quality local news, and we are committed to providing it — free and accessible to all.
             </p>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               What We Cover
             </h2>
             <ul>
@@ -89,24 +89,24 @@ export default function AboutPage() {
               <li><strong>US &amp; World News:</strong> National and international stories that affect {site.state}</li>
             </ul>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               Our Editorial Standards
             </h2>
             <p>
-              We hold ourselves to the highest standards of journalistic ethics and integrity. Our coverage is guided by principles of accuracy, fairness, independence, and accountability. For details, see our <Link href="/ethics" className="text-[#c1121f] underline">Ethics Policy</Link> and <Link href="/editorial-policy" className="text-[#c1121f] underline">Editorial Policy</Link>.
+              We hold ourselves to the highest standards of journalistic ethics and integrity. Our coverage is guided by principles of accuracy, fairness, independence, and accountability. For details, see our <Link href="/ethics" className="text-[var(--accent)] underline">Ethics Policy</Link> and <Link href="/editorial-policy" className="text-[var(--accent)] underline">Editorial Policy</Link>.
             </p>
 
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid #c1121f", paddingBottom: "0.5rem" }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
               Contact Us
             </h2>
             <p>
               We want to hear from you. Whether you have a news tip, a question, feedback, or a correction, please reach out:
             </p>
             <p>
-              Please visit our <Link href="/contact" className="text-[#c1121f] underline">Contact Page</Link> for general inquiries, news tips, and advertising questions.
+              Please visit our <Link href="/contact" className="text-[var(--accent)] underline">Contact Page</Link> for general inquiries, news tips, and advertising questions.
             </p>
             <p>
-              Visit our <Link href="/contact" className="text-[#c1121f] underline">Contact Page</Link> for more ways to reach us, or explore <Link href="/careers" className="text-[#c1121f] underline">career opportunities</Link> at MediaChief.
+              Visit our <Link href="/contact" className="text-[var(--accent)] underline">Contact Page</Link> for more ways to reach us, or explore <Link href="/careers" className="text-[var(--accent)] underline">career opportunities</Link> at MediaChief.
             </p>
 
           </div>
