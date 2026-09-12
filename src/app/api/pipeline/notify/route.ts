@@ -178,7 +178,11 @@ export async function POST(req: NextRequest) {
     results.websub = { ok: websubOk, failed: websubFail };
 
     // ─── 5. Google Indexing API (requires service account) ───
-    const googleSaKey = process.env.GOOGLE_INDEXING_SA_KEY;
+    // Credentials may be supplied either as one full service-account JSON
+    // (GOOGLE_INDEXING_SA_KEY) or as the separate email + private key pair
+    // used elsewhere in the app. Previously only the first name was read, so
+    // this step silently never ran.
+    const googleSaKey = buildServiceAccountKey();
     if (googleSaKey) {
       let indexingOk = 0;
       let indexingFail = 0;
@@ -234,6 +238,25 @@ export async function POST(req: NextRequest) {
     await logRunEnd(runId, 0, 0, Date.now() - startTime, String(error));
     return NextResponse.json({ error: String(error) }, { status: 500 });
   }
+}
+
+/**
+ * Resolve service-account credentials into the JSON shape
+ * getGoogleAccessToken expects, from either env layout.
+ */
+function buildServiceAccountKey(): string | null {
+  const full = process.env.GOOGLE_INDEXING_SA_KEY;
+  if (full) return full;
+
+  const email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
+  const privateKey = process.env.GOOGLE_SERVICE_ACCOUNT_KEY;
+  if (!email || !privateKey) return null;
+
+  return JSON.stringify({
+    client_email: email,
+    // Railway stores the PEM with escaped newlines.
+    private_key: privateKey.replace(/\\n/g, "\n"),
+  });
 }
 
 /**
