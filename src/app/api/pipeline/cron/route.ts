@@ -100,6 +100,22 @@ export async function POST(req: NextRequest) {
     actions.push("submit_sitemaps");
   }
 
+  // ─── Search Console property setup: hourly until every site is done ───
+  // Self-healing: a site whose DNS had not propagated yet is retried on the
+  // next pass, and once all 50 have a usable domain property this is a no-op.
+  if ((await claimJob("gsc_setup", 60 * 60)).claimed) {
+    fireAndForget(baseUrl, "admin/gsc-setup?step=auto", {}, secret);
+    actions.push("gsc_setup");
+  }
+
+  // ─── Database indexes: daily, idempotent (CREATE INDEX IF NOT EXISTS) ───
+  // Cheap when there is nothing to do, and means a new index added to the code
+  // gets applied without anyone remembering to run it.
+  if ((await claimJob("optimize_db", 24 * 60 * 60)).claimed) {
+    fireAndForget(baseUrl, "admin/optimize-db", {}, secret);
+    actions.push("optimize_db");
+  }
+
   if (actions.length === 0) {
     actions.push("nothing_due");
   }

@@ -3,6 +3,48 @@ import pool from "@/lib/db";
 import { listJobs } from "@/lib/pipeline/jobs";
 import { isPipelineEnabled } from "@/lib/pipeline/scheduler";
 import { isPublishingHours, STATE_BATCHES } from "@/config/feeds";
+import { sites as siteConfigs } from "@/config/sites";
+import { hasCloudflareCredentials } from "@/lib/cloudflare";
+import { hasGscCredentials, getGscToken, listProperties, hasUsableDomainProperty } from "@/lib/gsc";
+
+/**
+ * How far along the Search Console setup is. The hourly gsc_setup job drives
+ * this to 50/50 on its own; this is the number to watch rather than clicking
+ * through 50 properties by hand.
+ */
+async function searchConsoleSummary(): Promise<Record<string, unknown>> {
+  if (!hasGscCredentials()) {
+    return { ready: false, reason: "No Google service-account credentials" };
+  }
+  if (!hasCloudflareCredentials()) {
+    return {
+      ready: false,
+      reason: "No Cloudflare credentials — set CLOUDFLARE_API_TOKEN so DNS verification can run",
+    };
+  }
+
+  try {
+    const properties = await listProperties(await getGscToken());
+    const all = Object.values(siteConfigs);
+    const pending = all
+      .filter((s) => !hasUsableDomainProperty(properties.get(s.domain.toLowerCase())))
+      .map((s) => s.slug);
+
+    return {
+      ready: true,
+      owner: process.env.GSC_OWNER_EMAIL || null,
+      ...(!process.env.GSC_OWNER_EMAIL && {
+        warning:
+          "GSC_OWNER_EMAIL is not set, so properties stay owned by the service account and never appear in a person's Search Console.",
+      }),
+      configured: all.length - pending.length,
+      total: all.length,
+      pending,
+    };
+  } catch (e) {
+    return { ready: false, reason: e instanceof Error ? e.message : String(e) };
+  }
+}
 
 export const dynamic = "force-dynamic";
 
@@ -58,6 +100,7 @@ export async function GET(req: NextRequest) {
     pipelineEnabled: await isPipelineEnabled(),
     publishingHours: isPublishingHours(),
     nextFetchBatch: fetchJob ? fetchJob.runCount % STATE_BATCHES.length : 0,
+    searchConsole: await searchConsoleSummary(),
     jobs,
     totals: {
       sites: sites.length,

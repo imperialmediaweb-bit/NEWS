@@ -81,7 +81,10 @@ const STATEMENTS: { sql: string; why: string }[] = [
 ];
 
 export async function GET(req: NextRequest) {
-  const key = req.nextUrl.searchParams.get("key");
+  // Accept either form: ?key= for a browser, Bearer for the cron dispatcher.
+  const key =
+    req.nextUrl.searchParams.get("key") ||
+    req.headers.get("authorization")?.replace("Bearer ", "");
   const secret = process.env.CRON_SECRET;
   if (secret && key !== secret) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -118,4 +121,9 @@ export async function GET(req: NextRequest) {
     failed: results.filter((r) => !r.ok).length,
     results,
   });
+}
+
+// The cron dispatcher posts to its targets; a browser uses GET.
+export async function POST(req: NextRequest) {
+  return GET(req);
 }
