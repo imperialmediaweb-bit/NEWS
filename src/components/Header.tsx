@@ -13,10 +13,18 @@ const navItems = ["Local News", "Politics", "US News", "World News", "Sports", "
 
 interface HeaderProps {
   site: SiteConfig;
+  /**
+   * Render the masthead as the page's <h1>. Only the homepage should set this.
+   * Everywhere else the <h1> belongs to the page's own subject — the article
+   * headline, the category name — and a second <h1> saying "TEXAS EXPRESS"
+   * just competes with it for the same slot.
+   */
+  asHeading?: boolean;
 }
 
-export default function Header({ site }: HeaderProps) {
+export default function Header({ site, asHeading = false }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const Masthead = asHeading ? "h1" : "div";
 
   return (
     <header className="sticky top-0 z-50">
@@ -30,7 +38,7 @@ export default function Header({ site }: HeaderProps) {
           <span className="hidden md:block w-6" />
 
           <div className="flex-1 text-center">
-            <h1 className="inline-flex items-baseline gap-2 md:gap-3 leading-none">
+            <Masthead className="inline-flex items-baseline gap-2 md:gap-3 leading-none">
               <span
                 className="text-3xl md:text-5xl lg:text-6xl text-white"
                 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, letterSpacing: "-0.02em" }}
@@ -43,7 +51,7 @@ export default function Header({ site }: HeaderProps) {
               >
                 {site.logoSecond}
               </span>
-            </h1>
+            </Masthead>
             <div className="flex items-center justify-center gap-3 mt-1.5">
               <span className="h-[1px] w-8 md:w-16 bg-gray-600" />
               <p className="text-[9px] md:text-[11px] text-gray-400 uppercase tracking-[0.2em]" style={{ fontFamily: "'Oswald', sans-serif" }}>

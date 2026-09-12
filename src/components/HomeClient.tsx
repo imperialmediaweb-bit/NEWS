@@ -27,7 +27,7 @@ export default function HomeClient({ site, articles }: HomeClientProps) {
 
   return (
     <div className="min-h-screen bg-[#f5f5f5]">
-      <Header site={site} />
+      <Header site={site} asHeading />
 
       {/* HERO — big main story + side trending */}
       {articles.heroMain && <HeroSection main={articles.heroMain} side={articles.heroSide} />}

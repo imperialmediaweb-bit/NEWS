@@ -2,54 +2,46 @@
 
 import { motion } from "framer-motion";
 import { SiteConfig } from "@/config/site-config";
-import { generateContent, Article } from "@/data/generate-content";
+import { generateContent } from "@/data/generate-content";
+import type { ListArticle } from "@/lib/category-data";
 import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar";
 import Footer from "@/components/Footer";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 
 interface CategoryPageClientProps {
   site: SiteConfig;
   categorySlug: string;
   categoryLabel: string;
+  articles: ListArticle[];
+  page: number;
+  totalPages: number;
 }
 
-export default function CategoryPageClient({ site, categorySlug, categoryLabel }: CategoryPageClientProps) {
-  const [articles, setArticles] = useState<Article[]>([]);
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [loading, setLoading] = useState(false);
+/**
+ * Presentation only. The articles arrive from the server component, so they
+ * are in the initial HTML — this page used to fetch them in useEffect, which
+ * left every category page with zero article links for a crawler to follow.
+ */
+export default function CategoryPageClient({
+  site,
+  categorySlug,
+  categoryLabel,
+  articles,
+  page,
+  totalPages,
+}: CategoryPageClientProps) {
   const content = generateContent(site);
-
-  function loadArticles(pageNum: number, append = false) {
-    setLoading(true);
-    fetch(`/api/category?site=${site.slug}&category=${categorySlug}&page=${pageNum}`)
-      .then((r) => r.json())
-      .then((data) => {
-        // Real articles only — never substitute fabricated placeholder news.
-        if (data.articles && data.articles.length > 0) {
-          setArticles((prev) => append ? [...prev, ...data.articles] : data.articles);
-          setTotalPages(data.totalPages || 1);
-          setPage(pageNum);
-        }
-        setLoading(false);
-      })
-      .catch(() => {
-        setLoading(false);
-      });
-  }
-
-  useEffect(() => {
-    loadArticles(1);
-  }, [site, categorySlug]);
 
   const leadArticle = articles[0];
   const gridArticles = articles.slice(1, 7);
   const listArticles = articles.slice(7);
 
-  const makeSlug = (a: Article) =>
+  const makeSlug = (a: ListArticle) =>
     a.slug || a.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+
+  const pageHref = (n: number) =>
+    n <= 1 ? `/${categorySlug}` : `/${categorySlug}?page=${n}`;
 
   return (
     <div className="min-h-screen bg-[#f5f5f5]">
@@ -75,7 +67,7 @@ export default function CategoryPageClient({ site, categorySlug, categoryLabel }
       <div className="max-w-[1300px] mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           <div className="lg:col-span-8">
-            {!loading && articles.length === 0 && (
+            {articles.length === 0 && (
               <div className="bg-white rounded-xl shadow-sm p-12 text-center text-gray-500 mb-8">
                 No {categoryLabel.toLowerCase()} articles published yet. Check back soon.
               </div>
@@ -185,18 +177,35 @@ export default function CategoryPageClient({ site, categorySlug, categoryLabel }
                 ))}
               </div>
             )}
-            {/* Load More Button */}
-            {page < totalPages && (
-              <div className="text-center mt-8">
-                <button
-                  onClick={() => loadArticles(page + 1, true)}
-                  disabled={loading}
-                  className="px-8 py-3 bg-[var(--accent)] text-white font-bold rounded-lg hover:bg-[var(--accent-dark)] transition-colors disabled:opacity-50"
-                  style={{ fontFamily: "'Oswald', sans-serif", letterSpacing: "1px", textTransform: "uppercase" }}
-                >
-                  {loading ? "Loading..." : "Load More Articles"}
-                </button>
-              </div>
+            {/* Real links, not a JS-only "load more": a crawler has to be
+                able to walk to page 2 and beyond, otherwise everything past
+                the first 20 articles is reachable only from the sitemap. */}
+            {totalPages > 1 && (
+              <nav className="flex items-center justify-center gap-3 mt-10" aria-label="Pagination">
+                {page > 1 && (
+                  <Link
+                    href={pageHref(page - 1)}
+                    rel="prev"
+                    className="px-5 py-2.5 bg-white border border-gray-200 rounded text-sm font-bold hover:border-[var(--accent)] transition-colors"
+                    style={{ fontFamily: "'Oswald', sans-serif" }}
+                  >
+                    &larr; Newer
+                  </Link>
+                )}
+                <span className="text-sm text-gray-500">
+                  Page {page} of {totalPages.toLocaleString()}
+                </span>
+                {page < totalPages && (
+                  <Link
+                    href={pageHref(page + 1)}
+                    rel="next"
+                    className="px-5 py-2.5 bg-[var(--accent)] text-white rounded text-sm font-bold hover:bg-[var(--accent-dark)] transition-colors"
+                    style={{ fontFamily: "'Oswald', sans-serif" }}
+                  >
+                    Older &rarr;
+                  </Link>
+                )}
+              </nav>
             )}
           </div>
 

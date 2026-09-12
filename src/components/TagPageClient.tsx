@@ -3,37 +3,43 @@
 import { motion } from "framer-motion";
 import { ChevronRight, Tag } from "lucide-react";
 import { SiteConfig } from "@/config/site-config";
-import { generateContent, Article } from "@/data/generate-content";
+import { generateContent } from "@/data/generate-content";
+import type { ListArticle } from "@/lib/category-data";
 import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar";
 import Footer from "@/components/Footer";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 
 interface TagPageClientProps {
   site: SiteConfig;
   tag: string;
   tagLabel: string;
+  articles: ListArticle[];
+  total: number;
+  page: number;
+  totalPages: number;
 }
 
-export default function TagPageClient({ site, tag, tagLabel }: TagPageClientProps) {
-  const [articles, setArticles] = useState<Article[]>([]);
+/**
+ * Presentation only — articles come from the server so they appear in the
+ * initial HTML rather than arriving later via a client fetch a crawler may
+ * never wait for.
+ */
+export default function TagPageClient({
+  site,
+  tag,
+  tagLabel,
+  articles,
+  total,
+  page,
+  totalPages,
+}: TagPageClientProps) {
   const content = generateContent(site);
 
-  useEffect(() => {
-    // Real articles only — never substitute fabricated placeholder news.
-    fetch(`/api/tag?site=${site.slug}&tag=${tag}`)
-      .then((r) => r.json())
-      .then((data) => {
-        if (data.articles && data.articles.length > 0) {
-          setArticles(data.articles);
-        }
-      })
-      .catch(() => {});
-  }, [site, tag]);
-
-  const makeSlug = (a: Article) =>
+  const makeSlug = (a: ListArticle) =>
     a.slug || a.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+
+  const pageHref = (n: number) => (n <= 1 ? `/tag/${tag}` : `/tag/${tag}?page=${n}`);
 
   return (
     <div className="min-h-screen bg-[#f5f5f5]">
@@ -55,7 +61,7 @@ export default function TagPageClient({ site, tag, tagLabel }: TagPageClientProp
             </h1>
           </div>
           <p className="text-gray-400 mt-2 text-sm" style={{ fontFamily: "'Oswald', sans-serif" }}>
-            {articles.length} articles tagged with &quot;{tagLabel}&quot;
+            {total.toLocaleString()} articles tagged with &quot;{tagLabel}&quot;
           </p>
         </div>
       </div>
@@ -63,6 +69,12 @@ export default function TagPageClient({ site, tag, tagLabel }: TagPageClientProp
       <div className="max-w-[1300px] mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           <div className="lg:col-span-8">
+            {articles.length === 0 && (
+              <div className="bg-white rounded-xl shadow-sm p-12 text-center text-gray-500 mb-8">
+                No articles tagged &quot;{tagLabel}&quot; yet.
+              </div>
+            )}
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
               {articles.map((article, i) => {
                 const cat = article.category.toLowerCase().replace(/\s+/g, "-");
@@ -91,6 +103,28 @@ export default function TagPageClient({ site, tag, tagLabel }: TagPageClientProp
                 );
               })}
             </div>
+
+            {totalPages > 1 && (
+              <nav className="flex items-center justify-center gap-3 mb-8" aria-label="Pagination">
+                {page > 1 && (
+                  <Link href={pageHref(page - 1)} rel="prev"
+                    className="px-5 py-2.5 bg-white border border-gray-200 rounded text-sm font-bold hover:border-[var(--accent)] transition-colors"
+                    style={{ fontFamily: "'Oswald', sans-serif" }}>
+                    &larr; Newer
+                  </Link>
+                )}
+                <span className="text-sm text-gray-500">
+                  Page {page} of {totalPages.toLocaleString()}
+                </span>
+                {page < totalPages && (
+                  <Link href={pageHref(page + 1)} rel="next"
+                    className="px-5 py-2.5 bg-[var(--accent)] text-white rounded text-sm font-bold hover:bg-[var(--accent-dark)] transition-colors"
+                    style={{ fontFamily: "'Oswald', sans-serif" }}>
+                    Older &rarr;
+                  </Link>
+                )}
+              </nav>
+            )}
 
             <div className="bg-white rounded-xl shadow-sm p-5">
               <h3 className="text-sm font-bold uppercase tracking-wider text-gray-500 mb-3"
