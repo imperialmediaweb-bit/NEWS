@@ -8,15 +8,51 @@ import {
   isPipelineEnabled,
 } from "@/lib/pipeline/scheduler";
 import { sites } from "@/config/sites";
+import pool from "@/lib/db";
 
 export const maxDuration = 300;
 
 /**
  * Stop starting new sites past this point so a run always returns cleanly.
- * 14 feeds per site with a 500ms gap between Google News requests is roughly
- * 15-25 seconds per site, so a batch of ten can run well past four minutes.
  */
 const RUN_BUDGET_MS = 210_000;
+
+/**
+ * Feeds to fetch at once per site. Sequentially, 14 feeds with a 500ms gap
+ * plus Google News latency runs 40-60 seconds per site, so a batch of ten
+ * could not finish inside any sane budget and the tail was always dropped.
+ * Four at a time keeps the request rate polite while bringing a site under
+ * twenty seconds.
+ */
+const FEED_CONCURRENCY = 4;
+
+/**
+ * Order a batch's sites by how long since each last had a successful fetch,
+ * oldest first. Fixed ordering meant a run that ran out of time dropped the
+ * same states every time and they never caught up — Connecticut, Delaware,
+ * Florida and Georgia sat at the end of their batch and went a fortnight
+ * without an article while the first half published normally.
+ */
+async function orderByStaleness(states: string[]): Promise<Map<string, number>> {
+  const lastRun = new Map<string, number>();
+  try {
+    const { rows } = await pool.query(
+      `SELECT category AS state, max(completed_at) AS last_ok
+         FROM pipeline_runs
+        WHERE stage = 'fetch' AND error_message IS NULL AND category = ANY($1)
+        GROUP BY category`,
+      [states]
+    );
+    for (const row of rows) {
+      if (row.state && row.last_ok) {
+        lastRun.set(row.state as string, new Date(row.last_ok).getTime());
+      }
+    }
+  } catch (e) {
+    console.error("[fetch] staleness lookup failed:", e instanceof Error ? e.message : e);
+  }
+  return lastRun;
+}
 
 function authCheck(req: NextRequest): boolean {
   const token = req.headers.get("authorization")?.replace("Bearer ", "");
@@ -67,10 +103,20 @@ export async function POST(req: NextRequest) {
   let totalSkipped = 0;
   const errors: string[] = [];
 
-  // Find matching site entries for the states in this batch
+  // Find matching site entries for the states in this batch, oldest fetch
+  // first. `rotate` only breaks ties between sites that are equally stale.
   const matched = Object.values(sites).filter((s) => statesToProcess.includes(s.state));
-  const start = matched.length > 0 ? ((rotate % matched.length) + matched.length) % matched.length : 0;
-  const siteEntries = [...matched.slice(start), ...matched.slice(0, start)];
+  const lastRun = await orderByStaleness(statesToProcess);
+  const siteEntries = [...matched]
+    .map((site, i) => ({ site, i }))
+    .sort((a, b) => {
+      // Never successfully fetched sorts first.
+      const aTime = lastRun.get(a.site.state) ?? 0;
+      const bTime = lastRun.get(b.site.state) ?? 0;
+      if (aTime !== bTime) return aTime - bTime;
+      return ((a.i + rotate) % matched.length) - ((b.i + rotate) % matched.length);
+    })
+    .map((e) => e.site);
 
   // Load the dedup lookback window ONCE for the whole run.
   const dedupCtx = await loadDedupContext();
@@ -85,40 +131,45 @@ export async function POST(req: NextRequest) {
     let siteFetched = 0;
     let siteFailed = 0;
 
-    for (const feed of activeFeeds) {
-      try {
-        const url = feed.url(site.state, site.city);
-        const items = await parseFeed(url);
+    // Fetch the feeds a few at a time, but insert their items one feed at a
+    // time: dedup compares each item against the ones already inserted in this
+    // run, so concurrent inserts would let duplicates through.
+    for (let i = 0; i < activeFeeds.length; i += FEED_CONCURRENCY) {
+      const group = activeFeeds.slice(i, i + FEED_CONCURRENCY);
 
-        if (items.length === 0) {
-          console.log(`[fetch] No items from ${feed.id} for ${site.state} — URL: ${url}`);
-        }
+      const fetched = await Promise.all(
+        group.map(async (feed) => {
+          try {
+            const url = feed.url(site.state, site.city);
+            const items = await parseFeed(url);
+            if (items.length === 0) {
+              console.log(`[fetch] No items from ${feed.id} for ${site.state} — URL: ${url}`);
+            }
+            return { feed, items: items.slice(0, feed.maxItems) };
+          } catch (error) {
+            siteFailed++;
+            errors.push(`${feed.id}/${site.stateAbbr}: ${String(error)}`);
+            return { feed, items: [] };
+          }
+        })
+      );
 
-        const limited = items.slice(0, feed.maxItems);
-
-        for (const item of limited) {
+      for (const { feed, items } of fetched) {
+        for (const item of items) {
           if (await isDuplicate(item, dedupCtx)) {
             totalSkipped++;
             continue;
           }
-          const id = await insertFeedItem(
-            item,
-            feed.id,
-            feed.category,
-            site.state
-          );
+          const id = await insertFeedItem(item, feed.id, feed.category, site.state);
           if (id) {
             siteFetched++;
             totalFetched++;
           }
         }
-
-        // Rate limit: 500ms between Google News requests
-        await new Promise((r) => setTimeout(r, 500));
-      } catch (error) {
-        siteFailed++;
-        errors.push(`${feed.id}/${site.stateAbbr}: ${String(error)}`);
       }
+
+      // Stay polite to Google News between groups.
+      await new Promise((r) => setTimeout(r, 500));
     }
 
     await logRunEnd(
