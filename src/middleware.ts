@@ -147,6 +147,35 @@ if (typeof globalThis !== "undefined") {
 // ad serving and AdSense approval.
 const GOOGLE_CRAWLER = /Googlebot|Mediapartners-Google|AdsBot-Google|Google-Adstxt|Google-Safety|Google-InspectionTool|Storebot-Google|APIs-Google|bingbot/i;
 
+/**
+ * First path segments that are listings, not articles — their contents change
+ * as new articles publish, so they keep the short edge TTL.
+ */
+const LISTING_PREFIXES = new Set([
+  "tag",
+  "hub",
+  "feed",
+  "seo",
+  "author",
+  "search",
+  "category",
+]);
+
+/**
+ * True for a page whose content is fixed once published: an article, a web
+ * story, an imported WordPress article. These are `/<section>/<slug>` and the
+ * slug is always long, which is what separates them from a listing page.
+ *
+ * An article edited in the admin can take a day to change at the edge. That is
+ * the trade for not re-rendering the same 2024 article for every crawler.
+ */
+function isImmutablePage(pathname: string): boolean {
+  const parts = pathname.split("/").filter(Boolean);
+  if (parts.length !== 2) return false;
+  if (LISTING_PREFIXES.has(parts[0])) return false;
+  return parts[1].length >= 12;
+}
+
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const ua = req.headers.get("user-agent") || "";
@@ -283,11 +312,20 @@ export function middleware(req: NextRequest) {
     pathname.startsWith("/api/") ||
     pathname.startsWith("/_next/");
   if (!isPrivatePath) {
+    // An article never changes once published, but a listing does every time
+    // something is published into it. Giving both the same ten minutes meant
+    // the edge threw away millions of still-perfectly-good article pages: the
+    // account serves over a million requests a day at a 10% hit rate, so
+    // roughly a million of them reach the origin, which is the Railway bill.
+    const long = isImmutablePage(pathname);
+    const edgeTtl = long ? 86400 : 600;
+    const stale = long ? 604800 : 3600;
+
     response.headers.set(
       "Cache-Control",
-      "public, max-age=0, s-maxage=600, stale-while-revalidate=3600"
+      `public, max-age=0, s-maxage=${edgeTtl}, stale-while-revalidate=${stale}`
     );
-    response.headers.set("CDN-Cache-Control", "public, max-age=600");
+    response.headers.set("CDN-Cache-Control", `public, max-age=${edgeTtl}`);
     // Same URL on 50 different hosts must not share a cache entry.
     response.headers.set("Vary", "Host, Accept-Encoding");
   }
