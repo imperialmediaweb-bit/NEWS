@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Search } from "lucide-react";
 import { SiteConfig } from "@/config/site-config";
 
 // Nav items map to real category routes via toLowerCase + dashes.
@@ -26,6 +26,8 @@ export default function Header({ site }: HeaderProps) {
           <button className="md:hidden text-white" onClick={() => setMenuOpen(!menuOpen)} aria-label="Menu">
             {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
+          {/* Desktop counterweight for the search icon, so the masthead stays centred. */}
+          <span className="hidden md:block w-6" />
 
           <div className="flex-1 text-center">
             <h1 className="inline-flex items-baseline gap-2 md:gap-3 leading-none">
@@ -51,8 +53,14 @@ export default function Header({ site }: HeaderProps) {
             </div>
           </div>
 
-          {/* spacer keeps masthead centered on mobile (mirrors menu button) */}
-          <span className="md:hidden w-6" />
+          {/* Links to the real /search page — never a decorative dead icon. */}
+          <Link
+            href="/search"
+            aria-label="Search"
+            className="text-white hover:text-[var(--accent)] transition-colors w-6 flex justify-end"
+          >
+            <Search className="w-5 h-5" />
+          </Link>
         </div>
       </div>
 

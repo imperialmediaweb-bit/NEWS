@@ -41,6 +41,15 @@ const STATEMENTS: { sql: string; why: string }[] = [
           ON articles (site_id, (lower(replace(author, '''', ''))) text_pattern_ops)`,
     why: "author pages (expression index for the LIKE lookup)",
   },
+  // --- on-site search. Without this, websearch_to_tsquery has to build the
+  // tsvector for every one of ~745k rows on each query.
+  {
+    sql: `CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_articles_fts
+          ON articles USING GIN (
+            to_tsvector('english', coalesce(title, '') || ' ' || coalesce(summary, ''))
+          )`,
+    why: "on-site search (full-text GIN index)",
+  },
   // --- pipeline: dedup lookback + cleanup both scan feed_items by date
   {
     sql: `CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_feed_items_created

@@ -1,11 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import pool from "@/lib/db";
 import { logRunStart, logRunEnd, isPipelineEnabled } from "@/lib/pipeline/scheduler";
+import {
+  hasGoogleIndexingCredentials,
+  submitGoogleIndexing,
+  submitBingUrls,
+  submitYandexRecrawl,
+  refreshFacebookCache,
+} from "@/lib/indexing";
 
 function authCheck(req: NextRequest): boolean {
   const token = req.headers.get("authorization")?.replace("Bearer ", "");
   return token === process.env.CRON_SECRET;
 }
+
+/** Google's default Indexing API quota is 200 URLs per project per day. */
+const GOOGLE_DAILY_QUOTA = 200;
 
 /**
  * Submit recently published articles to ALL search engines:
@@ -14,6 +24,8 @@ function authCheck(req: NextRequest): boolean {
  * 3. Sitemap Ping → ping Bing with sitemap URL
  * 4. WebSub/PubSubHubbub → notify Google of RSS updates
  * 5. Google Indexing API → direct indexing request (if configured)
+ * 6. Bing Webmaster URL submission → batch submit (if configured)
+ * 7. Yandex recrawl + Facebook Open Graph refresh (if configured)
  */
 export async function POST(req: NextRequest) {
   if (!authCheck(req)) {
@@ -178,52 +190,53 @@ export async function POST(req: NextRequest) {
     results.websub = { ok: websubOk, failed: websubFail };
 
     // ─── 5. Google Indexing API (requires service account) ───
-    // Credentials may be supplied either as one full service-account JSON
-    // (GOOGLE_INDEXING_SA_KEY) or as the separate email + private key pair
-    // used elsewhere in the app. Previously only the first name was read, so
-    // this step silently never ran.
-    const googleSaKey = buildServiceAccountKey();
-    if (googleSaKey) {
+    // The quota is ~200 URLs/day for the whole project, so spend it on the
+    // newest articles rather than draining it on whichever domain sorts first.
+    if (hasGoogleIndexingCredentials()) {
       let indexingOk = 0;
       let indexingFail = 0;
-      try {
-        const token = await getGoogleAccessToken(googleSaKey);
-        if (token) {
-          // Google Indexing API allows batch of individual URLs
-          for (const [, urls] of entries) {
-            for (const url of urls.slice(0, 200)) {
-              try {
-                const res = await fetch(
-                  "https://indexing.googleapis.com/v3/urlNotifications:publish",
-                  {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json",
-                      Authorization: `Bearer ${token}`,
-                    },
-                    body: JSON.stringify({
-                      url,
-                      type: "URL_UPDATED",
-                    }),
-                  }
-                );
-                if (res.ok) {
-                  indexingOk++;
-                } else {
-                  indexingFail++;
-                }
-                // Rate limit: ~200 requests/day
-                await new Promise((r) => setTimeout(r, 100));
-              } catch {
-                indexingFail++;
-              }
-            }
-          }
+      const queue = interleaveByDomain(entries, GOOGLE_DAILY_QUOTA);
+      for (const url of queue) {
+        if (await submitGoogleIndexing(url)) {
+          indexingOk++;
+        } else {
+          indexingFail++;
         }
-      } catch {
-        indexingFail++;
+        await new Promise((r) => setTimeout(r, 100));
       }
       results.googleIndexingApi = { ok: indexingOk, failed: indexingFail };
+    }
+
+    // ─── 6. Bing Webmaster URL submission (batch, per site) ───
+    if (process.env.BING_WEBMASTER_API_KEY) {
+      let bingOk = 0;
+      let bingFail = 0;
+      for (const [domain, urls] of entries) {
+        if (await submitBingUrls(`https://${domain}`, urls)) {
+          bingOk += Math.min(urls.length, 500);
+        } else {
+          bingFail += Math.min(urls.length, 500);
+        }
+      }
+      results.bingWebmaster = { ok: bingOk, failed: bingFail };
+    }
+
+    // ─── 7. Yandex recrawl + Facebook Open Graph refresh ───
+    // Both are per-URL and rate limited, so cap them the same way.
+    if (process.env.YANDEX_WEBMASTER_TOKEN) {
+      let yandexOk = 0;
+      for (const url of interleaveByDomain(entries, 100)) {
+        if (await submitYandexRecrawl(url)) yandexOk++;
+      }
+      results.yandex = { ok: yandexOk };
+    }
+
+    if (process.env.FACEBOOK_APP_ACCESS_TOKEN) {
+      let fbOk = 0;
+      for (const url of interleaveByDomain(entries, 100)) {
+        if (await refreshFacebookCache(url)) fbOk++;
+      }
+      results.facebookCache = { ok: fbOk };
     }
 
     await logRunEnd(runId, totalNotified, totalFailed, Date.now() - startTime);
@@ -241,104 +254,17 @@ export async function POST(req: NextRequest) {
 }
 
 /**
- * Resolve service-account credentials into the JSON shape
- * getGoogleAccessToken expects, from either env layout.
+ * Round-robin URLs across domains up to `limit`, so a 50-site network shares
+ * a scarce daily quota evenly instead of one site consuming all of it.
  */
-function buildServiceAccountKey(): string | null {
-  const full = process.env.GOOGLE_INDEXING_SA_KEY;
-  if (full) return full;
-
-  const email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
-  const privateKey = process.env.GOOGLE_SERVICE_ACCOUNT_KEY;
-  if (!email || !privateKey) return null;
-
-  return JSON.stringify({
-    client_email: email,
-    // Railway stores the PEM with escaped newlines.
-    private_key: privateKey.replace(/\\n/g, "\n"),
-  });
-}
-
-/**
- * Get Google OAuth2 access token from service account JSON key.
- * Uses JWT grant type for server-to-server auth.
- */
-async function getGoogleAccessToken(saKeyJson: string): Promise<string | null> {
-  try {
-    const key = JSON.parse(saKeyJson);
-    const now = Math.floor(Date.now() / 1000);
-
-    // Build JWT header and claim set
-    const header = base64url(JSON.stringify({ alg: "RS256", typ: "JWT" }));
-    const claim = base64url(
-      JSON.stringify({
-        iss: key.client_email,
-        scope: "https://www.googleapis.com/auth/indexing",
-        aud: "https://oauth2.googleapis.com/token",
-        exp: now + 3600,
-        iat: now,
-      })
-    );
-
-    // Sign with private key using Web Crypto
-    const signingInput = `${header}.${claim}`;
-    const pemKey = key.private_key;
-
-    // Import PEM private key
-    const pemContents = pemKey
-      .replace(/-----BEGIN PRIVATE KEY-----/, "")
-      .replace(/-----END PRIVATE KEY-----/, "")
-      .replace(/\n/g, "");
-    const binaryKey = Uint8Array.from(atob(pemContents), (c) => c.charCodeAt(0));
-
-    const cryptoKey = await crypto.subtle.importKey(
-      "pkcs8",
-      binaryKey,
-      { name: "RSASSA-PKCS1-v1_5", hash: "SHA-256" },
-      false,
-      ["sign"]
-    );
-
-    const signature = await crypto.subtle.sign(
-      "RSASSA-PKCS1-v1_5",
-      cryptoKey,
-      new TextEncoder().encode(signingInput)
-    );
-
-    const jwt = `${signingInput}.${base64url(signature)}`;
-
-    // Exchange JWT for access token
-    const tokenRes = await fetch("https://oauth2.googleapis.com/token", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({
-        grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer",
-        assertion: jwt,
-      }).toString(),
-    });
-
-    if (tokenRes.ok) {
-      const data = await tokenRes.json();
-      return data.access_token;
+function interleaveByDomain(entries: [string, string[]][], limit: number): string[] {
+  const out: string[] = [];
+  const maxLen = Math.max(0, ...entries.map(([, urls]) => urls.length));
+  for (let i = 0; i < maxLen && out.length < limit; i++) {
+    for (const [, urls] of entries) {
+      if (out.length >= limit) break;
+      if (i < urls.length) out.push(urls[i]);
     }
-    return null;
-  } catch (e) {
-    console.error("Google auth error:", e);
-    return null;
   }
-}
-
-function base64url(input: string | ArrayBuffer): string {
-  let str: string;
-  if (typeof input === "string") {
-    str = btoa(input);
-  } else {
-    const bytes = new Uint8Array(input);
-    let binary = "";
-    for (let i = 0; i < bytes.length; i++) {
-      binary += String.fromCharCode(bytes[i]);
-    }
-    str = btoa(binary);
-  }
-  return str.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  return out;
 }
