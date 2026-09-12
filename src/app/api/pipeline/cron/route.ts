@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { isPublishingHours, STATE_BATCHES } from "@/config/feeds";
 import { isPipelineEnabled } from "@/lib/pipeline/scheduler";
 import { claimJob } from "@/lib/pipeline/jobs";
+import { hasCloudflareCredentials } from "@/lib/cloudflare";
+import { hasGscCredentials } from "@/lib/gsc";
 
 /**
  * 5 batches × 24 minutes = every state group is fetched once every 2 hours,
@@ -107,7 +109,12 @@ export async function POST(req: NextRequest) {
   // ─── Search Console property setup: hourly until every site is done ───
   // Self-healing: a site whose DNS had not propagated yet is retried on the
   // next pass, and once all 50 have a usable domain property this is a no-op.
-  if ((await claimJob("gsc_setup", 60 * 60)).claimed) {
+  //
+  // Check the credentials *before* claiming. The app runs as several service
+  // copies and any of them can win the claim; one that lacks the variables
+  // would take the claim, skip the work, and block the copy that does have
+  // them for the next hour.
+  if (hasCloudflareCredentials() && hasGscCredentials() && (await claimJob("gsc_setup", 60 * 60)).claimed) {
     fireAndForget(baseUrl, "admin/gsc-setup?step=auto", {}, secret);
     actions.push("gsc_setup");
   }
