@@ -31,12 +31,32 @@ export async function POST(req: NextRequest) {
   const startTime = Date.now();
   const runId = await logRunStart("rewrite");
 
-  // Pick oldest pending feed items
+  // Take the freshest pending item from as many different states as possible.
+  //
+  // This used to be a plain `ORDER BY created_at ASC LIMIT 10` over the whole
+  // queue, which had two problems. It published the stalest news first, on a
+  // news site. And because the queue is one shared FIFO for all fifty states,
+  // whichever states happened to be near the front consumed the entire budget:
+  // Florida was sitting on 36,045 pending items, Georgia 23,733 and Delaware
+  // 15,552, none of them failing, just never reached — those three had not
+  // published an article in two days while the rest of the network was fine.
+  //
+  // row_number() per state and ordering by it takes one item from each state
+  // before taking a second from any, so a large backlog can no longer starve
+  // anyone. Restricting to the last day both bounds the scan and stops us
+  // publishing two-week-old items as news.
   const { rows: pending } = await pool.query(
     `UPDATE feed_items SET status = 'processing'
      WHERE id IN (
-       SELECT id FROM feed_items WHERE status = 'pending'
-       ORDER BY created_at ASC LIMIT $1
+       SELECT id FROM (
+         SELECT id,
+                row_number() OVER (PARTITION BY state ORDER BY created_at DESC) AS rn
+           FROM feed_items
+          WHERE status = 'pending'
+            AND created_at > NOW() - INTERVAL '24 hours'
+       ) ranked
+       ORDER BY rn ASC
+       LIMIT $1
      )
      RETURNING *`,
     [batchSize]

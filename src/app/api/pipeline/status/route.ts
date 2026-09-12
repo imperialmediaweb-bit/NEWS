@@ -107,19 +107,24 @@ export async function GET(req: NextRequest) {
       .filter((s) => silent.includes(s.slug))
       .map((s) => s.state);
     try {
+      // Scalar subqueries, not two LEFT JOINs on the same key: joining
+      // feed_items and pipeline_runs together multiplies the rows, and the
+      // counts come back as pending × matching-runs. That inflated Florida's
+      // backlog to 36,045 in an earlier version of this endpoint.
       const { rows } = await pool.query(
         `SELECT s.state,
-                count(*) FILTER (WHERE f.status = 'pending')::int    AS pending,
-                count(*) FILTER (WHERE f.status = 'processing')::int AS processing,
-                count(*) FILTER (WHERE f.status = 'failed')::int     AS failed,
-                max(f.created_at)                                    AS newest_item,
-                max(r.completed_at)                                  AS last_fetch_ok
-           FROM unnest($1::text[]) AS s(state)
-           LEFT JOIN feed_items f    ON f.state = s.state
-           LEFT JOIN pipeline_runs r ON r.category = s.state
-                                    AND r.stage = 'fetch'
-                                    AND r.error_message IS NULL
-          GROUP BY s.state`,
+                (SELECT count(*)::int FROM feed_items f
+                  WHERE f.state = s.state AND f.status = 'pending')    AS pending,
+                (SELECT count(*)::int FROM feed_items f
+                  WHERE f.state = s.state AND f.status = 'processing') AS processing,
+                (SELECT count(*)::int FROM feed_items f
+                  WHERE f.state = s.state AND f.status = 'failed')     AS failed,
+                (SELECT max(f.created_at) FROM feed_items f
+                  WHERE f.state = s.state)                             AS newest_item,
+                (SELECT max(r.completed_at) FROM pipeline_runs r
+                  WHERE r.category = s.state AND r.stage = 'fetch'
+                    AND r.error_message IS NULL)                       AS last_fetch_ok
+           FROM unnest($1::text[]) AS s(state)`,
         [silentStates]
       );
       for (const r of rows) {
