@@ -95,8 +95,9 @@ export async function GET(req: NextRequest) {
     const checked: Record<string, unknown>[] = [];
     for (const url of urls) {
       const result = await inspect(token, property, url);
-      if (result.coverageState) {
-        coverageTotals[result.coverageState] = (coverageTotals[result.coverageState] || 0) + 1;
+      const coverage = typeof result.coverageState === "string" ? result.coverageState : null;
+      if (coverage) {
+        coverageTotals[coverage] = (coverageTotals[coverage] || 0) + 1;
       }
       checked.push({ url, ...result });
     }
