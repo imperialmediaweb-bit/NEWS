@@ -96,6 +96,57 @@ export async function GET(req: NextRequest) {
   const silent = sites.filter((s) => s.last48h === 0).map((s) => s.slug);
   const fetchJob = jobs.find((j) => j.job === "fetch");
 
+  // For anything still silent, say *where* it is stuck rather than leaving it
+  // to be worked out by hand. Items waiting in feed_items means fetching works
+  // and rewriting is behind; nothing waiting and an old fetch means the state
+  // is not being fetched at all; nothing waiting and a recent fetch means the
+  // source feed returned nothing worth keeping.
+  const diagnosis: Record<string, unknown>[] = [];
+  if (silent.length > 0) {
+    const silentStates = Object.values(siteConfigs)
+      .filter((s) => silent.includes(s.slug))
+      .map((s) => s.state);
+    try {
+      const { rows } = await pool.query(
+        `SELECT s.state,
+                count(*) FILTER (WHERE f.status = 'pending')::int    AS pending,
+                count(*) FILTER (WHERE f.status = 'processing')::int AS processing,
+                count(*) FILTER (WHERE f.status = 'failed')::int     AS failed,
+                max(f.created_at)                                    AS newest_item,
+                max(r.completed_at)                                  AS last_fetch_ok
+           FROM unnest($1::text[]) AS s(state)
+           LEFT JOIN feed_items f    ON f.state = s.state
+           LEFT JOIN pipeline_runs r ON r.category = s.state
+                                    AND r.stage = 'fetch'
+                                    AND r.error_message IS NULL
+          GROUP BY s.state`,
+        [silentStates]
+      );
+      for (const r of rows) {
+        const pending = Number(r.pending);
+        const lastFetch = r.last_fetch_ok ? new Date(r.last_fetch_ok) : null;
+        const fetchedRecently =
+          lastFetch !== null && Date.now() - lastFetch.getTime() < 3 * 60 * 60 * 1000;
+        diagnosis.push({
+          state: r.state,
+          pending,
+          processing: Number(r.processing),
+          failed: Number(r.failed),
+          newestItem: r.newest_item ? new Date(r.newest_item).toISOString() : null,
+          lastFetchOk: lastFetch ? lastFetch.toISOString() : null,
+          likelyCause:
+            pending > 0
+              ? "items are queued — the rewrite stage is behind, not the fetch"
+              : fetchedRecently
+                ? "fetched recently but nothing queued — the source feed returned only duplicates or nothing"
+                : "not being fetched — check that its batch is reaching this state",
+        });
+      }
+    } catch (e) {
+      diagnosis.push({ error: e instanceof Error ? e.message : String(e) });
+    }
+  }
+
   return NextResponse.json({
     pipelineEnabled: await isPipelineEnabled(),
     publishingHours: isPublishingHours(),
@@ -108,6 +159,8 @@ export async function GET(req: NextRequest) {
       sitesSilent48h: silent.length,
     },
     silent48h: silent,
+    // Why each silent site is silent, so this needs no follow-up detective work.
+    whySilent: diagnosis.length > 0 ? diagnosis : undefined,
     sites,
   });
 }
