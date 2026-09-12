@@ -119,6 +119,14 @@ export async function POST(req: NextRequest) {
     actions.push("gsc_setup");
   }
 
+  // ─── Advertorial campaigns: publish the day's batch ───
+  // Checked hourly but each campaign schedules its own next day, so this only
+  // does work when one is actually due.
+  if ((await claimJob("campaigns", 60 * 60)).claimed) {
+    fireAndForget(baseUrl, "admin/campaign", { publish: true }, secret);
+    actions.push("campaigns");
+  }
+
   // ─── Database indexes: daily, idempotent (CREATE INDEX IF NOT EXISTS) ───
   // Cheap when there is nothing to do, and means a new index added to the code
   // gets applied without anyone remembering to run it.
