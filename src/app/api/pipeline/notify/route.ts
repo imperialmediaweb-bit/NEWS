@@ -8,6 +8,7 @@ import {
   submitYandexRecrawl,
   refreshFacebookCache,
 } from "@/lib/indexing";
+import { submitToIndexNow } from "@/lib/indexnow";
 
 function authCheck(req: NextRequest): boolean {
   const token = req.headers.get("authorization")?.replace("Bearer ", "");
@@ -73,34 +74,24 @@ export async function POST(req: NextRequest) {
     const entries = Array.from(urlsByDomain.entries());
 
     // ─── 1. IndexNow (Bing, Yandex) ───
-    const indexNowKey = process.env.INDEXNOW_KEY;
-    if (indexNowKey) {
-      let indexNowOk = 0;
-      let indexNowFail = 0;
-      for (const [domain, urls] of entries) {
-        try {
-          const res = await fetch("https://api.indexnow.org/indexnow", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              host: domain,
-              key: indexNowKey,
-              urlList: urls.slice(0, 10000),
-            }),
-          });
-          if (res.ok || res.status === 202) {
-            indexNowOk += urls.length;
-          } else {
-            indexNowFail += urls.length;
-          }
-        } catch {
-          indexNowFail += urls.length;
-        }
+    // Use the shared helper rather than a second hand-rolled request. The
+    // inline version sent process.env.INDEXNOW_KEY, but /indexnow.txt serves a
+    // key derived per domain — two different keys — and it sent no
+    // keyLocation, so IndexNow looked for the key at https://<host>/<key>.txt.
+    // That path is caught by the [category] route and answers with an HTML
+    // page, so every submission was rejected.
+    let indexNowOk = 0;
+    let indexNowFail = 0;
+    for (const [domain, urls] of entries) {
+      if (await submitToIndexNow(domain, urls.slice(0, 10000))) {
+        indexNowOk += urls.length;
+      } else {
+        indexNowFail += urls.length;
       }
-      totalNotified += indexNowOk;
-      totalFailed += indexNowFail;
-      results.indexNow = { ok: indexNowOk, failed: indexNowFail };
     }
+    totalNotified += indexNowOk;
+    totalFailed += indexNowFail;
+    results.indexNow = { ok: indexNowOk, failed: indexNowFail };
 
     // ─── 2. Google Ping (sitemap) ───
     let googlePingOk = 0;

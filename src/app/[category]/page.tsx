@@ -84,9 +84,13 @@ export default async function CategoryPage({
     page
   );
 
-  // A page number past the end has no content to show. Serving an empty 200
-  // invites Google to index unlimited blank pages off ?page=999.
-  if (page > 1 && articles.length === 0) {
+  // Any single path segment lands here, so /nonsense.txt and /whatever-i-type
+  // were answering 200 with an empty category page. That is a soft 404: it
+  // invites Google to index unlimited blank pages, it wastes crawl budget on
+  // a network already taking a million bot requests a day, and it broke
+  // IndexNow, whose validator fetches https://<host>/<key>.txt and got HTML.
+  // An empty category has nothing to show either way, so 404 it.
+  if (articles.length === 0) {
     notFound();
   }
 
