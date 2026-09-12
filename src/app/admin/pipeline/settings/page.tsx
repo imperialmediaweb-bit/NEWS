@@ -198,7 +198,9 @@ export default function PipelineSettingsPage() {
           <p>PIXABAY_API_KEY=your-pixabay-key</p>
           <p>PEXELS_API_KEY=your-pexels-key (optional)</p>
           <p>UNSPLASH_ACCESS_KEY=your-unsplash-key (optional)</p>
-          <p>INDEXNOW_KEY=your-indexnow-key (optional)</p>
+          <p>GOOGLE_SERVICE_ACCOUNT_EMAIL=indexer@project.iam.gserviceaccount.com (Google Indexing API, optional)</p>
+          <p>GOOGLE_SERVICE_ACCOUNT_KEY=&quot;-----BEGIN PRIVATE KEY-----...&quot; (same service account, Owner on every Search Console property)</p>
+          <p>IndexNow needs no key: each domain serves its own at /indexnow.txt</p>
         </div>
       </div>
 

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { sites } from "@/config/sites";
 import pool from "@/lib/db";
 import { getGoogleAccessToken } from "@/lib/google-auth";
+import { generateIndexNowKey } from "@/lib/indexnow";
 
 /**
  * Submit all 50 site sitemaps to search engines.
@@ -15,7 +16,6 @@ import { getGoogleAccessToken } from "@/lib/google-auth";
  * GET  — check results
  */
 
-const INDEXNOW_KEY = "b7d8e9f2a1c4d6e8f0a2b4c6d8e0f2a4";
 
 async function getGSCToken(): Promise<string | null> {
   const email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
@@ -87,7 +87,7 @@ async function submitSitemaps() {
     // 1. IndexNow — submit sitemap URL to Bing/Yandex
     try {
       const indexnowRes = await fetch(
-        `https://api.indexnow.org/indexnow?url=${encodeURIComponent(`https://${domain}/sitemap.xml`)}&key=${INDEXNOW_KEY}`,
+        `https://api.indexnow.org/indexnow?url=${encodeURIComponent(`https://${domain}/sitemap.xml`)}&key=${generateIndexNowKey(domain)}&keyLocation=${encodeURIComponent(`https://${domain}/indexnow.txt`)}`,
         { method: "GET" }
       );
       if (!indexnowRes.ok && indexnowRes.status !== 202) {

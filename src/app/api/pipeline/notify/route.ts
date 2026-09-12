@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import pool from "@/lib/db";
 import { logRunStart, logRunEnd, isPipelineEnabled } from "@/lib/pipeline/scheduler";
+import { submitToIndexNow } from "@/lib/indexnow";
 
 function authCheck(req: NextRequest): boolean {
   const token = req.headers.get("authorization")?.replace("Bearer ", "");
@@ -60,30 +61,16 @@ export async function POST(req: NextRequest) {
 
     const entries = Array.from(urlsByDomain.entries());
 
-    // ─── 1. IndexNow (Bing, Yandex) ───
-    const indexNowKey = process.env.INDEXNOW_KEY;
-    if (indexNowKey) {
+    // ─── 1. IndexNow (Bing, Yandex, Seznam, Naver) ───
+    // The key is the per-domain one served at /indexnow.txt — the same one
+    // submitToIndexNow uses — otherwise Bing rejects the batch on verification.
+    {
       let indexNowOk = 0;
       let indexNowFail = 0;
       for (const [domain, urls] of entries) {
-        try {
-          const res = await fetch("https://api.indexnow.org/indexnow", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              host: domain,
-              key: indexNowKey,
-              urlList: urls.slice(0, 10000),
-            }),
-          });
-          if (res.ok || res.status === 202) {
-            indexNowOk += urls.length;
-          } else {
-            indexNowFail += urls.length;
-          }
-        } catch {
-          indexNowFail += urls.length;
-        }
+        const ok = await submitToIndexNow(domain, urls);
+        if (ok) indexNowOk += urls.length;
+        else indexNowFail += urls.length;
       }
       totalNotified += indexNowOk;
       totalFailed += indexNowFail;

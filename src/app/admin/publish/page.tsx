@@ -6,6 +6,17 @@ import { Send, Check } from "lucide-react";
 import ContentEditor from "@/components/admin/ContentEditor";
 import ImageUpload from "@/components/admin/ImageUpload";
 
+interface PublishResult {
+  links: string[];
+  results: { site: string; domain: string; url: string; inserted: boolean }[];
+  indexing: {
+    domains: number;
+    indexNow: { ok: number; failed: number };
+    websub: { ok: number; failed: number };
+    google: { ok: number; failed: number } | "not configured";
+  };
+}
+
 export default function PublishPage() {
   const siteList = Object.values(sites);
   const [title, setTitle] = useState("");
@@ -17,6 +28,7 @@ export default function PublishPage() {
   const [selectedSites, setSelectedSites] = useState<string[]>([]);
   const [publishing, setPublishing] = useState(false);
   const [published, setPublished] = useState(false);
+  const [result, setResult] = useState<PublishResult | null>(null);
 
   const toggleSite = (slug: string) => {
     setSelectedSites((prev) =>
@@ -50,6 +62,8 @@ export default function PublishPage() {
         }),
       });
       if (res.ok) {
+        const data = (await res.json()) as PublishResult;
+        setResult(data);
         setPublished(true);
         setTimeout(() => setPublished(false), 3000);
         setTitle("");
@@ -71,6 +85,48 @@ export default function PublishPage() {
   return (
     <div>
       <h1 className="text-2xl font-bold mb-6">Publish Article</h1>
+
+      {result && (
+        <div className="bg-green-50 border border-green-200 rounded-xl p-6 mb-6 space-y-3">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <h2 className="font-bold">
+              Published on {result.results.filter((r) => r.inserted).length} of {result.results.length} sites
+            </h2>
+            <div className="flex gap-2">
+              <button
+                onClick={() => navigator.clipboard.writeText(result.links.join("\n"))}
+                className="text-xs px-3 py-1.5 rounded-lg bg-white border font-medium hover:bg-gray-50"
+              >
+                Copy all links
+              </button>
+              <button
+                onClick={() => setResult(null)}
+                className="text-xs px-3 py-1.5 rounded-lg bg-white border font-medium hover:bg-gray-50"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+          <p className="text-xs text-gray-600">
+            Sent to search engines — IndexNow (Bing, Yandex): {result.indexing.indexNow.ok}/{result.indexing.domains} ·
+            Google feed ping: {result.indexing.websub.ok}/{result.indexing.domains} ·
+            Google Indexing API:{" "}
+            {result.indexing.google === "not configured"
+              ? "not configured (add GOOGLE_SERVICE_ACCOUNT_EMAIL + KEY)"
+              : `${result.indexing.google.ok} ok, ${result.indexing.google.failed} failed`}
+          </p>
+          <ul className="max-h-64 overflow-y-auto text-xs font-mono space-y-1">
+            {result.results.map((r) => (
+              <li key={r.url} className={r.inserted ? "" : "text-gray-400"}>
+                <a href={r.url} target="_blank" rel="noreferrer" className="hover:underline">
+                  {r.url}
+                </a>
+                {!r.inserted && " (already existed)"}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Article Form */}
