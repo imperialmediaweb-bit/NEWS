@@ -63,7 +63,11 @@ export async function POST(req: NextRequest) {
     const fetchClaim = await claimJob("fetch", FETCH_INTERVAL_SECONDS);
     if (fetchClaim.claimed) {
       const batchIndex = fetchClaim.runCount % STATE_BATCHES.length;
-      fireAndForget(baseUrl, "pipeline/fetch", { batch: batchIndex }, secret);
+      // How many full rotations we've done — used to advance the starting
+      // state inside the batch, so a run that runs out of time doesn't skip
+      // the same tail every time.
+      const rotate = Math.floor(fetchClaim.runCount / STATE_BATCHES.length);
+      fireAndForget(baseUrl, "pipeline/fetch", { batch: batchIndex, rotate }, secret);
       actions.push(`fetch_batch_${batchIndex}`);
     }
 

@@ -9,6 +9,15 @@ import {
 } from "@/lib/pipeline/scheduler";
 import { sites } from "@/config/sites";
 
+export const maxDuration = 300;
+
+/**
+ * Stop starting new sites past this point so a run always returns cleanly.
+ * 14 feeds per site with a 500ms gap between Google News requests is roughly
+ * 15-25 seconds per site, so a batch of ten can run well past four minutes.
+ */
+const RUN_BUDGET_MS = 210_000;
+
 function authCheck(req: NextRequest): boolean {
   const token = req.headers.get("authorization")?.replace("Bearer ", "");
   return token === process.env.CRON_SECRET;
@@ -30,6 +39,12 @@ export async function POST(req: NextRequest) {
   const body = await req.json().catch(() => ({}));
   const batchIndex: number | undefined = body.batch;
   const requestedCategories: string[] | undefined = body.categories;
+  // Where in the batch to start. The states are processed in order, so if a
+  // run is cut short it is always the same tail that gets skipped — which is
+  // how Colorado through Georgia ended up silent while the first half of the
+  // same batch published normally. Advancing the start position each time the
+  // batch comes round means every state gets to go first eventually.
+  const rotate: number = Number.isFinite(body.rotate) ? Number(body.rotate) : 0;
 
   // Determine which states to process based on batch index (0-4)
   let statesToProcess: string[];
@@ -53,14 +68,19 @@ export async function POST(req: NextRequest) {
   const errors: string[] = [];
 
   // Find matching site entries for the states in this batch
-  const siteEntries = Object.values(sites).filter((s) =>
-    statesToProcess.includes(s.state)
-  );
+  const matched = Object.values(sites).filter((s) => statesToProcess.includes(s.state));
+  const start = matched.length > 0 ? ((rotate % matched.length) + matched.length) % matched.length : 0;
+  const siteEntries = [...matched.slice(start), ...matched.slice(0, start)];
 
   // Load the dedup lookback window ONCE for the whole run.
   const dedupCtx = await loadDedupContext();
 
+  const skipped: string[] = [];
   for (const site of siteEntries) {
+    if (Date.now() - startTime > RUN_BUDGET_MS) {
+      skipped.push(site.state);
+      continue;
+    }
     const runId = await logRunStart("fetch", site.state);
     let siteFetched = 0;
     let siteFailed = 0;
@@ -113,9 +133,12 @@ export async function POST(req: NextRequest) {
   return NextResponse.json({
     batch: batchIndex,
     states: statesToProcess,
+    startedAt: siteEntries[0]?.state,
     feeds: activeFeeds.length,
     fetched: totalFetched,
     skipped: totalSkipped,
+    // States the run had no time left for — they lead the next rotation.
+    ranOutOfTimeFor: skipped.length > 0 ? skipped : undefined,
     errors: errors.length > 0 ? errors : undefined,
     durationMs: Date.now() - startTime,
   });
