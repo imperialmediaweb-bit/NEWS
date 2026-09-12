@@ -331,6 +331,58 @@ export async function rewriteArticle(
 }
 
 /**
+ * Rewrite a paid advertorial for one specific site.
+ *
+ * A campaign is bought once and runs across the network, so without this every
+ * site publishes a byte-identical copy — fifty duplicates on fifty domains,
+ * which is the pattern Google calls scaled content abuse and which would cost
+ * the whole network its AdSense at once, not one site.
+ *
+ * The hard constraint is that this is someone's paid message: the wording and
+ * the local framing may change, the claims may not. Inventing a detail about a
+ * paying client is a worse failure than duplicate content, so the prompt is
+ * explicit that facts, names, figures and offers are to be carried over
+ * untouched.
+ */
+export async function rewriteCampaignForSite(
+  siteName: string,
+  state: string,
+  city: string,
+  title: string,
+  content: string,
+  sponsorName: string
+): Promise<RewriteResult> {
+  const prompt = `You are an editor at ${siteName}, a local news outlet serving ${city}, ${state}.
+
+You are preparing a piece of SPONSORED CONTENT for publication. The sponsor is ${sponsorName || "the advertiser"}.
+
+Rewrite the copy below in your own words so it reads naturally to a reader in ${city}, ${state}, and does not read identically to the version running on other outlets.
+
+ABSOLUTE RULES — breaking any of these is worse than a dull rewrite:
+- Do NOT invent, add, change or remove any fact, claim, statistic, price, date, product name, company name, contact detail or offer. Everything factual must come from the source copy and survive unchanged.
+- Do NOT invent quotes or attribute statements to anyone not already quoted.
+- Do NOT add local details you were not given. You may address the local reader in general terms; you may not claim the sponsor has a branch in ${city} or anything similar unless the copy says so.
+- Do NOT write it as news. It is an advertisement and must not imitate newsroom reporting.
+- Keep roughly the same length as the source.
+
+Return ONLY valid JSON, no markdown fences:
+{
+  "title": "a rewritten headline, plain and non-sensational",
+  "summary": "one or two sentences, under 200 characters",
+  "content": "the rewritten body as HTML using only <p>, <h2>, <ul>, <li>, <strong> tags",
+  "suggestedImageQuery": "2-4 English keywords describing a suitable photo"
+}
+
+SOURCE HEADLINE:
+${title}
+
+SOURCE COPY:
+${content}`;
+
+  return callWithFallback(prompt);
+}
+
+/**
  * Short article rewrite for seed/breaking mode (300-500 words).
  * Faster, cheaper, used for initial site population.
  */

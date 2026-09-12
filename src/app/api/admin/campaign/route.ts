@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import pool from "@/lib/db";
 import { sites } from "@/config/sites";
 import { getSiteId } from "@/lib/site-id";
+import { rewriteCampaignForSite } from "@/lib/pipeline/rewriter";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 300;
@@ -183,7 +184,7 @@ async function publishDue(): Promise<Record<string, unknown>> {
     }
 
     const batch = remaining.slice(0, perDay);
-    const links: { site: string; url: string }[] = [];
+    const links: { site: string; url: string; rewritten: boolean }[] = [];
     const failures: { site: string; error: string }[] = [];
 
     for (let i = 0; i < batch.length; i++) {
@@ -197,13 +198,44 @@ async function publishDue(): Promise<Record<string, unknown>> {
           continue;
         }
 
-        const slug = buildSlug(campaign.title as string, site.stateAbbr || site.slug);
         const category = ((campaign.category as string) || "business")
           .toLowerCase()
           .replace(/[^a-z0-9]+/g, "-");
 
+        // Rewrite per site so the fifty copies are not identical. If the LLM
+        // is unavailable the campaign still runs on the original copy — a
+        // duplicate that publishes beats a paid placement that silently does
+        // not.
+        let siteTitle = campaign.title as string;
+        let siteSummary = (campaign.summary as string) || "";
+        let body = campaign.content as string;
+        let rewritten = false;
+        try {
+          const result = await rewriteCampaignForSite(
+            site.name,
+            site.state,
+            site.city,
+            campaign.title as string,
+            campaign.content as string,
+            (campaign.sponsor_name as string) || ""
+          );
+          if (result.content && result.title) {
+            siteTitle = result.title;
+            siteSummary = result.summary || siteSummary;
+            body = result.content;
+            rewritten = true;
+          }
+        } catch (e) {
+          console.error(
+            `[campaign] rewrite failed for ${site.slug}:`,
+            e instanceof Error ? e.message : e
+          );
+        }
+
+        const slug = buildSlug(siteTitle, site.stateAbbr || site.slug);
+
         const html = renderCampaignBody(
-          campaign.content as string,
+          body,
           site.city,
           site.state,
           campaign.sponsor_name as string,
@@ -217,17 +249,21 @@ async function publishDue(): Promise<Record<string, unknown>> {
            ON CONFLICT DO NOTHING`,
           [
             siteId,
-            campaign.title,
+            siteTitle,
             slug,
             html,
-            campaign.summary || "",
+            siteSummary,
             category,
             campaign.author || "Sponsored Content",
             images.length > 0 ? images[i % images.length] : null,
           ]
         );
 
-        links.push({ site: site.slug, url: `https://${site.domain}/${category}/${slug}` });
+        links.push({
+          site: site.slug,
+          url: `https://${site.domain}/${category}/${slug}`,
+          rewritten,
+        });
       } catch (e) {
         failures.push({ site: batch[i], error: e instanceof Error ? e.message : String(e) });
       }
