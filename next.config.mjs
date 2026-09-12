@@ -11,6 +11,11 @@ const nextConfig = {
   poweredByHeader: false,
   productionBrowserSourceMaps: false,
   reactStrictMode: true,
+  experimental: {
+    // Enables src/instrumentation.ts, which drives the publishing pipeline
+    // from inside the server instead of relying on an external cron service.
+    instrumentationHook: true,
+  },
   // Immutable long-cache for static assets so Cloudflare/browsers never re-fetch.
   async headers() {
     return [

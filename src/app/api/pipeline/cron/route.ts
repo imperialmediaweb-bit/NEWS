@@ -1,6 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { isPublishingHours } from "@/config/feeds";
+import { isPublishingHours, STATE_BATCHES } from "@/config/feeds";
 import { isPipelineEnabled } from "@/lib/pipeline/scheduler";
+import { claimJob } from "@/lib/pipeline/jobs";
+
+/**
+ * 5 batches × 24 minutes = every state group is fetched once every 2 hours,
+ * matching the old cadence.
+ */
+const FETCH_INTERVAL_SECONDS = 24 * 60;
 
 function authCheck(req: NextRequest): boolean {
   const token =
@@ -26,41 +33,42 @@ export async function POST(req: NextRequest) {
   }
 
   const now = new Date();
-  const utcHour = now.getUTCHours();
-  const utcMinute = now.getUTCMinutes();
   const actions: string[] = [];
   const baseUrl = getBaseUrl(req);
   const secret = process.env.CRON_SECRET || "";
 
-  // Manual test override: ?force=1 runs fetch+rewrite immediately, ignoring
-  // the publishing-hours window. Lets you verify the pipeline from a browser.
-  const force = req.nextUrl.searchParams.get("force") === "1";
-  if (force) {
-    fireAndForget(baseUrl, "pipeline/fetch", { batch: 0 }, secret);
+  // Manual test override: runs fetch+rewrite immediately, ignoring both the
+  // publishing-hours window and the job intervals. Lets you verify the
+  // pipeline from a browser. ?force=1 uses batch 0; ?force=3 uses batch 3.
+  const forceParam = req.nextUrl.searchParams.get("force");
+  if (forceParam) {
+    const batch = Math.min(4, Math.max(0, parseInt(forceParam, 10) || 0));
+    fireAndForget(baseUrl, "pipeline/fetch", { batch }, secret);
     fireAndForget(baseUrl, "pipeline/rewrite", { batchSize: 10 }, secret);
     return NextResponse.json({
       ok: true,
       forced: true,
       time: now.toISOString(),
-      triggered: ["fetch_batch_0", "rewrite"],
+      triggered: [`fetch_batch_${batch}`, "rewrite"],
       note: "Forced fetch+rewrite dispatched. Check article count in ~1-2 min.",
     });
   }
 
   if (isPublishingHours()) {
-    // ─── Fetch RSS: 1 batch per 5-min cycle, rotating ───
-    // Minute 0-4 → batch 0, 5-9 → batch 1, 10-14 → batch 2, etc.
-    // Every hour covers all 5 batches. Every 2h each batch runs twice.
-    const batchIndex = Math.floor(utcMinute / 5) % 5;
-
-    // Only fetch on even hours (every 2h)
-    if (utcHour % 2 === 0 && utcMinute < 25) {
+    // ─── Fetch RSS: one batch at a time, rotating ───
+    // Each claim advances to the next batch, so all five states groups get
+    // their turn no matter what minute the trigger happens to fire on. Five
+    // batches at 24 minutes apart means each batch is fetched every 2 hours,
+    // the same cadence as before.
+    const fetchClaim = await claimJob("fetch", FETCH_INTERVAL_SECONDS);
+    if (fetchClaim.claimed) {
+      const batchIndex = fetchClaim.runCount % STATE_BATCHES.length;
       fireAndForget(baseUrl, "pipeline/fetch", { batch: batchIndex }, secret);
       actions.push(`fetch_batch_${batchIndex}`);
     }
 
     // ─── Rewrite: every 15 min ───
-    if (utcMinute % 15 < 5) {
+    if ((await claimJob("rewrite", 15 * 60)).claimed) {
       fireAndForget(baseUrl, "pipeline/rewrite", { batchSize: 10 }, secret);
       actions.push("rewrite");
     }
@@ -68,26 +76,26 @@ export async function POST(req: NextRequest) {
     actions.push("outside_publishing_hours");
   }
 
-  // ─── IndexNow + Google Ping: every 2h ───
-  if (utcHour % 2 === 0 && utcMinute >= 50 && utcMinute < 55) {
+  // ─── IndexNow + search engine submission: every 2h ───
+  if ((await claimJob("notify", 2 * 60 * 60)).claimed) {
     fireAndForget(baseUrl, "pipeline/notify", {}, secret);
     actions.push("notify");
   }
 
-  // ─── Opinion: every 12h (8 AM and 8 PM UTC) ───
-  if ((utcHour === 8 || utcHour === 20) && utcMinute < 5) {
+  // ─── Opinion: every 12h ───
+  if ((await claimJob("opinion", 12 * 60 * 60)).claimed) {
     fireAndForget(baseUrl, "pipeline/opinion", {}, secret);
     actions.push("opinion");
   }
 
-  // ─── Cleanup: daily at 3 AM UTC ───
-  if (utcHour === 3 && utcMinute < 5) {
+  // ─── Cleanup: daily ───
+  if ((await claimJob("cleanup", 24 * 60 * 60)).claimed) {
     fireAndForget(baseUrl, "pipeline/cleanup", {}, secret);
     actions.push("cleanup");
   }
 
-  // ─── Submit sitemaps to Google & Bing: daily at 6 AM UTC ───
-  if (utcHour === 6 && utcMinute < 5) {
+  // ─── Submit sitemaps to Google & Bing: daily ───
+  if ((await claimJob("submit_sitemaps", 24 * 60 * 60)).claimed) {
     fireAndForget(baseUrl, "admin/submit-sitemaps", {}, secret);
     actions.push("submit_sitemaps");
   }
@@ -99,8 +107,6 @@ export async function POST(req: NextRequest) {
   return NextResponse.json({
     ok: true,
     time: now.toISOString(),
-    utcHour,
-    utcMinute,
     publishingHours: isPublishingHours(),
     triggered: actions,
   });
