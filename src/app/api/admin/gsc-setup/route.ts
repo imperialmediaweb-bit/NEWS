@@ -1,7 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { sites } from "@/config/sites";
 import { getZoneMap, hasCloudflareCredentials } from "@/lib/cloudflare";
-import { autoSetup, getGscToken, prepareDns, verifyAndAdd } from "@/lib/gsc";
+import {
+  autoSetup,
+  getGscToken,
+  prepareDns,
+  verifyAndAdd,
+  listProperties,
+  hasUsableDomainProperty,
+} from "@/lib/gsc";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 300;
@@ -65,6 +72,12 @@ async function handle(req: NextRequest) {
     const token = await getGscToken();
     const needsDns = step === "dns" || step === "auto";
 
+    // Skip anything already done. Re-verifying a verified site issues a fresh
+    // DNS token and then looks for it immediately, which fails until the new
+    // record propagates — so a pointless re-run reports a failure on a site
+    // that is actually fine.
+    const existing = step === "auto" ? await listProperties(token) : null;
+
     if (needsDns && !hasCloudflareCredentials()) {
       return NextResponse.json(
         {
@@ -80,6 +93,10 @@ async function handle(req: NextRequest) {
 
     for (const site of targets) {
       const domain = site.domain.toLowerCase();
+      if (existing && hasUsableDomainProperty(existing.get(domain))) {
+        results.push({ site: site.slug, domain, ok: true, note: "already verified" });
+        continue;
+      }
       try {
         if (needsDns) {
           const dns = await prepareDns(token, domain, zones);

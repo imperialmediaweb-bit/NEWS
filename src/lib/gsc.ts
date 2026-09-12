@@ -175,23 +175,9 @@ export async function verifyAndAdd(
   let ownerAdded: boolean | undefined;
   let ownerError: string | undefined;
   if (ownerEmail && resourceId) {
-    const ownerRes = await fetch(
-      `https://www.googleapis.com/siteVerification/v1/webResource/${encodeURIComponent(resourceId)}`,
-      {
-        method: "PUT",
-        headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
-        body: JSON.stringify({
-          id: resourceId,
-          site: { type: "INET_DOMAIN", identifier: domain },
-          owners: [ownerEmail],
-        }),
-        signal: AbortSignal.timeout(15000),
-      }
-    );
-    ownerAdded = ownerRes.ok;
-    if (!ownerRes.ok) {
-      ownerError = `addOwner: HTTP ${ownerRes.status} ${(await ownerRes.text()).slice(0, 200)}`;
-    }
+    const result = await addOwner(token, resourceId, domain, ownerEmail);
+    ownerAdded = result.ok;
+    ownerError = result.error;
   }
 
   return {
@@ -203,6 +189,55 @@ export async function verifyAndAdd(
     ...(addError && { error: addError }),
     ...(ownerError && { ownerError }),
   };
+}
+
+/**
+ * Add a person as an owner of a verified property.
+ *
+ * The owners list is replaced wholesale by this endpoint, so it has to be read
+ * first and the new address appended. Sending just the new owner drops the
+ * service account, and Google refuses that outright:
+ *   "You cannot use Update to unverify your site ownership."
+ */
+async function addOwner(
+  token: string,
+  resourceId: string,
+  domain: string,
+  ownerEmail: string
+): Promise<{ ok: boolean; error?: string }> {
+  const url = `https://www.googleapis.com/siteVerification/v1/webResource/${encodeURIComponent(resourceId)}`;
+
+  let owners: string[] = [];
+  try {
+    const getRes = await fetch(url, {
+      headers: { Authorization: `Bearer ${token}` },
+      signal: AbortSignal.timeout(15000),
+    });
+    if (getRes.ok) {
+      owners = ((await getRes.json()) as { owners?: string[] }).owners || [];
+    }
+  } catch {
+    // Fall through — an empty list below still includes the new owner, and the
+    // PUT will simply fail the same way it would have anyway.
+  }
+
+  if (owners.some((o) => o.toLowerCase() === ownerEmail.toLowerCase())) {
+    return { ok: true };
+  }
+
+  const res = await fetch(url, {
+    method: "PUT",
+    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+    body: JSON.stringify({
+      id: resourceId,
+      site: { type: "INET_DOMAIN", identifier: domain },
+      owners: [...owners, ownerEmail],
+    }),
+    signal: AbortSignal.timeout(15000),
+  });
+
+  if (res.ok) return { ok: true };
+  return { ok: false, error: `addOwner: HTTP ${res.status} ${(await res.text()).slice(0, 200)}` };
 }
 
 export interface AutoSetupReport {
@@ -245,19 +280,29 @@ export async function autoSetup(options: { limit?: number } = {}): Promise<AutoS
   const ownerEmail = process.env.GSC_OWNER_EMAIL || null;
   const results: Record<string, unknown>[] = [];
 
+  // Write every DNS record first, then verify. Google fetches the TXT record
+  // through its own resolver, which will not see a record written a second
+  // earlier — doing all the writes up front gives the earlier domains the time
+  // the later ones spend being written. Anything still not visible is simply
+  // retried on the next hourly pass.
+  const written: { slug: string; domain: string }[] = [];
   for (const site of batch) {
     const domain = site.domain.toLowerCase();
+    const dns = await prepareDns(token, domain, zones);
+    if (dns.ok) {
+      written.push({ slug: site.slug, domain });
+    } else {
+      results.push({ site: site.slug, domain, ok: false, stage: "dns", error: dns.error });
+    }
+  }
+
+  for (const { slug, domain } of written) {
     try {
-      const dns = await prepareDns(token, domain, zones);
-      if (!dns.ok) {
-        results.push({ site: site.slug, domain, ok: false, stage: "dns", error: dns.error });
-        continue;
-      }
       const verified = await verifyAndAdd(token, domain, ownerEmail);
-      results.push({ site: site.slug, stage: "verify", ...verified });
+      results.push({ site: slug, stage: "verify", ...verified });
     } catch (e) {
       results.push({
-        site: site.slug,
+        site: slug,
         domain,
         ok: false,
         error: e instanceof Error ? e.message : String(e),
