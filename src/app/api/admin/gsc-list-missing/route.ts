@@ -91,7 +91,33 @@ export async function GET(req: NextRequest) {
     const domain = site.domain.toLowerCase();
     const match = byDomain.get(domain);
     if (match) {
-      added.push({ site: site.slug, domain: site.domain, ...match });
+      // A property being listed is not the same as it being usable.
+      // `siteUnverifiedUser` means the account was added but never verified —
+      // it can see the property exists and nothing else. And a URL-prefix
+      // property on the www host collects nothing here, because middleware
+      // 301s every www request to the bare domain.
+      const usable =
+        match.permissionLevel === "siteOwner" ||
+        match.permissionLevel === "siteFullUser" ||
+        match.permissionLevel === "siteRestrictedUser";
+      const isDomainProperty = match.siteUrl.startsWith("sc-domain:");
+      const isWwwPrefix = !isDomainProperty && /^https?:\/\/www\./i.test(match.siteUrl);
+
+      added.push({
+        site: site.slug,
+        domain: site.domain,
+        ...match,
+        usable,
+        propertyType: isDomainProperty ? "domain" : "url-prefix",
+        ...(isWwwPrefix && {
+          warning:
+            "URL-prefix property on the www host, which 301s to the bare domain — this property sees only redirects. Replace it with a sc-domain property.",
+        }),
+        ...(!usable && {
+          warning2:
+            "permissionLevel is not an owner/full user: the property is listed but its data cannot be read.",
+        }),
+      });
     } else {
       missing.push({
         site: site.slug,
@@ -118,18 +144,23 @@ export async function GET(req: NextRequest) {
     );
   }
 
+  const usableCount = added.filter((a) => a.usable).length;
+
   return NextResponse.json({
     serviceAccount: email,
     totalSites: all.length,
-    verified: added.length,
+    // "listed" is what the API can see; "usable" is what it can actually read.
+    // Reporting only the first number makes a broken setup look half-working.
+    listed: added.length,
+    usable: usableCount,
     missing: missing.length,
     gscPropertiesVisible: entries.length,
     added,
     missingSites: missing,
     hint:
       missing.length > 0
-        ? `Add ${missing.length} propert${missing.length === 1 ? "y" : "ies"} in Search Console, then grant ${email} access to each.`
-        : "All configured sites are verified.",
+        ? `POST /api/admin/gsc-setup to create and verify sc-domain properties automatically via Cloudflare DNS, or add them by hand and grant ${email} access to each.`
+        : "All configured sites are present.",
   });
 }
 
