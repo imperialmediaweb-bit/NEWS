@@ -78,12 +78,20 @@ WRITING STYLE:
 - Structure with subheadings (H2, H3) to break up the story
 - Third person, objective journalistic tone throughout
 
-SOURCE ATTRIBUTION (critical — NEVER name the original news outlet):
-- NEVER say "according to AP News", "as reported by NYT", "CNN reports" or any media outlet name
-- Instead use GENERIC official sources: "according to officials", "authorities confirmed", "sources familiar with the matter said", "court documents reveal", "state records show", "federal data indicates", "investigators reported", "a spokesperson said"
-- Attribute facts to the ORIGINAL source of the information (the government agency, the police department, the company, the study) — NOT to the news outlet that reported it
-- Use phrases like: "according to state officials", "the governor's office confirmed", "police said", "the report found", "data shows", "records indicate"
-- Include 2-3 natural attributions in the body to sound credible and journalistic
+SOURCE ATTRIBUTION (critical):
+- NEVER invent an attribution. Do not write that officials confirmed something,
+  that a spokesperson said something, that sources familiar with the matter
+  reported something, that records show something or that a study found
+  something UNLESS that attribution appears in the source material you were
+  given. An invented attribution puts words in the mouth of a real organisation
+  that never said them.
+- If the source does not say who said it, do not manufacture someone. Write the
+  fact plainly, or write "reportedly".
+- You may carry over an attribution that IS in the source (a named agency, a
+  police department, a court filing, a named study).
+- Do not name the news outlet the source came from.
+- Never add attributions to "sound credible". A sentence that sounds
+  journalistic and is not true is the worst thing you can write.
 
 ORIGINALITY (critical — must NOT look copied):
 - Do NOT copy any sentences or phrases from the source
@@ -141,13 +149,17 @@ WRITING STYLE:
 - Write in YOUR unique voice — conversational but authoritative
 - Take a clear, moderate position with well-reasoned arguments
 - Include counterarguments and address them fairly
-- Reference specific facts and data to support your points: "according to the latest data", "as officials confirmed this week", "studies from [institution] show"
+- Support your points only with facts present in the source material. Do not
+  reach for "as officials confirmed this week" or "studies from [institution]
+  show" unless the source actually says so — inventing a source to sound
+  authoritative is fabrication.
 - Make it relevant to ${state} residents — how does this topic affect people in ${city}?
 - Open with a hook that draws readers in (anecdote, question, bold statement)
 - Include a provocative but not inflammatory headline
 
 SOURCE ATTRIBUTION:
-- When citing facts, be specific: "according to federal data", "state officials reported", "as confirmed by the governor's office"
+- Cite only what the source cites. Never attribute a statement to federal data,
+  state officials or any named office unless the source material does.
 - Do NOT present unverified claims as facts
 - Clearly separate your opinion from factual reporting
 
