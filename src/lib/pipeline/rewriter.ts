@@ -190,6 +190,72 @@ ${content}`;
   return { content: out.content, changed: out.changed !== false && out.content !== content };
 }
 
+/**
+ * Rewrite an article from the original source, fetched fresh.
+ *
+ * This is the honest version of a repair. The published articles cannot be
+ * fixed from their own text — whatever was invented in them cannot be
+ * un-invented without something to check against. With the source article in
+ * hand the model has real quotes from real named people and real institutions,
+ * so it can write a properly sourced piece instead of manufacturing one.
+ */
+export async function rewriteFromSource(
+  siteName: string,
+  state: string,
+  city: string,
+  sourceText: string,
+  publisher: string,
+  sourceUrl: string,
+  category: string
+): Promise<RewriteResult> {
+  const prompt = `You are a reporter at ${siteName}, a local news site serving ${city}, ${state}.
+
+Below is the full text of a published article from ${publisher || "another outlet"}. Write your own news article covering the same events, for your readers.
+
+SOURCING — this is what makes the piece worth publishing:
+- Every fact, name, figure, date and quotation must come from the source text below. Nothing else exists.
+- Quote real people by name where the source quotes them by name, using their words verbatim inside quotation marks. Real quotes are the point; do not paraphrase a quote into your own words and leave it in quotation marks.
+- Name the real institutions, agencies, companies and officials the source names, and attribute to them only what the source attributes to them.
+- NEVER write "officials confirmed", "a spokesperson said", "sources familiar with the matter" or any other unnamed attribution that is not in the source. If the source does not say who, write the fact plainly.
+- Invent nothing. No extra context, no background you were not given, no speculation about what happens next, no local impact you were not told about.
+- If the source contradicts itself or leaves something unclear, leave it out rather than resolving it yourself.
+
+CREDIT:
+- Where a fact clearly originates with the source outlet's own reporting, say so naturally: "${publisher} reported that ...". Credit is not a weakness; a piece that cites where it learned something is more credible, not less.
+
+WRITING:
+- Length follows the material: cover what the source covers, in 400-800 words. Do not pad and do not compress out substance.
+- Your own sentences and your own structure. Do not copy phrasing from the source, except inside quotation marks where you are quoting someone.
+- A plain, accurate headline describing what happened. No superlatives the facts do not support.
+- Third person, straightforward news style.
+
+LEGAL SAFETY (mandatory):
+- "alleged", "accused of", "charged with" — never assert guilt; only a court decides
+- No home addresses, phone numbers or medical details
+- Do not name minors involved in crimes or legal cases, or sexual assault victims
+- Ongoing investigations: "under investigation", "authorities are looking into"
+- Deaths: "died" unless officially ruled a homicide
+
+FORMATTING:
+- HTML with <h2>, <p>, <strong>, <em>, <ul>/<li>. No <h1>.
+
+Category: ${category}
+Source URL: ${sourceUrl}
+
+SOURCE ARTICLE:
+${sourceText}
+
+Return ONLY valid JSON, no markdown fences:
+{
+  "title": "a plain, accurate headline",
+  "summary": "1-2 sentences under 160 characters",
+  "content": "the article body as HTML",
+  "suggestedImageQuery": "2-4 words describing a generic scene, never a specific person"
+}`;
+
+  return callWithFallback(prompt);
+}
+
 export function buildOpinionPrompt(
   siteName: string,
   state: string,
