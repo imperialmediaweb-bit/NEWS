@@ -38,6 +38,15 @@ interface ArticlePageClientProps {
   slug: string;
 }
 
+/**
+ * Photos come from stock libraries via a keyword search, so they illustrate a
+ * subject rather than depict the event or the people in the story. Labelling
+ * them says so plainly instead of letting the layout imply otherwise.
+ */
+function isStockImage(url: string): boolean {
+  return /pexels\.com|unsplash\.com|pixabay\.com/i.test(url);
+}
+
 export default function ArticlePageClient({ site, article, related, categorySlug, slug }: ArticlePageClientProps) {
   const content = generateContent(site);
   const categoryLabel = categorySlug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
@@ -92,8 +101,17 @@ export default function ArticlePageClient({ site, article, related, categorySlug
           transition={{ duration: 0.6 }}
           className="relative w-full h-[300px] md:h-[450px] lg:h-[550px] overflow-hidden"
         >
-          <img src={displayImage} alt={displayTitle} className="w-full h-full object-cover" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+          {/* The alt text used to be the headline, which claims the photo shows
+              what the headline describes. These are stock photographs chosen by
+              a keyword search, so on a story about a named person the picture is
+              a stranger — the first thing one such person wrote in to say. */}
+          <img src={displayImage} alt="" className="w-full h-full object-cover" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+          {isStockImage(displayImage) && (
+            <span className="absolute top-3 right-3 z-10 px-2 py-1 text-[10px] uppercase tracking-wider bg-black/70 text-white/90 rounded">
+              Stock photo
+            </span>
+          )}
           <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10">
             <div className="max-w-[1300px] mx-auto">
               <span className="inline-block px-3 py-1 text-xs font-bold uppercase tracking-wider text-white rounded mb-4"
