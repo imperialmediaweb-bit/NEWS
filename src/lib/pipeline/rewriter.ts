@@ -129,6 +129,67 @@ Return ONLY a valid JSON object (no markdown code fences):
 }`;
 }
 
+/**
+ * Strip invented attribution from an article that is already published.
+ *
+ * This is NOT a rewrite. The source material those articles were built from is
+ * long gone; all that survives is the output the old prompt produced. Feeding
+ * that back through the new prompt would not recover what was true — it would
+ * only launder the same invented detail into cleaner prose.
+ *
+ * What can honestly be repaired is the specific harm: sentences that put words
+ * into the mouth of a real organisation. "State athletic officials confirmed
+ * the record" becomes "The record was reported" — the claim survives, unproven
+ * as it always was, but we stop asserting that a named body said it.
+ *
+ * Everything else is left exactly as it stands, deliberately. An edit that
+ * also tidies the prose would make it impossible to tell later which articles
+ * were touched and why.
+ */
+export async function stripInventedAttribution(
+  title: string,
+  content: string
+): Promise<{ content: string; changed: boolean }> {
+  const prompt = `The HTML article below was produced by a system that was instructed to invent sourcing — to add phrases like "officials confirmed", "a spokesperson said", "sources familiar with the matter reported", "records show" and "studies show" so the writing would sound authoritative. Those attributions are fabricated. Nobody said those things.
+
+Your single job is to remove that false sourcing. Nothing else.
+
+DO:
+- Delete or rephrase every clause that attributes a statement to someone who is not named with a specific, checkable identity. "Officials confirmed the bridge will reopen Monday" becomes "The bridge is expected to reopen Monday". "A spokesperson said the company is expanding" becomes "The company is reportedly expanding".
+- Remove invented quotations — any quoted speech attributed to an unnamed official, spokesperson, coach, expert or source.
+- Keep an attribution that names a specific identifiable body AND is plainly integral to the story (a court filing in a court report, a named police department in a crime report). If you are unsure, remove it.
+
+DO NOT:
+- Change any fact, figure, date, name or place.
+- Add anything at all. Not a word of new information, context or framing.
+- Improve, shorten, restructure or re-style the writing.
+- Remove whole paragraphs. Edit the offending clause and leave the rest.
+
+If the article contains no invented attribution, return it completely unchanged.
+
+Return ONLY valid JSON, no markdown fences:
+{
+  "changed": true or false,
+  "content": "the article HTML, edited only as described above"
+}
+
+HEADLINE: ${title}
+
+ARTICLE HTML:
+${content}`;
+
+  const result = await callWithFallback(prompt);
+  // callWithFallback returns the parsed object; the fields we need are content
+  // and, where the model supplied it, changed.
+  const out = result as unknown as { content?: string; changed?: boolean };
+  if (!out.content || out.content.length < content.length * 0.4) {
+    // A response that lost more than half the article is not an edit, it is a
+    // failure. Keep the original rather than publish a mangled one.
+    return { content, changed: false };
+  }
+  return { content: out.content, changed: out.changed !== false && out.content !== content };
+}
+
 export function buildOpinionPrompt(
   siteName: string,
   state: string,
