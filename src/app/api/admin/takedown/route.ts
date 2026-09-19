@@ -3,6 +3,7 @@ import pool from "@/lib/db";
 import { sites } from "@/config/sites";
 import { getSiteId } from "@/lib/site-id";
 import { submitGoogleIndexing } from "@/lib/indexing";
+import { getZoneMap, purgeUrls, hasCloudflareCredentials } from "@/lib/cloudflare";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 120;
@@ -103,11 +104,49 @@ export async function GET(req: NextRequest) {
     deindexed[m.url] = await submitGoogleIndexing(m.url, "URL_DELETED").catch(() => false);
   }
 
+  // Article pages sit in the edge cache for a day, so deleting the row is not
+  // enough — without this the page carries on loading as if nothing happened,
+  // which is the opposite of what someone asking for a takedown needs.
+  let cachePurged: boolean | undefined;
+  let cachePurgeError: string | undefined;
+  if (hasCloudflareCredentials()) {
+    try {
+      const zones = await getZoneMap();
+      let allOk = true;
+      for (const m of matches) {
+        const host = new URL(m.url).hostname;
+        const zoneId = zones.get(host.toLowerCase());
+        if (!zoneId) {
+          allOk = false;
+          cachePurgeError = `No Cloudflare zone for ${host}`;
+          continue;
+        }
+        const purge = await purgeUrls(zoneId, [m.url]);
+        if (!purge.ok) {
+          allOk = false;
+          cachePurgeError = purge.error;
+        }
+      }
+      cachePurged = allOk;
+    } catch (e) {
+      cachePurged = false;
+      cachePurgeError = e instanceof Error ? e.message : String(e);
+    }
+  } else {
+    cachePurged = false;
+    cachePurgeError = "No Cloudflare credentials";
+  }
+
   return NextResponse.json({
     removed: matches.length,
     matches,
     deindexRequested: deindexed,
-    note:
-      "Removed from the site. Google may still show a cached result for a short time; the removal request above asks it to drop the URL.",
+    cachePurged,
+    ...(cachePurgeError && { cachePurgeError }),
+    ...(cachePurged === false && {
+      warning:
+        "The article is deleted but still cached at the edge for up to 24 hours. Purge it by hand in Cloudflare (Caching -> Configuration -> Custom Purge), or give CLOUDFLARE_API_TOKEN the Zone:Cache Purge permission.",
+    }),
+    note: "Removed from the database. Google is asked to drop the URL; that can take a few days.",
   });
 }

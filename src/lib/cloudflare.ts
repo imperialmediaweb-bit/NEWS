@@ -77,6 +77,30 @@ export async function getZoneMap(): Promise<Map<string, string>> {
 }
 
 /**
+ * Drop specific URLs from the edge cache.
+ *
+ * Article pages are cached for a day, so a page deleted from the database goes
+ * on being served from Cloudflare long after it is gone from the site — which
+ * is exactly wrong when the reason for deleting it was that someone asked for
+ * it to be taken down.
+ *
+ * Needs Zone:Cache Purge on the token. A token with only Zone:DNS:Edit gets
+ * "Authentication error" here, so the failure is reported rather than
+ * swallowed: silently not purging is the same as not deleting.
+ */
+export async function purgeUrls(
+  zoneId: string,
+  urls: string[]
+): Promise<{ ok: boolean; error?: string }> {
+  if (urls.length === 0) return { ok: true };
+  const res = await cf<{ id: string }>(`/zones/${zoneId}/purge_cache`, {
+    method: "POST",
+    body: JSON.stringify({ files: urls.slice(0, 30) }),
+  });
+  return res.ok ? { ok: true } : { ok: false, error: res.error };
+}
+
+/**
  * Create a TXT record, or report it as already present. Cloudflare rejects an
  * exact duplicate, which for our purposes is success, not failure.
  */
