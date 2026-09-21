@@ -107,11 +107,6 @@ export default function ArticlePageClient({ site, article, related, categorySlug
               a stranger — the first thing one such person wrote in to say. */}
           <img src={displayImage} alt="" className="w-full h-full object-cover" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
-          {isStockImage(displayImage) && (
-            <span className="absolute top-3 right-3 z-10 px-2 py-1 text-[10px] uppercase tracking-wider bg-black/70 text-white/90 rounded">
-              Stock photo
-            </span>
-          )}
           <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10">
             <div className="max-w-[1300px] mx-auto">
               <span className="inline-block px-3 py-1 text-xs font-bold uppercase tracking-wider text-white rounded mb-4"
@@ -137,6 +132,20 @@ export default function ArticlePageClient({ site, article, related, categorySlug
               {displayTitle}
             </h1>
           </div>
+        </div>
+      )}
+
+      {/* Photo caption — below the image, where a caption belongs, and stated
+          plainly. These pictures are chosen by keyword from a stock library:
+          they illustrate the subject and show neither the event nor the people
+          in the story. Leaving that unsaid is how a reader ends up believing a
+          stranger's photograph is a picture of them. */}
+      {displayImage && isStockImage(displayImage) && (
+        <div className="max-w-[1300px] mx-auto px-4 pt-3">
+          <p className="text-xs text-gray-500 italic border-l-2 border-gray-200 pl-3">
+            Illustrative photo. This image is a stock photograph and does not
+            depict the actual people, places or events described in this article.
+          </p>
         </div>
       )}
 

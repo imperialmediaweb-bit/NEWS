@@ -94,6 +94,7 @@ export async function GET(
     .content h3 { font-size: 18px; margin: 24px 0 10px; }
     .content a { color: var(--accent); }
     .content amp-img { margin: 16px 0; border-radius: 4px; }
+    .photo-caption { font-size: 12px; font-style: italic; color: #666; border-left: 2px solid #ddd; padding-left: 10px; margin: 8px 0 16px; }
     .share { margin: 24px 0; display: flex; gap: 8px; }
     .footer { background: #111; color: #666; text-align: center; padding: 20px; font-size: 13px; font-family: sans-serif; margin-top: 40px; }
     .footer a { color: var(--accent); text-decoration: none; }
@@ -131,7 +132,13 @@ export async function GET(
       By <strong>${escapeHtml(author)}</strong>${publishedAt ? ` &bull; ${new Date(publishedAt).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}` : ""}
     </div>
 
-    ${image ? `<amp-img src="${escapeHtml(image)}" alt="${escapeHtml(title)}" width="1200" height="675" layout="responsive"></amp-img>` : ""}
+    ${image
+      ? `<amp-img src="${escapeHtml(image)}" alt="" width="1200" height="675" layout="responsive"></amp-img>${
+          isStockImage(image)
+            ? `<p class="photo-caption">Illustrative photo. This image is a stock photograph and does not depict the actual people, places or events described in this article.</p>`
+            : ""
+        }`
+      : ""}
 
     <div class="content">
       ${ampContent}
@@ -168,6 +175,15 @@ export async function GET(
       "Cache-Control": "public, max-age=3600, s-maxage=86400",
     },
   });
+}
+
+/**
+ * Photos are picked by keyword from a stock library, so they illustrate a
+ * subject and show neither the event nor the people in the story. The alt text
+ * used to be the headline, which asserted the opposite.
+ */
+function isStockImage(url: string): boolean {
+  return /pexels\.com|unsplash\.com|pixabay\.com/i.test(url);
 }
 
 function escapeHtml(str: string): string {
