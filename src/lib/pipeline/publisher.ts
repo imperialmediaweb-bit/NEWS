@@ -165,10 +165,18 @@ interface PublishOptions {
  * Returns 1 on success, 0 on failure/duplicate.
  */
 export async function publishArticle(opts: PublishOptions): Promise<number> {
-  // Quality gate — never publish thin/empty articles. A malformed LLM
-  // response must not become a live, sitemap-included NewsArticle page.
+  // Quality gate — never publish an empty or malformed LLM response as a live,
+  // sitemap-included NewsArticle page.
+  //
+  // The floor used to be 1,500 characters, from when the prompt demanded
+  // 800-1500 words of every story. The prompt now asks for 150-250 words when
+  // the source material is thin, and says so is correct — so that floor
+  // silently rejected essentially everything the new prompt produced, and the
+  // network published nothing for two days. 600 characters still catches an
+  // empty or truncated response without punishing an article for being short
+  // and true.
   const plainText = (opts.rewrite.content || "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
-  if (!opts.rewrite.title || opts.rewrite.title.trim().length < 15 || plainText.length < 1500) {
+  if (!opts.rewrite.title || opts.rewrite.title.trim().length < 15 || plainText.length < 600) {
     console.error(
       `Rejected thin article (title ${opts.rewrite.title?.length || 0} chars, body ${plainText.length} chars) for state: ${opts.state}`
     );

@@ -97,7 +97,7 @@ export async function POST(req: NextRequest) {
       const image = await findImage(rewrite.suggestedImageQuery, item.category);
 
       // Publish to the single matching state site
-      await publishArticle({
+      const published = await publishArticle({
         feedItemId: item.id,
         rewrite,
         category: item.category,
@@ -105,6 +105,20 @@ export async function POST(req: NextRequest) {
         imageUrl: image?.url || null,
         state: item.state,
       });
+
+      // publishArticle returns 0 when it rejects the article or hits a
+      // duplicate slug, and only marks the feed item when it actually
+      // publishes. Ignoring that return left every rejected item sitting at
+      // 'processing' for ever — 46 per state had piled up — while the run
+      // counted it as processed and reported success.
+      if (published === 0) {
+        failed++;
+        await pool.query(
+          "UPDATE feed_items SET status = 'failed', error_message = $2 WHERE id = $1",
+          [item.id, "Not published: rejected by quality gate or duplicate slug"]
+        );
+        continue;
+      }
 
       processed++;
       results.push({
