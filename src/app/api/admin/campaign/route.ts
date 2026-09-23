@@ -3,6 +3,8 @@ import pool from "@/lib/db";
 import { sites } from "@/config/sites";
 import { getSiteId } from "@/lib/site-id";
 import { rewriteCampaignForSite } from "@/lib/pipeline/rewriter";
+import { submitToAllEngines } from "@/lib/indexing";
+import { submitToIndexNow } from "@/lib/indexnow";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 300;
@@ -35,7 +37,13 @@ export const maxDuration = 300;
  *    optional and is not configurable.
  */
 
-const MAX_SITES_PER_DAY = 10;
+/**
+ * A campaign may run across the whole network in one day if that is what is
+ * wanted — 50 is the cap, not 10. The spread exists to reduce how obviously
+ * synchronised the network looks, not to stop anyone using what they own; the
+ * trade is stated in the response rather than enforced by a number here.
+ */
+const MAX_SITES_PER_DAY = 50;
 
 let schemaReady = false;
 
@@ -125,6 +133,10 @@ export async function POST(req: NextRequest) {
     totalSites: order.length,
     sitesPerDay: perDay,
     estimatedDays: Math.ceil(order.length / perDay),
+    ...(perDay >= 25 && {
+      warning:
+        "Publishing the same advertorial across most of the network in one day is the pattern Google reads as a link network. Each site gets its own rewrite and slug, which helps, but it does not disguise fifty domains carrying one advertiser's message on the same afternoon. Five to ten a day is the safer shape.",
+    }),
   });
 }
 
@@ -285,12 +297,23 @@ async function publishDue(): Promise<Record<string, unknown>> {
       ]
     );
 
+    // Send the new URLs to the search engines now rather than waiting for the
+    // two-hourly notify run. A paid placement is worth the immediate
+    // submission, and IndexNow is instant for Bing and Yandex.
+    const indexed: Record<string, unknown> = {};
+    for (const link of links) {
+      const host = new URL(link.url).hostname;
+      await submitToIndexNow(host, [link.url]);
+      indexed[link.url] = await submitToAllEngines(`https://${host}`, link.url);
+    }
+
     report.push({
       campaignId: campaign.id,
       title: campaign.title,
       publishedNow: links.length,
       remaining: newRemaining.length,
       links,
+      submittedToSearchEngines: Object.keys(indexed).length,
       ...(failures.length > 0 && { failures }),
     });
   }
