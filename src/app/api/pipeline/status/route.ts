@@ -123,7 +123,14 @@ export async function GET(req: NextRequest) {
                   WHERE f.state = s.state)                             AS newest_item,
                 (SELECT max(r.completed_at) FROM pipeline_runs r
                   WHERE r.category = s.state AND r.stage = 'fetch'
-                    AND r.error_message IS NULL)                       AS last_fetch_ok
+                    AND r.error_message IS NULL)                       AS last_fetch_ok,
+                -- The reason the most recent failure failed. Without this a
+                -- failed count says only that something is wrong, and the
+                -- answer sits in the table unread.
+                (SELECT f.error_message FROM feed_items f
+                  WHERE f.state = s.state AND f.status = 'failed'
+                    AND f.error_message IS NOT NULL
+                  ORDER BY f.created_at DESC LIMIT 1)                  AS last_error
            FROM unnest($1::text[]) AS s(state)`,
         [silentStates]
       );
@@ -137,6 +144,7 @@ export async function GET(req: NextRequest) {
           pending,
           processing: Number(r.processing),
           failed: Number(r.failed),
+          lastError: r.last_error || null,
           newestItem: r.newest_item ? new Date(r.newest_item).toISOString() : null,
           lastFetchOk: lastFetch ? lastFetch.toISOString() : null,
           likelyCause:
