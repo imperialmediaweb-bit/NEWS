@@ -159,12 +159,22 @@ interface PublishOptions {
   author?: string;
 }
 
+export interface PublishResult {
+  published: number;
+  /** Why it was not published. Present only on a 0. */
+  reason?: string;
+}
+
 /**
  * Publish a rewritten article to the single site matching the state.
  * Every article is unique per state — no cross-site publishing.
- * Returns 1 on success, 0 on failure/duplicate.
+ *
+ * Returns a reason alongside the count. Returning a bare 0 meant a rejected
+ * article was indistinguishable from a duplicate slug or a missing site row,
+ * and the pipeline published nothing for days while every layer above
+ * reported success.
  */
-export async function publishArticle(opts: PublishOptions): Promise<number> {
+export async function publishArticle(opts: PublishOptions): Promise<PublishResult> {
   // Quality gate — never publish an empty or malformed LLM response as a live,
   // sitemap-included NewsArticle page.
   //
@@ -177,10 +187,9 @@ export async function publishArticle(opts: PublishOptions): Promise<number> {
   // and true.
   const plainText = (opts.rewrite.content || "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
   if (!opts.rewrite.title || opts.rewrite.title.trim().length < 15 || plainText.length < 600) {
-    console.error(
-      `Rejected thin article (title ${opts.rewrite.title?.length || 0} chars, body ${plainText.length} chars) for state: ${opts.state}`
-    );
-    return 0;
+    const reason = `Rejected as thin: title ${opts.rewrite.title?.length || 0} chars, body ${plainText.length} chars (needs title >= 15, body >= 600)`;
+    console.error(`${reason} for state: ${opts.state}`);
+    return { published: 0, reason };
   }
 
   const slug = slugify(opts.rewrite.title);
@@ -202,7 +211,7 @@ export async function publishArticle(opts: PublishOptions): Promise<number> {
     const cfg = Object.values(siteConfigs).find((s) => s.state === opts.state);
     if (!cfg) {
       console.error(`No site config for state: ${opts.state}`);
-      return 0;
+      return { published: 0, reason: `No site config for state ${opts.state}` };
     }
     const { rows: created } = await pool.query(
       `INSERT INTO sites (slug, domain, name, logo_first, logo_second, city, state, state_abbr, tagline)
@@ -214,7 +223,7 @@ export async function publishArticle(opts: PublishOptions): Promise<number> {
     );
     if (created.length === 0) {
       console.error(`Failed to seed site for state: ${opts.state}`);
-      return 0;
+      return { published: 0, reason: `Could not seed site row for ${opts.state}` };
     }
     siteId = created[0].id;
   }
@@ -245,12 +254,15 @@ export async function publishArticle(opts: PublishOptions): Promise<number> {
         "UPDATE feed_items SET status = 'rewritten' WHERE id = $1",
         [opts.feedItemId]
       );
-      return 1;
+      return { published: 1 };
     }
 
-    return 0; // Duplicate slug
+    return { published: 0, reason: `Duplicate slug: ${slug}` };
   } catch (error) {
     console.error(`Publish failed for state ${opts.state}:`, error);
-    return 0;
+    return {
+      published: 0,
+      reason: `Insert failed: ${error instanceof Error ? error.message : String(error)}`,
+    };
   }
 }

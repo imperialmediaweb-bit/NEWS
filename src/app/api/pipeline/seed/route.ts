@@ -117,7 +117,7 @@ export async function POST(req: NextRequest) {
               state: site.state,
             });
 
-            if (published > 0) totalPublished++;
+            if (published.published > 0) totalPublished++;
           } catch (err) {
             totalFailed++;
             errors.push(`${site.stateAbbr}/${feed.category}: ${String(err).slice(0, 100)}`);

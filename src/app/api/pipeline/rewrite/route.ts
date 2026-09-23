@@ -70,6 +70,8 @@ export async function POST(req: NextRequest) {
   let processed = 0;
   let failed = 0;
   const results: { feedItemId: number; title: string; state: string }[] = [];
+  // Rejections come back in the response, not only into a column nobody reads.
+  const rejections: { state: string; reason: string }[] = [];
 
   for (const item of pending) {
     try {
@@ -111,11 +113,13 @@ export async function POST(req: NextRequest) {
       // publishes. Ignoring that return left every rejected item sitting at
       // 'processing' for ever — 46 per state had piled up — while the run
       // counted it as processed and reported success.
-      if (published === 0) {
+      if (published.published === 0) {
         failed++;
+        const reason = published.reason || "Not published (no reason given)";
+        rejections.push({ state: item.state, reason });
         await pool.query(
           "UPDATE feed_items SET status = 'failed', error_message = $2 WHERE id = $1",
-          [item.id, "Not published: rejected by quality gate or duplicate slug"]
+          [item.id, reason.slice(0, 500)]
         );
         continue;
       }
@@ -142,6 +146,7 @@ export async function POST(req: NextRequest) {
     processed,
     failed,
     results,
+    ...(rejections.length > 0 && { rejections }),
     durationMs: Date.now() - startTime,
   });
 }
