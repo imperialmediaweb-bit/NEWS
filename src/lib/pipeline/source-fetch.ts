@@ -21,7 +21,13 @@ export interface SourceText {
 
 const MAX_CHARS = 12000;
 
-export async function fetchSourceText(url: string): Promise<SourceText> {
+export async function fetchSourceText(rawUrl: string): Promise<SourceText> {
+  // Google News links are a wrapper: the publisher's URL is base64 inside the
+  // path. Fetching the wrapper gets a JavaScript redirect page, not an
+  // article, which is why every source came back at 50-130 characters and
+  // every item was rejected as too thin. Decode it first.
+  const url = decodeGoogleNewsUrl(rawUrl) || rawUrl;
+
   try {
     const res = await fetch(url, {
       redirect: "follow",
@@ -95,6 +101,30 @@ function extractArticleText(html: string): string {
     .filter((l) => l.length > 60);
 
   return lines.join("\n\n").trim();
+}
+
+/**
+ * Pull the publisher's URL out of a Google News article link.
+ *
+ * The id after /articles/ is URL-safe base64 of a protobuf blob; the original
+ * URL is the first http(s) string inside it. Taken from the Romanian network,
+ * which hit this first.
+ */
+export function decodeGoogleNewsUrl(gnewsUrl: string): string | null {
+  try {
+    if (!gnewsUrl.includes("news.google.com/")) return null;
+    const match = gnewsUrl.match(/\/articles\/([A-Za-z0-9_-]+)/);
+    if (!match) return null;
+
+    let encoded = match[1].replace(/-/g, "+").replace(/_/g, "/");
+    while (encoded.length % 4 !== 0) encoded += "=";
+
+    const decoded = Buffer.from(encoded, "base64").toString("binary");
+    const urlMatch = decoded.match(/https?:\/\/[a-zA-Z0-9\-._~:/?#\[\]@!$&'()*+,;=%]+/);
+    return urlMatch?.[0] || null;
+  } catch {
+    return null;
+  }
 }
 
 function publisherFromUrl(url: string): string {
