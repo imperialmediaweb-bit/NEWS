@@ -1,0 +1,1793 @@
+[
+  {
+    "state": "alabama",
+    "usable": [
+      {
+        "domain": "alabamareflector.com",
+        "feed": "https://alabamareflector.com/feed/",
+        "items": 100,
+        "medianChars": 5534,
+        "maxChars": 9150,
+        "usableShare": 1
+      },
+      {
+        "domain": "wsfa.com",
+        "feed": "https://wsfa.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1317,
+        "maxChars": 3186,
+        "usableShare": 1
+      },
+      {
+        "domain": "wbrc.com",
+        "feed": "https://wbrc.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1563,
+        "maxChars": 3186,
+        "usableShare": 1
+      },
+      {
+        "domain": "waff.com",
+        "feed": "https://waff.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1245,
+        "maxChars": 3059,
+        "usableShare": 1
+      }
+    ],
+    "weak": [
+      {
+        "domain": "alreporter.com",
+        "feed": "https://alreporter.com/feed/",
+        "items": 15,
+        "medianChars": 135,
+        "maxChars": 184,
+        "usableShare": 0
+      }
+    ],
+    "none": [
+      "al.com"
+    ]
+  },
+  {
+    "state": "alaska",
+    "usable": [
+      {
+        "domain": "alaskabeacon.com",
+        "feed": "https://alaskabeacon.com/feed/",
+        "items": 100,
+        "medianChars": 5534,
+        "maxChars": 17318,
+        "usableShare": 1
+      },
+      {
+        "domain": "adn.com",
+        "feed": "https://adn.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 25,
+        "medianChars": 5261,
+        "maxChars": 14326,
+        "usableShare": 1
+      },
+      {
+        "domain": "ktoo.org",
+        "feed": "https://ktoo.org/feed/",
+        "items": 20,
+        "medianChars": 1754,
+        "maxChars": 3547,
+        "usableShare": 1
+      },
+      {
+        "domain": "webcenter11.com",
+        "feed": "https://webcenter11.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1428,
+        "maxChars": 3115,
+        "usableShare": 1
+      }
+    ],
+    "weak": [],
+    "none": [
+      "alaskapublic.org"
+    ]
+  },
+  {
+    "state": "arizona",
+    "usable": [
+      {
+        "domain": "azmirror.com",
+        "feed": "https://azmirror.com/feed/",
+        "items": 100,
+        "medianChars": 5534,
+        "maxChars": 11325,
+        "usableShare": 1
+      },
+      {
+        "domain": "kold.com",
+        "feed": "https://kold.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1870,
+        "maxChars": 3059,
+        "usableShare": 0.92
+      }
+    ],
+    "weak": [],
+    "none": [
+      "tucson.com",
+      "azcentral.com",
+      "azpm.org"
+    ]
+  },
+  {
+    "state": "arkansas",
+    "usable": [
+      {
+        "domain": "arkansasadvocate.com",
+        "feed": "https://arkansasadvocate.com/feed/",
+        "items": 100,
+        "medianChars": 3874,
+        "maxChars": 11431,
+        "usableShare": 1
+      },
+      {
+        "domain": "kait8.com",
+        "feed": "https://kait8.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 915,
+        "maxChars": 4427,
+        "usableShare": 0.92
+      }
+    ],
+    "weak": [],
+    "none": [
+      "arkansasonline.com",
+      "katv.com",
+      "thv11.com"
+    ]
+  },
+  {
+    "state": "california",
+    "usable": [
+      {
+        "domain": "calmatters.org",
+        "feed": "https://calmatters.org/feed/",
+        "items": 10,
+        "medianChars": 6344,
+        "maxChars": 18096,
+        "usableShare": 1
+      },
+      {
+        "domain": "voiceofsandiego.org",
+        "feed": "https://voiceofsandiego.org/feed/",
+        "items": 10,
+        "medianChars": 5577,
+        "maxChars": 13208,
+        "usableShare": 1
+      }
+    ],
+    "weak": [
+      {
+        "domain": "lataco.com",
+        "feed": "https://lataco.com/feed/",
+        "items": 10,
+        "medianChars": 264,
+        "maxChars": 346,
+        "usableShare": 0
+      },
+      {
+        "domain": "sfstandard.com",
+        "feed": "https://sfstandard.com/feed/",
+        "items": 10,
+        "medianChars": 138,
+        "maxChars": 170,
+        "usableShare": 0
+      }
+    ],
+    "none": [
+      "kqed.org"
+    ]
+  },
+  {
+    "state": "colorado",
+    "usable": [
+      {
+        "domain": "coloradonewsline.com",
+        "feed": "https://coloradonewsline.com/feed/",
+        "items": 100,
+        "medianChars": 5137,
+        "maxChars": 10845,
+        "usableShare": 1
+      },
+      {
+        "domain": "kktv.com",
+        "feed": "https://kktv.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 959,
+        "maxChars": 3059,
+        "usableShare": 1
+      },
+      {
+        "domain": "denverite.com",
+        "feed": "https://denverite.com/feed/",
+        "items": 10,
+        "medianChars": 3933,
+        "maxChars": 10982,
+        "usableShare": 1
+      },
+      {
+        "domain": "cpr.org",
+        "feed": "https://cpr.org/feed/",
+        "items": 10,
+        "medianChars": 2884,
+        "maxChars": 20642,
+        "usableShare": 0.9
+      }
+    ],
+    "weak": [
+      {
+        "domain": "coloradosun.com",
+        "feed": "https://coloradosun.com/feed/",
+        "items": 10,
+        "medianChars": 134,
+        "maxChars": 147,
+        "usableShare": 0
+      }
+    ],
+    "none": []
+  },
+  {
+    "state": "connecticut",
+    "usable": [
+      {
+        "domain": "ctmirror.org",
+        "feed": "https://ctmirror.org/feed/",
+        "items": 40,
+        "medianChars": 4766,
+        "maxChars": 27696,
+        "usableShare": 1
+      },
+      {
+        "domain": "wfsb.com",
+        "feed": "https://wfsb.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1824,
+        "maxChars": 17203,
+        "usableShare": 1
+      }
+    ],
+    "weak": [],
+    "none": [
+      "ctinsider.com",
+      "ctpost.com",
+      "ctpublic.org"
+    ]
+  },
+  {
+    "state": "delaware",
+    "usable": [
+      {
+        "domain": "spotlightdelaware.org",
+        "feed": "https://spotlightdelaware.org/feed/",
+        "items": 10,
+        "medianChars": 6638,
+        "maxChars": 19465,
+        "usableShare": 1
+      }
+    ],
+    "weak": [],
+    "none": [
+      "delawareonline.com",
+      "wboc.com",
+      "delawarepublic.org"
+    ]
+  },
+  {
+    "state": "florida",
+    "usable": [
+      {
+        "domain": "floridaphoenix.com",
+        "feed": "https://floridaphoenix.com/feed/",
+        "items": 100,
+        "medianChars": 5320,
+        "maxChars": 9852,
+        "usableShare": 1
+      },
+      {
+        "domain": "wctv.tv",
+        "feed": "https://wctv.tv/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1826,
+        "maxChars": 3059,
+        "usableShare": 1
+      },
+      {
+        "domain": "wjhg.com",
+        "feed": "https://wjhg.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1487,
+        "maxChars": 3059,
+        "usableShare": 1
+      }
+    ],
+    "weak": [],
+    "none": [
+      "orlandosentinel.com",
+      "wusf.org"
+    ]
+  },
+  {
+    "state": "georgia",
+    "usable": [
+      {
+        "domain": "georgiarecorder.com",
+        "feed": "https://georgiarecorder.com/feed/",
+        "items": 100,
+        "medianChars": 5166,
+        "maxChars": 9003,
+        "usableShare": 1
+      },
+      {
+        "domain": "walb.com",
+        "feed": "https://walb.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1129,
+        "maxChars": 3059,
+        "usableShare": 1
+      },
+      {
+        "domain": "wtoc.com",
+        "feed": "https://wtoc.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1435,
+        "maxChars": 3059,
+        "usableShare": 0.92
+      },
+      {
+        "domain": "wrdw.com",
+        "feed": "https://wrdw.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1242,
+        "maxChars": 3059,
+        "usableShare": 1
+      }
+    ],
+    "weak": [
+      {
+        "domain": "gpb.org",
+        "feed": "https://gpb.org/rss/",
+        "items": 20,
+        "medianChars": 149,
+        "maxChars": 197,
+        "usableShare": 0
+      }
+    ],
+    "none": []
+  },
+  {
+    "state": "hawaii",
+    "usable": [
+      {
+        "domain": "hawaiinewsnow.com",
+        "feed": "https://hawaiinewsnow.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1870,
+        "maxChars": 4919,
+        "usableShare": 0.92
+      }
+    ],
+    "weak": [
+      {
+        "domain": "civilbeat.org",
+        "feed": "https://civilbeat.org/feed/",
+        "items": 10,
+        "medianChars": 117,
+        "maxChars": 162,
+        "usableShare": 0
+      },
+      {
+        "domain": "staradvertiser.com",
+        "feed": "https://staradvertiser.com/feed/",
+        "items": 40,
+        "medianChars": 187,
+        "maxChars": 357,
+        "usableShare": 0
+      }
+    ],
+    "none": [
+      "hawaiipublicradio.org"
+    ]
+  },
+  {
+    "state": "idaho",
+    "usable": [
+      {
+        "domain": "idahocapitalsun.com",
+        "feed": "https://idahocapitalsun.com/feed/",
+        "items": 100,
+        "medianChars": 6209,
+        "maxChars": 9922,
+        "usableShare": 1
+      },
+      {
+        "domain": "kmvt.com",
+        "feed": "https://kmvt.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 982,
+        "maxChars": 3059,
+        "usableShare": 1
+      }
+    ],
+    "weak": [],
+    "none": [
+      "idahostatesman.com",
+      "boisestatepublicradio.org"
+    ]
+  },
+  {
+    "state": "illinois",
+    "usable": [
+      {
+        "domain": "wifr.com",
+        "feed": "https://wifr.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1826,
+        "maxChars": 18995,
+        "usableShare": 1
+      },
+      {
+        "domain": "chicago.suntimes.com",
+        "feed": "https://chicago.suntimes.com/feed/",
+        "items": 55,
+        "medianChars": 1957,
+        "maxChars": 17519,
+        "usableShare": 1
+      },
+      {
+        "domain": "wbez.org",
+        "feed": "https://wbez.org/rss/",
+        "items": 55,
+        "medianChars": 13436,
+        "maxChars": 24101,
+        "usableShare": 1
+      },
+      {
+        "domain": "injusticewatch.org",
+        "feed": "https://injusticewatch.org/feed/",
+        "items": 30,
+        "medianChars": 8240,
+        "maxChars": 24296,
+        "usableShare": 0.92
+      }
+    ],
+    "weak": [
+      {
+        "domain": "capitolnewsillinois.com",
+        "feed": "https://capitolnewsillinois.com/feed/",
+        "items": 10,
+        "medianChars": 94,
+        "maxChars": 312,
+        "usableShare": 0
+      }
+    ],
+    "none": []
+  },
+  {
+    "state": "indiana",
+    "usable": [
+      {
+        "domain": "indianacapitalchronicle.com",
+        "feed": "https://indianacapitalchronicle.com/feed/",
+        "items": 100,
+        "medianChars": 4974,
+        "maxChars": 13877,
+        "usableShare": 1
+      },
+      {
+        "domain": "wndu.com",
+        "feed": "https://wndu.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1853,
+        "maxChars": 3059,
+        "usableShare": 1
+      },
+      {
+        "domain": "mirrorindy.org",
+        "feed": "https://mirrorindy.org/feed/",
+        "items": 10,
+        "medianChars": 3973,
+        "maxChars": 14364,
+        "usableShare": 1
+      }
+    ],
+    "weak": [],
+    "none": [
+      "indystar.com",
+      "wfyi.org"
+    ]
+  },
+  {
+    "state": "iowa",
+    "usable": [
+      {
+        "domain": "iowacapitaldispatch.com",
+        "feed": "https://iowacapitaldispatch.com/feed/",
+        "items": 100,
+        "medianChars": 4900,
+        "maxChars": 10690,
+        "usableShare": 1
+      },
+      {
+        "domain": "kcrg.com",
+        "feed": "https://kcrg.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1327,
+        "maxChars": 3059,
+        "usableShare": 0.75
+      },
+      {
+        "domain": "kwqc.com",
+        "feed": "https://kwqc.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1435,
+        "maxChars": 18995,
+        "usableShare": 0.92
+      }
+    ],
+    "weak": [],
+    "none": [
+      "desmoinesregister.com",
+      "iowapublicradio.org"
+    ]
+  },
+  {
+    "state": "kansas",
+    "usable": [
+      {
+        "domain": "kansasreflector.com",
+        "feed": "https://kansasreflector.com/feed/",
+        "items": 100,
+        "medianChars": 6013,
+        "maxChars": 12531,
+        "usableShare": 1
+      },
+      {
+        "domain": "kwch.com",
+        "feed": "https://kwch.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1435,
+        "maxChars": 3059,
+        "usableShare": 1
+      }
+    ],
+    "weak": [],
+    "none": [
+      "kansas.com",
+      "kcur.org",
+      "cjonline.com"
+    ]
+  },
+  {
+    "state": "kentucky",
+    "usable": [
+      {
+        "domain": "kentuckylantern.com",
+        "feed": "https://kentuckylantern.com/feed/",
+        "items": 100,
+        "medianChars": 4649,
+        "maxChars": 7035,
+        "usableShare": 1
+      },
+      {
+        "domain": "wkyt.com",
+        "feed": "https://wkyt.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1870,
+        "maxChars": 7603,
+        "usableShare": 0.83
+      },
+      {
+        "domain": "wave3.com",
+        "feed": "https://wave3.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1845,
+        "maxChars": 7603,
+        "usableShare": 1
+      },
+      {
+        "domain": "wfpl.org",
+        "feed": "https://wfpl.org/feed/",
+        "items": 12,
+        "medianChars": 4946,
+        "maxChars": 29674,
+        "usableShare": 1
+      }
+    ],
+    "weak": [],
+    "none": [
+      "courier-journal.com"
+    ]
+  },
+  {
+    "state": "louisiana",
+    "usable": [
+      {
+        "domain": "lailluminator.com",
+        "feed": "https://lailluminator.com/feed/",
+        "items": 100,
+        "medianChars": 4185,
+        "maxChars": 27949,
+        "usableShare": 1
+      },
+      {
+        "domain": "wafb.com",
+        "feed": "https://wafb.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1435,
+        "maxChars": 3322,
+        "usableShare": 1
+      },
+      {
+        "domain": "kplctv.com",
+        "feed": "https://kplctv.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1870,
+        "maxChars": 3322,
+        "usableShare": 1
+      },
+      {
+        "domain": "ksla.com",
+        "feed": "https://ksla.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1435,
+        "maxChars": 3322,
+        "usableShare": 1
+      }
+    ],
+    "weak": [],
+    "none": [
+      "nola.com"
+    ]
+  },
+  {
+    "state": "maine",
+    "usable": [
+      {
+        "domain": "mainemorningstar.com",
+        "feed": "https://mainemorningstar.com/feed/",
+        "items": 100,
+        "medianChars": 4987,
+        "maxChars": 16917,
+        "usableShare": 1
+      },
+      {
+        "domain": "wabi.tv",
+        "feed": "https://wabi.tv/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1982,
+        "maxChars": 3059,
+        "usableShare": 1
+      },
+      {
+        "domain": "bangordailynews.com",
+        "feed": "https://bangordailynews.com/feed/",
+        "items": 20,
+        "medianChars": 3935,
+        "maxChars": 9440,
+        "usableShare": 1
+      }
+    ],
+    "weak": [
+      {
+        "domain": "pressherald.com",
+        "feed": "https://pressherald.com/feed/",
+        "items": 50,
+        "medianChars": 125,
+        "maxChars": 371,
+        "usableShare": 0
+      }
+    ],
+    "none": [
+      "mainepublic.org"
+    ]
+  },
+  {
+    "state": "maryland",
+    "usable": [
+      {
+        "domain": "marylandmatters.org",
+        "feed": "https://marylandmatters.org/feed/",
+        "items": 100,
+        "medianChars": 5382,
+        "maxChars": 8968,
+        "usableShare": 1
+      },
+      {
+        "domain": "wmdt.com",
+        "feed": "https://wmdt.com/feed/",
+        "items": 10,
+        "medianChars": 1232,
+        "maxChars": 2644,
+        "usableShare": 1
+      }
+    ],
+    "weak": [],
+    "none": [
+      "baltimorebanner.com",
+      "baltimoresun.com",
+      "wypr.org"
+    ]
+  },
+  {
+    "state": "massachusetts",
+    "usable": [
+      {
+        "domain": "commonwealthbeacon.org",
+        "feed": "https://commonwealthbeacon.org/feed/",
+        "items": 10,
+        "medianChars": 6942,
+        "maxChars": 10807,
+        "usableShare": 1
+      },
+      {
+        "domain": "bostonglobe.com",
+        "feed": "https://bostonglobe.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 100,
+        "medianChars": 5319,
+        "maxChars": 52032,
+        "usableShare": 1
+      }
+    ],
+    "weak": [
+      {
+        "domain": "wwlp.com",
+        "feed": "https://wwlp.com/feed/",
+        "items": 50,
+        "medianChars": 145,
+        "maxChars": 184,
+        "usableShare": 0
+      },
+      {
+        "domain": "wbur.org",
+        "feed": "https://wbur.org/feed/",
+        "items": 100,
+        "medianChars": 162,
+        "maxChars": 243,
+        "usableShare": 0
+      }
+    ],
+    "none": [
+      "masslive.com"
+    ]
+  },
+  {
+    "state": "michigan",
+    "usable": [
+      {
+        "domain": "michiganadvance.com",
+        "feed": "https://michiganadvance.com/feed/",
+        "items": 100,
+        "medianChars": 6486,
+        "maxChars": 14952,
+        "usableShare": 1
+      },
+      {
+        "domain": "wilx.com",
+        "feed": "https://wilx.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1982,
+        "maxChars": 3146,
+        "usableShare": 1
+      },
+      {
+        "domain": "wnem.com",
+        "feed": "https://wnem.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1435,
+        "maxChars": 3547,
+        "usableShare": 1
+      },
+      {
+        "domain": "bridgemi.com",
+        "feed": "https://bridgemi.com/feed/",
+        "items": 10,
+        "medianChars": 5007,
+        "maxChars": 16195,
+        "usableShare": 1
+      },
+      {
+        "domain": "michiganpublic.org",
+        "feed": "https://michiganpublic.org/index.rss",
+        "items": 10,
+        "medianChars": 2537,
+        "maxChars": 5845,
+        "usableShare": 1
+      }
+    ],
+    "weak": [],
+    "none": []
+  },
+  {
+    "state": "minnesota",
+    "usable": [
+      {
+        "domain": "minnesotareformer.com",
+        "feed": "https://minnesotareformer.com/feed/",
+        "items": 100,
+        "medianChars": 4029,
+        "maxChars": 8054,
+        "usableShare": 1
+      },
+      {
+        "domain": "kttc.com",
+        "feed": "https://kttc.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1428,
+        "maxChars": 3059,
+        "usableShare": 1
+      },
+      {
+        "domain": "sahanjournal.com",
+        "feed": "https://sahanjournal.com/feed/",
+        "items": 10,
+        "medianChars": 6139,
+        "maxChars": 12472,
+        "usableShare": 1
+      }
+    ],
+    "weak": [
+      {
+        "domain": "startribune.com",
+        "feed": "https://startribune.com/rss/",
+        "items": 10,
+        "medianChars": 148,
+        "maxChars": 214,
+        "usableShare": 0
+      }
+    ],
+    "none": [
+      "mprnews.org"
+    ]
+  },
+  {
+    "state": "mississippi",
+    "usable": [
+      {
+        "domain": "mississippitoday.org",
+        "feed": "https://mississippitoday.org/feed/",
+        "items": 10,
+        "medianChars": 4496,
+        "maxChars": 11972,
+        "usableShare": 0.9
+      },
+      {
+        "domain": "wlbt.com",
+        "feed": "https://wlbt.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1870,
+        "maxChars": 3099,
+        "usableShare": 1
+      },
+      {
+        "domain": "wdam.com",
+        "feed": "https://wdam.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 936,
+        "maxChars": 3059,
+        "usableShare": 0.83
+      }
+    ],
+    "weak": [],
+    "none": [
+      "clarionledger.com",
+      "mpbonline.org"
+    ]
+  },
+  {
+    "state": "missouri",
+    "usable": [
+      {
+        "domain": "missouriindependent.com",
+        "feed": "https://missouriindependent.com/feed/",
+        "items": 100,
+        "medianChars": 4653,
+        "maxChars": 14765,
+        "usableShare": 1
+      },
+      {
+        "domain": "ky3.com",
+        "feed": "https://ky3.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1870,
+        "maxChars": 3161,
+        "usableShare": 1
+      },
+      {
+        "domain": "kfvs12.com",
+        "feed": "https://kfvs12.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 852,
+        "maxChars": 3059,
+        "usableShare": 0.92
+      }
+    ],
+    "weak": [],
+    "none": [
+      "stltoday.com",
+      "stlpublicradio.org"
+    ]
+  },
+  {
+    "state": "montana",
+    "usable": [
+      {
+        "domain": "dailymontanan.com",
+        "feed": "https://dailymontanan.com/feed/",
+        "items": 100,
+        "medianChars": 3749,
+        "maxChars": 6268,
+        "usableShare": 1
+      },
+      {
+        "domain": "montanafreepress.org",
+        "feed": "https://montanafreepress.org/feed/",
+        "items": 8,
+        "medianChars": 3717,
+        "maxChars": 11972,
+        "usableShare": 1
+      }
+    ],
+    "weak": [],
+    "none": [
+      "billingsgazette.com",
+      "mtpr.org",
+      "kulr8.com"
+    ]
+  },
+  {
+    "state": "nebraska",
+    "usable": [
+      {
+        "domain": "nebraskaexaminer.com",
+        "feed": "https://nebraskaexaminer.com/feed/",
+        "items": 100,
+        "medianChars": 3724,
+        "maxChars": 9150,
+        "usableShare": 1
+      },
+      {
+        "domain": "1011now.com",
+        "feed": "https://1011now.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1737,
+        "maxChars": 3253,
+        "usableShare": 1
+      },
+      {
+        "domain": "flatwaterfreepress.org",
+        "feed": "https://flatwaterfreepress.org/feed/",
+        "items": 10,
+        "medianChars": 4138,
+        "maxChars": 15025,
+        "usableShare": 1
+      }
+    ],
+    "weak": [],
+    "none": [
+      "omaha.com",
+      "netnebraska.org"
+    ]
+  },
+  {
+    "state": "nevada",
+    "usable": [
+      {
+        "domain": "nevadacurrent.com",
+        "feed": "https://nevadacurrent.com/feed/",
+        "items": 100,
+        "medianChars": 5855,
+        "maxChars": 13815,
+        "usableShare": 1
+      },
+      {
+        "domain": "kolotv.com",
+        "feed": "https://kolotv.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 959,
+        "maxChars": 3059,
+        "usableShare": 0.75
+      },
+      {
+        "domain": "thenevadaindependent.com",
+        "feed": "https://thenevadaindependent.com/feed/",
+        "items": 100,
+        "medianChars": 5439,
+        "maxChars": 23450,
+        "usableShare": 1
+      }
+    ],
+    "weak": [
+      {
+        "domain": "reviewjournal.com",
+        "feed": "https://reviewjournal.com/feed/",
+        "items": 30,
+        "medianChars": 107,
+        "maxChars": 179,
+        "usableShare": 0
+      }
+    ],
+    "none": [
+      "knpr.org"
+    ]
+  },
+  {
+    "state": "new hampshire",
+    "usable": [
+      {
+        "domain": "newhampshirebulletin.com",
+        "feed": "https://newhampshirebulletin.com/feed/",
+        "items": 100,
+        "medianChars": 5621,
+        "maxChars": 13168,
+        "usableShare": 1
+      }
+    ],
+    "weak": [
+      {
+        "domain": "nhpr.org",
+        "feed": "https://nhpr.org/rss.xml",
+        "items": 10,
+        "medianChars": 150,
+        "maxChars": 260,
+        "usableShare": 0
+      },
+      {
+        "domain": "concordmonitor.com",
+        "feed": "https://concordmonitor.com/feed/",
+        "items": 10,
+        "medianChars": 0,
+        "maxChars": 0,
+        "usableShare": 0
+      }
+    ],
+    "none": [
+      "wmur.com",
+      "unionleader.com"
+    ]
+  },
+  {
+    "state": "new jersey",
+    "usable": [
+      {
+        "domain": "newjerseymonitor.com",
+        "feed": "https://newjerseymonitor.com/feed/",
+        "items": 100,
+        "medianChars": 4987,
+        "maxChars": 8807,
+        "usableShare": 1
+      }
+    ],
+    "weak": [
+      {
+        "domain": "njspotlightnews.org",
+        "feed": "https://njspotlightnews.org/feed/",
+        "items": 10,
+        "medianChars": 235,
+        "maxChars": 249,
+        "usableShare": 0
+      },
+      {
+        "domain": "whyy.org",
+        "feed": "https://whyy.org/feed/",
+        "items": 20,
+        "medianChars": 36,
+        "maxChars": 5185,
+        "usableShare": 0.42
+      }
+    ],
+    "none": [
+      "nj.com",
+      "northjersey.com"
+    ]
+  },
+  {
+    "state": "new mexico",
+    "usable": [
+      {
+        "domain": "sourcenm.com",
+        "feed": "https://sourcenm.com/feed/",
+        "items": 100,
+        "medianChars": 4174,
+        "maxChars": 16661,
+        "usableShare": 1
+      },
+      {
+        "domain": "searchlightnm.org",
+        "feed": "https://searchlightnm.org/feed/",
+        "items": 10,
+        "medianChars": 4679,
+        "maxChars": 8975,
+        "usableShare": 1
+      }
+    ],
+    "weak": [],
+    "none": [
+      "abqjournal.com",
+      "kunm.org",
+      "santafenewmexican.com"
+    ]
+  },
+  {
+    "state": "new york",
+    "usable": [
+      {
+        "domain": "nysfocus.com",
+        "feed": "https://nysfocus.com/feed/",
+        "items": 50,
+        "medianChars": 9131,
+        "maxChars": 24141,
+        "usableShare": 1
+      },
+      {
+        "domain": "citylimits.org",
+        "feed": "https://citylimits.org/feed/",
+        "items": 10,
+        "medianChars": 5217,
+        "maxChars": 22649,
+        "usableShare": 1
+      },
+      {
+        "domain": "gothamist.com",
+        "feed": "https://gothamist.com/feed/",
+        "items": 40,
+        "medianChars": 513,
+        "maxChars": 683,
+        "usableShare": 0.58
+      },
+      {
+        "domain": "thecity.nyc",
+        "feed": "https://thecity.nyc/feed/",
+        "items": 10,
+        "medianChars": 4526,
+        "maxChars": 6641,
+        "usableShare": 1
+      }
+    ],
+    "weak": [],
+    "none": [
+      "syracuse.com"
+    ]
+  },
+  {
+    "state": "north carolina",
+    "usable": [
+      {
+        "domain": "ncnewsline.com",
+        "feed": "https://ncnewsline.com/feed/",
+        "items": 100,
+        "medianChars": 4184,
+        "maxChars": 10753,
+        "usableShare": 1
+      },
+      {
+        "domain": "witn.com",
+        "feed": "https://witn.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1466,
+        "maxChars": 3059,
+        "usableShare": 1
+      },
+      {
+        "domain": "wect.com",
+        "feed": "https://wect.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1428,
+        "maxChars": 3059,
+        "usableShare": 0.92
+      }
+    ],
+    "weak": [],
+    "none": [
+      "newsobserver.com",
+      "wunc.org"
+    ]
+  },
+  {
+    "state": "north dakota",
+    "usable": [
+      {
+        "domain": "northdakotamonitor.com",
+        "feed": "https://northdakotamonitor.com/feed/",
+        "items": 100,
+        "medianChars": 4381,
+        "maxChars": 9007,
+        "usableShare": 1
+      },
+      {
+        "domain": "kfyrtv.com",
+        "feed": "https://kfyrtv.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1385,
+        "maxChars": 3059,
+        "usableShare": 1
+      },
+      {
+        "domain": "valleynewslive.com",
+        "feed": "https://valleynewslive.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1870,
+        "maxChars": 3059,
+        "usableShare": 1
+      },
+      {
+        "domain": "inforum.com",
+        "feed": "https://inforum.com/index.rss",
+        "items": 77,
+        "medianChars": 4537,
+        "maxChars": 12956,
+        "usableShare": 1
+      }
+    ],
+    "weak": [],
+    "none": [
+      "prairiepublic.org"
+    ]
+  },
+  {
+    "state": "ohio",
+    "usable": [
+      {
+        "domain": "ohiocapitaljournal.com",
+        "feed": "https://ohiocapitaljournal.com/feed/",
+        "items": 100,
+        "medianChars": 5745,
+        "maxChars": 10722,
+        "usableShare": 1
+      },
+      {
+        "domain": "signalcleveland.org",
+        "feed": "https://signalcleveland.org/feed/",
+        "items": 10,
+        "medianChars": 6805,
+        "maxChars": 12149,
+        "usableShare": 1
+      }
+    ],
+    "weak": [],
+    "none": [
+      "woio.com",
+      "wtol.com",
+      "cleveland.com"
+    ]
+  },
+  {
+    "state": "oklahoma",
+    "usable": [
+      {
+        "domain": "oklahomavoice.com",
+        "feed": "https://oklahomavoice.com/feed/",
+        "items": 100,
+        "medianChars": 4174,
+        "maxChars": 9001,
+        "usableShare": 1
+      },
+      {
+        "domain": "kswo.com",
+        "feed": "https://kswo.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 978,
+        "maxChars": 3059,
+        "usableShare": 0.92
+      }
+    ],
+    "weak": [
+      {
+        "domain": "nondoc.com",
+        "feed": "https://nondoc.com/feed/",
+        "items": 10,
+        "medianChars": 458,
+        "maxChars": 557,
+        "usableShare": 0.3
+      }
+    ],
+    "none": [
+      "oklahoman.com",
+      "kosu.org"
+    ]
+  },
+  {
+    "state": "oregon",
+    "usable": [
+      {
+        "domain": "oregoncapitalchronicle.com",
+        "feed": "https://oregoncapitalchronicle.com/feed/",
+        "items": 100,
+        "medianChars": 5534,
+        "maxChars": 16094,
+        "usableShare": 1
+      },
+      {
+        "domain": "opb.org",
+        "feed": "https://opb.org/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 39,
+        "medianChars": 2938,
+        "maxChars": 10581,
+        "usableShare": 1
+      },
+      {
+        "domain": "ktvz.com",
+        "feed": "https://ktvz.com/feed/",
+        "items": 50,
+        "medianChars": 2791,
+        "maxChars": 7051,
+        "usableShare": 1
+      }
+    ],
+    "weak": [],
+    "none": [
+      "oregonlive.com",
+      "willametteweek.com"
+    ]
+  },
+  {
+    "state": "pennsylvania",
+    "usable": [
+      {
+        "domain": "penncapital-star.com",
+        "feed": "https://penncapital-star.com/feed/",
+        "items": 100,
+        "medianChars": 6268,
+        "maxChars": 9158,
+        "usableShare": 1
+      },
+      {
+        "domain": "inquirer.com",
+        "feed": "https://inquirer.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 100,
+        "medianChars": 1241,
+        "maxChars": 8983,
+        "usableShare": 1
+      },
+      {
+        "domain": "witf.org",
+        "feed": "https://witf.org/feed/",
+        "items": 50,
+        "medianChars": 1410,
+        "maxChars": 4830,
+        "usableShare": 1
+      }
+    ],
+    "weak": [
+      {
+        "domain": "wtaj.com",
+        "feed": "https://wtaj.com/feed/",
+        "items": 17,
+        "medianChars": 343,
+        "maxChars": 380,
+        "usableShare": 0
+      }
+    ],
+    "none": [
+      "spotlightpa.org"
+    ]
+  },
+  {
+    "state": "rhode island",
+    "usable": [
+      {
+        "domain": "rhodeislandcurrent.com",
+        "feed": "https://rhodeislandcurrent.com/feed/",
+        "items": 100,
+        "medianChars": 5715,
+        "maxChars": 10727,
+        "usableShare": 1
+      }
+    ],
+    "weak": [
+      {
+        "domain": "thepublicsradio.org",
+        "feed": "https://thepublicsradio.org/feed/",
+        "items": 1000,
+        "medianChars": 265,
+        "maxChars": 322,
+        "usableShare": 0
+      }
+    ],
+    "none": [
+      "wjar.com",
+      "providencejournal.com"
+    ]
+  },
+  {
+    "state": "south carolina",
+    "usable": [
+      {
+        "domain": "scdailygazette.com",
+        "feed": "https://scdailygazette.com/feed/",
+        "items": 100,
+        "medianChars": 5298,
+        "maxChars": 11185,
+        "usableShare": 1
+      },
+      {
+        "domain": "wistv.com",
+        "feed": "https://wistv.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1553,
+        "maxChars": 3059,
+        "usableShare": 1
+      },
+      {
+        "domain": "live5news.com",
+        "feed": "https://live5news.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 645,
+        "maxChars": 6828,
+        "usableShare": 0.58
+      }
+    ],
+    "weak": [],
+    "none": [
+      "postandcourier.com",
+      "scpublicradio.org"
+    ]
+  },
+  {
+    "state": "south dakota",
+    "usable": [
+      {
+        "domain": "southdakotasearchlight.com",
+        "feed": "https://southdakotasearchlight.com/feed/",
+        "items": 100,
+        "medianChars": 4805,
+        "maxChars": 6518,
+        "usableShare": 1
+      },
+      {
+        "domain": "dakotanewsnow.com",
+        "feed": "https://dakotanewsnow.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 3013,
+        "maxChars": 7096,
+        "usableShare": 1
+      },
+      {
+        "domain": "kotatv.com",
+        "feed": "https://kotatv.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1435,
+        "maxChars": 3059,
+        "usableShare": 0.92
+      }
+    ],
+    "weak": [],
+    "none": [
+      "argusleader.com",
+      "sdpb.org"
+    ]
+  },
+  {
+    "state": "tennessee",
+    "usable": [
+      {
+        "domain": "tennesseelookout.com",
+        "feed": "https://tennesseelookout.com/feed/",
+        "items": 100,
+        "medianChars": 4184,
+        "maxChars": 7891,
+        "usableShare": 1
+      },
+      {
+        "domain": "wmcactionnews5.com",
+        "feed": "https://wmcactionnews5.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1272,
+        "maxChars": 3059,
+        "usableShare": 0.92
+      },
+      {
+        "domain": "wvlt.tv",
+        "feed": "https://wvlt.tv/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1435,
+        "maxChars": 3468,
+        "usableShare": 1
+      },
+      {
+        "domain": "wpln.org",
+        "feed": "https://wpln.org/feed/",
+        "items": 16,
+        "medianChars": 2678,
+        "maxChars": 11879,
+        "usableShare": 0.83
+      }
+    ],
+    "weak": [],
+    "none": [
+      "tennessean.com"
+    ]
+  },
+  {
+    "state": "texas",
+    "usable": [
+      {
+        "domain": "kltv.com",
+        "feed": "https://kltv.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 778,
+        "maxChars": 3059,
+        "usableShare": 0.92
+      },
+      {
+        "domain": "kwtx.com",
+        "feed": "https://kwtx.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1445,
+        "maxChars": 3059,
+        "usableShare": 1
+      },
+      {
+        "domain": "kbtx.com",
+        "feed": "https://kbtx.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1982,
+        "maxChars": 6303,
+        "usableShare": 0.92
+      },
+      {
+        "domain": "sacurrent.com",
+        "feed": "https://sacurrent.com/feed/",
+        "items": 10,
+        "medianChars": 2663,
+        "maxChars": 8258,
+        "usableShare": 1
+      }
+    ],
+    "weak": [
+      {
+        "domain": "texastribune.org",
+        "feed": "https://texastribune.org/feed/",
+        "items": 20,
+        "medianChars": 181,
+        "maxChars": 278,
+        "usableShare": 0
+      }
+    ],
+    "none": [
+      "houstonchronicle.com"
+    ]
+  },
+  {
+    "state": "utah",
+    "usable": [
+      {
+        "domain": "utahnewsdispatch.com",
+        "feed": "https://utahnewsdispatch.com/feed/",
+        "items": 100,
+        "medianChars": 5512,
+        "maxChars": 13795,
+        "usableShare": 1
+      },
+      {
+        "domain": "deseret.com",
+        "feed": "https://deseret.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 6320,
+        "maxChars": 15469,
+        "usableShare": 1
+      }
+    ],
+    "weak": [
+      {
+        "domain": "sltrib.com",
+        "feed": "https://sltrib.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 45,
+        "medianChars": 228,
+        "maxChars": 452,
+        "usableShare": 0
+      }
+    ],
+    "none": [
+      "kuer.org",
+      "kslnewsradio.com"
+    ]
+  },
+  {
+    "state": "vermont",
+    "usable": [
+      {
+        "domain": "vtdigger.org",
+        "feed": "https://vtdigger.org/feed/",
+        "items": 30,
+        "medianChars": 5334,
+        "maxChars": 8263,
+        "usableShare": 1
+      },
+      {
+        "domain": "wcax.com",
+        "feed": "https://wcax.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 862,
+        "maxChars": 3059,
+        "usableShare": 0.67
+      }
+    ],
+    "weak": [
+      {
+        "domain": "vermontpublic.org",
+        "feed": "https://vermontpublic.org/feeds/rss",
+        "items": 12,
+        "medianChars": 141,
+        "maxChars": 256,
+        "usableShare": 0
+      }
+    ],
+    "none": [
+      "burlingtonfreepress.com"
+    ]
+  },
+  {
+    "state": "virginia",
+    "usable": [
+      {
+        "domain": "virginiamercury.com",
+        "feed": "https://virginiamercury.com/feed/",
+        "items": 100,
+        "medianChars": 4655,
+        "maxChars": 6931,
+        "usableShare": 0.92
+      },
+      {
+        "domain": "whsv.com",
+        "feed": "https://whsv.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1870,
+        "maxChars": 3351,
+        "usableShare": 1
+      },
+      {
+        "domain": "wdbj7.com",
+        "feed": "https://wdbj7.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1870,
+        "maxChars": 6502,
+        "usableShare": 0.92
+      }
+    ],
+    "weak": [],
+    "none": [
+      "richmond.com",
+      "vpm.org"
+    ]
+  },
+  {
+    "state": "washington",
+    "usable": [
+      {
+        "domain": "washingtonstatestandard.com",
+        "feed": "https://washingtonstatestandard.com/feed/",
+        "items": 100,
+        "medianChars": 4579,
+        "maxChars": 21019,
+        "usableShare": 1
+      }
+    ],
+    "weak": [
+      {
+        "domain": "crosscut.com",
+        "feed": "https://crosscut.com/feed/",
+        "items": 15,
+        "medianChars": 356,
+        "maxChars": 419,
+        "usableShare": 0
+      }
+    ],
+    "none": [
+      "seattletimes.com",
+      "kuow.org",
+      "spokesman.com"
+    ]
+  },
+  {
+    "state": "west virginia",
+    "usable": [
+      {
+        "domain": "westvirginiawatch.com",
+        "feed": "https://westvirginiawatch.com/feed/",
+        "items": 100,
+        "medianChars": 4184,
+        "maxChars": 6816,
+        "usableShare": 1
+      },
+      {
+        "domain": "wsaz.com",
+        "feed": "https://wsaz.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1010,
+        "maxChars": 3059,
+        "usableShare": 0.92
+      },
+      {
+        "domain": "wdtv.com",
+        "feed": "https://wdtv.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1113,
+        "maxChars": 3059,
+        "usableShare": 1
+      }
+    ],
+    "weak": [],
+    "none": [
+      "wvgazettemail.com",
+      "wvpublic.org"
+    ]
+  },
+  {
+    "state": "wisconsin",
+    "usable": [
+      {
+        "domain": "wisconsinexaminer.com",
+        "feed": "https://wisconsinexaminer.com/feed/",
+        "items": 100,
+        "medianChars": 4987,
+        "maxChars": 12320,
+        "usableShare": 1
+      },
+      {
+        "domain": "wbay.com",
+        "feed": "https://wbay.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1751,
+        "maxChars": 3059,
+        "usableShare": 1
+      },
+      {
+        "domain": "wsaw.com",
+        "feed": "https://wsaw.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1807,
+        "maxChars": 3326,
+        "usableShare": 1
+      }
+    ],
+    "weak": [
+      {
+        "domain": "wpr.org",
+        "feed": "https://wpr.org/feed/",
+        "items": 10,
+        "medianChars": 273,
+        "maxChars": 368,
+        "usableShare": 0
+      }
+    ],
+    "none": [
+      "jsonline.com"
+    ]
+  },
+  {
+    "state": "wyoming",
+    "usable": [
+      {
+        "domain": "wyofile.com",
+        "feed": "https://wyofile.com/feed/",
+        "items": 10,
+        "medianChars": 5942,
+        "maxChars": 13781,
+        "usableShare": 1
+      }
+    ],
+    "weak": [
+      {
+        "domain": "cowboystatedaily.com",
+        "feed": "https://cowboystatedaily.com/rss.xml",
+        "items": 50,
+        "medianChars": 97,
+        "maxChars": 277,
+        "usableShare": 0
+      }
+    ],
+    "none": [
+      "wyomingnews.com",
+      "trib.com",
+      "wyomingpublicmedia.org"
+    ]
+  }
+]
