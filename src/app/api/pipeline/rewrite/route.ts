@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import pool from "@/lib/db";
 import { isPublishingHours } from "@/config/feeds";
-import { rewriteArticle, rewriteFromSource } from "@/lib/pipeline/rewriter";
+import { rewriteFromSource } from "@/lib/pipeline/rewriter";
 import { fetchSourceText } from "@/lib/pipeline/source-fetch";
 import { findImage } from "@/lib/pipeline/images";
 import { publishArticle } from "@/lib/pipeline/publisher";
@@ -14,6 +14,14 @@ import { sites } from "@/config/sites";
  * The Romanian network landed on 500 after starting at 800.
  */
 const MIN_SOURCE_CHARS = 500;
+
+function hostOf(url: string): string {
+  try {
+    return new URL(url).hostname.replace(/^www\./, "");
+  } catch {
+    return "";
+  }
+}
 
 function authCheck(req: NextRequest): boolean {
   const token = req.headers.get("authorization")?.replace("Bearer ", "");
@@ -105,8 +113,25 @@ export async function POST(req: NextRequest) {
       // The gate therefore belongs on the INPUT. A story with no real material
       // behind it should not be published at all, rather than published as
       // invention and then judged on its length afterwards.
-      const source = await fetchSourceText(item.source_url);
-      const material = source.ok ? source.text! : (item.description || "");
+      // The feed usually carries the article itself now, so try that before
+      // asking the publisher's site for it. Fetching is the unreliable half:
+      // WKRG answers a bot with a 403 and a captcha, and every request is a
+      // second spent and a chance to be blocked. If the feed already gave us
+      // enough, there is nothing to go and get.
+      const feedText = (item.description || "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+
+      let material = feedText;
+      let publisher = "";
+      let sourceLink = item.source_url;
+
+      if (feedText.length < MIN_SOURCE_CHARS) {
+        const source = await fetchSourceText(item.source_url);
+        if (source.ok) {
+          material = source.text!;
+          publisher = source.publisher || "";
+          sourceLink = source.finalUrl || item.source_url;
+        }
+      }
 
       if (material.length < MIN_SOURCE_CHARS) {
         failed++;
@@ -120,27 +145,16 @@ export async function POST(req: NextRequest) {
       }
 
       // With the real article in hand, write from it — real quotes from named
-      // people, real institutions. Without it, fall back to the old path on
-      // the description alone.
-      const rewrite = source.ok
-        ? await rewriteFromSource(
-            siteEntry.name,
-            siteEntry.state,
-            siteEntry.city,
-            material,
-            source.publisher || "",
-            source.finalUrl || item.source_url,
-            item.category
-          )
-        : await rewriteArticle(
-            siteEntry.name,
-            siteEntry.state,
-            siteEntry.city,
-            item.title,
-            item.description || "",
-            item.source_url,
-            item.category
-          );
+      // people, real institutions, credited to the outlet that reported them.
+      const rewrite = await rewriteFromSource(
+        siteEntry.name,
+        siteEntry.state,
+        siteEntry.city,
+        material,
+        publisher || hostOf(sourceLink),
+        sourceLink,
+        item.category
+      );
 
       // Find an image (with category fallback for precision)
       const image = await findImage(rewrite.suggestedImageQuery, item.category);

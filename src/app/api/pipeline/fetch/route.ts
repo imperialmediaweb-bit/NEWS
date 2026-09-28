@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { feeds, STATE_BATCHES, isPublishingHours } from "@/config/feeds";
+import { feedsForState } from "@/config/state-feeds";
 import { parseFeed } from "@/lib/pipeline/rss-parser";
 import { isDuplicate, insertFeedItem, loadDedupContext } from "@/lib/pipeline/dedup";
 import {
@@ -131,11 +132,29 @@ export async function POST(req: NextRequest) {
     let siteFetched = 0;
     let siteFailed = 0;
 
+    // The state's own publisher feeds come first. Google News only ever gave a
+    // headline and a sentence, behind a link that can no longer be resolved to
+    // the publisher — so everything written from it past that sentence was
+    // invented. These feeds carry the article itself, 500 to 5,500 characters
+    // of it, which is what makes an honest rewrite possible at all.
+    const stateFeeds = feedsForState(site.state).map((f) => ({
+      id: f.publisher,
+      url: () => f.url,
+      category: "local-news",
+      intervalHours: 2,
+      maxItems: 8,
+    }));
+
+    // Google News is kept only as a thin fallback for a state whose own feeds
+    // are down: its items are rejected downstream for lack of material, so it
+    // adds queue noise rather than articles.
+    const feedsToFetch = stateFeeds.length > 0 ? stateFeeds : activeFeeds;
+
     // Fetch the feeds a few at a time, but insert their items one feed at a
     // time: dedup compares each item against the ones already inserted in this
     // run, so concurrent inserts would let duplicates through.
-    for (let i = 0; i < activeFeeds.length; i += FEED_CONCURRENCY) {
-      const group = activeFeeds.slice(i, i + FEED_CONCURRENCY);
+    for (let i = 0; i < feedsToFetch.length; i += FEED_CONCURRENCY) {
+      const group = feedsToFetch.slice(i, i + FEED_CONCURRENCY);
 
       const fetched = await Promise.all(
         group.map(async (feed) => {

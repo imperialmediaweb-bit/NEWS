@@ -9,6 +9,11 @@ export interface FeedItem {
   source: string;
 }
 
+/** The longest of several candidate fields — whichever actually holds the article. */
+function longest(candidates: string[]): string {
+  return candidates.reduce((best, c) => (c.length > best.length ? c : best), "");
+}
+
 const parser = new XMLParser({
   ignoreAttributes: false,
   attributeNamePrefix: "@_",
@@ -56,7 +61,16 @@ export async function parseFeed(url: string): Promise<FeedItem[]> {
     guid: extractText(item.guid) || extractText(item.link) || "",
     title: stripCDATA(extractText(item.title) || ""),
     link: extractText(item.link) || "",
-    description: stripCDATA(extractText(item.description) || ""),
+    // Prefer <content:encoded>, which is where a feed puts the full article.
+    // Taking <description> alone threw the article away and kept the teaser —
+    // and the teaser is not enough to write from, so the model filled the rest
+    // in. On the feeds worth using this is the difference between 130
+    // characters and 5,500.
+    description: longest([
+      stripCDATA(extractText(item["content:encoded"]) || ""),
+      stripCDATA(extractText(item.content) || ""),
+      stripCDATA(extractText(item.description) || ""),
+    ]),
     pubDate: extractText(item.pubDate) || "",
     source: extractText(item.source) || "",
   }));
@@ -74,7 +88,10 @@ function normalizeAtom(entries: unknown[]): FeedItem[] {
       guid: String(e.id || link),
       title: stripCDATA(String(e.title || "")),
       link,
-      description: stripCDATA(String(e.summary || e.content || "")),
+      description: longest([
+        stripCDATA(extractText(e.content) || ""),
+        stripCDATA(extractText(e.summary) || ""),
+      ]),
       pubDate: String(e.updated || e.published || ""),
       source: "",
     };
