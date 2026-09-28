@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { feeds, STATE_BATCHES, isPublishingHours } from "@/config/feeds";
 import { feedsForState } from "@/config/state-feeds";
+import { isRelevantToState } from "@/lib/pipeline/relevance";
 import { parseFeed } from "@/lib/pipeline/rss-parser";
 import { isDuplicate, insertFeedItem, loadDedupContext } from "@/lib/pipeline/dedup";
 import {
@@ -123,6 +124,9 @@ export async function POST(req: NextRequest) {
   const dedupCtx = await loadDedupContext();
 
   const skipped: string[] = [];
+  // Items dropped for being about somewhere else — worth counting separately
+  // from duplicates, since a feed that is mostly off-topic should be replaced.
+  let offTopic = 0;
   // Which feeds were actually read, and how much text their items carried.
   // Without this it is guesswork whether a run used the state's own
   // publishers or fell back to Google News, and the two produce very
@@ -188,6 +192,23 @@ export async function POST(req: NextRequest) {
             totalSkipped++;
             continue;
           }
+
+          // Drop stories that are not about this state before they reach the
+          // queue. The state newsrooms republish each other, so Alaska's feed
+          // carries Georgia stories — and one went live on alaska-express on
+          // the first run. Filtering here rather than at rewrite also means
+          // not paying for an LLM call to produce something unpublishable.
+          const relevance = isRelevantToState(
+            item.title,
+            item.description || "",
+            site.state,
+            site.city
+          );
+          if (!relevance.relevant) {
+            totalSkipped++;
+            offTopic++;
+            continue;
+          }
           const id = await insertFeedItem(item, feed.id, feed.category, site.state);
           if (id) {
             siteFetched++;
@@ -217,6 +238,7 @@ export async function POST(req: NextRequest) {
     feeds: activeFeeds.length,
     fetched: totalFetched,
     skipped: totalSkipped,
+    skippedOffTopic: offTopic,
     // States the run had no time left for — they lead the next rotation.
     ranOutOfTimeFor: skipped.length > 0 ? skipped : undefined,
     errors: errors.length > 0 ? errors : undefined,
