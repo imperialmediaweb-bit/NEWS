@@ -123,6 +123,11 @@ export async function POST(req: NextRequest) {
   const dedupCtx = await loadDedupContext();
 
   const skipped: string[] = [];
+  // Which feeds were actually read, and how much text their items carried.
+  // Without this it is guesswork whether a run used the state's own
+  // publishers or fell back to Google News, and the two produce very
+  // different material.
+  const feedsUsed = new Map<string, number>();
   for (const site of siteEntries) {
     if (Date.now() - startTime > RUN_BUDGET_MS) {
       skipped.push(site.state);
@@ -174,6 +179,10 @@ export async function POST(req: NextRequest) {
       );
 
       for (const { feed, items } of fetched) {
+        if (items.length > 0) {
+          const longest = Math.max(...items.map((i) => (i.description || "").length));
+          feedsUsed.set(feed.id, Math.max(feedsUsed.get(feed.id) ?? 0, longest));
+        }
         for (const item of items) {
           if (await isDuplicate(item, dedupCtx)) {
             totalSkipped++;
@@ -204,6 +213,7 @@ export async function POST(req: NextRequest) {
     batch: batchIndex,
     states: statesToProcess,
     startedAt: siteEntries[0]?.state,
+    feedsUsed: Object.fromEntries(feedsUsed),
     feeds: activeFeeds.length,
     fetched: totalFetched,
     skipped: totalSkipped,
