@@ -35,6 +35,19 @@ export async function POST(req: NextRequest) {
       `DELETE FROM feed_items WHERE created_at < NOW() - INTERVAL '7 days'`
     );
 
+    // Queue items with too little text to write from can never be published:
+    // the rewrite stage rejects anything under 500 characters rather than let
+    // the model invent the rest. They are the Google News backlog — a headline
+    // and a sentence each — and there are hundreds per state, so the rewriter
+    // spends every run picking them up and throwing them away while the real
+    // articles behind them wait. Clearing them is what lets a state start
+    // publishing again.
+    const deadQueue = await pool.query(
+      `DELETE FROM feed_items
+        WHERE status IN ('pending', 'failed')
+          AND length(regexp_replace(coalesce(description, ''), '<[^>]+>', ' ', 'g')) < 500`
+    );
+
     // Un-stick items left in 'processing' by a crashed/timed-out batch so
     // they can be picked up again instead of leaking.
     const stuckResult = await pool.query(
@@ -74,6 +87,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({
       feedItemsDeleted: feedDeleted,
+      unpublishableQueueDeleted: deadQueue.rowCount ?? 0,
       stuckItemsReset: unstuck,
       pipelineRunsDeleted: runsDeleted,
       pageViewsDeleted: viewsDeleted,
