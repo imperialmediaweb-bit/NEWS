@@ -26,6 +26,30 @@ export const maxDuration = 300;
  * over, and dryRun shows the before and after without writing.
  */
 
+/**
+ * Sentences present in one version and not the other, so a dry run shows the
+ * actual edit rather than an identical-looking preview.
+ */
+function sentenceDiff(before: string, after: string) {
+  const split = (html: string) =>
+    html
+      .replace(/<[^>]+>/g, " ")
+      .replace(/\s+/g, " ")
+      .split(/(?<=[.!?])\s+/)
+      .map((x) => x.trim())
+      .filter(Boolean);
+
+  const b = split(before);
+  const a = split(after);
+  const aSet = new Set(a);
+  const bSet = new Set(b);
+
+  return [
+    ...b.filter((s) => !aSet.has(s)).map((s) => ({ removed: s })),
+    ...a.filter((s) => !bSet.has(s)).map((s) => ({ added: s })),
+  ];
+}
+
 const PATTERNS = [
   "%sources familiar%",
   "%spokesperson%",
@@ -92,10 +116,13 @@ export async function GET(req: NextRequest) {
   const limit = Math.min(50, Math.max(1, parseInt(req.nextUrl.searchParams.get("limit") || "20", 10) || 20));
 
   const { rows } = await pool.query(
-    `SELECT a.id, a.title, a.content, a.slug, a.category, s.domain
+    `SELECT a.id, a.title, a.content, a.slug, a.category, a.published_at, s.domain
        FROM articles a JOIN sites s ON a.site_id = s.id
       WHERE a.defabricated_at IS NULL AND (${orClause})
-      ORDER BY a.published_at DESC
+      -- Oldest first. Sorting newest-first started with articles the repaired
+      -- pipeline had just written from real sources — the ones that need
+      -- nothing — while the fabricated archive underneath went untouched.
+      ORDER BY a.published_at ASC
       LIMIT $${PATTERNS.length + 1}`,
     [...PATTERNS, limit]
   );
@@ -118,8 +145,11 @@ export async function GET(req: NextRequest) {
           url: `https://${row.domain}/${row.category || "local-news"}/${row.slug}`,
           title: row.title,
           changed: out.changed,
-          before: String(row.content).slice(0, 700),
-          after: out.content.slice(0, 700),
+          publishedAt: row.published_at,
+          // The edits are scattered through the body, so showing the opening
+          // of each version proves nothing — both look the same. Show the
+          // sentences that actually differ.
+          edits: sentenceDiff(String(row.content), out.content).slice(0, 6),
         });
         if (out.changed) changed++;
         else unchanged++;
