@@ -96,6 +96,23 @@ export async function GET(req: NextRequest) {
       [cutoff]
     );
 
+    // Are the sourceless articles AI output, or WordPress imports from sites
+    // that already existed? 671k with no source_url is far too many to be
+    // pipeline output, and the answer decides whether deleting them is
+    // cleaning up or destroying something real.
+    const { rows: provenance } = await pool.query(
+      `SELECT
+         count(*) FILTER (WHERE wp_original_id IS NOT NULL)::int             AS imported,
+         count(*) FILTER (WHERE auto_generated = true)::int                  AS aiGenerated,
+         count(*) FILTER (WHERE wp_original_id IS NULL
+                            AND coalesce(auto_generated, false) = false)::int AS neither,
+         count(*) FILTER (WHERE wp_original_id IS NOT NULL
+                            AND (source_url IS NULL OR source_url = ''))::int AS importedNoSource,
+         count(*) FILTER (WHERE auto_generated = true
+                            AND (source_url IS NULL OR source_url = ''))::int AS aiNoSource
+       FROM articles`
+    );
+
     const { rows: byYear } = await pool.query(
       `SELECT extract(year from published_at)::int AS year, count(*)::int AS n
          FROM articles
@@ -124,6 +141,7 @@ export async function GET(req: NextRequest) {
       matchingAtLeastOne: wouldDelete,
       wouldRemain: total - wouldDelete,
       percentageAffected: total > 0 ? Number(((wouldDelete / total) * 100).toFixed(1)) : 0,
+      provenance: provenance[0] || {},
       byYear,
       byCategory,
       note: "Counts only. Nothing has been deleted. The buckets overlap, so add nothing up — matchingAtLeastOne is the real figure.",
