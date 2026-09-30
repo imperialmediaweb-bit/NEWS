@@ -4,6 +4,7 @@ import { getSiteByDomain, getActiveSite } from "@/config/sites";
 import { generateContent } from "@/data/generate-content";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import AdvertiseForm from "@/components/AdvertiseForm";
 import Link from "next/link";
 
 function getSiteFromHeaders() {
@@ -113,15 +114,18 @@ export default function AdvertisePage() {
               Get Started
             </h2>
             <p>
-              Ready to reach {site.state} readers? Contact our advertising team:
-            </p>
-            <p>
-              Visit our <Link href="/contact" className="text-[var(--accent)] underline">Contact Page</Link> with subject <strong>&quot;Advertising Inquiry — {site.name}&quot;</strong>
-            </p>
-            <p>
-              We&apos;ll respond within 1-2 business days with a media kit, rate card, and custom proposal tailored to your goals.
+              Ready to reach {site.state} readers? Tell us what you want to promote and
+              we&apos;ll come back with options and pricing. You can also reach us through
+              the <Link href="/contact" className="text-[var(--accent)] underline">contact page</Link>.
             </p>
 
+          </div>
+
+          {/* The page described four products and offered no way to order any
+              of them, so every enquiry depended on a reader hunting down an
+              address and writing one unprompted. */}
+          <div className="mt-8">
+            <AdvertiseForm site={site} />
           </div>
         </div>
       </div>
