@@ -194,15 +194,19 @@ export async function GET(req: NextRequest) {
     client.release();
   }
 
-  const { rows: left } = await pool.query(
-    `SELECT count(*)::int AS n FROM articles a WHERE ${where}`,
-    PATTERNS
-  );
+  const [{ rows: left }, { rows: logged }] = await Promise.all([
+    pool.query(`SELECT count(*)::int AS n FROM articles a WHERE ${where}`, PATTERNS),
+    pool.query("SELECT count(*)::int AS n FROM purged_articles"),
+  ]);
   const remaining = Number(left[0]?.n) || 0;
 
   return NextResponse.json({
     deleted,
     remaining,
+    // Reported so the record can be checked rather than assumed. If this
+    // stops tracking the number deleted, the transaction is not doing what
+    // the comment above claims and the run should stop.
+    recorded: Number(logged[0]?.n) || 0,
     done: remaining === 0,
     // The sitemaps are generated from this table, so the URLs leave the
     // sitemaps on their own. No index-removal calls are made: a sample of
