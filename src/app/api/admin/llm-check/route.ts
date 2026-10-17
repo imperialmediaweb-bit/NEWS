@@ -45,8 +45,10 @@ type ProviderReport = {
   configuredModel: string;
   ok: boolean;
   error?: string;
-  /** Models this provider says it has. Only Gemini publishes a usable list. */
+  /** Models this provider says it has. */
   availableModels?: string[];
+  /** Why the model list could not be fetched, when it could not. */
+  listError?: string;
 };
 
 async function getConfig(key: string, fallback: string): Promise<string> {
@@ -162,9 +164,16 @@ async function checkOpenAI(model: string): Promise<ProviderReport> {
         // and moderation models, which are not candidates here.
         .filter((id: string) => /^(gpt|o[0-9]|chatgpt)/.test(id))
         .sort();
+    } else {
+      // Say why. A silently absent list reads as "this provider has no
+      // models", when the usual cause is a project key scoped without
+      // api.model.read — the key works perfectly for chat and simply may not
+      // enumerate. Swallowing that sent me looking in the wrong place.
+      report.listError = `${list.status}: ${(await list.text()).slice(0, 200)}`;
     }
-  } catch {
+  } catch (e) {
     // A failed listing is not a failed provider — the probe below decides.
+    report.listError = e instanceof Error ? e.message : String(e);
   }
 
   try {
