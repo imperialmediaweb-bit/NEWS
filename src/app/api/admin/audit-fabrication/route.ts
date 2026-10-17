@@ -241,6 +241,16 @@ export async function GET(req: NextRequest) {
     PATTERNS.map((p) => p.sql)
   );
 
+  const { rows: generatedByDomain } = await pool.query(
+    `SELECT s.domain, count(*)::int AS n
+       FROM articles a JOIN sites s ON a.site_id = s.id
+      WHERE a.wp_original_id IS NULL
+        AND (${orClause})
+      GROUP BY s.domain
+      ORDER BY n DESC`,
+    PATTERNS.map((p) => p.sql)
+  );
+
   return NextResponse.json({
     totalArticles: total,
     articlesWithAtLeastOnePattern: affected,
@@ -252,6 +262,14 @@ export async function GET(req: NextRequest) {
     // generatedNoSource: the same, with no source URL, so there is nothing to
     //   check the claims against and no way to rebuild the article honestly.
     byProvenance: provRows[0] || {},
+    // Which sites the generated matches are on.
+    //
+    // Every attempt to sample them landed on the same two domains, through
+    // three different sampling methods. At that point the sampling is not the
+    // story: the articles themselves are clustered, and a removal plan built
+    // on "73,014 spread across fifty sites" would be aimed at the wrong
+    // shape. This says where they actually are.
+    generatedByDomain: generatedByDomain.slice(0, 15),
     caveat:
       "A match means the phrase is present, not that it is false — an article whose source genuinely quoted a named agency matches too. Use &phrase=<text>&sample=20 to read real examples before drawing conclusions.",
   });
