@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { DECLARED_BLOCKED_CRAWLERS } from "@/config/crawlers";
 
 /**
  * Security middleware — protects against bots, hackers, and abuse.
@@ -40,23 +41,13 @@ const BAD_BOT_PATTERNS = [
   /scrapy/i,
   /wget/i,
   /curl\/[0-9]/i,
-  /AhrefsBot/i,
-  /SemrushBot/i,
-  /MJ12bot/i,
-  /DotBot/i,
-  /PetalBot/i,
-  /BLEXBot/i,
-  /DataForSeoBot/i,
-  /SeznamBot/i,
-  /YandexBot/i,
-  /Bytespider/i,
-  /GPTBot/i,
-  /ClaudeBot/i,
-  /CCBot/i,
-  /anthropic-ai/i,
-  /Claude-Web/i,
-  /Omgilibot/i,
-  /cohere-ai/i,
+  // The named crawlers live in src/config/crawlers.ts, because robots.txt has
+  // to declare the same list. It used to say "Allow: /" to every one of them
+  // while this answered 403, which reads as a broken site rather than a
+  // closed door.
+  ...DECLARED_BLOCKED_CRAWLERS.map(
+    (agent) => new RegExp(agent.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i")
+  ),
 ];
 
 // ─── Blocked countries (bot traffic sources) ───

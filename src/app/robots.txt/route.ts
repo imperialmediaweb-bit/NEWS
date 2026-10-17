@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getActiveSite, getSiteByDomain } from "@/config/sites";
+import { DECLARED_BLOCKED_CRAWLERS } from "@/config/crawlers";
 
 export const dynamic = "force-dynamic";
 
@@ -13,9 +14,20 @@ export async function GET(request: NextRequest) {
   const site = getSiteByDomain(domain) || getActiveSite();
   const baseUrl = `https://${site.domain}`;
 
+  // Declare the crawlers the middleware refuses. Saying "Allow: /" to an
+  // agent and then answering it 403 reads as a broken site rather than a
+  // closed door — see src/config/crawlers.ts.
+  const declined = DECLARED_BLOCKED_CRAWLERS.map(
+    (agent) => `User-agent: ${agent}\nDisallow: /`
+  ).join("\n\n");
+
   const text = `User-agent: *
 Allow: /
 Disallow: /admin/
+Disallow: /api/
+Disallow: /report/
+
+${declined}
 
 Sitemap: ${baseUrl}/sitemap.xml
 Sitemap: ${baseUrl}/news-sitemap.xml
