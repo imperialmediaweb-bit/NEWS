@@ -3,7 +3,7 @@ import { feeds, STATE_BATCHES, isPublishingHours } from "@/config/feeds";
 import { feedsForState } from "@/config/state-feeds";
 import { isRelevantToState } from "@/lib/pipeline/relevance";
 import { parseFeed } from "@/lib/pipeline/rss-parser";
-import { isDuplicate, insertFeedItem, loadDedupContext } from "@/lib/pipeline/dedup";
+import { duplicateReason, insertFeedItem, loadDedupContext } from "@/lib/pipeline/dedup";
 import {
   logRunStart,
   logRunEnd,
@@ -137,10 +137,12 @@ export async function POST(req: NextRequest) {
     {
       read: number;
       inserted: number;
-      duplicate: number;
+      seenBefore: number;
+      similarTitle: number;
       offTopic: number;
       insertRejected: number;
       offTopicExample: string;
+      similarExample: string;
     }
   >();
   for (const site of siteEntries) {
@@ -159,10 +161,12 @@ export async function POST(req: NextRequest) {
     const tally = {
       read: 0,
       inserted: 0,
-      duplicate: 0,
+      seenBefore: 0,
+      similarTitle: 0,
       offTopic: 0,
       insertRejected: 0,
       offTopicExample: "",
+      similarExample: "",
     };
     perState.set(site.state, tally);
 
@@ -214,9 +218,17 @@ export async function POST(req: NextRequest) {
         }
         tally.read += items.length;
         for (const item of items) {
-          if (await isDuplicate(item, dedupCtx)) {
+          const dup = await duplicateReason(item, dedupCtx);
+          if (dup) {
             totalSkipped++;
-            tally.duplicate++;
+            // Seen before (correct) and "looks like something else we have"
+            // (a threshold, and therefore a judgement that can be wrong) are
+            // different problems with opposite fixes. Count them apart.
+            if (dup === "guid") tally.seenBefore++;
+            else {
+              tally.similarTitle++;
+              if (!tally.similarExample) tally.similarExample = item.title.slice(0, 90);
+            }
             continue;
           }
 

@@ -47,7 +47,23 @@ function jaccardSimilarity(a: Set<string>, b: Set<string>): number {
  * Check if a feed item is a duplicate.
  * Returns true if duplicate (should be skipped).
  */
-export async function isDuplicate(item: FeedItem, ctx?: DedupContext): Promise<boolean> {
+/**
+ * Which layer rejected an item, or "" if it is new.
+ *
+ * The two layers mean completely different things and the fix for each is the
+ * opposite of the other. A GUID hit means we have genuinely seen this exact
+ * article before — correct, and most of what a feed returns on any run after
+ * the first. A title-similarity hit is a judgement call at a threshold, and a
+ * threshold set too low silently discards distinct stories. Returning a bare
+ * boolean made the two indistinguishable, and three states that queued
+ * nothing for weeks could not be diagnosed because of it.
+ */
+export type DuplicateReason = "" | "guid" | "title";
+
+export async function duplicateReason(
+  item: FeedItem,
+  ctx?: DedupContext
+): Promise<DuplicateReason> {
   const guid = generateGuid(item);
 
   // Layer 1: GUID check
@@ -55,7 +71,7 @@ export async function isDuplicate(item: FeedItem, ctx?: DedupContext): Promise<b
     "SELECT id FROM feed_items WHERE guid = $1",
     [guid]
   );
-  if (guidRows.length > 0) return true;
+  if (guidRows.length > 0) return "guid";
 
   // Layer 2: title similarity against recent items. Callers should pass a
   // DedupContext so the 48h lookback is fetched and normalized ONCE per run
@@ -66,14 +82,18 @@ export async function isDuplicate(item: FeedItem, ctx?: DedupContext): Promise<b
   const itemWords = normalizeTitle(item.title);
   for (const recentWords of context.recentTitleWords) {
     if (jaccardSimilarity(itemWords, recentWords) > 0.7) {
-      return true;
+      return "title";
     }
   }
 
   // Keep the current title in play so duplicates *within* this run are caught.
   context.recentTitleWords.push(itemWords);
 
-  return false;
+  return "";
+}
+
+export async function isDuplicate(item: FeedItem, ctx?: DedupContext): Promise<boolean> {
+  return (await duplicateReason(item, ctx)) !== "";
 }
 
 export interface DedupContext {
