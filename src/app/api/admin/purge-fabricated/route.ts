@@ -143,6 +143,16 @@ export async function GET(req: NextRequest) {
         `SELECT
            count(*) FILTER (WHERE published_at <  DATE '2026-09-19')::int AS beforePromptFix,
            count(*) FILTER (WHERE published_at >= DATE '2026-09-19')::int AS afterPromptFix,
+           -- Of the post-fix articles removed in error, how many can be
+           -- rebuilt. The body is not kept — deliberately, it was the
+           -- fabricated text — but the source URL is, and a post-fix article
+           -- was written from a real publisher URL rather than a Google News
+           -- token. Those can be fetched and written again.
+           count(*) FILTER (WHERE published_at >= DATE '2026-09-19'
+                              AND source_url IS NOT NULL
+                              AND source_url <> ''
+                              AND source_url NOT LIKE '%news.google.com%')::int
+             AS afterPromptFixRecoverable,
            count(*)::int AS total
          FROM purged_articles`
       )
