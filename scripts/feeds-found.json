@@ -6,43 +6,48 @@
         "domain": "alabamareflector.com",
         "feed": "https://alabamareflector.com/feed/",
         "items": 100,
-        "medianChars": 5534,
-        "maxChars": 9150,
-        "usableShare": 1
-      },
-      {
-        "domain": "wsfa.com",
-        "feed": "https://wsfa.com/arc/outboundfeeds/rss/?outputType=xml",
-        "items": 20,
-        "medianChars": 1317,
-        "maxChars": 3186,
-        "usableShare": 1
+        "medianChars": 3974,
+        "maxChars": 17234,
+        "usableShare": 1,
+        "identity": "https://alabamareflector.com/?post_type=republished&#038;p=23864|https://alabamareflector.com/?post_type=republished&#038;p=23861|https://alabamareflector.com/?post_type=republished&#038;p=23867"
       },
       {
         "domain": "wbrc.com",
         "feed": "https://wbrc.com/arc/outboundfeeds/rss/?outputType=xml",
         "items": 20,
-        "medianChars": 1563,
-        "maxChars": 3186,
-        "usableShare": 1
+        "medianChars": 1415,
+        "maxChars": 5913,
+        "usableShare": 1,
+        "identity": "https://www.wbrc.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.wbrc.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/|https://www.wbrc.com/2026/10/17/community-group-hosting-stop-violence-get-out-vote-event-birmingham/"
+      },
+      {
+        "domain": "wsfa.com",
+        "feed": "https://wsfa.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1381,
+        "maxChars": 3674,
+        "usableShare": 1,
+        "identity": "https://www.wsfa.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.wsfa.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/|https://www.wsfa.com/2026/10/17/investigation-underway-after-shots-heard-near-selma-homecoming/"
       },
       {
         "domain": "waff.com",
         "feed": "https://waff.com/arc/outboundfeeds/rss/?outputType=xml",
         "items": 20,
-        "medianChars": 1245,
-        "maxChars": 3059,
-        "usableShare": 1
+        "medianChars": 1357,
+        "maxChars": 7008,
+        "usableShare": 1,
+        "identity": "https://www.waff.com/2026/10/17/sunny-windy-cool-today/|https://www.waff.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.waff.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/"
       }
     ],
     "weak": [
       {
         "domain": "alreporter.com",
-        "feed": "https://alreporter.com/feed/",
+        "feed": "https://www.alreporter.com/feed/",
         "items": 15,
-        "medianChars": 135,
-        "maxChars": 184,
-        "usableShare": 0
+        "medianChars": 130,
+        "maxChars": 156,
+        "usableShare": 0,
+        "identity": "https://www.alreporter.com/?p=225149|https://www.alreporter.com/?p=225111|https://www.alreporter.com/?p=225137"
       }
     ],
     "none": [
@@ -56,33 +61,37 @@
         "domain": "alaskabeacon.com",
         "feed": "https://alaskabeacon.com/feed/",
         "items": 100,
-        "medianChars": 5534,
-        "maxChars": 17318,
-        "usableShare": 1
+        "medianChars": 6185,
+        "maxChars": 21019,
+        "usableShare": 1,
+        "identity": "https://alaskabeacon.com/?p=29952|https://alaskabeacon.com/?p=29948|https://alaskabeacon.com/?p=29943"
       },
       {
         "domain": "adn.com",
         "feed": "https://adn.com/arc/outboundfeeds/rss/?outputType=xml",
         "items": 25,
-        "medianChars": 5261,
-        "maxChars": 14326,
-        "usableShare": 1
+        "medianChars": 5808,
+        "maxChars": 18716,
+        "usableShare": 1,
+        "identity": "https://www.adn.com/alaska-life/advice/2026/10/17/miss-manners-i-found-out-a-donation-was-made-in-my-name-by-someone-im-not-close-with/|https://www.adn.com/alaska-life/advice/2026/10/17/dear-annie-i-got-sober-but-my-family-problems-didnt-go-away/|https://www.adn.com/alaska-life/advice/2026/10/17/asking-eric-my-sisters-bad-relationship-with-our-dad-is-making-it-difficult-for-everyone/"
       },
       {
         "domain": "ktoo.org",
         "feed": "https://ktoo.org/feed/",
         "items": 20,
-        "medianChars": 1754,
-        "maxChars": 3547,
-        "usableShare": 1
+        "medianChars": 2499,
+        "maxChars": 4718,
+        "usableShare": 1,
+        "identity": "https://www.ktoo.org/?p=357582|https://www.ktoo.org/?p=357572|https://www.ktoo.org/?p=357547&#038;preview=true&#038;preview_id=357547"
       },
       {
         "domain": "webcenter11.com",
         "feed": "https://webcenter11.com/arc/outboundfeeds/rss/?outputType=xml",
         "items": 20,
-        "medianChars": 1428,
-        "maxChars": 3115,
-        "usableShare": 1
+        "medianChars": 1741,
+        "maxChars": 8886,
+        "usableShare": 1,
+        "identity": "https://www.webcenterfairbanks.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.webcenterfairbanks.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/|https://www.webcenterfairbanks.com/2026/10/17/acting-ag-calls-alaska-legislature-fix-gun-law-gray-area/"
       }
     ],
     "weak": [],
@@ -94,27 +103,68 @@
     "state": "arizona",
     "usable": [
       {
+        "domain": "cronkitenews.azpbs.org",
+        "feed": "https://cronkitenews.azpbs.org/feed/",
+        "items": 15,
+        "medianChars": 7148,
+        "maxChars": 11865,
+        "usableShare": 1,
+        "identity": "https://cronkitenews.azpbs.org/?p=107166|https://cronkitenews.azpbs.org/?p=107148|https://cronkitenews.azpbs.org/?p=107137"
+      },
+      {
         "domain": "azmirror.com",
         "feed": "https://azmirror.com/feed/",
         "items": 100,
-        "medianChars": 5534,
-        "maxChars": 11325,
-        "usableShare": 1
+        "medianChars": 4704,
+        "maxChars": 7191,
+        "usableShare": 1,
+        "identity": "https://azmirror.com/?p=28703|https://azmirror.com/?p=28701|https://azmirror.com/?p=28699"
+      },
+      {
+        "domain": "kgun9.com",
+        "feed": "https://www.kgun9.com/index.rss",
+        "items": 5,
+        "medianChars": 2682,
+        "maxChars": 2920,
+        "usableShare": 1,
+        "identity": "https://www.kgun9.com/sports/local-sports/arizona-defeats-san-diego-state-82-67-in-preseason-exhibition|https://www.kgun9.com/news/local-news/blustery-wind-blasts-southern-arizona|https://www.kgun9.com/news/state/arizona-joins-lawsuit-over-colorado-river-water-cuts"
+      },
+      {
+        "domain": "azfamily.com",
+        "feed": "https://azfamily.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 2172,
+        "maxChars": 7238,
+        "usableShare": 1,
+        "identity": "https://www.azfamily.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.azfamily.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/|https://www.azfamily.com/2026/10/17/asu-launches-mentorship-program-grow-more-organic-farmers/"
       },
       {
         "domain": "kold.com",
         "feed": "https://kold.com/arc/outboundfeeds/rss/?outputType=xml",
         "items": 20,
-        "medianChars": 1870,
-        "maxChars": 3059,
-        "usableShare": 0.92
+        "medianChars": 1299,
+        "maxChars": 7238,
+        "usableShare": 0.92,
+        "identity": "https://www.kold.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.kold.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/|https://www.kold.com/2026/10/17/high-wind-warning-continues-into-saturday-morning/"
       }
     ],
-    "weak": [],
+    "weak": [
+      {
+        "domain": "tucson.com",
+        "feed": "https://tucson.com/search/?f=rss&amp;t=article&amp;l=50&amp;s=start_time&amp;sd=desc&amp;k%5B%5D=%23topstory",
+        "items": 10,
+        "medianChars": 145,
+        "maxChars": 256,
+        "usableShare": 0,
+        "identity": "http://tucson.com/tncms/asset/editorial/469a8ca4-6415-4465-b9a6-623208f0eaa6|http://tucson.com/tncms/asset/editorial/2ec889f6-89e2-4a6f-bf77-21566e0dffc9|http://tucson.com/tncms/asset/editorial/9fe06690-e731-46f2-99b2-0fb8be8a23dd"
+      }
+    ],
     "none": [
-      "tucson.com",
       "azcentral.com",
-      "azpm.org"
+      "azpm.org",
+      "kjzz.org",
+      "tucsonsentinel.com",
+      "arizonaluminaria.org"
     ]
   },
   {
@@ -124,102 +174,236 @@
         "domain": "arkansasadvocate.com",
         "feed": "https://arkansasadvocate.com/feed/",
         "items": 100,
-        "medianChars": 3874,
-        "maxChars": 11431,
-        "usableShare": 1
+        "medianChars": 4585,
+        "maxChars": 17234,
+        "usableShare": 1,
+        "identity": "https://arkansasadvocate.com/?p=30002|https://arkansasadvocate.com/?p=29971|https://arkansasadvocate.com/?post_type=republished&#038;p=29995"
       },
       {
         "domain": "kait8.com",
         "feed": "https://kait8.com/arc/outboundfeeds/rss/?outputType=xml",
         "items": 20,
-        "medianChars": 915,
-        "maxChars": 4427,
-        "usableShare": 0.92
+        "medianChars": 1158,
+        "maxChars": 2891,
+        "usableShare": 0.92,
+        "identity": "https://www.kait8.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.kait8.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/|https://www.kait8.com/2026/10/16/kountry-cozy-owners-bring-family-day-event-back-jonesboro-roots/"
       }
     ],
-    "weak": [],
+    "weak": [
+      {
+        "domain": "thv11.com",
+        "feed": "https://www.thv11.com/feeds/syndication/rss/news",
+        "items": 40,
+        "medianChars": 124,
+        "maxChars": 150,
+        "usableShare": 0,
+        "identity": "a2b0b311-0661-4cd6-8fab-1d52183b9e91|71d0d46f-1428-45f9-ad35-0fb03ccfa0e8|5faa5cc4-60db-43f2-ab42-d4145843ad5e"
+      },
+      {
+        "domain": "arktimes.com",
+        "feed": "https://arktimes.com/feed",
+        "items": 25,
+        "medianChars": 112,
+        "maxChars": 6217,
+        "usableShare": 0.17,
+        "identity": "https://arktimes.com/?p=771078|https://arktimes.com/?p=771031|https://arktimes.com/?p=770769"
+      },
+      {
+        "domain": "arktimes.com",
+        "feed": "https://arktimes.com/news/feed/",
+        "items": 25,
+        "medianChars": 392,
+        "maxChars": 9049,
+        "usableShare": 0.5,
+        "identity": "https://arktimes.com/?p=765678|https://arktimes.com/?p=759113|https://arktimes.com/?p=726320"
+      },
+      {
+        "domain": "5newsonline.com",
+        "feed": "https://www.5newsonline.com/feeds/syndication/rss/news",
+        "items": 40,
+        "medianChars": 124,
+        "maxChars": 145,
+        "usableShare": 0,
+        "identity": "0026ebcb-8d42-49dd-af6e-56be80704c3f|71d0d46f-1428-45f9-ad35-0fb03ccfa0e8|5faa5cc4-60db-43f2-ab42-d4145843ad5e"
+      }
+    ],
     "none": [
       "arkansasonline.com",
       "katv.com",
-      "thv11.com"
+      "kuaf.com",
+      "nwaonline.com",
+      "magnoliareporter.com"
     ]
   },
   {
     "state": "california",
     "usable": [
       {
-        "domain": "calmatters.org",
-        "feed": "https://calmatters.org/feed/",
-        "items": 10,
-        "medianChars": 6344,
-        "maxChars": 18096,
-        "usableShare": 1
+        "domain": "laist.com",
+        "feed": "https://laist.com/index.atom",
+        "items": 30,
+        "medianChars": 6668,
+        "maxChars": 16117,
+        "usableShare": 1,
+        "identity": "https://laist.com/news/climate-environment/norte-fire-san-clemente|https://laist.com/news/climate-environment/bryson-fire-malibu-oct-2026|https://laist.com/news/politics/reps-say-adelanto-has-made-little-progress-on-unsanitary-conditions"
       },
       {
         "domain": "voiceofsandiego.org",
         "feed": "https://voiceofsandiego.org/feed/",
         "items": 10,
-        "medianChars": 5577,
-        "maxChars": 13208,
-        "usableShare": 1
+        "medianChars": 5747,
+        "maxChars": 9895,
+        "usableShare": 1,
+        "identity": "https://voiceofsandiego.org/?p=770093|https://voiceofsandiego.org/?p=770122|https://voiceofsandiego.org/?p=770024"
+      },
+      {
+        "domain": "calmatters.org",
+        "feed": "https://calmatters.org/feed/",
+        "items": 10,
+        "medianChars": 5696,
+        "maxChars": 10689,
+        "usableShare": 1,
+        "identity": "https://calmatters.org/?p=510754|https://calmatters.org/?p=510638|https://calmatters.org/?p=510627"
+      },
+      {
+        "domain": "kqed.org",
+        "feed": "https://ww2.kqed.org/news/feed/",
+        "items": 30,
+        "medianChars": 4895,
+        "maxChars": 10900,
+        "usableShare": 1,
+        "identity": "https://ww2.kqed.org/news/?p=12104776|https://ww2.kqed.org/news/?p=12104780|https://ww2.kqed.org/news/?p=12104891"
+      },
+      {
+        "domain": "laist.com",
+        "feed": "https://laist.com/index.rss",
+        "items": 30,
+        "medianChars": 3490,
+        "maxChars": 6381,
+        "usableShare": 1,
+        "identity": "000001a1-465f-d250-afe7-fe7f78160002|000001a1-4234-d8bb-adfb-7634dd5b0002|000001a1-464e-dbca-a9fb-7ffe000c0001"
+      },
+      {
+        "domain": "edsource.org",
+        "feed": "https://edsource.org/feed/",
+        "items": 15,
+        "medianChars": 2034,
+        "maxChars": 8850,
+        "usableShare": 1,
+        "identity": "https://edsource.org/?p=768402|https://edsource.org/?post_type=updates&#038;p=768387|https://edsource.org/?post_type=updates&#038;p=768369"
       }
     ],
     "weak": [
       {
         "domain": "lataco.com",
-        "feed": "https://lataco.com/feed/",
+        "feed": "https://lataco.com/feed",
         "items": 10,
-        "medianChars": 264,
-        "maxChars": 346,
-        "usableShare": 0
+        "medianChars": 308,
+        "maxChars": 362,
+        "usableShare": 0,
+        "identity": "https://lataco.com/?p=184282|https://lataco.com/?p=184236|https://lataco.com/?p=184231"
       },
       {
         "domain": "sfstandard.com",
         "feed": "https://sfstandard.com/feed/",
         "items": 10,
-        "medianChars": 138,
-        "maxChars": 170,
-        "usableShare": 0
+        "medianChars": 122,
+        "maxChars": 150,
+        "usableShare": 0,
+        "identity": "https://sfstandard.com/2026/10/16/sfpd-officer-mannix-murder-suicide/|https://sfstandard.com/section-415/2026/10/16/section-415-podcast-bold-warriors-predictions-2026-27-season/|https://sfstandard.com/2026/10/16/mayor-lurie-data-center-moratorium/"
+      },
+      {
+        "domain": "sfstandard.com",
+        "feed": "https://sfstandard.com/news/feed/",
+        "items": 10,
+        "medianChars": 102,
+        "maxChars": 136,
+        "usableShare": 0,
+        "identity": "https://sfstandard.com/2026/10/16/sfpd-officer-mannix-murder-suicide/|https://sfstandard.com/pacific-standard-time/2026/10/16/myrna-melgar-says-sf-having-metoo-moment-s-personal/|https://sfstandard.com/2026/10/16/sfpd-rape-kits-sexual-assault-stalled/"
+      },
+      {
+        "domain": "sfstandard.com",
+        "feed": "https://sfstandard.com/politics/feed/",
+        "items": 10,
+        "medianChars": 133,
+        "maxChars": 152,
+        "usableShare": 0,
+        "identity": "https://sfstandard.com/2026/10/16/mayor-lurie-data-center-moratorium/|https://sfstandard.com/pacific-standard-time/2026/10/16/myrna-melgar-says-sf-having-metoo-moment-s-personal/|https://sfstandard.com/2026/10/15/manny-yekutiel-s-campaign-hasn-t-repaid-255k-public-financing-city-says/"
+      },
+      {
+        "domain": "berkeleyside.org",
+        "feed": "https://www.berkeleyside.org/feed",
+        "items": 12,
+        "medianChars": 143,
+        "maxChars": 179,
+        "usableShare": 0,
+        "identity": "https://www.berkeleyside.org/?p=564546|https://www.berkeleyside.org/?p=564491|https://www.berkeleyside.org/?p=564552"
+      },
+      {
+        "domain": "oaklandside.org",
+        "feed": "https://oaklandside.org/feed/",
+        "items": 20,
+        "medianChars": 221,
+        "maxChars": 308,
+        "usableShare": 0,
+        "identity": "https://oaklandside.org/?p=481801|https://oaklandside.org/?p=481753|https://oaklandside.org/?p=481744"
+      },
+      {
+        "domain": "lookout.co",
+        "feed": "https://lookout.co/feed",
+        "items": 10,
+        "medianChars": 336,
+        "maxChars": 7959,
+        "usableShare": 0.5,
+        "identity": "https://lookout.co/?p=359312|https://lookout.co/?p=358476|https://lookout.co/?p=300655"
       }
     ],
     "none": [
-      "kqed.org"
+      "sandiegouniontribune.com",
+      "mercurynews.com",
+      "longbeachpost.com",
+      "sacbee.com",
+      "kcrw.com"
     ]
   },
   {
     "state": "colorado",
     "usable": [
       {
-        "domain": "coloradonewsline.com",
-        "feed": "https://coloradonewsline.com/feed/",
-        "items": 100,
-        "medianChars": 5137,
-        "maxChars": 10845,
-        "usableShare": 1
-      },
-      {
-        "domain": "kktv.com",
-        "feed": "https://kktv.com/arc/outboundfeeds/rss/?outputType=xml",
-        "items": 20,
-        "medianChars": 959,
-        "maxChars": 3059,
-        "usableShare": 1
-      },
-      {
         "domain": "denverite.com",
         "feed": "https://denverite.com/feed/",
         "items": 10,
-        "medianChars": 3933,
-        "maxChars": 10982,
-        "usableShare": 1
+        "medianChars": 4888,
+        "maxChars": 17108,
+        "usableShare": 1,
+        "identity": "https://denverite.com/?p=244907|https://denverite.com/?p=244898|https://denverite.com/?p=244896"
+      },
+      {
+        "domain": "coloradonewsline.com",
+        "feed": "https://coloradonewsline.com/feed/",
+        "items": 100,
+        "medianChars": 4859,
+        "maxChars": 21019,
+        "usableShare": 1,
+        "identity": "https://coloradonewsline.com/?post_type=republished&#038;p=48301|https://coloradonewsline.com/?p=48299|https://coloradonewsline.com/?p=48294"
       },
       {
         "domain": "cpr.org",
         "feed": "https://cpr.org/feed/",
         "items": 10,
-        "medianChars": 2884,
-        "maxChars": 20642,
-        "usableShare": 0.9
+        "medianChars": 4769,
+        "maxChars": 9420,
+        "usableShare": 1,
+        "identity": "https://www.cpr.org/?p=881870|https://www.cpr.org/?p=881697|https://www.cpr.org/?p=881684"
+      },
+      {
+        "domain": "kktv.com",
+        "feed": "https://kktv.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1158,
+        "maxChars": 3390,
+        "usableShare": 0.92,
+        "identity": "https://www.kktv.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.kktv.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/|https://www.kktv.com/2026/10/17/friday-night-endzone-week-8/"
       }
     ],
     "weak": [
@@ -227,9 +411,19 @@
         "domain": "coloradosun.com",
         "feed": "https://coloradosun.com/feed/",
         "items": 10,
-        "medianChars": 134,
-        "maxChars": 147,
-        "usableShare": 0
+        "medianChars": 140,
+        "maxChars": 259,
+        "usableShare": 0,
+        "identity": "https://coloradosun.com/?p=505424|https://coloradosun.com/?p=504995|https://coloradosun.com/?p=505420"
+      },
+      {
+        "domain": "cpr.org",
+        "feed": "https://cpr.org/rss/",
+        "items": 10,
+        "medianChars": 128,
+        "maxChars": 244,
+        "usableShare": 0,
+        "identity": "https://www.cpr.org/2026/10/16/colorado-springs-state-of-the-city-yemi-mobolade/|https://www.cpr.org/2026/10/16/democrats-raising-money-late-election-push-colorado/|https://www.cpr.org/2026/10/16/democrats-veterans-flip-congress-seats-military/"
       }
     ],
     "none": []
@@ -238,46 +432,113 @@
     "state": "connecticut",
     "usable": [
       {
+        "domain": "newhavenindependent.org",
+        "feed": "https://www.newhavenindependent.org/feed/",
+        "items": 10,
+        "medianChars": 5872,
+        "maxChars": 13494,
+        "usableShare": 1,
+        "identity": "https://www.newhavenindependent.org/?p=233385|https://www.newhavenindependent.org/?p=233354|https://www.newhavenindependent.org/?p=233268"
+      },
+      {
         "domain": "ctmirror.org",
         "feed": "https://ctmirror.org/feed/",
         "items": 40,
-        "medianChars": 4766,
-        "maxChars": 27696,
-        "usableShare": 1
+        "medianChars": 4008,
+        "maxChars": 18452,
+        "usableShare": 0.92,
+        "identity": "https://ctmirror.org/?p=1183269|https://ctmirror.org/?p=1184264|https://ctmirror.org/?p=1184193"
       },
       {
         "domain": "wfsb.com",
         "feed": "https://wfsb.com/arc/outboundfeeds/rss/?outputType=xml",
         "items": 20,
-        "medianChars": 1824,
-        "maxChars": 17203,
-        "usableShare": 1
+        "medianChars": 639,
+        "maxChars": 16387,
+        "usableShare": 0.83,
+        "identity": "https://www.wfsb.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.wfsb.com/2026/10/17/first-alert-weather-cooler-windy-today-freeze-warning-some-tonight/|https://www.wfsb.com/2026/10/17/technical-discussion-freeze-likely-tomorrow-morning/"
       }
     ],
-    "weak": [],
+    "weak": [
+      {
+        "domain": "ctmirror.org",
+        "feed": "https://ctmirror.org/news/feed/",
+        "items": 40,
+        "medianChars": 133,
+        "maxChars": 141,
+        "usableShare": 0,
+        "identity": "https://ctmirror.org/?p=1184264|https://ctmirror.org/?p=1184193|https://ctmirror.org/?p=1184091"
+      },
+      {
+        "domain": "ctnewsjunkie.com",
+        "feed": "https://ctnewsjunkie.com/feed/",
+        "items": 10,
+        "medianChars": 233,
+        "maxChars": 294,
+        "usableShare": 0,
+        "identity": "https://ctnewsjunkie.com/?p=285465|https://ctnewsjunkie.com/?p=285475|https://ctnewsjunkie.com/?p=285492"
+      }
+    ],
     "none": [
       "ctinsider.com",
       "ctpost.com",
-      "ctpublic.org"
+      "ctpublic.org",
+      "courant.com",
+      "nhregister.com",
+      "wshu.org"
     ]
   },
   {
     "state": "delaware",
     "usable": [
       {
+        "domain": "capegazette.com",
+        "feed": "https://capegazette.com/rss.xml",
+        "items": 10,
+        "medianChars": 135164,
+        "maxChars": 142778,
+        "usableShare": 1,
+        "identity": "354541 at https://www.capegazette.com|356085 at https://www.capegazette.com|356075 at https://www.capegazette.com"
+      },
+      {
         "domain": "spotlightdelaware.org",
         "feed": "https://spotlightdelaware.org/feed/",
         "items": 10,
-        "medianChars": 6638,
-        "maxChars": 19465,
-        "usableShare": 1
+        "medianChars": 5250,
+        "maxChars": 13053,
+        "usableShare": 1,
+        "identity": "https://spotlightdelaware.org/?p=24645|https://spotlightdelaware.org/?p=24646|https://spotlightdelaware.org/?p=24623"
       }
     ],
-    "weak": [],
+    "weak": [
+      {
+        "domain": "wdel.com",
+        "feed": "http://www.wdel.com/search/?f=rss&amp;t=article&amp;l=50&amp;s=start_time&amp;sd=desc&amp;k%5B%5D=%23topstory",
+        "items": 10,
+        "medianChars": 94,
+        "maxChars": 249,
+        "usableShare": 0,
+        "identity": "http://www.wdel.com/tncms/asset/editorial/f8319af6-4aa7-50e4-a174-946fa38ca38b|http://www.wdel.com/tncms/asset/editorial/f67ea2b6-529f-4252-a330-97de2b6ea2f0|http://www.wdel.com/tncms/asset/editorial/9a88b6e2-190d-4219-b06a-4510831b370f"
+      },
+      {
+        "domain": "delawarebusinessnow.com",
+        "feed": "http://www.delawarebusinessnow.com/search/?f=rss&amp;t=article&amp;l=50&amp;s=start_time&amp;sd=desc&amp;k%5B%5D=%23topstory",
+        "items": 10,
+        "medianChars": 141,
+        "maxChars": 256,
+        "usableShare": 0,
+        "identity": "http://www.delawarebusinessnow.com/tncms/asset/editorial/5351a4d0-ecda-579f-8a69-67f49924bf88|http://www.delawarebusinessnow.com/tncms/asset/editorial/9788acc3-5a83-5c2f-9baf-76df6ca00898|http://www.delawarebusinessnow.com/tncms/asset/editorial/61c4e13c-cddf-5cb0-b77d-6ca8eb52d0ab"
+      }
+    ],
     "none": [
       "delawareonline.com",
       "wboc.com",
-      "delawarepublic.org"
+      "delawarepublic.org",
+      "baytobaynews.com",
+      "newarkpostonline.com",
+      "delmarvanow.com",
+      "wrde.com",
+      "townsquarelive.com"
     ]
   },
   {
@@ -287,25 +548,28 @@
         "domain": "floridaphoenix.com",
         "feed": "https://floridaphoenix.com/feed/",
         "items": 100,
-        "medianChars": 5320,
-        "maxChars": 9852,
-        "usableShare": 1
-      },
-      {
-        "domain": "wctv.tv",
-        "feed": "https://wctv.tv/arc/outboundfeeds/rss/?outputType=xml",
-        "items": 20,
-        "medianChars": 1826,
-        "maxChars": 3059,
-        "usableShare": 1
+        "medianChars": 3797,
+        "maxChars": 10121,
+        "usableShare": 1,
+        "identity": "https://floridaphoenix.com/?post_type=republished&#038;p=244706|https://floridaphoenix.com/?post_type=republished&#038;p=244884|https://floridaphoenix.com/?post_type=republished&#038;p=244886"
       },
       {
         "domain": "wjhg.com",
         "feed": "https://wjhg.com/arc/outboundfeeds/rss/?outputType=xml",
         "items": 20,
-        "medianChars": 1487,
-        "maxChars": 3059,
-        "usableShare": 1
+        "medianChars": 1330,
+        "maxChars": 3022,
+        "usableShare": 1,
+        "identity": "https://www.wjhg.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.wjhg.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/|https://www.wjhg.com/2026/10/17/panama-city-fire-department-holds-annual-open-house/"
+      },
+      {
+        "domain": "wctv.tv",
+        "feed": "https://wctv.tv/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1094,
+        "maxChars": 2952,
+        "usableShare": 1,
+        "identity": "https://www.wctv.tv/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.wctv.tv/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/|https://www.wctv.tv/2026/10/17/wctv-band-week-colquitt-county-50th-regiment-band-performs-halftime-show/"
       }
     ],
     "weak": [],
@@ -321,33 +585,46 @@
         "domain": "georgiarecorder.com",
         "feed": "https://georgiarecorder.com/feed/",
         "items": 100,
-        "medianChars": 5166,
-        "maxChars": 9003,
-        "usableShare": 1
+        "medianChars": 6716,
+        "maxChars": 21019,
+        "usableShare": 1,
+        "identity": "https://georgiarecorder.com/?p=47569|https://georgiarecorder.com/?post_type=republished&#038;p=47541|https://georgiarecorder.com/?p=47532"
+      },
+      {
+        "domain": "georgiarecorder.com",
+        "feed": "https://georgiarecorder.com/feed/localFeed/",
+        "items": 100,
+        "medianChars": 6485,
+        "maxChars": 11170,
+        "usableShare": 1,
+        "identity": "https://georgiarecorder.com/?p=47569|https://georgiarecorder.com/?p=47532|https://georgiarecorder.com/?p=47533"
       },
       {
         "domain": "walb.com",
         "feed": "https://walb.com/arc/outboundfeeds/rss/?outputType=xml",
         "items": 20,
-        "medianChars": 1129,
-        "maxChars": 3059,
-        "usableShare": 1
-      },
-      {
-        "domain": "wtoc.com",
-        "feed": "https://wtoc.com/arc/outboundfeeds/rss/?outputType=xml",
-        "items": 20,
-        "medianChars": 1435,
-        "maxChars": 3059,
-        "usableShare": 0.92
+        "medianChars": 1533,
+        "maxChars": 4440,
+        "usableShare": 1,
+        "identity": "https://www.walb.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.walb.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/|https://www.walb.com/2026/10/17/join-overtime-talk-south-georgia-ball-with-walb-sports/"
       },
       {
         "domain": "wrdw.com",
         "feed": "https://wrdw.com/arc/outboundfeeds/rss/?outputType=xml",
         "items": 20,
-        "medianChars": 1242,
-        "maxChars": 3059,
-        "usableShare": 1
+        "medianChars": 1404,
+        "maxChars": 12105,
+        "usableShare": 0.92,
+        "identity": "https://www.wrdw.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.wrdw.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/|https://www.wrdw.com/2026/10/11/first-alert-forecast-drying-out-with-near-record-highs-week-ahead/"
+      },
+      {
+        "domain": "wtoc.com",
+        "feed": "https://wtoc.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1158,
+        "maxChars": 3238,
+        "usableShare": 0.92,
+        "identity": "https://www.wtoc.com/2025/09/16/first-alert-weather-forecast/|https://www.wtoc.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.wtoc.com/2026/10/17/chatham-county-da-host-2026-community-resource-fair/"
       }
     ],
     "weak": [
@@ -355,9 +632,10 @@
         "domain": "gpb.org",
         "feed": "https://gpb.org/rss/",
         "items": 20,
-        "medianChars": 149,
-        "maxChars": 197,
-        "usableShare": 0
+        "medianChars": 179,
+        "maxChars": 490,
+        "usableShare": 0,
+        "identity": "1555766|1555751|1555756"
       }
     ],
     "none": []
@@ -366,30 +644,132 @@
     "state": "hawaii",
     "usable": [
       {
+        "domain": "mauinews.com",
+        "feed": "https://mauinews.com/feed/",
+        "items": 10,
+        "medianChars": 3913,
+        "maxChars": 6605,
+        "usableShare": 0.9,
+        "identity": "https://www.mauinews.com/?p=1328544|https://www.mauinews.com/?p=1328584|https://www.mauinews.com/?p=1328547"
+      },
+      {
+        "domain": "bigislandnow.com",
+        "feed": "https://bigislandnow.com/feed/",
+        "items": 25,
+        "medianChars": 2254,
+        "maxChars": 9858,
+        "usableShare": 1,
+        "identity": "https://bigislandnow.com/2026/10/16/hawaii-county-weather-forecast-for-october-17-2026/|https://bigislandnow.com/2026/10/16/hawaii-county-surf-forecast-for-october-17-2026/|https://bigislandnow.com/?p=449901"
+      },
+      {
+        "domain": "kauainownews.com",
+        "feed": "https://kauainownews.com/feed/",
+        "items": 10,
+        "medianChars": 2071,
+        "maxChars": 20554,
+        "usableShare": 1,
+        "identity": "https://kauainownews.com/2026/10/16/kauai-weather-forecast-for-october-17-2026/|https://kauainownews.com/2026/10/16/kauai-surf-forecast-for-october-17-2026/|https://kauainownews.com/?p=101216"
+      },
+      {
         "domain": "hawaiinewsnow.com",
         "feed": "https://hawaiinewsnow.com/arc/outboundfeeds/rss/?outputType=xml",
         "items": 20,
-        "medianChars": 1870,
-        "maxChars": 4919,
-        "usableShare": 0.92
+        "medianChars": 1741,
+        "maxChars": 4409,
+        "usableShare": 1,
+        "identity": "https://www.hawaiinewsnow.com/2026/10/17/man-critically-injured-young-street-stabbing/|https://www.hawaiinewsnow.com/2026/10/17/city-rebuild-torched-sheridan-playground-add-waianae-aina-haina-play-spaces/|https://www.hawaiinewsnow.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/"
+      },
+      {
+        "domain": "mauinow.com",
+        "feed": "https://mauinow.com/feed/",
+        "items": 10,
+        "medianChars": 1604,
+        "maxChars": 3864,
+        "usableShare": 1,
+        "identity": "https://mauinow.com/2026/10/16/maui-surf-forecast-for-october-17-2026/|https://mauinow.com/?p=540835|https://mauinow.com/?p=540948"
+      },
+      {
+        "domain": "mauinews.com",
+        "feed": "https://mauinews.com/news/feed/",
+        "items": 10,
+        "medianChars": 992,
+        "maxChars": 4242,
+        "usableShare": 0.9,
+        "identity": "https://www.mauinews.com/?p=1328584|https://www.mauinews.com/?p=1328508|https://www.mauinews.com/?p=1328501"
       }
     ],
     "weak": [
       {
         "domain": "civilbeat.org",
-        "feed": "https://civilbeat.org/feed/",
+        "feed": "https://www.civilbeat.org/feed/",
         "items": 10,
-        "medianChars": 117,
-        "maxChars": 162,
-        "usableShare": 0
+        "medianChars": 123,
+        "maxChars": 184,
+        "usableShare": 0,
+        "identity": "https://www.civilbeat.org/?p=1815857|https://www.civilbeat.org/?p=1815599|https://www.civilbeat.org/?p=1814133"
+      },
+      {
+        "domain": "civilbeat.org",
+        "feed": "https://civilbeat.org/rss/",
+        "items": 10,
+        "medianChars": 123,
+        "maxChars": 184,
+        "usableShare": 0,
+        "identity": "https://www.civilbeat.org/2026/10/supreme-court-blasts-embattled-elections-office-why-are-we-here/|https://www.civilbeat.org/2026/10/uniqlo-founder-accuses-maui-water-provider-of-textbook-financial-fraud/|https://www.civilbeat.org/2026/10/quotable-terror-at-sea/"
       },
       {
         "domain": "staradvertiser.com",
-        "feed": "https://staradvertiser.com/feed/",
+        "feed": "https://www.staradvertiser.com/feed/",
         "items": 40,
-        "medianChars": 187,
-        "maxChars": 357,
-        "usableShare": 0
+        "medianChars": 204,
+        "maxChars": 300,
+        "usableShare": 0,
+        "identity": "https://www.staradvertiser.com/2026/10/16/breaking-news/trump-exempts-russia-from-new-sanctions-law/|https://www.staradvertiser.com/2026/10/16/breaking-news/hfd-rescues-hiker-in-his-20s-atop-koko-crater-trail/|https://www.staradvertiser.com/2026/10/16/breaking-news/israeli-settlers-burn-olive-trees-attack-u-s-journalist-in-west-bank/"
+      },
+      {
+        "domain": "khon2.com",
+        "feed": "https://khon2.com/feed/",
+        "items": 50,
+        "medianChars": 156,
+        "maxChars": 241,
+        "usableShare": 0,
+        "identity": "https://www.khon2.com/?p=3159522|https://www.khon2.com/?p=3159645|https://www.khon2.com/?p=3159175"
+      },
+      {
+        "domain": "khon2.com",
+        "feed": "https://khon2.com/local-news/feed/",
+        "items": 50,
+        "medianChars": 156,
+        "maxChars": 241,
+        "usableShare": 0,
+        "identity": "https://www.khon2.com/?p=3159645|https://www.khon2.com/?p=3159546|https://www.khon2.com/?p=3159551"
+      },
+      {
+        "domain": "kitv.com",
+        "feed": "http://www.kitv.com/search/?f=rss&amp;t=article&amp;l=50&amp;s=start_time&amp;sd=desc&amp;k%5B%5D=%23topstory",
+        "items": 10,
+        "medianChars": 140,
+        "maxChars": 281,
+        "usableShare": 0,
+        "identity": "http://www.kitv.com/tncms/asset/editorial/cfa86910-694f-437e-b5ac-4cb8deff0ba3|http://www.kitv.com/tncms/asset/editorial/33049e20-4b87-5866-a533-5958c50d7767|http://www.kitv.com/tncms/asset/editorial/62e3c687-1a67-51c7-a111-19529bb17f57"
+      },
+      {
+        "domain": "hawaiitribune-herald.com",
+        "feed": "https://hawaiitribune-herald.com/feed/",
+        "items": 40,
+        "medianChars": 354,
+        "maxChars": 487,
+        "usableShare": 0,
+        "identity": "https://www.hawaiitribune-herald.com/?p=380268|https://www.hawaiitribune-herald.com/?p=380266|https://www.hawaiitribune-herald.com/?p=380263"
+      },
+      {
+        "domain": "westhawaiitoday.com",
+        "feed": "https://westhawaiitoday.com/feed/",
+        "items": 50,
+        "medianChars": 331,
+        "maxChars": 483,
+        "usableShare": 0,
+        "identity": "https://www.westhawaiitoday.com/?p=321144|https://www.westhawaiitoday.com/?p=321095|https://www.westhawaiitoday.com/?p=321085"
       }
     ],
     "none": [
@@ -400,62 +780,99 @@
     "state": "idaho",
     "usable": [
       {
+        "domain": "idahoednews.org",
+        "feed": "https://www.idahoednews.org/feed/",
+        "items": 50,
+        "medianChars": 5395,
+        "maxChars": 13257,
+        "usableShare": 1,
+        "identity": "https://www.idahoednews.org/?p=127257|https://www.idahoednews.org/?p=127232|https://www.idahoednews.org/?p=127199"
+      },
+      {
         "domain": "idahocapitalsun.com",
         "feed": "https://idahocapitalsun.com/feed/",
         "items": 100,
-        "medianChars": 6209,
-        "maxChars": 9922,
-        "usableShare": 1
+        "medianChars": 3053,
+        "maxChars": 17234,
+        "usableShare": 1,
+        "identity": "https://idahocapitalsun.com/?post_type=republished&#038;p=32663|https://idahocapitalsun.com/?p=32658|https://idahocapitalsun.com/?post_type=republished&#038;p=32644"
       },
+      {
+        "domain": "kivitv.com",
+        "feed": "https://www.kivitv.com/index.rss",
+        "items": 3,
+        "medianChars": 1971,
+        "maxChars": 2165,
+        "usableShare": 1,
+        "identity": "https://www.kivitv.com/downtown-boise/bluebird-days-music-festival-makes-its-debut-along-the-boise-river|https://www.kivitv.com/news/boise-state-university-graduate-killed-in-silver-rail-elementary-shooting|https://www.kivitv.com/news/millions-flow-into-idaho-elections-as-outside-donors-take-interest"
+      }
+    ],
+    "weak": [
       {
         "domain": "kmvt.com",
         "feed": "https://kmvt.com/arc/outboundfeeds/rss/?outputType=xml",
         "items": 20,
-        "medianChars": 982,
-        "maxChars": 3059,
-        "usableShare": 1
+        "medianChars": 494,
+        "maxChars": 1741,
+        "usableShare": 0.5,
+        "identity": "https://www.kmvt.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.kmvt.com/2026/10/17/friday-night-blitz-raft-river-remains-undefeated/|https://www.kmvt.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/"
+      },
+      {
+        "domain": "ktvb.com",
+        "feed": "https://www.ktvb.com/feeds/syndication/rss/news",
+        "items": 40,
+        "medianChars": 124,
+        "maxChars": 164,
+        "usableShare": 0,
+        "identity": "04d49ab9-9f05-4e17-b1f0-7c25af391cd4|018f9617-eb37-4d53-a5ac-edf012d145d0|71d0d46f-1428-45f9-ad35-0fb03ccfa0e8"
       }
     ],
-    "weak": [],
     "none": [
       "idahostatesman.com",
-      "boisestatepublicradio.org"
+      "boisestatepublicradio.org",
+      "eastidahonews.com",
+      "postregister.com",
+      "idahopress.com"
     ]
   },
   {
     "state": "illinois",
     "usable": [
       {
-        "domain": "wifr.com",
-        "feed": "https://wifr.com/arc/outboundfeeds/rss/?outputType=xml",
-        "items": 20,
-        "medianChars": 1826,
-        "maxChars": 18995,
-        "usableShare": 1
-      },
-      {
-        "domain": "chicago.suntimes.com",
-        "feed": "https://chicago.suntimes.com/feed/",
-        "items": 55,
-        "medianChars": 1957,
-        "maxChars": 17519,
-        "usableShare": 1
-      },
-      {
         "domain": "wbez.org",
-        "feed": "https://wbez.org/rss/",
-        "items": 55,
-        "medianChars": 13436,
-        "maxChars": 24101,
-        "usableShare": 1
+        "feed": "https://www.wbez.org/rss/index.xml",
+        "items": 19,
+        "medianChars": 8967,
+        "maxChars": 27230,
+        "usableShare": 1,
+        "identity": "https://www.wbez.org/education/2026/10/16/insufficient-evidence-that-chicago-school-board-candidate-engaged-in-sexual-misconduct-watchdog-report-finds|https://www.wbez.org/wbez-newsletter/2026/10/16/the-rundown-metras-plan-to-offer-more-frequent-trains|https://www.wbez.org/government-politics/2026/10/16/mayor-brandon-johnson-signs-executive-order-to-protect-seniors"
       },
       {
         "domain": "injusticewatch.org",
-        "feed": "https://injusticewatch.org/feed/",
+        "feed": "https://www.injusticewatch.org/feed/",
         "items": 30,
-        "medianChars": 8240,
+        "medianChars": 6241,
         "maxChars": 24296,
-        "usableShare": 0.92
+        "usableShare": 0.92,
+        "identity": "https://www.injusticewatch.org/?p=464756|https://www.injusticewatch.org/?p=464724|https://www.injusticewatch.org/?p=464727"
+      },
+      {
+        "domain": "chicago.suntimes.com",
+        "feed": "https://chicago.suntimes.com/rss/index.xml",
+        "items": 55,
+        "medianChars": 3598,
+        "maxChars": 30332,
+        "usableShare": 1,
+        "identity": "https://chicago.suntimes.com/high-school-football/2026/10/17/hersey-football-jake-nawrot-prospect|https://chicago.suntimes.com/horoscopes/2026/10/17/horoscopes-today-saturday-october-17-2026|https://chicago.suntimes.com/high-school-football/2026/10/16/high-school-football-super-25-scores-sun-times-chicago"
+      },
+      {
+        "domain": "wifr.com",
+        "feed": "https://wifr.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1122,
+        "maxChars": 4863,
+        "usableShare": 0.75,
+        "identity": "https://www.rockfordnewsfirst.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.rockfordnewsfirst.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/|https://www.rockfordnewsfirst.com/2026/10/17/sting-performs-hard-rock-rockfords-fastest-selling-show/"
       }
     ],
     "weak": [
@@ -463,9 +880,10 @@
         "domain": "capitolnewsillinois.com",
         "feed": "https://capitolnewsillinois.com/feed/",
         "items": 10,
-        "medianChars": 94,
-        "maxChars": 312,
-        "usableShare": 0
+        "medianChars": 77,
+        "maxChars": 159,
+        "usableShare": 0,
+        "identity": "https://capitolnewsillinois.com/?p=133013|https://capitolnewsillinois.com/?p=132979|https://capitolnewsillinois.com/?p=132947"
       }
     ],
     "none": []
@@ -475,27 +893,30 @@
     "usable": [
       {
         "domain": "indianacapitalchronicle.com",
-        "feed": "https://indianacapitalchronicle.com/feed/",
+        "feed": "https://indianacapitalchronicle.com/feed/localFeed/",
         "items": 100,
-        "medianChars": 4974,
-        "maxChars": 13877,
-        "usableShare": 1
-      },
-      {
-        "domain": "wndu.com",
-        "feed": "https://wndu.com/arc/outboundfeeds/rss/?outputType=xml",
-        "items": 20,
-        "medianChars": 1853,
-        "maxChars": 3059,
-        "usableShare": 1
+        "medianChars": 5305,
+        "maxChars": 12282,
+        "usableShare": 1,
+        "identity": "https://indianacapitalchronicle.com/?p=27496|https://indianacapitalchronicle.com/?p=27491|https://indianacapitalchronicle.com/?p=27485"
       },
       {
         "domain": "mirrorindy.org",
         "feed": "https://mirrorindy.org/feed/",
         "items": 10,
-        "medianChars": 3973,
-        "maxChars": 14364,
-        "usableShare": 1
+        "medianChars": 4755,
+        "maxChars": 8071,
+        "usableShare": 1,
+        "identity": "https://mirrorindy.org/?p=92951|https://mirrorindy.org/?p=93497|https://mirrorindy.org/?p=93506"
+      },
+      {
+        "domain": "wndu.com",
+        "feed": "https://wndu.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1505,
+        "maxChars": 4627,
+        "usableShare": 1,
+        "identity": "https://www.wndu.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.wndu.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/|https://www.wndu.com/2026/10/17/friday-night-frenzy-high-school-football-scores-highlights-oct-16-2026/"
       }
     ],
     "weak": [],
@@ -511,25 +932,28 @@
         "domain": "iowacapitaldispatch.com",
         "feed": "https://iowacapitaldispatch.com/feed/",
         "items": 100,
-        "medianChars": 4900,
-        "maxChars": 10690,
-        "usableShare": 1
+        "medianChars": 5399,
+        "maxChars": 21019,
+        "usableShare": 1,
+        "identity": "https://iowacapitaldispatch.com/?p=60513|https://iowacapitaldispatch.com/?p=60516|https://iowacapitaldispatch.com/?p=60503"
       },
       {
         "domain": "kcrg.com",
         "feed": "https://kcrg.com/arc/outboundfeeds/rss/?outputType=xml",
         "items": 20,
-        "medianChars": 1327,
-        "maxChars": 3059,
-        "usableShare": 0.75
+        "medianChars": 1158,
+        "maxChars": 2302,
+        "usableShare": 1,
+        "identity": "https://www.kcrg.com/2026/10/17/iowans-honor-walter-lauridsen-ii-his-philanthropy-community-service/|https://www.kcrg.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.kcrg.com/2026/10/17/hvac-technicians-share-tips-get-your-furnace-ready-winter/"
       },
       {
         "domain": "kwqc.com",
         "feed": "https://kwqc.com/arc/outboundfeeds/rss/?outputType=xml",
         "items": 20,
-        "medianChars": 1435,
-        "maxChars": 18995,
-        "usableShare": 0.92
+        "medianChars": 1122,
+        "maxChars": 5764,
+        "usableShare": 0.92,
+        "identity": "https://www.kwqc.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.kwqc.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/|https://www.kwqc.com/2026/10/16/strong-winds-today-freeze-warning-tonight-warm-up-ahead-quad-cities/"
       }
     ],
     "weak": [],
@@ -542,63 +966,101 @@
     "state": "kansas",
     "usable": [
       {
+        "domain": "thebeaconnews.org",
+        "feed": "https://thebeaconnews.org/feed/",
+        "items": 10,
+        "medianChars": 8578,
+        "maxChars": 12500,
+        "usableShare": 1,
+        "identity": "https://thebeaconnews.org/?p=35458|https://thebeaconnews.org/?p=35447|https://thebeaconnews.org/?p=35438"
+      },
+      {
         "domain": "kansasreflector.com",
         "feed": "https://kansasreflector.com/feed/",
         "items": 100,
-        "medianChars": 6013,
-        "maxChars": 12531,
-        "usableShare": 1
+        "medianChars": 4826,
+        "maxChars": 11075,
+        "usableShare": 1,
+        "identity": "https://kansasreflector.com/?p=63108|https://kansasreflector.com/?post_type=republished&#038;p=63030|https://kansasreflector.com/?post_type=republished&#038;p=63113"
       },
       {
         "domain": "kwch.com",
         "feed": "https://kwch.com/arc/outboundfeeds/rss/?outputType=xml",
         "items": 20,
-        "medianChars": 1435,
-        "maxChars": 3059,
-        "usableShare": 1
+        "medianChars": 1158,
+        "maxChars": 3241,
+        "usableShare": 1,
+        "identity": "https://www.kwch.com/2026/10/16/chilly-start-milder-finish-weekend/|https://www.kwch.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.kwch.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/"
       }
     ],
-    "weak": [],
+    "weak": [
+      {
+        "domain": "ksnt.com",
+        "feed": "https://ksnt.com/feed/",
+        "items": 50,
+        "medianChars": 131,
+        "maxChars": 345,
+        "usableShare": 0,
+        "identity": "https://www.ksnt.com/?p=3168069|https://www.ksnt.com/?p=3168597|https://www.ksnt.com/?p=3168184"
+      }
+    ],
     "none": [
       "kansas.com",
       "kcur.org",
-      "cjonline.com"
+      "cjonline.com",
+      "kansaspublicradio.org",
+      "kake.com",
+      "hutchnews.com",
+      "kansascity.com"
     ]
   },
   {
     "state": "kentucky",
     "usable": [
       {
+        "domain": "wfpl.org",
+        "feed": "https://wfpl.org/feed/",
+        "items": 12,
+        "medianChars": 4493,
+        "maxChars": 40290,
+        "usableShare": 1,
+        "identity": "https://www.lpm.org/news/2026-10-16/lawsuit-alleges-feds-gathered-sensitive-data-on-kentucky-voters|https://www.lpm.org/news/2026-10-16/dark-money-billionaires-fuel-campaign-ads-in-kentuckys-alvarado-dembo-race|https://www.lpm.org/news/2026-10-16/longtime-louisville-youth-choir-leader-to-retire"
+      },
+      {
         "domain": "kentuckylantern.com",
         "feed": "https://kentuckylantern.com/feed/",
         "items": 100,
-        "medianChars": 4649,
-        "maxChars": 7035,
-        "usableShare": 1
+        "medianChars": 4242,
+        "maxChars": 21019,
+        "usableShare": 1,
+        "identity": "https://kentuckylantern.com/?p=42733|https://kentuckylantern.com/?post_type=republished&#038;p=42729|https://kentuckylantern.com/?p=42725"
       },
       {
-        "domain": "wkyt.com",
-        "feed": "https://wkyt.com/arc/outboundfeeds/rss/?outputType=xml",
-        "items": 20,
-        "medianChars": 1870,
-        "maxChars": 7603,
-        "usableShare": 0.83
+        "domain": "wfpl.org",
+        "feed": "https://wfpl.org/index.rss",
+        "items": 12,
+        "medianChars": 2938,
+        "maxChars": 40290,
+        "usableShare": 1,
+        "identity": "https://www.lpm.org/news/2026-10-16/lawsuit-alleges-feds-gathered-sensitive-data-on-kentucky-voters|https://www.lpm.org/music/2026-10-16/new-music-friday-the-best-albums-out-oct-16|https://www.lpm.org/news/2026-10-16/dark-money-billionaires-fuel-campaign-ads-in-kentuckys-alvarado-dembo-race"
       },
       {
         "domain": "wave3.com",
         "feed": "https://wave3.com/arc/outboundfeeds/rss/?outputType=xml",
         "items": 20,
-        "medianChars": 1845,
-        "maxChars": 7603,
-        "usableShare": 1
+        "medianChars": 1122,
+        "maxChars": 9797,
+        "usableShare": 0.92,
+        "identity": "https://www.wdrbwave.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.wdrbwave.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/|https://www.wdrbwave.com/2026/10/16/forecast-blustery-evening-with-gusty-showers/"
       },
       {
-        "domain": "wfpl.org",
-        "feed": "https://wfpl.org/feed/",
-        "items": 12,
-        "medianChars": 4946,
-        "maxChars": 29674,
-        "usableShare": 1
+        "domain": "wkyt.com",
+        "feed": "https://wkyt.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 713,
+        "maxChars": 2057,
+        "usableShare": 0.92,
+        "identity": "https://www.wkyt.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.wkyt.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/|https://www.wkyt.com/2026/10/17/wkyt-high-school-game-time-week-9/"
       }
     ],
     "weak": [],
@@ -613,33 +1075,37 @@
         "domain": "lailluminator.com",
         "feed": "https://lailluminator.com/feed/",
         "items": 100,
-        "medianChars": 4185,
-        "maxChars": 27949,
-        "usableShare": 1
+        "medianChars": 4585,
+        "maxChars": 13426,
+        "usableShare": 1,
+        "identity": "https://lailluminator.com/?p=35783|https://lailluminator.com/?post_type=republished&#038;p=35781|https://lailluminator.com/?p=35779"
       },
       {
         "domain": "wafb.com",
         "feed": "https://wafb.com/arc/outboundfeeds/rss/?outputType=xml",
         "items": 20,
-        "medianChars": 1435,
-        "maxChars": 3322,
-        "usableShare": 1
+        "medianChars": 1741,
+        "maxChars": 5170,
+        "usableShare": 1,
+        "identity": "https://www.wafb.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.wafb.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/|https://www.wafb.com/2026/10/16/high-school-student-shot-killed-interstate-police-say/"
       },
       {
         "domain": "kplctv.com",
         "feed": "https://kplctv.com/arc/outboundfeeds/rss/?outputType=xml",
         "items": 20,
-        "medianChars": 1870,
-        "maxChars": 3322,
-        "usableShare": 1
+        "medianChars": 1698,
+        "maxChars": 26637,
+        "usableShare": 1,
+        "identity": "https://www.kplctv.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.kplctv.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/|https://www.kplctv.com/2026/10/15/tdl-week-7-scores-highlights/"
       },
       {
         "domain": "ksla.com",
         "feed": "https://ksla.com/arc/outboundfeeds/rss/?outputType=xml",
         "items": 20,
-        "medianChars": 1435,
-        "maxChars": 3322,
-        "usableShare": 1
+        "medianChars": 1122,
+        "maxChars": 3013,
+        "usableShare": 0.92,
+        "identity": "https://www.ksla.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.ksla.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/|https://www.ksla.com/2026/10/17/ksla-overtime-two-east-texas-foes-meet-gilmer-ruston-continues-send-message-state/"
       }
     ],
     "weak": [],
@@ -654,35 +1120,57 @@
         "domain": "mainemorningstar.com",
         "feed": "https://mainemorningstar.com/feed/",
         "items": 100,
-        "medianChars": 4987,
-        "maxChars": 16917,
-        "usableShare": 1
+        "medianChars": 6716,
+        "maxChars": 21019,
+        "usableShare": 1,
+        "identity": "https://mainemorningstar.com/?post_type=republished&#038;p=17742|https://mainemorningstar.com/?post_type=republished&#038;p=17746|https://mainemorningstar.com/?p=17741"
+      },
+      {
+        "domain": "bangordailynews.com",
+        "feed": "https://www.bangordailynews.com/feed/",
+        "items": 20,
+        "medianChars": 3808,
+        "maxChars": 7835,
+        "usableShare": 0.92,
+        "identity": "https://www.bangordailynews.com/?p=3733063|https://www.bangordailynews.com/2026/10/17/uncategorized/retail-price-impacts-from-the-iran-war-are-uneven-but-add-up-for-us-households-before-midterms/|https://www.bangordailynews.com/?p=3732994"
       },
       {
         "domain": "wabi.tv",
         "feed": "https://wabi.tv/arc/outboundfeeds/rss/?outputType=xml",
         "items": 20,
-        "medianChars": 1982,
-        "maxChars": 3059,
-        "usableShare": 1
-      },
-      {
-        "domain": "bangordailynews.com",
-        "feed": "https://bangordailynews.com/feed/",
-        "items": 20,
-        "medianChars": 3935,
-        "maxChars": 9440,
-        "usableShare": 1
+        "medianChars": 1385,
+        "maxChars": 2737,
+        "usableShare": 0.83,
+        "identity": "https://www.wabi.tv/2026/10/17/blustery-cold-today-less-windy-tomorrow-then-calm-week/|https://www.wabi.tv/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.wabi.tv/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/"
       }
     ],
     "weak": [
       {
         "domain": "pressherald.com",
-        "feed": "https://pressherald.com/feed/",
+        "feed": "https://www.pressherald.com/feed/",
         "items": 50,
-        "medianChars": 125,
-        "maxChars": 371,
-        "usableShare": 0
+        "medianChars": 119,
+        "maxChars": 359,
+        "usableShare": 0,
+        "identity": "https://www.pressherald.com/?p=7746766|https://www.pressherald.com/?p=7749491|https://www.pressherald.com/?p=7749357"
+      },
+      {
+        "domain": "pressherald.com",
+        "feed": "https://pressherald.com/news/feed/",
+        "items": 50,
+        "medianChars": 119,
+        "maxChars": 175,
+        "usableShare": 0,
+        "identity": "https://www.pressherald.com/?p=7748552|https://www.pressherald.com/?p=7741166|https://www.pressherald.com/?p=7749491"
+      },
+      {
+        "domain": "pressherald.com",
+        "feed": "https://pressherald.com/politics/feed/",
+        "items": 50,
+        "medianChars": 104,
+        "maxChars": 162,
+        "usableShare": 0,
+        "identity": "https://www.pressherald.com/?p=7749352|https://www.pressherald.com/?p=7749491|https://www.pressherald.com/?p=7749357"
       }
     ],
     "none": [
@@ -693,27 +1181,87 @@
     "state": "maryland",
     "usable": [
       {
+        "domain": "marylandreporter.com",
+        "feed": "https://marylandreporter.com/feed/",
+        "items": 10,
+        "medianChars": 6525,
+        "maxChars": 9062,
+        "usableShare": 1,
+        "identity": "https://marylandreporter.com/?p=4832501|https://marylandreporter.com/?p=4832492|https://marylandreporter.com/?p=4832483"
+      },
+      {
         "domain": "marylandmatters.org",
         "feed": "https://marylandmatters.org/feed/",
         "items": 100,
-        "medianChars": 5382,
-        "maxChars": 8968,
-        "usableShare": 1
+        "medianChars": 5927,
+        "maxChars": 12700,
+        "usableShare": 1,
+        "identity": "https://marylandmatters.org/?p=101700|https://marylandmatters.org/?p=101701|https://marylandmatters.org/?post_type=republished&#038;p=101704"
       },
       {
-        "domain": "wmdt.com",
-        "feed": "https://wmdt.com/feed/",
+        "domain": "wtop.com",
+        "feed": "https://wtop.com/local/feed/",
         "items": 10,
-        "medianChars": 1232,
-        "maxChars": 2644,
-        "usableShare": 1
+        "medianChars": 3227,
+        "maxChars": 8202,
+        "usableShare": 1,
+        "identity": "https://wtop.com/?p=30568791|https://wtop.com/?p=30564482|https://wtop.com/?p=30567780"
+      },
+      {
+        "domain": "wtop.com",
+        "feed": "https://wtop.com/feed/",
+        "items": 10,
+        "medianChars": 3141,
+        "maxChars": 8037,
+        "usableShare": 0.9,
+        "identity": "https://wtop.com/?p=30570699|https://wtop.com/?p=30570961|https://wtop.com/?p=30570879"
+      },
+      {
+        "domain": "baltimorefishbowl.com",
+        "feed": "https://baltimorefishbowl.com/feed/",
+        "items": 15,
+        "medianChars": 1605,
+        "maxChars": 8460,
+        "usableShare": 1,
+        "identity": "https://baltimorefishbowl.com/?p=244012|https://baltimorefishbowl.com/?p=244006|https://baltimorefishbowl.com/?p=243983"
       }
     ],
-    "weak": [],
+    "weak": [
+      {
+        "domain": "wmdt.com",
+        "feed": "https://www.wmdt.com/feed/",
+        "items": 10,
+        "medianChars": 358,
+        "maxChars": 1157,
+        "usableShare": 0.2,
+        "identity": "https://www.wmdt.com/?p=4755941|https://www.wmdt.com/?p=4756027|https://www.wmdt.com/?p=4756015"
+      },
+      {
+        "domain": "thedailyrecord.com",
+        "feed": "https://thedailyrecord.com/feed/",
+        "items": 10,
+        "medianChars": 248,
+        "maxChars": 355,
+        "usableShare": 0,
+        "identity": "https://thedailyrecord.com/?p=752680|https://thedailyrecord.com/?p=752698|https://thedailyrecord.com/?p=752691"
+      },
+      {
+        "domain": "wtop.com",
+        "feed": "https://wtop.com/rss/",
+        "items": 10,
+        "medianChars": 333,
+        "maxChars": 403,
+        "usableShare": 0,
+        "identity": "https://wtop.com/national/2026/10/airstrike-kills-3-children-in-yemen-and-other-middle-east-developments/|https://wtop.com/national/2026/10/hurricane-trudy-makes-its-way-toward-mexico-as-typhoon-champi-threatens-guam/|https://wtop.com/world/2026/10/the-vatican-says-pope-leo-will-be-released-from-the-hospital-saturday-four-days-after-lung-cancer-surgery/"
+      }
+    ],
     "none": [
       "baltimorebanner.com",
       "baltimoresun.com",
-      "wypr.org"
+      "wypr.org",
+      "wbaltv.com",
+      "foxbaltimore.com",
+      "heraldmailmedia.com"
     ]
   },
   {
@@ -723,17 +1271,19 @@
         "domain": "commonwealthbeacon.org",
         "feed": "https://commonwealthbeacon.org/feed/",
         "items": 10,
-        "medianChars": 6942,
-        "maxChars": 10807,
-        "usableShare": 1
+        "medianChars": 5566,
+        "maxChars": 13886,
+        "usableShare": 1,
+        "identity": "https://commonwealthbeacon.org/?p=323273|https://commonwealthbeacon.org/?p=323258|https://commonwealthbeacon.org/?p=323243"
       },
       {
         "domain": "bostonglobe.com",
         "feed": "https://bostonglobe.com/arc/outboundfeeds/rss/?outputType=xml",
         "items": 100,
-        "medianChars": 5319,
-        "maxChars": 52032,
-        "usableShare": 1
+        "medianChars": 5126,
+        "maxChars": 12088,
+        "usableShare": 1,
+        "identity": "https://www.bostonglobe.com/2026/10/17/world/pope-leo-to-be-released-from-hospital/|https://www.bostonglobe.com/2026/10/17/metro/autumn-leaves-changing-weather-dave-epstein/|https://www.bostonglobe.com/2026/10/17/business/boston-ad-agency-colossus-chemistry-private-equity-backed/"
       }
     ],
     "weak": [
@@ -741,111 +1291,163 @@
         "domain": "wwlp.com",
         "feed": "https://wwlp.com/feed/",
         "items": 50,
-        "medianChars": 145,
-        "maxChars": 184,
-        "usableShare": 0
+        "medianChars": 117,
+        "maxChars": 321,
+        "usableShare": 0,
+        "identity": "https://www.wwlp.com/?p=3190677|https://www.wwlp.com/?p=3190415|https://www.wwlp.com/?p=3190456"
+      },
+      {
+        "domain": "wwlp.com",
+        "feed": "https://wwlp.com/news/feed/",
+        "items": 50,
+        "medianChars": 136,
+        "maxChars": 237,
+        "usableShare": 0,
+        "identity": "https://www.wwlp.com/?p=3191469|https://www.wwlp.com/?p=3191466|https://www.wwlp.com/?p=3191475"
       },
       {
         "domain": "wbur.org",
-        "feed": "https://wbur.org/feed/",
+        "feed": "https://rss.wbur.org/wbur/rss",
         "items": 100,
-        "medianChars": 162,
-        "maxChars": 243,
-        "usableShare": 0
+        "medianChars": 122,
+        "maxChars": 251,
+        "usableShare": 0,
+        "identity": "a428d61d-0fa9-4a36-a3f2-b2eaecdf7912|8e5f80cf-192c-454e-b6e3-32c552996c89|91f48015-ebc4-47f0-b40c-e85646f88367"
+      },
+      {
+        "domain": "dotnews.com",
+        "feed": "https://www.dotnews.com/feed/",
+        "items": 10,
+        "medianChars": 266,
+        "maxChars": 412,
+        "usableShare": 0,
+        "identity": "https://www.dotnews.com/?p=80394|https://www.dotnews.com/?p=80383|https://www.dotnews.com/?p=80365"
       }
     ],
     "none": [
-      "masslive.com"
+      "masslive.com",
+      "bostonherald.com",
+      "gbh.org",
+      "telegram.com",
+      "berkshireeagle.com",
+      "capecodtimes.com",
+      "nbcboston.com"
     ]
   },
   {
     "state": "michigan",
     "usable": [
       {
+        "domain": "bridgemi.com",
+        "feed": "https://bridgemi.com/feed/",
+        "items": 10,
+        "medianChars": 6771,
+        "maxChars": 11625,
+        "usableShare": 1,
+        "identity": "https://bridgemi.com/?p=81391|https://bridgemi.com/?p=81389|https://bridgemi.com/?p=81372"
+      },
+      {
+        "domain": "michiganpublic.org",
+        "feed": "https://www.michiganpublic.org/index.rss",
+        "items": 10,
+        "medianChars": 3593,
+        "maxChars": 7589,
+        "usableShare": 1,
+        "identity": "https://www.michiganpublic.org/podcast/the-dish/2026-10-17/anna-ansari-and-the-melon-that-never-made-it-home|https://www.michiganpublic.org/politics-government/2026-10-17/coalition-calls-for-paid-family-and-medical-leave-in-michigan|https://www.michiganpublic.org/economy/2026-10-16/the-long-sometimes-bitter-nurses-strike-at-henry-ford-genesys-is-over"
+      },
+      {
         "domain": "michiganadvance.com",
         "feed": "https://michiganadvance.com/feed/",
         "items": 100,
-        "medianChars": 6486,
-        "maxChars": 14952,
-        "usableShare": 1
+        "medianChars": 3343,
+        "maxChars": 13111,
+        "usableShare": 1,
+        "identity": "https://michiganadvance.com/?p=114554|https://michiganadvance.com/?post_type=republished&#038;p=114552|https://michiganadvance.com/?post_type=republished&#038;p=114547"
       },
       {
         "domain": "wilx.com",
         "feed": "https://wilx.com/arc/outboundfeeds/rss/?outputType=xml",
         "items": 20,
-        "medianChars": 1982,
-        "maxChars": 3146,
-        "usableShare": 1
+        "medianChars": 1158,
+        "maxChars": 8981,
+        "usableShare": 1,
+        "identity": "https://www.wilx.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.wilx.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/|https://www.wilx.com/2026/10/17/friday-night-frenzy-week-8-highlights-scores/"
       },
       {
         "domain": "wnem.com",
         "feed": "https://wnem.com/arc/outboundfeeds/rss/?outputType=xml",
         "items": 20,
-        "medianChars": 1435,
-        "maxChars": 3547,
-        "usableShare": 1
-      },
-      {
-        "domain": "bridgemi.com",
-        "feed": "https://bridgemi.com/feed/",
-        "items": 10,
-        "medianChars": 5007,
-        "maxChars": 16195,
-        "usableShare": 1
-      },
-      {
-        "domain": "michiganpublic.org",
-        "feed": "https://michiganpublic.org/index.rss",
-        "items": 10,
-        "medianChars": 2537,
-        "maxChars": 5845,
-        "usableShare": 1
+        "medianChars": 808,
+        "maxChars": 2940,
+        "usableShare": 0.67,
+        "identity": "https://www.wnem.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.wnem.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/|https://www.wnem.com/2026/10/17/michigan-lawmaker-proposes-tougher-fines-drivers-illegally-passing-school-buses/"
       }
     ],
-    "weak": [],
+    "weak": [
+      {
+        "domain": "bridgemi.com",
+        "feed": "https://bridgemi.com/rss.xml",
+        "items": 20,
+        "medianChars": 119,
+        "maxChars": 220,
+        "usableShare": 0,
+        "identity": "https://bridgemi.com/?p=81391|https://bridgemi.com/?p=81372|https://bridgemi.com/?p=81359"
+      }
+    ],
     "none": []
   },
   {
     "state": "minnesota",
     "usable": [
       {
+        "domain": "sahanjournal.com",
+        "feed": "https://sahanjournal.com/feed/",
+        "items": 10,
+        "medianChars": 7427,
+        "maxChars": 13850,
+        "usableShare": 1,
+        "identity": "https://sahanjournal.com/?p=88238|https://sahanjournal.com/?p=88231|https://sahanjournal.com/?p=88233"
+      },
+      {
         "domain": "minnesotareformer.com",
         "feed": "https://minnesotareformer.com/feed/",
         "items": 100,
-        "medianChars": 4029,
-        "maxChars": 8054,
-        "usableShare": 1
+        "medianChars": 6600,
+        "maxChars": 18693,
+        "usableShare": 1,
+        "identity": "https://minnesotareformer.com/?p=39261|https://minnesotareformer.com/?p=39260|https://minnesotareformer.com/?post_type=republished&#038;p=39254"
+      },
+      {
+        "domain": "mprnews.org",
+        "feed": "https://www.mprnews.org/feed/homepage",
+        "items": 30,
+        "medianChars": 4614,
+        "maxChars": 9936,
+        "usableShare": 1,
+        "identity": "https://www.mprnews.org/story/2026/10/16/red-lake-nation-chairman-darrell-seki-to-resign-after-child-welfare-program-probe|https://www.mprnews.org/story/2026/10/16/peggy-flanagan-michele-tafoya-debate-ahead-of-minnesota-us-senate-election|https://www.mprnews.org/story/2026/10/16/campaign-ads-blame-fraud-violence-on-somali-minnesotans"
       },
       {
         "domain": "kttc.com",
         "feed": "https://kttc.com/arc/outboundfeeds/rss/?outputType=xml",
         "items": 20,
-        "medianChars": 1428,
-        "maxChars": 3059,
-        "usableShare": 1
-      },
-      {
-        "domain": "sahanjournal.com",
-        "feed": "https://sahanjournal.com/feed/",
-        "items": 10,
-        "medianChars": 6139,
-        "maxChars": 12472,
-        "usableShare": 1
+        "medianChars": 1122,
+        "maxChars": 2779,
+        "usableShare": 0.92,
+        "identity": "https://www.kttc.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.kttc.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/|https://www.kttc.com/2026/10/17/byron-girls-soccer-advances-section-1aa-championship/"
       }
     ],
     "weak": [
       {
         "domain": "startribune.com",
         "feed": "https://startribune.com/rss/",
-        "items": 10,
-        "medianChars": 148,
-        "maxChars": 214,
-        "usableShare": 0
+        "items": 8,
+        "medianChars": 138,
+        "maxChars": 262,
+        "usableShare": 0,
+        "identity": "601899220|601899597|601902240"
       }
     ],
-    "none": [
-      "mprnews.org"
-    ]
+    "none": []
   },
   {
     "state": "mississippi",
@@ -853,26 +1455,38 @@
       {
         "domain": "mississippitoday.org",
         "feed": "https://mississippitoday.org/feed/",
-        "items": 10,
-        "medianChars": 4496,
-        "maxChars": 11972,
-        "usableShare": 0.9
+        "items": 12,
+        "medianChars": 3415,
+        "maxChars": 15266,
+        "usableShare": 1,
+        "identity": "https://mississippitoday.org/?p=1196102|https://mississippitoday.org/?p=1196092|https://mississippitoday.org/?p=1196082"
+      },
+      {
+        "domain": "mississippitoday.org",
+        "feed": "https://mississippitoday.org/news/feed/",
+        "items": 12,
+        "medianChars": 3415,
+        "maxChars": 27236,
+        "usableShare": 0.92,
+        "identity": "https://mississippitoday.org/?p=1196092|https://mississippitoday.org/?p=1196082|https://mississippitoday.org/?p=1196064"
       },
       {
         "domain": "wlbt.com",
         "feed": "https://wlbt.com/arc/outboundfeeds/rss/?outputType=xml",
         "items": 20,
-        "medianChars": 1870,
-        "maxChars": 3099,
-        "usableShare": 1
+        "medianChars": 1158,
+        "maxChars": 7983,
+        "usableShare": 1,
+        "identity": "https://www.wlbt.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.wlbt.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/|https://www.wlbt.com/2026/10/17/end-zone-week-9/"
       },
       {
         "domain": "wdam.com",
         "feed": "https://wdam.com/arc/outboundfeeds/rss/?outputType=xml",
         "items": 20,
-        "medianChars": 936,
-        "maxChars": 3059,
-        "usableShare": 0.83
+        "medianChars": 952,
+        "maxChars": 2744,
+        "usableShare": 0.92,
+        "identity": "https://www.wdam.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.wdam.com/2026/10/17/gametime-week-8/|https://www.wdam.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/"
       }
     ],
     "weak": [],
@@ -888,30 +1502,51 @@
         "domain": "missouriindependent.com",
         "feed": "https://missouriindependent.com/feed/",
         "items": 100,
-        "medianChars": 4653,
-        "maxChars": 14765,
-        "usableShare": 1
+        "medianChars": 6701,
+        "maxChars": 21019,
+        "usableShare": 1,
+        "identity": "https://missouriindependent.com/?post_type=republished&#038;p=33292|https://missouriindependent.com/?post_type=republished&#038;p=33294|https://missouriindependent.com/?post_type=republished&#038;p=33287"
       },
       {
         "domain": "ky3.com",
         "feed": "https://ky3.com/arc/outboundfeeds/rss/?outputType=xml",
         "items": 20,
-        "medianChars": 1870,
-        "maxChars": 3161,
-        "usableShare": 1
+        "medianChars": 1293,
+        "maxChars": 2471,
+        "usableShare": 0.92,
+        "identity": "https://www.ky3.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.ky3.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/|https://www.ky3.com/2026/10/17/springfield-city-utilities-offers-tips-heating-season-begins/"
       },
       {
         "domain": "kfvs12.com",
         "feed": "https://kfvs12.com/arc/outboundfeeds/rss/?outputType=xml",
         "items": 20,
-        "medianChars": 852,
-        "maxChars": 3059,
-        "usableShare": 0.92
+        "medianChars": 1088,
+        "maxChars": 2968,
+        "usableShare": 0.92,
+        "identity": "https://www.kfvs12.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.kfvs12.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/|https://www.kfvs12.com/2026/10/16/ky-239-fulton-county-blocked-just-north-ky-166-due-overturned-semi/"
       }
     ],
-    "weak": [],
+    "weak": [
+      {
+        "domain": "stltoday.com",
+        "feed": "http://www.stltoday.com/search/?f=rss&amp;t=article&amp;l=50&amp;s=start_time&amp;sd=desc&amp;k%5B%5D=%23topstory",
+        "items": 10,
+        "medianChars": 68,
+        "maxChars": 224,
+        "usableShare": 0,
+        "identity": "http://www.stltoday.com/tncms/asset/editorial/947e4921-4b4d-4907-b337-1a0c2b50e389|http://www.stltoday.com/tncms/asset/editorial/5905c769-f580-5f36-a6ae-406e3e47a1ee|http://www.stltoday.com/tncms/asset/editorial/21ef281a-85c4-54f6-9e57-b17dc68ccbfe"
+      },
+      {
+        "domain": "stltoday.com",
+        "feed": "https://stltoday.com/rss/news",
+        "items": 10,
+        "medianChars": 38,
+        "maxChars": 166,
+        "usableShare": 0,
+        "identity": "http://www.stltoday.com/tncms/asset/editorial/947e4921-4b4d-4907-b337-1a0c2b50e389|http://www.stltoday.com/tncms/asset/editorial/689fe14d-7eed-51e9-a482-47f86403baeb|http://www.stltoday.com/tncms/asset/editorial/40187aef-ca0a-5343-95e6-61a34958a5f2"
+      }
+    ],
     "none": [
-      "stltoday.com",
       "stlpublicradio.org"
     ]
   },
@@ -919,60 +1554,131 @@
     "state": "montana",
     "usable": [
       {
-        "domain": "dailymontanan.com",
-        "feed": "https://dailymontanan.com/feed/",
-        "items": 100,
-        "medianChars": 3749,
-        "maxChars": 6268,
-        "usableShare": 1
-      },
-      {
         "domain": "montanafreepress.org",
         "feed": "https://montanafreepress.org/feed/",
         "items": 8,
-        "medianChars": 3717,
-        "maxChars": 11972,
-        "usableShare": 1
+        "medianChars": 5950,
+        "maxChars": 16091,
+        "usableShare": 1,
+        "identity": "https://montanafreepress.org/?p=282845|https://montanafreepress.org/?p=282844|https://montanafreepress.org/?p=282826"
+      },
+      {
+        "domain": "dailymontanan.com",
+        "feed": "https://dailymontanan.com/feed/",
+        "items": 100,
+        "medianChars": 4585,
+        "maxChars": 9176,
+        "usableShare": 1,
+        "identity": "https://dailymontanan.com/?post_type=republished&#038;p=39546|https://dailymontanan.com/?post_type=republished&#038;p=39543|https://dailymontanan.com/?post_type=republished&#038;p=39540"
+      },
+      {
+        "domain": "flatheadbeacon.com",
+        "feed": "https://flatheadbeacon.com/feed/",
+        "items": 10,
+        "medianChars": 4518,
+        "maxChars": 14255,
+        "usableShare": 1,
+        "identity": "https://flatheadbeacon.com/?p=153146|https://flatheadbeacon.com/?p=153145|https://flatheadbeacon.com/?p=153035"
+      },
+      {
+        "domain": "dailymontanan.com",
+        "feed": "https://dailymontanan.com/feed/localFeed/",
+        "items": 100,
+        "medianChars": 4428,
+        "maxChars": 12430,
+        "usableShare": 1,
+        "identity": "https://dailymontanan.com/?p=39533|https://dailymontanan.com/?p=39500|https://dailymontanan.com/?p=39527"
+      },
+      {
+        "domain": "kpax.com",
+        "feed": "https://www.kpax.com/index.rss",
+        "items": 3,
+        "medianChars": 2009,
+        "maxChars": 2608,
+        "usableShare": 1,
+        "identity": "https://www.kpax.com/news/cattle-trailer-rollover-leads-to-unexpected-roundup-on-billings-streets|https://www.kpax.com/news/custer-county-district-high-school-is-led-by-two-principals-not-one|https://www.kpax.com/news/lake-county-commissioners-seek-a-resolution-as-irrigation-fees-climb"
+      },
+      {
+        "domain": "ktvq.com",
+        "feed": "https://www.ktvq.com/index.rss",
+        "items": 3,
+        "medianChars": 968,
+        "maxChars": 1030,
+        "usableShare": 1,
+        "identity": "https://www.ktvq.com/news/1-man-injured-1-man-arrested-following-livingston-stabbing|https://www.ktvq.com/news/truck-explosion-caught-on-camera-in-billings-parking-lot-no-injuries-reported|https://www.ktvq.com/news/cattle-trailer-rollover-leads-to-unexpected-roundup-on-billings-streets"
       }
     ],
-    "weak": [],
+    "weak": [
+      {
+        "domain": "billingsgazette.com",
+        "feed": "http://billingsgazette.com/search/?f=rss&amp;t=article&amp;l=50&amp;s=start_time&amp;sd=desc&amp;k%5B%5D=%23topstory",
+        "items": 10,
+        "medianChars": 133,
+        "maxChars": 238,
+        "usableShare": 0,
+        "identity": "http://billingsgazette.com/tncms/asset/editorial/59c005df-6d48-5fbb-8530-c263494ac430|http://billingsgazette.com/tncms/asset/editorial/d05c93de-4530-52f1-a630-1e2c201ed52d|http://billingsgazette.com/tncms/asset/editorial/1ff648d3-ef35-52cf-872f-50aa5b319ff8"
+      },
+      {
+        "domain": "helenair.com",
+        "feed": "http://helenair.com/search/?f=rss&amp;t=article&amp;l=50&amp;s=start_time&amp;sd=desc&amp;k%5B%5D=%23topstory",
+        "items": 10,
+        "medianChars": 133,
+        "maxChars": 238,
+        "usableShare": 0,
+        "identity": "http://helenair.com/tncms/asset/editorial/bcf5bf3c-f124-55cd-b061-d2f62e179539|http://helenair.com/tncms/asset/editorial/f3008581-d71e-508b-9a30-9ca41fc5adc7|http://helenair.com/tncms/asset/editorial/320288f2-3ad6-5fcc-a669-b2fa8594ccb4"
+      }
+    ],
     "none": [
-      "billingsgazette.com",
       "mtpr.org",
-      "kulr8.com"
+      "kulr8.com",
+      "missoulian.com",
+      "bozemandailychronicle.com",
+      "nbcmontana.com"
     ]
   },
   {
     "state": "nebraska",
     "usable": [
       {
+        "domain": "flatwaterfreepress.org",
+        "feed": "https://flatwaterfreepress.org/feed/",
+        "items": 10,
+        "medianChars": 7174,
+        "maxChars": 13715,
+        "usableShare": 1,
+        "identity": "https://flatwaterfreepress.org/?p=18634|https://flatwaterfreepress.org/?p=18646|https://flatwaterfreepress.org/?p=18323"
+      },
+      {
         "domain": "nebraskaexaminer.com",
         "feed": "https://nebraskaexaminer.com/feed/",
         "items": 100,
-        "medianChars": 3724,
-        "maxChars": 9150,
-        "usableShare": 1
+        "medianChars": 3856,
+        "maxChars": 12564,
+        "usableShare": 1,
+        "identity": "https://nebraskaexaminer.com/?post_type=republished&#038;p=45239|https://nebraskaexaminer.com/?post_type=republished&#038;p=45237|https://nebraskaexaminer.com/?post_type=republished&#038;p=45233"
       },
       {
         "domain": "1011now.com",
         "feed": "https://1011now.com/arc/outboundfeeds/rss/?outputType=xml",
         "items": 20,
-        "medianChars": 1737,
-        "maxChars": 3253,
-        "usableShare": 1
-      },
-      {
-        "domain": "flatwaterfreepress.org",
-        "feed": "https://flatwaterfreepress.org/feed/",
-        "items": 10,
-        "medianChars": 4138,
-        "maxChars": 15025,
-        "usableShare": 1
+        "medianChars": 1181,
+        "maxChars": 2732,
+        "usableShare": 1,
+        "identity": "https://www.1011now.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.1011now.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/|https://www.1011now.com/2026/10/17/lincoln-residents-turn-yards-into-halloween-hotspots/"
       }
     ],
-    "weak": [],
+    "weak": [
+      {
+        "domain": "omaha.com",
+        "feed": "http://omaha.com/search/?f=rss&amp;t=article&amp;l=50&amp;s=start_time&amp;sd=desc&amp;k%5B%5D=%23topstory",
+        "items": 10,
+        "medianChars": 106,
+        "maxChars": 236,
+        "usableShare": 0,
+        "identity": "http://omaha.com/tncms/asset/editorial/bfcf7b75-a762-5c38-903d-5bb707ccb1a9|http://omaha.com/tncms/asset/editorial/d84d054e-ad04-426d-af30-a0ad2eaa4751|http://omaha.com/tncms/asset/editorial/929a32e8-c075-58e2-97ee-ef1db3ecd8f9"
+      }
+    ],
     "none": [
-      "omaha.com",
       "netnebraska.org"
     ]
   },
@@ -980,38 +1686,69 @@
     "state": "nevada",
     "usable": [
       {
-        "domain": "nevadacurrent.com",
-        "feed": "https://nevadacurrent.com/feed/",
-        "items": 100,
-        "medianChars": 5855,
-        "maxChars": 13815,
-        "usableShare": 1
-      },
-      {
-        "domain": "kolotv.com",
-        "feed": "https://kolotv.com/arc/outboundfeeds/rss/?outputType=xml",
-        "items": 20,
-        "medianChars": 959,
-        "maxChars": 3059,
-        "usableShare": 0.75
-      },
-      {
         "domain": "thenevadaindependent.com",
         "feed": "https://thenevadaindependent.com/feed/",
         "items": 100,
-        "medianChars": 5439,
-        "maxChars": 23450,
-        "usableShare": 1
+        "medianChars": 6021,
+        "maxChars": 11515,
+        "usableShare": 1,
+        "identity": "https://thenevadaindependent.com/?post_type=article&#038;p=206870|https://thenevadaindependent.com/?post_type=article&#038;p=206900|https://thenevadaindependent.com/?post_type=article&#038;p=206888"
+      },
+      {
+        "domain": "nevadacurrent.com",
+        "feed": "https://nevadacurrent.com/politics/feed/",
+        "items": 100,
+        "medianChars": 5435,
+        "maxChars": 7209,
+        "usableShare": 1,
+        "identity": "https://nevadacurrent.com/?post_type=republished&#038;p=220251|https://nevadacurrent.com/?p=220223|https://nevadacurrent.com/?p=219939"
+      },
+      {
+        "domain": "nevadacurrent.com",
+        "feed": "https://nevadacurrent.com/feed/",
+        "items": 100,
+        "medianChars": 5327,
+        "maxChars": 21019,
+        "usableShare": 1,
+        "identity": "https://nevadacurrent.com/?p=220281|https://nevadacurrent.com/?p=220279|https://nevadacurrent.com/?post_type=republished&#038;p=220271"
       }
     ],
     "weak": [
       {
+        "domain": "kolotv.com",
+        "feed": "https://kolotv.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 194,
+        "maxChars": 6667,
+        "usableShare": 0.42,
+        "identity": "https://www.kolotv.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.kolotv.com/2026/10/17/sports-caravan-highlights-north-valleys-vs-wooster/|https://www.kolotv.com/2026/10/17/sports-caravan-highlights-reed-vs-bishop-manogue/"
+      },
+      {
         "domain": "reviewjournal.com",
         "feed": "https://reviewjournal.com/feed/",
         "items": 30,
-        "medianChars": 107,
-        "maxChars": 179,
-        "usableShare": 0
+        "medianChars": 116,
+        "maxChars": 172,
+        "usableShare": 0,
+        "identity": "https://www.reviewjournal.com/?p=3901404|https://www.reviewjournal.com/?p=3901377|https://www.reviewjournal.com/?p=3901360"
+      },
+      {
+        "domain": "reviewjournal.com",
+        "feed": "https://reviewjournal.com/news/feed/",
+        "items": 30,
+        "medianChars": 159,
+        "maxChars": 217,
+        "usableShare": 0,
+        "identity": "https://www.reviewjournal.com/?p=3901215|https://www.reviewjournal.com/?p=3901186|https://www.reviewjournal.com/?p=3901056"
+      },
+      {
+        "domain": "reviewjournal.com",
+        "feed": "https://reviewjournal.com/local/feed/",
+        "items": 30,
+        "medianChars": 158,
+        "maxChars": 189,
+        "usableShare": 0,
+        "identity": "https://www.reviewjournal.com/?p=3901215|https://www.reviewjournal.com/?p=3901154|https://www.reviewjournal.com/?p=3901120"
       }
     ],
     "none": [
@@ -1025,32 +1762,73 @@
         "domain": "newhampshirebulletin.com",
         "feed": "https://newhampshirebulletin.com/feed/",
         "items": 100,
-        "medianChars": 5621,
-        "maxChars": 13168,
-        "usableShare": 1
+        "medianChars": 4784,
+        "maxChars": 10121,
+        "usableShare": 1,
+        "identity": "https://newhampshirebulletin.com/?p=28776|https://newhampshirebulletin.com/?p=28760|https://newhampshirebulletin.com/?post_type=republished&#038;p=28773"
+      },
+      {
+        "domain": "nhbr.com",
+        "feed": "https://www.nhbr.com/feed/",
+        "items": 10,
+        "medianChars": 3932,
+        "maxChars": 12429,
+        "usableShare": 1,
+        "identity": "https://www.nhbr.com/?p=195990|https://www.nhbr.com/?p=195984|https://www.nhbr.com/?p=195968"
+      },
+      {
+        "domain": "indepthnh.org",
+        "feed": "https://indepthnh.org/feed/",
+        "items": 15,
+        "medianChars": 3619,
+        "maxChars": 15433,
+        "usableShare": 0.83,
+        "identity": "https://indepthnh.org/?p=6842261|https://indepthnh.org/?p=6842991|https://indepthnh.org/?p=6842850"
       }
     ],
     "weak": [
       {
+        "domain": "unionleader.com",
+        "feed": "https://unionleader.com/rss.xml",
+        "items": 20,
+        "medianChars": 309,
+        "maxChars": 3819,
+        "usableShare": 0.42,
+        "identity": "https://www.unionleader.com/lifestyles/travel-tips-2026-holiday-travel-cheat-sheet-how-to-hack-airfares-and-score-deals-c990ec26|https://www.unionleader.com/columns/be-warned-of-drained-batteries-9641c83f|https://www.unionleader.com/columns/daughter-with-grudges-makes-herself-hard-to-love-92c3d382"
+      },
+      {
         "domain": "nhpr.org",
         "feed": "https://nhpr.org/rss.xml",
         "items": 10,
-        "medianChars": 150,
-        "maxChars": 260,
-        "usableShare": 0
+        "medianChars": 162,
+        "maxChars": 316,
+        "usableShare": 0,
+        "identity": "https://www.nhpr.org/show/check-this-out/2026-10-17/check-this-out-in-retro-jessica-goldstein-creates-a-luxury-time-travel-agency|https://www.nhpr.org/environment/2026-10-17/outside-in-the-secret-origins-of-commercial-coyote-urine|https://www.nhpr.org/nh-news/2026-10-17/concord-housing-sensors-minut-monitoring-aclu-nh-surveillance"
       },
       {
         "domain": "concordmonitor.com",
-        "feed": "https://concordmonitor.com/feed/",
+        "feed": "https://www.concordmonitor.com/feed/",
         "items": 10,
         "medianChars": 0,
         "maxChars": 0,
-        "usableShare": 0
+        "usableShare": 0,
+        "identity": "https://www.concordmonitor.com/?p=401220|https://www.concordmonitor.com/?p=401222|https://www.concordmonitor.com/?p=401238"
+      },
+      {
+        "domain": "manchesterinklink.com",
+        "feed": "https://manchesterinklink.com/feed/",
+        "items": 20,
+        "medianChars": 220,
+        "maxChars": 521,
+        "usableShare": 0.08,
+        "identity": "https://manchester.inklink.news/?p=290052|https://manchester.inklink.news/?p=290049|https://manchester.inklink.news/?p=290019"
       }
     ],
     "none": [
       "wmur.com",
-      "unionleader.com"
+      "sentinelsource.com",
+      "seacoastonline.com",
+      "fosters.com"
     ]
   },
   {
@@ -1060,59 +1838,144 @@
         "domain": "newjerseymonitor.com",
         "feed": "https://newjerseymonitor.com/feed/",
         "items": 100,
-        "medianChars": 4987,
-        "maxChars": 8807,
-        "usableShare": 1
+        "medianChars": 3856,
+        "maxChars": 7861,
+        "usableShare": 1,
+        "identity": "https://newjerseymonitor.com/?post_type=republished&#038;p=25775|https://newjerseymonitor.com/?p=25770|https://newjerseymonitor.com/?p=25769"
+      },
+      {
+        "domain": "newjerseyglobe.com",
+        "feed": "https://newjerseyglobe.com/feed/",
+        "items": 10,
+        "medianChars": 3032,
+        "maxChars": 5577,
+        "usableShare": 1,
+        "identity": "https://newjerseyglobe.com/?p=170372|https://newjerseyglobe.com/?p=170364|https://newjerseyglobe.com/?p=170345"
+      },
+      {
+        "domain": "jerseydigs.com",
+        "feed": "https://jerseydigs.com/feed/",
+        "items": 10,
+        "medianChars": 2420,
+        "maxChars": 6130,
+        "usableShare": 1,
+        "identity": "https://jerseydigs.com/?p=100798|https://jerseydigs.com/?p=100788|https://jerseydigs.com/?p=100794"
       }
     ],
     "weak": [
       {
         "domain": "njspotlightnews.org",
-        "feed": "https://njspotlightnews.org/feed/",
+        "feed": "https://www.njspotlightnews.org/feed/",
         "items": 10,
-        "medianChars": 235,
+        "medianChars": 194,
+        "maxChars": 242,
+        "usableShare": 0,
+        "identity": "https://www.njspotlightnews.org/?p=597422|https://www.njspotlightnews.org/?p=597464|https://www.njspotlightnews.org/?p=597430"
+      },
+      {
+        "domain": "njspotlightnews.org",
+        "feed": "https://njspotlightnews.org/politics/feed/",
+        "items": 10,
+        "medianChars": 226,
         "maxChars": 249,
-        "usableShare": 0
+        "usableShare": 0,
+        "identity": "https://www.njspotlightnews.org/?p=597437|https://www.njspotlightnews.org/?p=597355|https://www.njspotlightnews.org/?p=597247"
       },
       {
         "domain": "whyy.org",
         "feed": "https://whyy.org/feed/",
         "items": 20,
-        "medianChars": 36,
-        "maxChars": 5185,
-        "usableShare": 0.42
+        "medianChars": 395,
+        "maxChars": 3023,
+        "usableShare": 0.5,
+        "identity": "https://whyy.org/?post_type=article&#038;p=756670|https://whyy.org/?post_type=article&#038;p=756656|https://whyy.org/?post_type=article&#038;p=756648"
+      },
+      {
+        "domain": "nj1015.com",
+        "feed": "https://nj1015.com/feed/",
+        "items": 35,
+        "medianChars": 155,
+        "maxChars": 227,
+        "usableShare": 0,
+        "identity": "https://nj1015.com/?p=923773|https://nj1015.com/?p=2520000000705495|https://nj1015.com/?p=1397057"
       }
     ],
     "none": [
       "nj.com",
-      "northjersey.com"
+      "northjersey.com",
+      "app.com",
+      "njbiz.com",
+      "courierpostonline.com",
+      "tapinto.net"
     ]
   },
   {
     "state": "new mexico",
     "usable": [
       {
-        "domain": "sourcenm.com",
-        "feed": "https://sourcenm.com/feed/",
-        "items": 100,
-        "medianChars": 4174,
-        "maxChars": 16661,
-        "usableShare": 1
-      },
-      {
         "domain": "searchlightnm.org",
         "feed": "https://searchlightnm.org/feed/",
         "items": 10,
-        "medianChars": 4679,
-        "maxChars": 8975,
-        "usableShare": 1
+        "medianChars": 6976,
+        "maxChars": 18532,
+        "usableShare": 1,
+        "identity": "https://searchlightnm.org/?p=122894|https://searchlightnm.org/?p=122886|https://searchlightnm.org/?p=122878"
+      },
+      {
+        "domain": "sourcenm.com",
+        "feed": "https://sourcenm.com/feed/",
+        "items": 100,
+        "medianChars": 3547,
+        "maxChars": 7142,
+        "usableShare": 1,
+        "identity": "https://sourcenm.com/?p=33186|https://sourcenm.com/?post_type=republished&#038;p=33195|https://sourcenm.com/?post_type=republished&#038;p=33193"
       }
     ],
-    "weak": [],
+    "weak": [
+      {
+        "domain": "santafenewmexican.com",
+        "feed": "http://www.santafenewmexican.com/search/?f=rss&amp;t=article&amp;l=50&amp;s=start_time&amp;sd=desc&amp;k%5B%5D=%23topstory",
+        "items": 10,
+        "medianChars": 144,
+        "maxChars": 276,
+        "usableShare": 0,
+        "identity": "http://www.santafenewmexican.com/tncms/asset/editorial/3d7fa45e-9911-453a-aa85-064b02ac8b05|http://www.santafenewmexican.com/tncms/asset/editorial/68f48aad-fb50-4575-89c7-eb2cd6e6c320|http://www.santafenewmexican.com/tncms/asset/editorial/74fa0ac0-71cf-53fd-9985-2131e8ec8d73"
+      },
+      {
+        "domain": "krqe.com",
+        "feed": "https://krqe.com/feed/",
+        "items": 25,
+        "medianChars": 361,
+        "maxChars": 376,
+        "usableShare": 0,
+        "identity": "https://www.krqe.com/?p=3168558|https://www.krqe.com/?p=3169312|https://www.krqe.com/?p=3168970"
+      },
+      {
+        "domain": "krqe.com",
+        "feed": "https://krqe.com/news/feed/",
+        "items": 25,
+        "medianChars": 353,
+        "maxChars": 376,
+        "usableShare": 0,
+        "identity": "https://www.krqe.com/?p=3169312|https://www.krqe.com/?p=3169284|https://www.krqe.com/?p=3169043"
+      },
+      {
+        "domain": "nmindepth.com",
+        "feed": "https://nmindepth.com/feed/",
+        "items": 10,
+        "medianChars": 348,
+        "maxChars": 383,
+        "usableShare": 0,
+        "identity": "https://nmindepth.com/?p=1427095|https://nmindepth.com/?p=1426432|https://nmindepth.com/?p=1425354"
+      }
+    ],
     "none": [
       "abqjournal.com",
       "kunm.org",
-      "santafenewmexican.com"
+      "koat.com",
+      "nmpoliticalreport.com",
+      "lcsun-news.com",
+      "lascrucesbulletin.com"
     ]
   },
   {
@@ -1120,38 +1983,43 @@
     "usable": [
       {
         "domain": "nysfocus.com",
-        "feed": "https://nysfocus.com/feed/",
+        "feed": "https://nysfocus.com/feed",
         "items": 50,
-        "medianChars": 9131,
-        "maxChars": 24141,
-        "usableShare": 1
+        "medianChars": 7067,
+        "maxChars": 12023,
+        "usableShare": 1,
+        "identity": "425502|425510|425495"
       },
       {
         "domain": "citylimits.org",
         "feed": "https://citylimits.org/feed/",
         "items": 10,
-        "medianChars": 5217,
-        "maxChars": 22649,
-        "usableShare": 1
-      },
-      {
-        "domain": "gothamist.com",
-        "feed": "https://gothamist.com/feed/",
-        "items": 40,
-        "medianChars": 513,
-        "maxChars": 683,
-        "usableShare": 0.58
+        "medianChars": 5736,
+        "maxChars": 11478,
+        "usableShare": 1,
+        "identity": "https://citylimits.org/?p=22458418|https://citylimits.org/?p=22458412|https://citylimits.org/?p=22458409"
       },
       {
         "domain": "thecity.nyc",
         "feed": "https://thecity.nyc/feed/",
         "items": 10,
-        "medianChars": 4526,
-        "maxChars": 6641,
-        "usableShare": 1
+        "medianChars": 4346,
+        "maxChars": 11169,
+        "usableShare": 1,
+        "identity": "https://www.thecityreporter.nyc/?p=85857|https://www.thecityreporter.nyc/?p=85852|https://www.thecityreporter.nyc/?p=85797"
       }
     ],
-    "weak": [],
+    "weak": [
+      {
+        "domain": "gothamist.com",
+        "feed": "https://gothamist.com/feed/",
+        "items": 40,
+        "medianChars": 421,
+        "maxChars": 760,
+        "usableShare": 0.42,
+        "identity": "https://gothamist.com/news/deer-are-all-over-new-jersey-roads-looking-for-sex-state-officials-warn|https://gothamist.com/news/man-messaged-i-got-straight-poison-before-giving-nyc-college-students-fentanyl-feds-say|https://gothamist.com/news/inside-the-plan-to-fix-the-nearly-collapsed-pfizer-building-164th-of-an-inch-at-a-time"
+      }
+    ],
     "none": [
       "syracuse.com"
     ]
@@ -1163,25 +2031,28 @@
         "domain": "ncnewsline.com",
         "feed": "https://ncnewsline.com/feed/",
         "items": 100,
-        "medianChars": 4184,
-        "maxChars": 10753,
-        "usableShare": 1
+        "medianChars": 4422,
+        "maxChars": 12511,
+        "usableShare": 1,
+        "identity": "https://ncnewsline.com/?p=195518|https://ncnewsline.com/?post_type=republished&#038;p=195515|https://ncnewsline.com/?post_type=republished&#038;p=195513"
       },
       {
         "domain": "witn.com",
         "feed": "https://witn.com/arc/outboundfeeds/rss/?outputType=xml",
         "items": 20,
-        "medianChars": 1466,
-        "maxChars": 3059,
-        "usableShare": 1
+        "medianChars": 1158,
+        "maxChars": 3097,
+        "usableShare": 0.92,
+        "identity": "https://www.witn.com/2026/10/17/coastal-storm-building-off-north-carolina-coast/|https://www.witn.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.witn.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/"
       },
       {
         "domain": "wect.com",
         "feed": "https://wect.com/arc/outboundfeeds/rss/?outputType=xml",
         "items": 20,
-        "medianChars": 1428,
-        "maxChars": 3059,
-        "usableShare": 0.92
+        "medianChars": 1158,
+        "maxChars": 1741,
+        "usableShare": 0.92,
+        "identity": "https://www.wect.com/2026/10/17/first-alert-forecast-colder-winds/|https://www.wect.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.wect.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/"
       }
     ],
     "weak": [],
@@ -1197,33 +2068,37 @@
         "domain": "northdakotamonitor.com",
         "feed": "https://northdakotamonitor.com/feed/",
         "items": 100,
-        "medianChars": 4381,
-        "maxChars": 9007,
-        "usableShare": 1
+        "medianChars": 5491,
+        "maxChars": 21019,
+        "usableShare": 1,
+        "identity": "https://northdakotamonitor.com/?p=22837|https://northdakotamonitor.com/?p=22804|https://northdakotamonitor.com/?post_type=republished&#038;p=22834"
+      },
+      {
+        "domain": "inforum.com",
+        "feed": "https://www.inforum.com/index.rss",
+        "items": 77,
+        "medianChars": 3657,
+        "maxChars": 6229,
+        "usableShare": 1,
+        "identity": "https://www.inforum.com/sports/prep/god-pulled-through-for-me-dgf-football-player-zander-opsahl-released-from-hospital-following-injury-scare|https://www.inforum.com/news/fargo/court-documents-reveal-new-details-in-attempted-murder-case|https://www.inforum.com/news/north-dakota/2-arrested-in-deadly-bismarck-street-racing-crash-police-say"
       },
       {
         "domain": "kfyrtv.com",
         "feed": "https://kfyrtv.com/arc/outboundfeeds/rss/?outputType=xml",
         "items": 20,
-        "medianChars": 1385,
-        "maxChars": 3059,
-        "usableShare": 1
+        "medianChars": 1158,
+        "maxChars": 2283,
+        "usableShare": 1,
+        "identity": "https://www.kfyrtv.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/|https://www.kfyrtv.com/2026/10/17/williston-pd-searching-missing-man/|https://www.kfyrtv.com/2026/10/17/we-people-increase-women-agriculture/"
       },
       {
         "domain": "valleynewslive.com",
         "feed": "https://valleynewslive.com/arc/outboundfeeds/rss/?outputType=xml",
         "items": 20,
-        "medianChars": 1870,
-        "maxChars": 3059,
-        "usableShare": 1
-      },
-      {
-        "domain": "inforum.com",
-        "feed": "https://inforum.com/index.rss",
-        "items": 77,
-        "medianChars": 4537,
-        "maxChars": 12956,
-        "usableShare": 1
+        "medianChars": 1158,
+        "maxChars": 2438,
+        "usableShare": 1,
+        "identity": "https://www.valleynewslive.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.valleynewslive.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/|https://www.valleynewslive.com/2026/10/16/frosty-friday-night-ahead-warm-sunny-weekend/"
       }
     ],
     "weak": [],
@@ -1235,47 +2110,137 @@
     "state": "ohio",
     "usable": [
       {
-        "domain": "ohiocapitaljournal.com",
-        "feed": "https://ohiocapitaljournal.com/feed/",
-        "items": 100,
-        "medianChars": 5745,
-        "maxChars": 10722,
-        "usableShare": 1
-      },
-      {
         "domain": "signalcleveland.org",
         "feed": "https://signalcleveland.org/feed/",
         "items": 10,
-        "medianChars": 6805,
-        "maxChars": 12149,
-        "usableShare": 1
+        "medianChars": 6299,
+        "maxChars": 8650,
+        "usableShare": 1,
+        "identity": "https://signalcleveland.org/?p=84833|https://signalcleveland.org/?p=84811|https://signalcleveland.org/?p=84764"
+      },
+      {
+        "domain": "ohiocapitaljournal.com",
+        "feed": "https://ohiocapitaljournal.com/feed/localFeed/",
+        "items": 100,
+        "medianChars": 4430,
+        "maxChars": 12421,
+        "usableShare": 1,
+        "identity": "https://ohiocapitaljournal.com/?p=42304|https://ohiocapitaljournal.com/?p=42299|https://ohiocapitaljournal.com/?p=42345"
+      },
+      {
+        "domain": "ohiocapitaljournal.com",
+        "feed": "https://ohiocapitaljournal.com/feed/",
+        "items": 100,
+        "medianChars": 3856,
+        "maxChars": 17232,
+        "usableShare": 1,
+        "identity": "https://ohiocapitaljournal.com/?post_type=republished&#038;p=42367|https://ohiocapitaljournal.com/?post_type=republished&#038;p=42349|https://ohiocapitaljournal.com/?post_type=republished&#038;p=42351"
       }
     ],
-    "weak": [],
+    "weak": [
+      {
+        "domain": "wtol.com",
+        "feed": "https://www.wtol.com/feeds/syndication/rss/news",
+        "items": 40,
+        "medianChars": 124,
+        "maxChars": 162,
+        "usableShare": 0,
+        "identity": "71d0d46f-1428-45f9-ad35-0fb03ccfa0e8|5faa5cc4-60db-43f2-ab42-d4145843ad5e|bbead4ed-b634-40c5-9d20-1bf64a17e251"
+      },
+      {
+        "domain": "daytondailynews.com",
+        "feed": "http://www.daytondailynews.com/search/?f=rss&amp;t=article&amp;l=50&amp;s=start_time&amp;sd=desc&amp;k%5B%5D=%23topstory",
+        "items": 10,
+        "medianChars": 213,
+        "maxChars": 232,
+        "usableShare": 0,
+        "identity": "http://www.daytondailynews.com/tncms/asset/editorial/f0611464-8c12-56f3-8152-b9e2fbb15b78|http://www.daytondailynews.com/tncms/asset/editorial/3b4031db-53af-5576-8314-192ccbd773bc|http://www.daytondailynews.com/tncms/asset/editorial/ddcecc97-a0df-5c60-9a5c-b821ffc7a945"
+      },
+      {
+        "domain": "toledoblade.com",
+        "feed": "https://toledoblade.com/rss/",
+        "items": 19,
+        "medianChars": 169,
+        "maxChars": 291,
+        "usableShare": 0,
+        "identity": "https://www.toledoblade.com/business/personal-finance/2026/10/17/seniors-struggle-inflation-outpace-social-security-benefits/stories/20261017007|https://www.toledoblade.com/sports/high-school/2026/10/16/high-school-football-liberty-center-archbold-stay-unbeaten/stories/20261016134|https://www.toledoblade.com/sports/bgsu/2026/10/16/bgsu-hockey-falls-niagara-ot/stories/20261016135"
+      },
+      {
+        "domain": "toledoblade.com",
+        "feed": "https://toledoblade.com/rss/news",
+        "items": 20,
+        "medianChars": 241,
+        "maxChars": 358,
+        "usableShare": 0,
+        "identity": "https://www.toledoblade.com/news/nation/2026/10/16/man-who-stopped-the-oregon-elementary-school-shooter-has-2-daughters-at-the-school-his-mom-says-1/stories/20261016116|https://www.toledoblade.com/news/nation/2026/10/16/trump-fires-katie-zacharia-as-white-house-press-secretary-after-five-days-advis/stories/20261016112|https://www.toledoblade.com/news/nation/2026/10/15/winter-wetter-warmer-forecasters-say/stories/20261015094"
+      },
+      {
+        "domain": "eyeonohio.com",
+        "feed": "https://eyeonohio.com/feed/",
+        "items": 10,
+        "medianChars": 346,
+        "maxChars": 386,
+        "usableShare": 0,
+        "identity": "https://eyeonohio.com/?p=127844|https://eyeonohio.com/?p=127831|https://eyeonohio.com/?p=127754"
+      }
+    ],
     "none": [
       "woio.com",
-      "wtol.com",
-      "cleveland.com"
+      "cleveland.com",
+      "dispatch.com",
+      "cincinnati.com",
+      "ideastream.org",
+      "wosu.org",
+      "crainscleveland.com"
     ]
   },
   {
     "state": "oklahoma",
     "usable": [
       {
+        "domain": "readfrontier.org",
+        "feed": "https://readfrontier.org/politics/feed/",
+        "items": 10,
+        "medianChars": 6587,
+        "maxChars": 11815,
+        "usableShare": 1,
+        "identity": "https://www.readfrontier.org/?post_type=stories&#038;p=32167|https://www.readfrontier.org/?post_type=stories&#038;p=31682|https://www.readfrontier.org/?post_type=stories&#038;p=31650"
+      },
+      {
+        "domain": "readfrontier.org",
+        "feed": "https://www.readfrontier.org/feed/",
+        "items": 10,
+        "medianChars": 6362,
+        "maxChars": 12223,
+        "usableShare": 0.9,
+        "identity": "https://www.readfrontier.org/?p=17189|http://www.readfrontier.org/?p=9572|http://www.readfrontier.org/?p=8751"
+      },
+      {
         "domain": "oklahomavoice.com",
         "feed": "https://oklahomavoice.com/feed/",
         "items": 100,
-        "medianChars": 4174,
-        "maxChars": 9001,
-        "usableShare": 1
+        "medianChars": 5110,
+        "maxChars": 21019,
+        "usableShare": 1,
+        "identity": "https://oklahomavoice.com/?post_type=republished&#038;p=22115|https://oklahomavoice.com/?p=22114|https://oklahomavoice.com/?post_type=republished&#038;p=22111"
+      },
+      {
+        "domain": "oklahomawatch.org",
+        "feed": "https://oklahomawatch.org/feed/",
+        "items": 10,
+        "medianChars": 4270,
+        "maxChars": 9089,
+        "usableShare": 0.9,
+        "identity": "https://oklahomawatch.org/?p=762893|https://oklahomawatch.org/?p=762944|https://oklahomawatch.org/?p=762988"
       },
       {
         "domain": "kswo.com",
         "feed": "https://kswo.com/arc/outboundfeeds/rss/?outputType=xml",
         "items": 20,
-        "medianChars": 978,
-        "maxChars": 3059,
-        "usableShare": 0.92
+        "medianChars": 995,
+        "maxChars": 2580,
+        "usableShare": 1,
+        "identity": "https://www.kswo.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.kswo.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/|https://www.kswo.com/2026/10/16/high-school-student-shot-killed-interstate-police-say/"
       }
     ],
     "weak": [
@@ -1283,14 +2248,53 @@
         "domain": "nondoc.com",
         "feed": "https://nondoc.com/feed/",
         "items": 10,
-        "medianChars": 458,
-        "maxChars": 557,
-        "usableShare": 0.3
+        "medianChars": 460,
+        "maxChars": 541,
+        "usableShare": 0.1,
+        "identity": "https://nondoc.com/?p=62280|https://nondoc.com/?p=62117|https://nondoc.com/?p=62099"
+      },
+      {
+        "domain": "tulsaworld.com",
+        "feed": "http://tulsaworld.com/search/?f=rss&amp;t=article&amp;l=50&amp;s=start_time&amp;sd=desc&amp;k%5B%5D=%23topstory",
+        "items": 10,
+        "medianChars": 35,
+        "maxChars": 268,
+        "usableShare": 0,
+        "identity": "http://tulsaworld.com/tncms/asset/editorial/dd74cf1a-2027-5332-af1e-e7298c1bc0b0|http://tulsaworld.com/tncms/asset/editorial/39db95ac-f09a-518b-8ba7-b34a619b40c5|http://tulsaworld.com/tncms/asset/editorial/cf364db2-c596-5ad7-9bf5-a133e32cf72d"
+      },
+      {
+        "domain": "news9.com",
+        "feed": "https://www.news9.com/index.rss",
+        "items": 10,
+        "medianChars": 148,
+        "maxChars": 190,
+        "usableShare": 0,
+        "identity": "https://www.news9.com/sports/josh-jacobs-green-bay-packers-commissioners-exempt-list-update|https://www.news9.com/sports/university-of-oklahoma/toby-rowland-previews-oklahoma-vs-kentucky-with-wildcats-radio-voice-tom-leach|https://www.news9.com/sports/university-of-oklahoma/oklahoma-kentucky-football-injury-report-october-17-2026"
+      },
+      {
+        "domain": "kfor.com",
+        "feed": "https://kfor.com/feed/",
+        "items": 20,
+        "medianChars": 267,
+        "maxChars": 337,
+        "usableShare": 0,
+        "identity": "https://kfor.com/?p=3520891|https://kfor.com/?p=3521557|https://kfor.com/?p=3521186"
+      },
+      {
+        "domain": "kfor.com",
+        "feed": "https://kfor.com/news/feed/",
+        "items": 20,
+        "medianChars": 220,
+        "maxChars": 357,
+        "usableShare": 0,
+        "identity": "https://kfor.com/?p=3521725|https://kfor.com/?p=3521557|https://kfor.com/?p=3520958"
       }
     ],
     "none": [
       "oklahoman.com",
-      "kosu.org"
+      "kosu.org",
+      "okcfox.com",
+      "normantranscript.com"
     ]
   },
   {
@@ -1300,25 +2304,37 @@
         "domain": "oregoncapitalchronicle.com",
         "feed": "https://oregoncapitalchronicle.com/feed/",
         "items": 100,
-        "medianChars": 5534,
-        "maxChars": 16094,
-        "usableShare": 1
+        "medianChars": 5719,
+        "maxChars": 21019,
+        "usableShare": 1,
+        "identity": "https://oregoncapitalchronicle.com/?p=23888|https://oregoncapitalchronicle.com/?post_type=republished&#038;p=23886|https://oregoncapitalchronicle.com/?p=23885"
       },
       {
         "domain": "opb.org",
         "feed": "https://opb.org/arc/outboundfeeds/rss/?outputType=xml",
-        "items": 39,
-        "medianChars": 2938,
-        "maxChars": 10581,
-        "usableShare": 1
+        "items": 62,
+        "medianChars": 4864,
+        "maxChars": 18536,
+        "usableShare": 1,
+        "identity": "https://www.opb.org/article/2026/10/16/bend-grade-school-shooting-details-unfold/|https://www.opb.org/article/2026/10/16/oregon-school-shooting-bend-silver-rail/|https://www.opb.org/article/2026/10/16/trump-puts-new-russia-sanctions-that-he-recently-signed-into-law-on-hold-citing-national-interest/"
       },
       {
         "domain": "ktvz.com",
         "feed": "https://ktvz.com/feed/",
         "items": 50,
-        "medianChars": 2791,
-        "maxChars": 7051,
-        "usableShare": 1
+        "medianChars": 1842,
+        "maxChars": 5440,
+        "usableShare": 0.92,
+        "identity": "https://ktvz.com/?p=1661381|https://ktvz.com/?p=1661379|https://ktvz.com/?p=1661367"
+      },
+      {
+        "domain": "ktvz.com",
+        "feed": "https://ktvz.com/local-news/feed/",
+        "items": 50,
+        "medianChars": 1496,
+        "maxChars": 5440,
+        "usableShare": 1,
+        "identity": "https://ktvz.com/?p=1661300|https://ktvz.com/?post_type=nota_script&#038;p=1661158|https://ktvz.com/?post_type=nota_script&#038;p=1661151"
       }
     ],
     "weak": [],
@@ -1334,35 +2350,48 @@
         "domain": "penncapital-star.com",
         "feed": "https://penncapital-star.com/feed/",
         "items": 100,
-        "medianChars": 6268,
-        "maxChars": 9158,
-        "usableShare": 1
+        "medianChars": 3766,
+        "maxChars": 17242,
+        "usableShare": 1,
+        "identity": "https://penncapital-star.com/?post_type=republished&#038;p=69923|https://penncapital-star.com/?post_type=republished&#038;p=69920|https://penncapital-star.com/?post_type=republished&#038;p=69913"
       },
       {
         "domain": "inquirer.com",
         "feed": "https://inquirer.com/arc/outboundfeeds/rss/?outputType=xml",
         "items": 100,
-        "medianChars": 1241,
-        "maxChars": 8983,
-        "usableShare": 1
+        "medianChars": 2371,
+        "maxChars": 6156,
+        "usableShare": 1,
+        "identity": "https://www.inquirer.com/news/philadelphia/christmas-village-accessibility-changes-ada-philadelphia-booths-20261017.html|https://www.inquirer.com/news/philadelphia/rocky-meat-punching-reading-terminal-market-20261017.html|https://www.inquirer.com/business/boeing-delaware-county-plant-funding-cuts-20261017.html"
       },
       {
         "domain": "witf.org",
         "feed": "https://witf.org/feed/",
         "items": 50,
-        "medianChars": 1410,
-        "maxChars": 4830,
-        "usableShare": 1
+        "medianChars": 1503,
+        "maxChars": 11089,
+        "usableShare": 1,
+        "identity": "https://witf.io/?p=274869|https://witf.io/?p=274792|https://witf.io/?p=274788"
       }
     ],
     "weak": [
       {
         "domain": "wtaj.com",
         "feed": "https://wtaj.com/feed/",
-        "items": 17,
-        "medianChars": 343,
-        "maxChars": 380,
-        "usableShare": 0
+        "items": 20,
+        "medianChars": 357,
+        "maxChars": 408,
+        "usableShare": 0,
+        "identity": "https://www.wtaj.com/?p=3161206|https://www.wtaj.com/?post_type=nota_script&#038;p=3160898|https://www.wtaj.com/?post_type=nota_script&#038;p=3160784"
+      },
+      {
+        "domain": "wtaj.com",
+        "feed": "https://wtaj.com/news/feed/",
+        "items": 50,
+        "medianChars": 350,
+        "maxChars": 408,
+        "usableShare": 0,
+        "identity": "https://www.wtaj.com/news/national-news/ap-us-news/ap-us-coast-guard-says-it-has-rescued-at-least-16-from-the-water-off-mexicos-baja-coast/|https://www.wtaj.com/news/national-news/ap-us-news/ap-governor-praises-local-who-helped-end-the-mass-shooting-at-an-oregon-elementary-school/|https://www.wtaj.com/us-politics/ap-politics/ap-trump-casts-doubt-on-press-secretary-zacharias-future/"
       }
     ],
     "none": [
@@ -1373,12 +2402,22 @@
     "state": "rhode island",
     "usable": [
       {
+        "domain": "ecori.org",
+        "feed": "https://ecori.org/feed/",
+        "items": 10,
+        "medianChars": 6056,
+        "maxChars": 19641,
+        "usableShare": 1,
+        "identity": "https://ecori.org/?p=106821|https://ecori.org/?p=106702|https://ecori.org/?p=106777"
+      },
+      {
         "domain": "rhodeislandcurrent.com",
         "feed": "https://rhodeislandcurrent.com/feed/",
         "items": 100,
-        "medianChars": 5715,
-        "maxChars": 10727,
-        "usableShare": 1
+        "medianChars": 4585,
+        "maxChars": 21019,
+        "usableShare": 1,
+        "identity": "https://rhodeislandcurrent.com/?p=34173|https://rhodeislandcurrent.com/?post_type=republished&#038;p=34178|https://rhodeislandcurrent.com/?p=34167"
       }
     ],
     "weak": [
@@ -1386,14 +2425,46 @@
         "domain": "thepublicsradio.org",
         "feed": "https://thepublicsradio.org/feed/",
         "items": 1000,
-        "medianChars": 265,
-        "maxChars": 322,
-        "usableShare": 0
+        "medianChars": 264,
+        "maxChars": 504,
+        "usableShare": 0.08,
+        "identity": "https://thepublicsradio.org/?p=113685|https://thepublicsradio.org/?p=113651|https://thepublicsradio.org/?p=113608"
+      },
+      {
+        "domain": "wpri.com",
+        "feed": "https://wpri.com/feed/",
+        "items": 30,
+        "medianChars": 110,
+        "maxChars": 362,
+        "usableShare": 0,
+        "identity": "https://www.wpri.com/?p=3202096|https://www.wpri.com/?p=3202588|https://www.wpri.com/?p=3203427"
+      },
+      {
+        "domain": "wpri.com",
+        "feed": "https://wpri.com/news/feed/",
+        "items": 30,
+        "medianChars": 151,
+        "maxChars": 242,
+        "usableShare": 0,
+        "identity": "https://www.wpri.com/?p=3201710|https://www.wpri.com/?p=3203462|https://www.wpri.com/?p=3203427"
+      },
+      {
+        "domain": "upriseri.com",
+        "feed": "https://upriseri.com/rss.xml",
+        "items": 50,
+        "medianChars": 210,
+        "maxChars": 261,
+        "usableShare": 0,
+        "identity": "https://upriseri.com/article/ri-jobs-fell-1600-in-september-as-rate-dips-to-36percent/|https://upriseri.com/article/maines-utility-playbook-has-a-rhode-island-echo/|https://upriseri.com/article/who-really-owns-that-amazon-bestseller-pillow/"
       }
     ],
     "none": [
       "wjar.com",
-      "providencejournal.com"
+      "providencejournal.com",
+      "abc6.com",
+      "golocalprov.com",
+      "newportri.com",
+      "valleybreeze.com"
     ]
   },
   {
@@ -1403,30 +2474,42 @@
         "domain": "scdailygazette.com",
         "feed": "https://scdailygazette.com/feed/",
         "items": 100,
-        "medianChars": 5298,
-        "maxChars": 11185,
-        "usableShare": 1
+        "medianChars": 4925,
+        "maxChars": 13187,
+        "usableShare": 1,
+        "identity": "https://scdailygazette.com/?p=15551|https://scdailygazette.com/?p=15546|https://scdailygazette.com/?post_type=republished&#038;p=15542"
       },
       {
         "domain": "wistv.com",
         "feed": "https://wistv.com/arc/outboundfeeds/rss/?outputType=xml",
         "items": 20,
-        "medianChars": 1553,
-        "maxChars": 3059,
-        "usableShare": 1
+        "medianChars": 1734,
+        "maxChars": 3635,
+        "usableShare": 1,
+        "identity": "https://www.wistv.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.wistv.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/|https://www.wistv.com/2026/10/17/mobile-exhibit-pushing-epstein-files-release-stops-columbia/"
       },
       {
         "domain": "live5news.com",
         "feed": "https://live5news.com/arc/outboundfeeds/rss/?outputType=xml",
         "items": 20,
-        "medianChars": 645,
-        "maxChars": 6828,
-        "usableShare": 0.58
+        "medianChars": 877,
+        "maxChars": 2225,
+        "usableShare": 0.75,
+        "identity": "https://www.live5news.com/2026/10/17/first-alert-significantly-cooler-breezier-behind-saturday-mornings-front/|https://www.live5news.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.live5news.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/"
       }
     ],
-    "weak": [],
+    "weak": [
+      {
+        "domain": "postandcourier.com",
+        "feed": "https://www.postandcourier.com/search/?f=rss&amp;t=article&amp;l=50&amp;s=start_time&amp;sd=desc&amp;k%5B%5D=%23topstory",
+        "items": 10,
+        "medianChars": 138,
+        "maxChars": 255,
+        "usableShare": 0,
+        "identity": "http://www.postandcourier.com/tncms/asset/editorial/c9689d9c-e25f-4313-835a-5c57a453f4cb|http://www.postandcourier.com/tncms/asset/editorial/1ad31262-e3ac-4221-9fe4-9af4c9b0e158|http://www.postandcourier.com/tncms/asset/editorial/0af56298-fab4-499a-a9ca-7c31d50fb278"
+      }
+    ],
     "none": [
-      "postandcourier.com",
       "scpublicradio.org"
     ]
   },
@@ -1437,25 +2520,28 @@
         "domain": "southdakotasearchlight.com",
         "feed": "https://southdakotasearchlight.com/feed/",
         "items": 100,
-        "medianChars": 4805,
-        "maxChars": 6518,
-        "usableShare": 1
-      },
-      {
-        "domain": "dakotanewsnow.com",
-        "feed": "https://dakotanewsnow.com/arc/outboundfeeds/rss/?outputType=xml",
-        "items": 20,
-        "medianChars": 3013,
-        "maxChars": 7096,
-        "usableShare": 1
+        "medianChars": 4696,
+        "maxChars": 11124,
+        "usableShare": 1,
+        "identity": "https://southdakotasearchlight.com/?p=25462|https://southdakotasearchlight.com/?p=25458|https://southdakotasearchlight.com/?p=25440"
       },
       {
         "domain": "kotatv.com",
         "feed": "https://kotatv.com/arc/outboundfeeds/rss/?outputType=xml",
         "items": 20,
-        "medianChars": 1435,
-        "maxChars": 3059,
-        "usableShare": 0.92
+        "medianChars": 1562,
+        "maxChars": 8542,
+        "usableShare": 0.92,
+        "identity": "https://www.kotatv.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.kotatv.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/|https://www.kotatv.com/2026/10/17/friday-night-hike-october-16th/"
+      },
+      {
+        "domain": "dakotanewsnow.com",
+        "feed": "https://dakotanewsnow.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1158,
+        "maxChars": 2611,
+        "usableShare": 1,
+        "identity": "https://www.dakotanewsnow.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.dakotanewsnow.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/|https://www.dakotanewsnow.com/2026/10/17/football-friday-regular-season-wraps-9-man-iowa/"
       }
     ],
     "weak": [],
@@ -1471,33 +2557,37 @@
         "domain": "tennesseelookout.com",
         "feed": "https://tennesseelookout.com/feed/",
         "items": 100,
-        "medianChars": 4184,
-        "maxChars": 7891,
-        "usableShare": 1
-      },
-      {
-        "domain": "wmcactionnews5.com",
-        "feed": "https://wmcactionnews5.com/arc/outboundfeeds/rss/?outputType=xml",
-        "items": 20,
-        "medianChars": 1272,
-        "maxChars": 3059,
-        "usableShare": 0.92
-      },
-      {
-        "domain": "wvlt.tv",
-        "feed": "https://wvlt.tv/arc/outboundfeeds/rss/?outputType=xml",
-        "items": 20,
-        "medianChars": 1435,
-        "maxChars": 3468,
-        "usableShare": 1
+        "medianChars": 4584,
+        "maxChars": 15165,
+        "usableShare": 1,
+        "identity": "https://tennesseelookout.com/?post_type=republished&#038;p=36187|https://tennesseelookout.com/?p=36184|https://tennesseelookout.com/?p=36177"
       },
       {
         "domain": "wpln.org",
         "feed": "https://wpln.org/feed/",
         "items": 16,
-        "medianChars": 2678,
-        "maxChars": 11879,
-        "usableShare": 0.83
+        "medianChars": 2937,
+        "maxChars": 8502,
+        "usableShare": 0.83,
+        "identity": "https://wpln.org/?p=197308|https://wpln.org/?p=197221|https://wpln.org/?p=196293"
+      },
+      {
+        "domain": "wvlt.tv",
+        "feed": "https://wvlt.tv/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1345,
+        "maxChars": 5680,
+        "usableShare": 1,
+        "identity": "https://www.wvlt.tv/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.wvlt.tv/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/|https://www.wvlt.tv/2026/10/17/east-tennessee-high-school-football-scores-week-9/"
+      },
+      {
+        "domain": "wmcactionnews5.com",
+        "feed": "https://wmcactionnews5.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1122,
+        "maxChars": 4550,
+        "usableShare": 1,
+        "identity": "https://www.actionnews5.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.actionnews5.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/|https://www.actionnews5.com/2026/10/17/friday-football-fever-week-9-mus-ends-centrals-perfect-season-game-week-more/"
       }
     ],
     "weak": [],
@@ -1509,46 +2599,51 @@
     "state": "texas",
     "usable": [
       {
-        "domain": "kltv.com",
-        "feed": "https://kltv.com/arc/outboundfeeds/rss/?outputType=xml",
-        "items": 20,
-        "medianChars": 778,
-        "maxChars": 3059,
-        "usableShare": 0.92
+        "domain": "sacurrent.com",
+        "feed": "https://www.sacurrent.com/feed/",
+        "items": 10,
+        "medianChars": 3630,
+        "maxChars": 10793,
+        "usableShare": 1,
+        "identity": "https://www.sacurrent.com/?p=426244|https://www.sacurrent.com/?p=426164|https://www.sacurrent.com/?p=426172"
       },
       {
         "domain": "kwtx.com",
         "feed": "https://kwtx.com/arc/outboundfeeds/rss/?outputType=xml",
         "items": 20,
-        "medianChars": 1445,
-        "maxChars": 3059,
-        "usableShare": 1
+        "medianChars": 1158,
+        "maxChars": 2040,
+        "usableShare": 0.83,
+        "identity": "https://www.kwtx.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.kwtx.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/|https://www.kwtx.com/2026/10/17/vote-week-8-slovaceks-xtra-hot-play-week/"
+      },
+      {
+        "domain": "kltv.com",
+        "feed": "https://kltv.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1141,
+        "maxChars": 1741,
+        "usableShare": 1,
+        "identity": "https://www.kltv.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.kltv.com/2026/10/17/lindale-scores-31-unanswered-points-beat-pine-tree-45-21/|https://www.kltv.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/"
       },
       {
         "domain": "kbtx.com",
         "feed": "https://kbtx.com/arc/outboundfeeds/rss/?outputType=xml",
         "items": 20,
-        "medianChars": 1982,
-        "maxChars": 6303,
-        "usableShare": 0.92
-      },
-      {
-        "domain": "sacurrent.com",
-        "feed": "https://sacurrent.com/feed/",
-        "items": 10,
-        "medianChars": 2663,
-        "maxChars": 8258,
-        "usableShare": 1
+        "medianChars": 1036,
+        "maxChars": 2542,
+        "usableShare": 1,
+        "identity": "https://www.kbtx.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.kbtx.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/|https://www.kbtx.com/2026/10/17/game-week-bremond-shuts-out-snook-improves-7-0-this-season/"
       }
     ],
     "weak": [
       {
         "domain": "texastribune.org",
-        "feed": "https://texastribune.org/feed/",
+        "feed": "https://www.texastribune.org/feed/",
         "items": 20,
-        "medianChars": 181,
-        "maxChars": 278,
-        "usableShare": 0
+        "medianChars": 155,
+        "maxChars": 222,
+        "usableShare": 0,
+        "identity": "https://www.texastribune.org/?p=236623|https://www.texastribune.org/?p=246932|https://www.texastribune.org/?p=246639"
       }
     ],
     "none": [
@@ -1559,55 +2654,127 @@
     "state": "utah",
     "usable": [
       {
+        "domain": "deseret.com",
+        "feed": "https://www.deseret.com/rss/latest.rss",
+        "items": 20,
+        "medianChars": 5593,
+        "maxChars": 14182,
+        "usableShare": 1,
+        "identity": "https://www.deseret.com/faith/2026/10/17/baylor-byu-presidents-share-student-faith-formation-g20/|https://www.deseret.com/sports/2026/10/17/byu-football-cougars-notre-dame-history-tradition-gold-helmets-irish-series/|https://www.deseret.com/politics/2026/10/17/republicans-push-to-preserve-montana-first-district/"
+      },
+      {
         "domain": "utahnewsdispatch.com",
         "feed": "https://utahnewsdispatch.com/feed/",
         "items": 100,
-        "medianChars": 5512,
-        "maxChars": 13795,
-        "usableShare": 1
+        "medianChars": 4340,
+        "maxChars": 10189,
+        "usableShare": 1,
+        "identity": "https://utahnewsdispatch.com/?post_type=republished&#038;p=20423|https://utahnewsdispatch.com/?p=20421|https://utahnewsdispatch.com/?post_type=republished&#038;p=20419"
       },
       {
-        "domain": "deseret.com",
-        "feed": "https://deseret.com/arc/outboundfeeds/rss/?outputType=xml",
-        "items": 20,
-        "medianChars": 6320,
-        "maxChars": 15469,
-        "usableShare": 1
+        "domain": "fox13now.com",
+        "feed": "https://www.fox13now.com/index.rss",
+        "items": 3,
+        "medianChars": 2011,
+        "maxChars": 2954,
+        "usableShare": 0.67,
+        "identity": "https://www.fox13now.com/news/local-news/salt-lake-county/128-million-question-on-salt-lake-county-midterm-election-ballots|https://www.fox13now.com/news/local-news/ogden/ogden-halloween-event-draws-hundreds-of-people-with-an-emphasis-on-mental-health|https://www.fox13now.com/news/local-news/weber-county/motorcyclist-critically-injured-after-crash-in-ogden-washington-boulevard-closed"
       }
     ],
     "weak": [
       {
         "domain": "sltrib.com",
-        "feed": "https://sltrib.com/arc/outboundfeeds/rss/?outputType=xml",
-        "items": 45,
-        "medianChars": 228,
-        "maxChars": 452,
-        "usableShare": 0
+        "feed": "https://www.sltrib.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 40,
+        "medianChars": 176,
+        "maxChars": 264,
+        "usableShare": 0,
+        "identity": "https://www.sltrib.com/sports/byu-cougars/2026/10/16/rece-davis-byu-notre-dame-dirty/|https://www.sltrib.com/news/politics/2026/10/12/nelson-abbott-faces-nancy-lee/|https://www.sltrib.com/sports/utah-utes/2026/10/16/how-byu-utah-would-fare-24-team/"
+      },
+      {
+        "domain": "ksl.com",
+        "feed": "https://ksl.com/rss/news",
+        "items": 20,
+        "medianChars": 142,
+        "maxChars": 223,
+        "usableShare": 0,
+        "identity": "https://www.ksl.com/article/51637416/utah-adds-25200-jobs-over-the-past-year-as-unemployment-holds-steady-at-35|https://www.ksl.com/article/51637481/pope-leos-diagnosis-puts-spotlight-on-lung-cancer-risks-beyond-smoking|https://www.ksl.com/article/51637508/motorcyclist-critically-injured-in-ogden-crash"
+      },
+      {
+        "domain": "abc4.com",
+        "feed": "https://abc4.com/feed/",
+        "items": 99,
+        "medianChars": 320,
+        "maxChars": 396,
+        "usableShare": 0,
+        "identity": "https://www.abc4.com/?p=3177853|https://www.abc4.com/?p=3176294|https://www.abc4.com/?p=3177785"
+      },
+      {
+        "domain": "abc4.com",
+        "feed": "https://abc4.com/news/feed/",
+        "items": 100,
+        "medianChars": 321,
+        "maxChars": 396,
+        "usableShare": 0,
+        "identity": "https://www.abc4.com/?p=3178081|https://www.abc4.com/?p=3178051|https://www.abc4.com/?p=3178052"
       }
     ],
     "none": [
       "kuer.org",
-      "kslnewsradio.com"
+      "kslnewsradio.com",
+      "heraldextra.com",
+      "standard.net",
+      "stgeorgeutah.com",
+      "buildingsaltlake.com"
     ]
   },
   {
     "state": "vermont",
     "usable": [
       {
+        "domain": "vermontbiz.com",
+        "feed": "https://vermontbiz.com/rss.xml",
+        "items": 10,
+        "medianChars": 6481,
+        "maxChars": 52770,
+        "usableShare": 1,
+        "identity": "244960 at https://vermontbiz.com|239005 at https://vermontbiz.com|212556 at https://vermontbiz.com"
+      },
+      {
         "domain": "vtdigger.org",
         "feed": "https://vtdigger.org/feed/",
         "items": 30,
-        "medianChars": 5334,
-        "maxChars": 8263,
-        "usableShare": 1
+        "medianChars": 5290,
+        "maxChars": 8583,
+        "usableShare": 1,
+        "identity": "https://vtdigger.org/?p=657111|https://vtdigger.org/?p=657103|https://vtdigger.org/?p=657087"
+      },
+      {
+        "domain": "sevendaysvt.com",
+        "feed": "https://www.sevendaysvt.com/feed/",
+        "items": 10,
+        "medianChars": 2340,
+        "maxChars": 33198,
+        "usableShare": 0.9,
+        "identity": "https://www.sevendaysvt.com/?p=221178|https://www.sevendaysvt.com/?p=221179|https://www.sevendaysvt.com/?p=221134"
       },
       {
         "domain": "wcax.com",
         "feed": "https://wcax.com/arc/outboundfeeds/rss/?outputType=xml",
         "items": 20,
-        "medianChars": 862,
-        "maxChars": 3059,
-        "usableShare": 0.67
+        "medianChars": 1158,
+        "maxChars": 5271,
+        "usableShare": 0.75,
+        "identity": "https://www.wcax.com/2026/10/17/blustery-colder-today-with-few-am-showers-mountain-snow-showers-trace-an-inch-accumulation-is-possible-near-summits/|https://www.wcax.com/2026/10/17/what-do-saturday-october-17/|https://www.wcax.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/"
+      },
+      {
+        "domain": "newportdispatch.com",
+        "feed": "https://www.newportdispatch.com/feed/",
+        "items": 100,
+        "medianChars": 1128,
+        "maxChars": 2277,
+        "usableShare": 0.92,
+        "identity": "https://www.newportdispatch.com/2026/10/16/woman-arrested-on-larceny-charge-in-east-fishkill/|https://www.newportdispatch.com/2026/10/16/11-arrested-on-drug-charges-in-newburgh/|https://www.newportdispatch.com/2026/10/16/man-arrested-on-child-exploitation-charges-in-cobleskill/"
       }
     ],
     "weak": [
@@ -1615,13 +2782,52 @@
         "domain": "vermontpublic.org",
         "feed": "https://vermontpublic.org/feeds/rss",
         "items": 12,
-        "medianChars": 141,
-        "maxChars": 256,
-        "usableShare": 0
+        "medianChars": 154,
+        "maxChars": 301,
+        "usableShare": 0,
+        "identity": "https://www.vermontpublic.org/show/vermont-this-week/2026-10-16/in-review-heating-oil-housing-market-affordability-in-vermont|https://www.vermontpublic.org/show/vermont-edition/2026-10-16/vermont-author-dana-mashoian-walrath-unflinching-disaster-comic-the-book-of-genocides|https://www.vermontpublic.org/local-news/2026-10-16/vermont-schoolteacher-musician-mines-family-mythology-in-new-song"
+      },
+      {
+        "domain": "rutlandherald.com",
+        "feed": "http://www.rutlandherald.com/search/?f=rss&amp;t=article&amp;l=50&amp;s=start_time&amp;sd=desc&amp;k%5B%5D=%23topstory",
+        "items": 10,
+        "medianChars": 254,
+        "maxChars": 299,
+        "usableShare": 0,
+        "identity": "http://www.rutlandherald.com/tncms/asset/editorial/aeb7fd71-5499-5316-96c2-af4a0e26e099|http://www.rutlandherald.com/tncms/asset/editorial/38c12d47-2895-54ea-b784-6d4c856d3f15|http://www.rutlandherald.com/tncms/asset/editorial/875cc810-5652-5371-b4dc-5eb751770ed5"
+      },
+      {
+        "domain": "newportdispatch.com",
+        "feed": "https://newportdispatch.com/rss.xml",
+        "items": 50,
+        "medianChars": 0,
+        "maxChars": 0,
+        "usableShare": 0,
+        "identity": "https://www.newportdispatch.com/|https://www.newportdispatch.com/2026/10/16/woman-arrested-on-larceny-charge-in-east-fishkill/|https://www.newportdispatch.com/2026/10/16/woman-arrested-on-drug-charges-in-southport/"
+      },
+      {
+        "domain": "mychamplainvalley.com",
+        "feed": "https://mychamplainvalley.com/feed/",
+        "items": 12,
+        "medianChars": 152,
+        "maxChars": 252,
+        "usableShare": 0,
+        "identity": "https://www.mychamplainvalley.com/?p=3181380|https://www.mychamplainvalley.com/?p=3181617|https://www.mychamplainvalley.com/?p=3181715"
+      },
+      {
+        "domain": "mychamplainvalley.com",
+        "feed": "https://mychamplainvalley.com/news/feed/",
+        "items": 25,
+        "medianChars": 138,
+        "maxChars": 322,
+        "usableShare": 0,
+        "identity": "https://www.mychamplainvalley.com/?p=3181715|https://www.mychamplainvalley.com/?p=3181451|https://www.mychamplainvalley.com/?p=3181557"
       }
     ],
     "none": [
-      "burlingtonfreepress.com"
+      "burlingtonfreepress.com",
+      "timesargus.com",
+      "benningtonbanner.com"
     ]
   },
   {
@@ -1631,25 +2837,28 @@
         "domain": "virginiamercury.com",
         "feed": "https://virginiamercury.com/feed/",
         "items": 100,
-        "medianChars": 4655,
-        "maxChars": 6931,
-        "usableShare": 0.92
-      },
-      {
-        "domain": "whsv.com",
-        "feed": "https://whsv.com/arc/outboundfeeds/rss/?outputType=xml",
-        "items": 20,
-        "medianChars": 1870,
-        "maxChars": 3351,
-        "usableShare": 1
+        "medianChars": 4439,
+        "maxChars": 7883,
+        "usableShare": 1,
+        "identity": "https://virginiamercury.com/?post_type=republished&#038;p=49434|https://virginiamercury.com/?p=49440|https://virginiamercury.com/?p=49441"
       },
       {
         "domain": "wdbj7.com",
         "feed": "https://wdbj7.com/arc/outboundfeeds/rss/?outputType=xml",
         "items": 20,
-        "medianChars": 1870,
-        "maxChars": 6502,
-        "usableShare": 0.92
+        "medianChars": 1741,
+        "maxChars": 10852,
+        "usableShare": 1,
+        "identity": "https://www.wdbj7.com/2026/10/16/first-alert-drastic-drop-temperatures-this-weekend/|https://www.wdbj7.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.wdbj7.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/"
+      },
+      {
+        "domain": "whsv.com",
+        "feed": "https://whsv.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1158,
+        "maxChars": 2839,
+        "usableShare": 0.83,
+        "identity": "https://www.whsv.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.whsv.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/|https://www.whsv.com/2026/10/17/jmu-homecoming-weekend-brings-crowds-harrisonburg-businesses/"
       }
     ],
     "weak": [],
@@ -1662,12 +2871,49 @@
     "state": "washington",
     "usable": [
       {
+        "domain": "crosscut.com",
+        "feed": "https://crosscut.com/politics/feed/",
+        "items": 15,
+        "medianChars": 5567,
+        "maxChars": 16189,
+        "usableShare": 1,
+        "identity": "68ed86c70424280001ecd28f|68d6ed660424280001ea8550|68d315550424280001ea3de8"
+      },
+      {
+        "domain": "crosscut.com",
+        "feed": "https://crosscut.com/news/feed/",
+        "items": 15,
+        "medianChars": 5135,
+        "maxChars": 15963,
+        "usableShare": 1,
+        "identity": "6ad00ce81eb00a00016feda5|6ace928c1eb00a00016fa03e|6acd90691eb00a00016f7e13"
+      },
+      {
+        "domain": "cascadiadaily.com",
+        "feed": "https://www.cascadiadaily.com/feed/",
+        "items": 10,
+        "medianChars": 4608,
+        "maxChars": 11402,
+        "usableShare": 1,
+        "identity": "https://www.cascadiadaily.com/?p=536412|https://www.cascadiadaily.com/?p=535452|https://www.cascadiadaily.com/?p=536379"
+      },
+      {
         "domain": "washingtonstatestandard.com",
         "feed": "https://washingtonstatestandard.com/feed/",
         "items": 100,
-        "medianChars": 4579,
-        "maxChars": 21019,
-        "usableShare": 1
+        "medianChars": 4048,
+        "maxChars": 17242,
+        "usableShare": 1,
+        "identity": "https://washingtonstatestandard.com/?p=17586|https://washingtonstatestandard.com/?post_type=republished&#038;p=17559|https://washingtonstatestandard.com/?post_type=republished&#038;p=17577"
+      },
+      {
+        "domain": "thestranger.com",
+        "feed": "https://www.thestranger.com/feed/",
+        "items": 10,
+        "medianChars": 1899,
+        "maxChars": 8699,
+        "usableShare": 1,
+        "identity": "https://www.thestranger.com/?p=333236|https://www.thestranger.com/?p=333224|https://www.thestranger.com/?p=333149"
       }
     ],
     "weak": [
@@ -1675,15 +2921,56 @@
         "domain": "crosscut.com",
         "feed": "https://crosscut.com/feed/",
         "items": 15,
-        "medianChars": 356,
-        "maxChars": 419,
-        "usableShare": 0
+        "medianChars": 350,
+        "maxChars": 397,
+        "usableShare": 0,
+        "identity": "6ad300ec1eb00a0001706706|6ad2e4d71eb00a00017064ce|6ad2e4d41eb00a00017064be"
+      },
+      {
+        "domain": "king5.com",
+        "feed": "https://www.king5.com/feeds/syndication/rss/news",
+        "items": 40,
+        "medianChars": 134,
+        "maxChars": 163,
+        "usableShare": 0,
+        "identity": "1971dacc-f59b-4414-a8da-66d7342e3aeb|a3980daf-c157-4b9c-bc35-d4a7f4a93840|9ff2d07b-9d3d-4bef-8e4e-7079458cc81b"
+      },
+      {
+        "domain": "heraldnet.com",
+        "feed": "https://heraldnet.com/feed/",
+        "items": 10,
+        "medianChars": 83,
+        "maxChars": 1430,
+        "usableShare": 0.1,
+        "identity": "https://www.heraldnet.com/2026/10/17/editorial-cartoons-for-saturday-october-17/|https://www.heraldnet.com/2026/10/16/meadowdale-football-wins-wesco-3a-south-on-2-point-stop-in-ot/|https://www.heraldnet.com/2026/10/16/everett-police-cold-case-investigation-featured-on-48-hours-season-debut/"
+      },
+      {
+        "domain": "yakimaherald.com",
+        "feed": "http://www.yakimaherald.com/search/?f=rss&amp;t=article&amp;l=50&amp;s=start_time&amp;sd=desc&amp;k%5B%5D=%23topstory",
+        "items": 10,
+        "medianChars": 144,
+        "maxChars": 275,
+        "usableShare": 0,
+        "identity": "http://www.yakimaherald.com/tncms/asset/editorial/8a876ca4-3d8f-5126-b9f6-82202a0958fc|http://www.yakimaherald.com/tncms/asset/editorial/5e80d836-e9ac-5f2b-a9aa-cda1473f7e0b|http://www.yakimaherald.com/tncms/asset/editorial/15056ec6-b883-5a70-8fe4-a80436527c14"
+      },
+      {
+        "domain": "publicola.com",
+        "feed": "https://publicola.com/feed/",
+        "items": 10,
+        "medianChars": 271,
+        "maxChars": 337,
+        "usableShare": 0,
+        "identity": "https://publicola.com/?p=55925|https://publicola.com/?p=55878|https://publicola.com/?p=55879"
       }
     ],
     "none": [
       "seattletimes.com",
       "kuow.org",
-      "spokesman.com"
+      "spokesman.com",
+      "komonews.com",
+      "thenewstribune.com",
+      "tri-cityherald.com",
+      "theolympian.com"
     ]
   },
   {
@@ -1693,30 +2980,42 @@
         "domain": "westvirginiawatch.com",
         "feed": "https://westvirginiawatch.com/feed/",
         "items": 100,
-        "medianChars": 4184,
-        "maxChars": 6816,
-        "usableShare": 1
-      },
-      {
-        "domain": "wsaz.com",
-        "feed": "https://wsaz.com/arc/outboundfeeds/rss/?outputType=xml",
-        "items": 20,
-        "medianChars": 1010,
-        "maxChars": 3059,
-        "usableShare": 0.92
+        "medianChars": 6125,
+        "maxChars": 11068,
+        "usableShare": 1,
+        "identity": "https://westvirginiawatch.com/?post_type=republished&#038;p=20025|https://westvirginiawatch.com/?post_type=republished&#038;p=20022|https://westvirginiawatch.com/?post_type=republished&#038;p=20019"
       },
       {
         "domain": "wdtv.com",
         "feed": "https://wdtv.com/arc/outboundfeeds/rss/?outputType=xml",
         "items": 20,
-        "medianChars": 1113,
-        "maxChars": 3059,
-        "usableShare": 1
+        "medianChars": 1142,
+        "maxChars": 4214,
+        "usableShare": 0.83,
+        "identity": "https://www.wdtv.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.wdtv.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/|https://www.wdtv.com/2026/10/17/week-8-5th-quarter-wv-high-school-football-highlights/"
+      },
+      {
+        "domain": "wsaz.com",
+        "feed": "https://wsaz.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 636,
+        "maxChars": 2195,
+        "usableShare": 0.58,
+        "identity": "https://www.wsaz.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.wsaz.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/|https://www.wsaz.com/2026/10/17/cell-phone-addiction-can-be-scary/"
       }
     ],
-    "weak": [],
+    "weak": [
+      {
+        "domain": "wvgazettemail.com",
+        "feed": "http://www.wvgazettemail.com/search/?f=rss&amp;t=article&amp;l=50&amp;s=start_time&amp;sd=desc&amp;k%5B%5D=%23topstory",
+        "items": 10,
+        "medianChars": 92,
+        "maxChars": 241,
+        "usableShare": 0,
+        "identity": "http://www.wvgazettemail.com/tncms/asset/editorial/dead9e4a-079f-4194-b08d-11d99b85c25c|http://www.wvgazettemail.com/tncms/asset/editorial/c65ad115-983b-4d80-af83-0c1b8ad569b9|http://www.wvgazettemail.com/tncms/asset/editorial/9acbc337-14be-4421-98cf-dc07dcca7254"
+      }
+    ],
     "none": [
-      "wvgazettemail.com",
       "wvpublic.org"
     ]
   },
@@ -1727,35 +3026,39 @@
         "domain": "wisconsinexaminer.com",
         "feed": "https://wisconsinexaminer.com/feed/",
         "items": 100,
-        "medianChars": 4987,
-        "maxChars": 12320,
-        "usableShare": 1
-      },
-      {
-        "domain": "wbay.com",
-        "feed": "https://wbay.com/arc/outboundfeeds/rss/?outputType=xml",
-        "items": 20,
-        "medianChars": 1751,
-        "maxChars": 3059,
-        "usableShare": 1
+        "medianChars": 4585,
+        "maxChars": 10062,
+        "usableShare": 1,
+        "identity": "https://wisconsinexaminer.com/?p=48394|https://wisconsinexaminer.com/?post_type=republished&#038;p=48392|https://wisconsinexaminer.com/?post_type=republished&#038;p=48386"
       },
       {
         "domain": "wsaw.com",
         "feed": "https://wsaw.com/arc/outboundfeeds/rss/?outputType=xml",
         "items": 20,
-        "medianChars": 1807,
-        "maxChars": 3326,
-        "usableShare": 1
+        "medianChars": 1514,
+        "maxChars": 2995,
+        "usableShare": 1,
+        "identity": "https://www.wsaw.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.wsaw.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/|https://www.wsaw.com/2026/10/17/hilight-zone-week-9-wausau-east-ends-regular-season-with-win/"
+      },
+      {
+        "domain": "wbay.com",
+        "feed": "https://wbay.com/arc/outboundfeeds/rss/?outputType=xml",
+        "items": 20,
+        "medianChars": 1369,
+        "maxChars": 2268,
+        "usableShare": 0.92,
+        "identity": "https://www.wbay.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.wbay.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/|https://www.wbay.com/2026/10/17/operation-football-week-9/"
       }
     ],
     "weak": [
       {
         "domain": "wpr.org",
-        "feed": "https://wpr.org/feed/",
+        "feed": "https://www.wpr.org/feed",
         "items": 10,
-        "medianChars": 273,
-        "maxChars": 368,
-        "usableShare": 0
+        "medianChars": 275,
+        "maxChars": 326,
+        "usableShare": 0,
+        "identity": "https://www.wpr.org/?p=491941|https://www.wpr.org/?p=491906|https://www.wpr.org/?p=491832"
       }
     ],
     "none": [
@@ -1766,28 +3069,129 @@
     "state": "wyoming",
     "usable": [
       {
+        "domain": "oilcity.news",
+        "feed": "https://oilcity.news/politics/feed/",
+        "items": 51,
+        "medianChars": 5758,
+        "maxChars": 13643,
+        "usableShare": 1,
+        "identity": "https://oilcity.news/?p=404699|https://oilcity.news/?p=404345|https://oilcity.news/?p=403792"
+      },
+      {
+        "domain": "capcity.news",
+        "feed": "https://capcity.news/politics/feed/",
+        "items": 51,
+        "medianChars": 5758,
+        "maxChars": 13643,
+        "usableShare": 1,
+        "identity": "https://capcity.news/?p=177876|https://capcity.news/?p=177630|https://capcity.news/?p=177192"
+      },
+      {
         "domain": "wyofile.com",
         "feed": "https://wyofile.com/feed/",
         "items": 10,
-        "medianChars": 5942,
-        "maxChars": 13781,
-        "usableShare": 1
+        "medianChars": 5585,
+        "maxChars": 110854,
+        "usableShare": 1,
+        "identity": "https://wyofile.com/?p=131876|https://wyofile.com/?p=131879|https://wyofile.com/?p=131795"
+      },
+      {
+        "domain": "oilcity.news",
+        "feed": "https://oilcity.news/feed/",
+        "items": 51,
+        "medianChars": 3182,
+        "maxChars": 10666,
+        "usableShare": 1,
+        "identity": "https://oilcity.news/?p=405776|https://oilcity.news/?p=405746|https://oilcity.news/?p=405735"
+      },
+      {
+        "domain": "capcity.news",
+        "feed": "https://capcity.news/feed/",
+        "items": 51,
+        "medianChars": 1803,
+        "maxChars": 6177,
+        "usableShare": 1,
+        "identity": "https://capcity.news/?p=178085|https://capcity.news/?p=178080|https://capcity.news/?p=177942"
+      },
+      {
+        "domain": "capcity.news",
+        "feed": "https://capcity.news/news/feed/",
+        "items": 51,
+        "medianChars": 1803,
+        "maxChars": 6177,
+        "usableShare": 1,
+        "identity": "https://capcity.news/?p=178080|https://capcity.news/?p=177942|https://capcity.news/?p=178072"
+      },
+      {
+        "domain": "sheridanmedia.com",
+        "feed": "https://sheridanmedia.com/feed/",
+        "items": 10,
+        "medianChars": 1634,
+        "maxChars": 3121,
+        "usableShare": 0.9,
+        "identity": "https://sheridanmedia.com/?p=253497|https://sheridanmedia.com/?p=253489|https://sheridanmedia.com/?p=253426"
+      },
+      {
+        "domain": "county10.com",
+        "feed": "https://county10.com/feed/",
+        "items": 25,
+        "medianChars": 1578,
+        "maxChars": 4335,
+        "usableShare": 0.92,
+        "identity": "https://county10.com/?p=494715|https://county10.com/?p=494593|https://county10.com/?p=494549"
+      },
+      {
+        "domain": "sheridanmedia.com",
+        "feed": "https://sheridanmedia.com/news/feed/",
+        "items": 10,
+        "medianChars": 1091,
+        "maxChars": 2721,
+        "usableShare": 0.8,
+        "identity": "https://sheridanmedia.com/?p=253465|https://sheridanmedia.com/?p=253459|https://sheridanmedia.com/?p=253457"
       }
     ],
     "weak": [
       {
+        "domain": "trib.com",
+        "feed": "http://trib.com/search/?f=rss&amp;t=article&amp;l=50&amp;s=start_time&amp;sd=desc&amp;k%5B%5D=%23topstory",
+        "items": 10,
+        "medianChars": 25,
+        "maxChars": 269,
+        "usableShare": 0,
+        "identity": "http://trib.com/tncms/asset/editorial/272dfc94-9fa8-5fde-b438-7f0a0f3e578e|http://trib.com/tncms/asset/editorial/92a1c7c3-fe1b-5544-a94b-3e63b24e78eb|http://trib.com/tncms/asset/editorial/7bd2887c-c478-5517-8c16-ecc3c6ca70d5"
+      },
+      {
         "domain": "cowboystatedaily.com",
         "feed": "https://cowboystatedaily.com/rss.xml",
         "items": 50,
-        "medianChars": 97,
-        "maxChars": 277,
-        "usableShare": 0
+        "medianChars": 44,
+        "maxChars": 301,
+        "usableShare": 0,
+        "identity": "https://cowboystatedaily.com/2026/10/16/wyoming-legislator-says-hell-push-anti-dark-money-measure-after-committee-doesnt/|https://cowboystatedaily.com/2026/10/16/your-wyoming-sunrise-saturday-october-17-2026/|https://cowboystatedaily.com/2026/10/16/one-more-for-the-road-saturday-october-17-2026/"
+      },
+      {
+        "domain": "gillettenewsrecord.com",
+        "feed": "http://www.gillettenewsrecord.com/search/?f=rss&amp;t=article&amp;l=50&amp;s=start_time&amp;sd=desc&amp;k%5B%5D=%23topstory",
+        "items": 10,
+        "medianChars": 94,
+        "maxChars": 256,
+        "usableShare": 0,
+        "identity": "http://www.gillettenewsrecord.com/tncms/asset/editorial/df789889-acbf-5a15-bf27-e670cbba4104|http://www.gillettenewsrecord.com/tncms/asset/editorial/2d739c37-56e5-575e-94e4-579943905b9d|http://www.gillettenewsrecord.com/tncms/asset/editorial/187e53c3-f935-507f-873e-5e3e32ae943a"
+      },
+      {
+        "domain": "buckrail.com",
+        "feed": "https://buckrail.com/feed/",
+        "items": 60,
+        "medianChars": 469,
+        "maxChars": 527,
+        "usableShare": 0.17,
+        "identity": "https://buckrail.com/?p=286328|https://buckrail.com/?p=286333|https://buckrail.com/?p=286192"
       }
     ],
     "none": [
       "wyomingnews.com",
-      "trib.com",
-      "wyomingpublicmedia.org"
+      "wyomingpublicmedia.org",
+      "jhnewsandguide.com"
     ]
   }
 ]
