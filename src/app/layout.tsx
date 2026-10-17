@@ -5,6 +5,7 @@ import "./globals.css";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import AnalyticsTracker from "@/components/AnalyticsTracker";
 import CookieConsent from "@/components/CookieConsent";
+import FacebookPixel from "@/components/FacebookPixel";
 import PushNotification from "@/components/PushNotification";
 
 // Google AdSense publisher ID — shared across the whole network
@@ -148,6 +149,11 @@ export default function RootLayout({
       <body className="antialiased bg-white overflow-x-hidden">
         {children}
         <GoogleAnalytics />
+        {/* Meta pixel — only renders when FACEBOOK_PIXEL_ID is set, and only
+            fires once the visitor has accepted cookies. */}
+        <FacebookPixel
+          pixelId={process.env.FACEBOOK_PIXEL_ID || process.env.NEXT_PUBLIC_FACEBOOK_PIXEL_ID}
+        />
         <AnalyticsTracker />
         <CookieConsent />
         <PushNotification />
