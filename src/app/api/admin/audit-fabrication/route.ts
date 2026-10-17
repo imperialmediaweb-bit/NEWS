@@ -78,12 +78,20 @@ export async function GET(req: NextRequest) {
     }
 
     const orClause = PATTERNS.map((_, i) => `a.content ILIKE $${i + 1}`).join(" OR ");
+    // TABLESAMPLE rather than ORDER BY random(): random() has to scan all
+    // 765,000 rows and apply ten ILIKE patterns to each before it can sort,
+    // which took the request past its timeout and returned a 502. Sampling 3%
+    // of the table's pages first keeps the scan small and the sample
+    // representative of the whole archive rather than of its most recent
+    // weeks, which matters here — recent articles are the most likely to be
+    // indexed, so a recency-biased sample would overstate the cost of
+    // removal.
     const { rows } = await pool.query(
       `SELECT a.title, a.slug, a.category, a.published_at, a.source_url, s.domain
-         FROM articles a JOIN sites s ON a.site_id = s.id
+         FROM articles a TABLESAMPLE SYSTEM (3)
+         JOIN sites s ON a.site_id = s.id
         WHERE (${orClause})
           AND a.wp_original_id IS NULL
-        ORDER BY random()
         LIMIT $${PATTERNS.length + 1}`,
       [...PATTERNS.map((p) => p.sql), inspectCount]
     );
@@ -98,23 +106,36 @@ export async function GET(req: NextRequest) {
       lastCrawl: string | null;
     }[] = [];
 
-    for (const r of rows) {
-      const url = `https://${r.domain}/${r.category || "local-news"}/${r.slug}`;
-      const props = properties.get(r.domain as string);
-      const property = props?.[0]?.siteUrl;
-      if (!property) {
-        coverage["no verified property"] = (coverage["no verified property"] || 0) + 1;
-        continue;
+    // Five at a time. Serially, twenty-five inspections at up to twenty
+    // seconds each exceeded the request budget before any answer came back.
+    const CONCURRENCY = 5;
+    for (let i = 0; i < rows.length; i += CONCURRENCY) {
+      const group = rows.slice(i, i + CONCURRENCY);
+      const results = await Promise.all(
+        group.map(async (r) => {
+          const url = `https://${r.domain}/${r.category || "local-news"}/${r.slug}`;
+          const props = properties.get(r.domain as string);
+          const property = props?.[0]?.siteUrl;
+          if (!property) return { url, noProperty: true as const };
+          const result = await inspectUrl(token, property, url);
+          return {
+            url,
+            coverageState:
+              typeof result.coverageState === "string" ? result.coverageState : null,
+            lastCrawl: typeof result.lastCrawlTime === "string" ? result.lastCrawlTime : null,
+          };
+        })
+      );
+
+      for (const r of results) {
+        if ("noProperty" in r) {
+          coverage["no verified property"] = (coverage["no verified property"] || 0) + 1;
+          continue;
+        }
+        const key = r.coverageState || "inspection failed";
+        coverage[key] = (coverage[key] || 0) + 1;
+        inspected.push(r);
       }
-      const result = await inspectUrl(token, property, url);
-      const state = typeof result.coverageState === "string" ? result.coverageState : null;
-      const key = state || "inspection failed";
-      coverage[key] = (coverage[key] || 0) + 1;
-      inspected.push({
-        url,
-        coverageState: state,
-        lastCrawl: typeof result.lastCrawlTime === "string" ? result.lastCrawlTime : null,
-      });
     }
 
     return NextResponse.json({
