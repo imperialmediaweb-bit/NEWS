@@ -6,8 +6,8 @@
         "domain": "alabamareflector.com",
         "feed": "https://alabamareflector.com/feed/",
         "items": 100,
-        "medianChars": 3974,
-        "maxChars": 17234,
+        "medianChars": 3938,
+        "maxChars": 17151,
         "usableShare": 1,
         "identity": "https://alabamareflector.com/?post_type=republished&#038;p=23864|https://alabamareflector.com/?post_type=republished&#038;p=23861|https://alabamareflector.com/?post_type=republished&#038;p=23867"
       },
@@ -50,6 +50,7 @@
         "identity": "https://www.alreporter.com/?p=225149|https://www.alreporter.com/?p=225111|https://www.alreporter.com/?p=225137"
       }
     ],
+    "pages": [],
     "none": [
       "al.com"
     ]
@@ -61,17 +62,17 @@
         "domain": "alaskabeacon.com",
         "feed": "https://alaskabeacon.com/feed/",
         "items": 100,
-        "medianChars": 6185,
-        "maxChars": 21019,
-        "usableShare": 1,
+        "medianChars": 6059,
+        "maxChars": 21001,
+        "usableShare": 0.83,
         "identity": "https://alaskabeacon.com/?p=29952|https://alaskabeacon.com/?p=29948|https://alaskabeacon.com/?p=29943"
       },
       {
         "domain": "adn.com",
         "feed": "https://adn.com/arc/outboundfeeds/rss/?outputType=xml",
         "items": 25,
-        "medianChars": 5808,
-        "maxChars": 18716,
+        "medianChars": 4228,
+        "maxChars": 11105,
         "usableShare": 1,
         "identity": "https://www.adn.com/alaska-life/advice/2026/10/17/miss-manners-i-found-out-a-donation-was-made-in-my-name-by-someone-im-not-close-with/|https://www.adn.com/alaska-life/advice/2026/10/17/dear-annie-i-got-sober-but-my-family-problems-didnt-go-away/|https://www.adn.com/alaska-life/advice/2026/10/17/asking-eric-my-sisters-bad-relationship-with-our-dad-is-making-it-difficult-for-everyone/"
       },
@@ -79,8 +80,8 @@
         "domain": "ktoo.org",
         "feed": "https://ktoo.org/feed/",
         "items": 20,
-        "medianChars": 2499,
-        "maxChars": 4718,
+        "medianChars": 2430,
+        "maxChars": 4406,
         "usableShare": 1,
         "identity": "https://www.ktoo.org/?p=357582|https://www.ktoo.org/?p=357572|https://www.ktoo.org/?p=357547&#038;preview=true&#038;preview_id=357547"
       },
@@ -95,6 +96,7 @@
       }
     ],
     "weak": [],
+    "pages": [],
     "none": [
       "alaskapublic.org"
     ]
@@ -106,8 +108,8 @@
         "domain": "cronkitenews.azpbs.org",
         "feed": "https://cronkitenews.azpbs.org/feed/",
         "items": 15,
-        "medianChars": 7148,
-        "maxChars": 11865,
+        "medianChars": 8527,
+        "maxChars": 14645,
         "usableShare": 1,
         "identity": "https://cronkitenews.azpbs.org/?p=107166|https://cronkitenews.azpbs.org/?p=107148|https://cronkitenews.azpbs.org/?p=107137"
       },
@@ -153,12 +155,13 @@
         "domain": "tucson.com",
         "feed": "https://tucson.com/search/?f=rss&amp;t=article&amp;l=50&amp;s=start_time&amp;sd=desc&amp;k%5B%5D=%23topstory",
         "items": 10,
-        "medianChars": 145,
-        "maxChars": 256,
+        "medianChars": 157,
+        "maxChars": 177,
         "usableShare": 0,
-        "identity": "http://tucson.com/tncms/asset/editorial/469a8ca4-6415-4465-b9a6-623208f0eaa6|http://tucson.com/tncms/asset/editorial/2ec889f6-89e2-4a6f-bf77-21566e0dffc9|http://tucson.com/tncms/asset/editorial/9fe06690-e731-46f2-99b2-0fb8be8a23dd"
+        "identity": "http://tucson.com/tncms/asset/editorial/2ac9c3fb-3033-4f6a-829a-30099d3118d9|http://tucson.com/tncms/asset/editorial/caca3e8b-116f-4ee1-859a-a1ac82586b26|http://tucson.com/tncms/asset/editorial/c63a1355-49f4-41c8-93c2-1435fc6d26c4"
       }
     ],
+    "pages": [],
     "none": [
       "azcentral.com",
       "azpm.org",
@@ -174,10 +177,37 @@
         "domain": "arkansasadvocate.com",
         "feed": "https://arkansasadvocate.com/feed/",
         "items": 100,
-        "medianChars": 4585,
-        "maxChars": 17234,
+        "medianChars": 6776,
+        "maxChars": 17151,
         "usableShare": 1,
-        "identity": "https://arkansasadvocate.com/?p=30002|https://arkansasadvocate.com/?p=29971|https://arkansasadvocate.com/?post_type=republished&#038;p=29995"
+        "identity": "https://arkansasadvocate.com/?p=29894|https://arkansasadvocate.com/?post_type=republished&#038;p=30003|https://arkansasadvocate.com/?p=30002"
+      },
+      {
+        "domain": "talkbusiness.net",
+        "feed": "https://talkbusiness.net/feed/",
+        "items": 20,
+        "medianChars": 5179,
+        "maxChars": 10059,
+        "usableShare": 1,
+        "identity": "https://talkbusiness.net/?p=301953|https://talkbusiness.net/?p=301937|https://talkbusiness.net/?p=301935"
+      },
+      {
+        "domain": "pbcommercial.com",
+        "feed": "https://pbcommercial.com/feed/",
+        "items": 401,
+        "medianChars": 2821,
+        "maxChars": 29313,
+        "usableShare": 0.83,
+        "identity": "https://www.pbcommercial.com/?p=93093|https://www.pbcommercial.com/?p=93630|https://www.pbcommercial.com/?p=93612"
+      },
+      {
+        "domain": "harrisondaily.com",
+        "feed": "https://harrisondaily.com/feed/",
+        "items": 10,
+        "medianChars": 2308,
+        "maxChars": 16826,
+        "usableShare": 1,
+        "identity": "https://harrisondaily.com/?p=427266|https://harrisondaily.com/?p=427267|https://harrisondaily.com/2026/10/16/carroll-county-asks-water-district-what-impact-industry-could-have/"
       },
       {
         "domain": "kait8.com",
@@ -197,7 +227,7 @@
         "medianChars": 124,
         "maxChars": 150,
         "usableShare": 0,
-        "identity": "a2b0b311-0661-4cd6-8fab-1d52183b9e91|71d0d46f-1428-45f9-ad35-0fb03ccfa0e8|5faa5cc4-60db-43f2-ab42-d4145843ad5e"
+        "identity": "995e5e6f-dd6d-46c7-9201-e5051a59c4f1|a2b0b311-0661-4cd6-8fab-1d52183b9e91|71d0d46f-1428-45f9-ad35-0fb03ccfa0e8"
       },
       {
         "domain": "arktimes.com",
@@ -224,35 +254,58 @@
         "medianChars": 124,
         "maxChars": 145,
         "usableShare": 0,
-        "identity": "0026ebcb-8d42-49dd-af6e-56be80704c3f|71d0d46f-1428-45f9-ad35-0fb03ccfa0e8|5faa5cc4-60db-43f2-ab42-d4145843ad5e"
+        "identity": "995e5e6f-dd6d-46c7-9201-e5051a59c4f1|0026ebcb-8d42-49dd-af6e-56be80704c3f|71d0d46f-1428-45f9-ad35-0fb03ccfa0e8"
+      },
+      {
+        "domain": "fayettevilleflyer.com",
+        "feed": "https://fayettevilleflyer.com/feed/",
+        "items": 20,
+        "medianChars": 200,
+        "maxChars": 342,
+        "usableShare": 0,
+        "identity": "https://fayettevilleflyer.com/?p=339918|https://fayettevilleflyer.com/?p=339899|https://fayettevilleflyer.com/?p=339893"
+      },
+      {
+        "domain": "kark.com",
+        "feed": "https://kark.com/feed/",
+        "items": 25,
+        "medianChars": 175,
+        "maxChars": 332,
+        "usableShare": 0,
+        "identity": "https://www.kark.com/?p=3173214|https://www.kark.com/?p=3173003|https://www.kark.com/?p=3172585"
+      },
+      {
+        "domain": "kark.com",
+        "feed": "https://kark.com/news/feed/",
+        "items": 25,
+        "medianChars": 175,
+        "maxChars": 332,
+        "usableShare": 0,
+        "identity": "https://www.kark.com/?p=3173592|https://www.kark.com/?p=3173525|https://www.kark.com/?p=3173505"
       }
     ],
+    "pages": [],
     "none": [
       "arkansasonline.com",
       "katv.com",
       "kuaf.com",
       "nwaonline.com",
-      "magnoliareporter.com"
+      "magnoliareporter.com",
+      "arkansasbusiness.com",
+      "ualrpublicradio.org",
+      "hotsr.com",
+      "eldoradonews.com"
     ]
   },
   {
     "state": "california",
     "usable": [
       {
-        "domain": "laist.com",
-        "feed": "https://laist.com/index.atom",
-        "items": 30,
-        "medianChars": 6668,
-        "maxChars": 16117,
-        "usableShare": 1,
-        "identity": "https://laist.com/news/climate-environment/norte-fire-san-clemente|https://laist.com/news/climate-environment/bryson-fire-malibu-oct-2026|https://laist.com/news/politics/reps-say-adelanto-has-made-little-progress-on-unsanitary-conditions"
-      },
-      {
         "domain": "voiceofsandiego.org",
         "feed": "https://voiceofsandiego.org/feed/",
         "items": 10,
-        "medianChars": 5747,
-        "maxChars": 9895,
+        "medianChars": 5711,
+        "maxChars": 9877,
         "usableShare": 1,
         "identity": "https://voiceofsandiego.org/?p=770093|https://voiceofsandiego.org/?p=770122|https://voiceofsandiego.org/?p=770024"
       },
@@ -260,8 +313,8 @@
         "domain": "calmatters.org",
         "feed": "https://calmatters.org/feed/",
         "items": 10,
-        "medianChars": 5696,
-        "maxChars": 10689,
+        "medianChars": 5636,
+        "maxChars": 10635,
         "usableShare": 1,
         "identity": "https://calmatters.org/?p=510754|https://calmatters.org/?p=510638|https://calmatters.org/?p=510627"
       },
@@ -269,10 +322,19 @@
         "domain": "kqed.org",
         "feed": "https://ww2.kqed.org/news/feed/",
         "items": 30,
-        "medianChars": 4895,
-        "maxChars": 10900,
+        "medianChars": 4853,
+        "maxChars": 10840,
         "usableShare": 1,
         "identity": "https://ww2.kqed.org/news/?p=12104776|https://ww2.kqed.org/news/?p=12104780|https://ww2.kqed.org/news/?p=12104891"
+      },
+      {
+        "domain": "laist.com",
+        "feed": "https://laist.com/index.atom",
+        "items": 30,
+        "medianChars": 3490,
+        "maxChars": 6381,
+        "usableShare": 1,
+        "identity": "https://laist.com/news/climate-environment/norte-fire-san-clemente|https://laist.com/news/climate-environment/bryson-fire-malibu-oct-2026|https://laist.com/news/politics/reps-say-adelanto-has-made-little-progress-on-unsanitary-conditions"
       },
       {
         "domain": "laist.com",
@@ -287,8 +349,8 @@
         "domain": "edsource.org",
         "feed": "https://edsource.org/feed/",
         "items": 15,
-        "medianChars": 2034,
-        "maxChars": 8850,
+        "medianChars": 1864,
+        "maxChars": 8814,
         "usableShare": 1,
         "identity": "https://edsource.org/?p=768402|https://edsource.org/?post_type=updates&#038;p=768387|https://edsource.org/?post_type=updates&#038;p=768369"
       }
@@ -334,18 +396,18 @@
         "domain": "berkeleyside.org",
         "feed": "https://www.berkeleyside.org/feed",
         "items": 12,
-        "medianChars": 143,
-        "maxChars": 179,
-        "usableShare": 0,
+        "medianChars": 179,
+        "maxChars": 504,
+        "usableShare": 0.08,
         "identity": "https://www.berkeleyside.org/?p=564546|https://www.berkeleyside.org/?p=564491|https://www.berkeleyside.org/?p=564552"
       },
       {
         "domain": "oaklandside.org",
         "feed": "https://oaklandside.org/feed/",
         "items": 20,
-        "medianChars": 221,
-        "maxChars": 308,
-        "usableShare": 0,
+        "medianChars": 454,
+        "maxChars": 591,
+        "usableShare": 0.33,
         "identity": "https://oaklandside.org/?p=481801|https://oaklandside.org/?p=481753|https://oaklandside.org/?p=481744"
       },
       {
@@ -353,11 +415,12 @@
         "feed": "https://lookout.co/feed",
         "items": 10,
         "medianChars": 336,
-        "maxChars": 7959,
+        "maxChars": 11540,
         "usableShare": 0.5,
         "identity": "https://lookout.co/?p=359312|https://lookout.co/?p=358476|https://lookout.co/?p=300655"
       }
     ],
+    "pages": [],
     "none": [
       "sandiegouniontribune.com",
       "mercurynews.com",
@@ -370,31 +433,31 @@
     "state": "colorado",
     "usable": [
       {
-        "domain": "denverite.com",
-        "feed": "https://denverite.com/feed/",
-        "items": 10,
-        "medianChars": 4888,
-        "maxChars": 17108,
-        "usableShare": 1,
-        "identity": "https://denverite.com/?p=244907|https://denverite.com/?p=244898|https://denverite.com/?p=244896"
-      },
-      {
         "domain": "coloradonewsline.com",
         "feed": "https://coloradonewsline.com/feed/",
         "items": 100,
-        "medianChars": 4859,
-        "maxChars": 21019,
+        "medianChars": 4835,
+        "maxChars": 10067,
         "usableShare": 1,
-        "identity": "https://coloradonewsline.com/?post_type=republished&#038;p=48301|https://coloradonewsline.com/?p=48299|https://coloradonewsline.com/?p=48294"
+        "identity": "https://coloradonewsline.com/?post_type=republished&#038;p=48306|https://coloradonewsline.com/?post_type=republished&#038;p=48301|https://coloradonewsline.com/?p=48299"
+      },
+      {
+        "domain": "denverite.com",
+        "feed": "https://denverite.com/feed/",
+        "items": 10,
+        "medianChars": 4792,
+        "maxChars": 17000,
+        "usableShare": 1,
+        "identity": "https://denverite.com/?p=244907|https://denverite.com/?p=244898|https://denverite.com/?p=244896"
       },
       {
         "domain": "cpr.org",
         "feed": "https://cpr.org/feed/",
         "items": 10,
-        "medianChars": 4769,
-        "maxChars": 9420,
+        "medianChars": 3079,
+        "maxChars": 9408,
         "usableShare": 1,
-        "identity": "https://www.cpr.org/?p=881870|https://www.cpr.org/?p=881697|https://www.cpr.org/?p=881684"
+        "identity": "https://www.cpr.org/?p=881848|https://www.cpr.org/?p=881818|https://www.cpr.org/?p=881870"
       },
       {
         "domain": "kktv.com",
@@ -411,10 +474,10 @@
         "domain": "coloradosun.com",
         "feed": "https://coloradosun.com/feed/",
         "items": 10,
-        "medianChars": 140,
-        "maxChars": 259,
-        "usableShare": 0,
-        "identity": "https://coloradosun.com/?p=505424|https://coloradosun.com/?p=504995|https://coloradosun.com/?p=505420"
+        "medianChars": 359,
+        "maxChars": 724,
+        "usableShare": 0.2,
+        "identity": "https://coloradosun.com/?p=505386|https://coloradosun.com/?p=505424|https://coloradosun.com/?p=504995"
       },
       {
         "domain": "cpr.org",
@@ -423,9 +486,10 @@
         "medianChars": 128,
         "maxChars": 244,
         "usableShare": 0,
-        "identity": "https://www.cpr.org/2026/10/16/colorado-springs-state-of-the-city-yemi-mobolade/|https://www.cpr.org/2026/10/16/democrats-raising-money-late-election-push-colorado/|https://www.cpr.org/2026/10/16/democrats-veterans-flip-congress-seats-military/"
+        "identity": "https://www.cpr.org/2026/10/17/officials-warn-bears-pumpkins-halloween/|https://www.cpr.org/2026/10/17/colorado-leadership-expert-social-media/|https://www.cpr.org/2026/10/16/colorado-springs-state-of-the-city-yemi-mobolade/"
       }
     ],
+    "pages": [],
     "none": []
   },
   {
@@ -435,8 +499,8 @@
         "domain": "newhavenindependent.org",
         "feed": "https://www.newhavenindependent.org/feed/",
         "items": 10,
-        "medianChars": 5872,
-        "maxChars": 13494,
+        "medianChars": 6856,
+        "maxChars": 14877,
         "usableShare": 1,
         "identity": "https://www.newhavenindependent.org/?p=233385|https://www.newhavenindependent.org/?p=233354|https://www.newhavenindependent.org/?p=233268"
       },
@@ -444,9 +508,9 @@
         "domain": "ctmirror.org",
         "feed": "https://ctmirror.org/feed/",
         "items": 40,
-        "medianChars": 4008,
-        "maxChars": 18452,
-        "usableShare": 0.92,
+        "medianChars": 4318,
+        "maxChars": 31046,
+        "usableShare": 0.83,
         "identity": "https://ctmirror.org/?p=1183269|https://ctmirror.org/?p=1184264|https://ctmirror.org/?p=1184193"
       },
       {
@@ -456,7 +520,7 @@
         "medianChars": 639,
         "maxChars": 16387,
         "usableShare": 0.83,
-        "identity": "https://www.wfsb.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.wfsb.com/2026/10/17/first-alert-weather-cooler-windy-today-freeze-warning-some-tonight/|https://www.wfsb.com/2026/10/17/technical-discussion-freeze-likely-tomorrow-morning/"
+        "identity": "https://www.wfsb.com/2026/10/17/bristol-officer-fatally-shoots-person-during-overnight-wellness-check-police-say/|https://www.wfsb.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.wfsb.com/2026/10/17/first-alert-weather-cooler-windy-today-freeze-warning-some-tonight/"
       }
     ],
     "weak": [
@@ -464,9 +528,9 @@
         "domain": "ctmirror.org",
         "feed": "https://ctmirror.org/news/feed/",
         "items": 40,
-        "medianChars": 133,
-        "maxChars": 141,
-        "usableShare": 0,
+        "medianChars": 356,
+        "maxChars": 558,
+        "usableShare": 0.08,
         "identity": "https://ctmirror.org/?p=1184264|https://ctmirror.org/?p=1184193|https://ctmirror.org/?p=1184091"
       },
       {
@@ -479,6 +543,7 @@
         "identity": "https://ctnewsjunkie.com/?p=285465|https://ctnewsjunkie.com/?p=285475|https://ctnewsjunkie.com/?p=285492"
       }
     ],
+    "pages": [],
     "none": [
       "ctinsider.com",
       "ctpost.com",
@@ -495,50 +560,58 @@
         "domain": "capegazette.com",
         "feed": "https://capegazette.com/rss.xml",
         "items": 10,
-        "medianChars": 135164,
-        "maxChars": 142778,
-        "usableShare": 1,
+        "medianChars": 7794,
+        "maxChars": 8425,
+        "usableShare": 0.9,
         "identity": "354541 at https://www.capegazette.com|356085 at https://www.capegazette.com|356075 at https://www.capegazette.com"
       },
       {
         "domain": "spotlightdelaware.org",
         "feed": "https://spotlightdelaware.org/feed/",
         "items": 10,
-        "medianChars": 5250,
-        "maxChars": 13053,
+        "medianChars": 5238,
+        "maxChars": 12909,
         "usableShare": 1,
         "identity": "https://spotlightdelaware.org/?p=24645|https://spotlightdelaware.org/?p=24646|https://spotlightdelaware.org/?p=24623"
+      },
+      {
+        "domain": "wgmd.com",
+        "feed": "https://www.wgmd.com/feed/",
+        "items": 10,
+        "medianChars": 807,
+        "maxChars": 2362,
+        "usableShare": 0.7,
+        "identity": "https://www.wgmd.com/?p=5580165|https://www.wgmd.com/?p=5580168|https://www.wgmd.com/?p=5580118"
       }
     ],
     "weak": [
-      {
-        "domain": "wdel.com",
-        "feed": "http://www.wdel.com/search/?f=rss&amp;t=article&amp;l=50&amp;s=start_time&amp;sd=desc&amp;k%5B%5D=%23topstory",
-        "items": 10,
-        "medianChars": 94,
-        "maxChars": 249,
-        "usableShare": 0,
-        "identity": "http://www.wdel.com/tncms/asset/editorial/f8319af6-4aa7-50e4-a174-946fa38ca38b|http://www.wdel.com/tncms/asset/editorial/f67ea2b6-529f-4252-a330-97de2b6ea2f0|http://www.wdel.com/tncms/asset/editorial/9a88b6e2-190d-4219-b06a-4510831b370f"
-      },
       {
         "domain": "delawarebusinessnow.com",
         "feed": "http://www.delawarebusinessnow.com/search/?f=rss&amp;t=article&amp;l=50&amp;s=start_time&amp;sd=desc&amp;k%5B%5D=%23topstory",
         "items": 10,
         "medianChars": 141,
-        "maxChars": 256,
+        "maxChars": 250,
         "usableShare": 0,
         "identity": "http://www.delawarebusinessnow.com/tncms/asset/editorial/5351a4d0-ecda-579f-8a69-67f49924bf88|http://www.delawarebusinessnow.com/tncms/asset/editorial/9788acc3-5a83-5c2f-9baf-76df6ca00898|http://www.delawarebusinessnow.com/tncms/asset/editorial/61c4e13c-cddf-5cb0-b77d-6ca8eb52d0ab"
       }
     ],
+    "pages": [],
     "none": [
       "delawareonline.com",
       "wboc.com",
       "delawarepublic.org",
+      "wdel.com",
       "baytobaynews.com",
       "newarkpostonline.com",
       "delmarvanow.com",
       "wrde.com",
-      "townsquarelive.com"
+      "townsquarelive.com",
+      "delawarelive.com",
+      "milfordlive.com",
+      "coastalpoint.com",
+      "doverpost.com",
+      "delawarestatenews.net",
+      "middletowntranscript.com"
     ]
   },
   {
@@ -548,8 +621,8 @@
         "domain": "floridaphoenix.com",
         "feed": "https://floridaphoenix.com/feed/",
         "items": 100,
-        "medianChars": 3797,
-        "maxChars": 10121,
+        "medianChars": 3779,
+        "maxChars": 10067,
         "usableShare": 1,
         "identity": "https://floridaphoenix.com/?post_type=republished&#038;p=244706|https://floridaphoenix.com/?post_type=republished&#038;p=244884|https://floridaphoenix.com/?post_type=republished&#038;p=244886"
       },
@@ -566,13 +639,14 @@
         "domain": "wctv.tv",
         "feed": "https://wctv.tv/arc/outboundfeeds/rss/?outputType=xml",
         "items": 20,
-        "medianChars": 1094,
+        "medianChars": 1105,
         "maxChars": 2952,
         "usableShare": 1,
-        "identity": "https://www.wctv.tv/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.wctv.tv/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/|https://www.wctv.tv/2026/10/17/wctv-band-week-colquitt-county-50th-regiment-band-performs-halftime-show/"
+        "identity": "https://www.wctv.tv/2026/10/17/winds-change-fall-weather-here-stay/|https://www.wctv.tv/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.wctv.tv/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/"
       }
     ],
     "weak": [],
+    "pages": [],
     "none": [
       "orlandosentinel.com",
       "wusf.org"
@@ -585,17 +659,17 @@
         "domain": "georgiarecorder.com",
         "feed": "https://georgiarecorder.com/feed/",
         "items": 100,
-        "medianChars": 6716,
-        "maxChars": 21019,
-        "usableShare": 1,
+        "medianChars": 6686,
+        "maxChars": 21001,
+        "usableShare": 0.92,
         "identity": "https://georgiarecorder.com/?p=47569|https://georgiarecorder.com/?post_type=republished&#038;p=47541|https://georgiarecorder.com/?p=47532"
       },
       {
         "domain": "georgiarecorder.com",
         "feed": "https://georgiarecorder.com/feed/localFeed/",
         "items": 100,
-        "medianChars": 6485,
-        "maxChars": 11170,
+        "medianChars": 6437,
+        "maxChars": 11071,
         "usableShare": 1,
         "identity": "https://georgiarecorder.com/?p=47569|https://georgiarecorder.com/?p=47532|https://georgiarecorder.com/?p=47533"
       },
@@ -613,7 +687,7 @@
         "feed": "https://wrdw.com/arc/outboundfeeds/rss/?outputType=xml",
         "items": 20,
         "medianChars": 1404,
-        "maxChars": 12105,
+        "maxChars": 11381,
         "usableShare": 0.92,
         "identity": "https://www.wrdw.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.wrdw.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/|https://www.wrdw.com/2026/10/11/first-alert-forecast-drying-out-with-near-record-highs-week-ahead/"
       },
@@ -638,6 +712,7 @@
         "identity": "1555766|1555751|1555756"
       }
     ],
+    "pages": [],
     "none": []
   },
   {
@@ -648,7 +723,7 @@
         "feed": "https://mauinews.com/feed/",
         "items": 10,
         "medianChars": 3913,
-        "maxChars": 6605,
+        "maxChars": 6545,
         "usableShare": 0.9,
         "identity": "https://www.mauinews.com/?p=1328544|https://www.mauinews.com/?p=1328584|https://www.mauinews.com/?p=1328547"
       },
@@ -656,19 +731,19 @@
         "domain": "bigislandnow.com",
         "feed": "https://bigislandnow.com/feed/",
         "items": 25,
-        "medianChars": 2254,
-        "maxChars": 9858,
+        "medianChars": 2249,
+        "maxChars": 9723,
         "usableShare": 1,
-        "identity": "https://bigislandnow.com/2026/10/16/hawaii-county-weather-forecast-for-october-17-2026/|https://bigislandnow.com/2026/10/16/hawaii-county-surf-forecast-for-october-17-2026/|https://bigislandnow.com/?p=449901"
+        "identity": "https://bigislandnow.com/?p=449911|https://bigislandnow.com/2026/10/16/hawaii-county-weather-forecast-for-october-17-2026/|https://bigislandnow.com/2026/10/16/hawaii-county-surf-forecast-for-october-17-2026/"
       },
       {
         "domain": "kauainownews.com",
         "feed": "https://kauainownews.com/feed/",
         "items": 10,
-        "medianChars": 2071,
-        "maxChars": 20554,
-        "usableShare": 1,
-        "identity": "https://kauainownews.com/2026/10/16/kauai-weather-forecast-for-october-17-2026/|https://kauainownews.com/2026/10/16/kauai-surf-forecast-for-october-17-2026/|https://kauainownews.com/?p=101216"
+        "medianChars": 2041,
+        "maxChars": 20542,
+        "usableShare": 0.9,
+        "identity": "https://kauainownews.com/?p=105047|https://kauainownews.com/2026/10/16/kauai-weather-forecast-for-october-17-2026/|https://kauainownews.com/2026/10/16/kauai-surf-forecast-for-october-17-2026/"
       },
       {
         "domain": "hawaiinewsnow.com",
@@ -683,7 +758,7 @@
         "domain": "mauinow.com",
         "feed": "https://mauinow.com/feed/",
         "items": 10,
-        "medianChars": 1604,
+        "medianChars": 1584,
         "maxChars": 3864,
         "usableShare": 1,
         "identity": "https://mauinow.com/2026/10/16/maui-surf-forecast-for-october-17-2026/|https://mauinow.com/?p=540835|https://mauinow.com/?p=540948"
@@ -693,7 +768,7 @@
         "feed": "https://mauinews.com/news/feed/",
         "items": 10,
         "medianChars": 992,
-        "maxChars": 4242,
+        "maxChars": 4236,
         "usableShare": 0.9,
         "identity": "https://www.mauinews.com/?p=1328584|https://www.mauinews.com/?p=1328508|https://www.mauinews.com/?p=1328501"
       }
@@ -721,10 +796,10 @@
         "domain": "staradvertiser.com",
         "feed": "https://www.staradvertiser.com/feed/",
         "items": 40,
-        "medianChars": 204,
-        "maxChars": 300,
-        "usableShare": 0,
-        "identity": "https://www.staradvertiser.com/2026/10/16/breaking-news/trump-exempts-russia-from-new-sanctions-law/|https://www.staradvertiser.com/2026/10/16/breaking-news/hfd-rescues-hiker-in-his-20s-atop-koko-crater-trail/|https://www.staradvertiser.com/2026/10/16/breaking-news/israeli-settlers-burn-olive-trees-attack-u-s-journalist-in-west-bank/"
+        "medianChars": 209,
+        "maxChars": 712,
+        "usableShare": 0.08,
+        "identity": "https://www.staradvertiser.com/?p=1457950|https://www.staradvertiser.com/?p=1457949|https://www.staradvertiser.com/2026/10/17/sports/hawaii-prep-world/playoff-bound-nanakuli-holds-off-moanalua/"
       },
       {
         "domain": "khon2.com",
@@ -745,35 +820,28 @@
         "identity": "https://www.khon2.com/?p=3159645|https://www.khon2.com/?p=3159546|https://www.khon2.com/?p=3159551"
       },
       {
-        "domain": "kitv.com",
-        "feed": "http://www.kitv.com/search/?f=rss&amp;t=article&amp;l=50&amp;s=start_time&amp;sd=desc&amp;k%5B%5D=%23topstory",
-        "items": 10,
-        "medianChars": 140,
-        "maxChars": 281,
-        "usableShare": 0,
-        "identity": "http://www.kitv.com/tncms/asset/editorial/cfa86910-694f-437e-b5ac-4cb8deff0ba3|http://www.kitv.com/tncms/asset/editorial/33049e20-4b87-5866-a533-5958c50d7767|http://www.kitv.com/tncms/asset/editorial/62e3c687-1a67-51c7-a111-19529bb17f57"
-      },
-      {
         "domain": "hawaiitribune-herald.com",
         "feed": "https://hawaiitribune-herald.com/feed/",
         "items": 40,
-        "medianChars": 354,
-        "maxChars": 487,
+        "medianChars": 310,
+        "maxChars": 423,
         "usableShare": 0,
-        "identity": "https://www.hawaiitribune-herald.com/?p=380268|https://www.hawaiitribune-herald.com/?p=380266|https://www.hawaiitribune-herald.com/?p=380263"
+        "identity": "https://www.hawaiitribune-herald.com/?p=380331|https://www.hawaiitribune-herald.com/?p=380334|https://www.hawaiitribune-herald.com/?p=380324"
       },
       {
         "domain": "westhawaiitoday.com",
         "feed": "https://westhawaiitoday.com/feed/",
         "items": 50,
-        "medianChars": 331,
-        "maxChars": 483,
+        "medianChars": 294,
+        "maxChars": 418,
         "usableShare": 0,
-        "identity": "https://www.westhawaiitoday.com/?p=321144|https://www.westhawaiitoday.com/?p=321095|https://www.westhawaiitoday.com/?p=321085"
+        "identity": "https://www.westhawaiitoday.com/?p=321148|https://www.westhawaiitoday.com/?p=321133|https://www.westhawaiitoday.com/?p=321141"
       }
     ],
+    "pages": [],
     "none": [
-      "hawaiipublicradio.org"
+      "hawaiipublicradio.org",
+      "kitv.com"
     ]
   },
   {
@@ -783,8 +851,8 @@
         "domain": "idahoednews.org",
         "feed": "https://www.idahoednews.org/feed/",
         "items": 50,
-        "medianChars": 5395,
-        "maxChars": 13257,
+        "medianChars": 5783,
+        "maxChars": 15764,
         "usableShare": 1,
         "identity": "https://www.idahoednews.org/?p=127257|https://www.idahoednews.org/?p=127232|https://www.idahoednews.org/?p=127199"
       },
@@ -793,9 +861,9 @@
         "feed": "https://idahocapitalsun.com/feed/",
         "items": 100,
         "medianChars": 3053,
-        "maxChars": 17234,
+        "maxChars": 17151,
         "usableShare": 1,
-        "identity": "https://idahocapitalsun.com/?post_type=republished&#038;p=32663|https://idahocapitalsun.com/?p=32658|https://idahocapitalsun.com/?post_type=republished&#038;p=32644"
+        "identity": "https://idahocapitalsun.com/?post_type=republished&#038;p=32660|https://idahocapitalsun.com/?post_type=republished&#038;p=32663|https://idahocapitalsun.com/?p=32658"
       },
       {
         "domain": "kivitv.com",
@@ -824,46 +892,55 @@
         "medianChars": 124,
         "maxChars": 164,
         "usableShare": 0,
-        "identity": "04d49ab9-9f05-4e17-b1f0-7c25af391cd4|018f9617-eb37-4d53-a5ac-edf012d145d0|71d0d46f-1428-45f9-ad35-0fb03ccfa0e8"
+        "identity": "676742d0-f3e6-41d7-8115-8b566476cb7a|995e5e6f-dd6d-46c7-9201-e5051a59c4f1|04d49ab9-9f05-4e17-b1f0-7c25af391cd4"
+      },
+      {
+        "domain": "idahopress.com",
+        "feed": "http://www.idahopress.com/search/?f=rss&amp;t=article&amp;l=50&amp;s=start_time&amp;sd=desc&amp;k%5B%5D=%23topstory",
+        "items": 10,
+        "medianChars": 216,
+        "maxChars": 238,
+        "usableShare": 0,
+        "identity": "http://www.idahopress.com/tncms/asset/editorial/e0415944-1517-502b-9568-8155a4f84227|http://www.idahopress.com/tncms/asset/editorial/4a35fb3c-a3ab-44bf-99dd-9b57b6598393|http://www.idahopress.com/tncms/asset/editorial/c644add7-8cfb-4cbd-adad-c9a050374cad"
       }
     ],
+    "pages": [],
     "none": [
       "idahostatesman.com",
       "boisestatepublicradio.org",
       "eastidahonews.com",
-      "postregister.com",
-      "idahopress.com"
+      "postregister.com"
     ]
   },
   {
     "state": "illinois",
     "usable": [
       {
-        "domain": "wbez.org",
-        "feed": "https://www.wbez.org/rss/index.xml",
-        "items": 19,
-        "medianChars": 8967,
-        "maxChars": 27230,
-        "usableShare": 1,
-        "identity": "https://www.wbez.org/education/2026/10/16/insufficient-evidence-that-chicago-school-board-candidate-engaged-in-sexual-misconduct-watchdog-report-finds|https://www.wbez.org/wbez-newsletter/2026/10/16/the-rundown-metras-plan-to-offer-more-frequent-trains|https://www.wbez.org/government-politics/2026/10/16/mayor-brandon-johnson-signs-executive-order-to-protect-seniors"
-      },
-      {
         "domain": "injusticewatch.org",
         "feed": "https://www.injusticewatch.org/feed/",
         "items": 30,
         "medianChars": 6241,
-        "maxChars": 24296,
-        "usableShare": 0.92,
+        "maxChars": 24290,
+        "usableShare": 0.83,
         "identity": "https://www.injusticewatch.org/?p=464756|https://www.injusticewatch.org/?p=464724|https://www.injusticewatch.org/?p=464727"
+      },
+      {
+        "domain": "wbez.org",
+        "feed": "https://www.wbez.org/rss/index.xml",
+        "items": 19,
+        "medianChars": 4651,
+        "maxChars": 10360,
+        "usableShare": 1,
+        "identity": "https://www.wbez.org/obituary/2026/10/17/old-town-school-of-folk-teacher-ted-johnson-obituary-music-chicago-history|https://www.wbez.org/education/2026/10/16/insufficient-evidence-that-chicago-school-board-candidate-engaged-in-sexual-misconduct-watchdog-report-finds|https://www.wbez.org/wbez-newsletter/2026/10/16/the-rundown-metras-plan-to-offer-more-frequent-trains"
       },
       {
         "domain": "chicago.suntimes.com",
         "feed": "https://chicago.suntimes.com/rss/index.xml",
         "items": 55,
-        "medianChars": 3598,
-        "maxChars": 30332,
+        "medianChars": 3988,
+        "maxChars": 12662,
         "usableShare": 1,
-        "identity": "https://chicago.suntimes.com/high-school-football/2026/10/17/hersey-football-jake-nawrot-prospect|https://chicago.suntimes.com/horoscopes/2026/10/17/horoscopes-today-saturday-october-17-2026|https://chicago.suntimes.com/high-school-football/2026/10/16/high-school-football-super-25-scores-sun-times-chicago"
+        "identity": "https://chicago.suntimes.com/real-estate/2026/10/17/mortgage-rates-home-prices-sidelining-buyers-purchase-redfin-report|https://chicago.suntimes.com/chicago/2026/10/17/chicago-neighborhood-feels-like-small-town-what-you-told-us|https://chicago.suntimes.com/letters-to-the-editor/2026/10/17/thrifting-affordability-race-sophie-cunningham-dijonai-carrington-death-penalty-flock-union-trump"
       },
       {
         "domain": "wifr.com",
@@ -886,28 +963,29 @@
         "identity": "https://capitolnewsillinois.com/?p=133013|https://capitolnewsillinois.com/?p=132979|https://capitolnewsillinois.com/?p=132947"
       }
     ],
+    "pages": [],
     "none": []
   },
   {
     "state": "indiana",
     "usable": [
       {
-        "domain": "indianacapitalchronicle.com",
-        "feed": "https://indianacapitalchronicle.com/feed/localFeed/",
-        "items": 100,
-        "medianChars": 5305,
-        "maxChars": 12282,
-        "usableShare": 1,
-        "identity": "https://indianacapitalchronicle.com/?p=27496|https://indianacapitalchronicle.com/?p=27491|https://indianacapitalchronicle.com/?p=27485"
-      },
-      {
         "domain": "mirrorindy.org",
         "feed": "https://mirrorindy.org/feed/",
         "items": 10,
-        "medianChars": 4755,
-        "maxChars": 8071,
-        "usableShare": 1,
+        "medianChars": 10407,
+        "maxChars": 21238,
+        "usableShare": 0.9,
         "identity": "https://mirrorindy.org/?p=92951|https://mirrorindy.org/?p=93497|https://mirrorindy.org/?p=93506"
+      },
+      {
+        "domain": "indianacapitalchronicle.com",
+        "feed": "https://indianacapitalchronicle.com/feed/localFeed/",
+        "items": 100,
+        "medianChars": 5227,
+        "maxChars": 12228,
+        "usableShare": 1,
+        "identity": "https://indianacapitalchronicle.com/?p=27496|https://indianacapitalchronicle.com/?p=27491|https://indianacapitalchronicle.com/?p=27485"
       },
       {
         "domain": "wndu.com",
@@ -920,6 +998,7 @@
       }
     ],
     "weak": [],
+    "pages": [],
     "none": [
       "indystar.com",
       "wfyi.org"
@@ -932,9 +1011,9 @@
         "domain": "iowacapitaldispatch.com",
         "feed": "https://iowacapitaldispatch.com/feed/",
         "items": 100,
-        "medianChars": 5399,
-        "maxChars": 21019,
-        "usableShare": 1,
+        "medianChars": 5387,
+        "maxChars": 21001,
+        "usableShare": 0.92,
         "identity": "https://iowacapitaldispatch.com/?p=60513|https://iowacapitaldispatch.com/?p=60516|https://iowacapitaldispatch.com/?p=60503"
       },
       {
@@ -957,6 +1036,7 @@
       }
     ],
     "weak": [],
+    "pages": [],
     "none": [
       "desmoinesregister.com",
       "iowapublicradio.org"
@@ -969,8 +1049,8 @@
         "domain": "thebeaconnews.org",
         "feed": "https://thebeaconnews.org/feed/",
         "items": 10,
-        "medianChars": 8578,
-        "maxChars": 12500,
+        "medianChars": 8572,
+        "maxChars": 12446,
         "usableShare": 1,
         "identity": "https://thebeaconnews.org/?p=35458|https://thebeaconnews.org/?p=35447|https://thebeaconnews.org/?p=35438"
       },
@@ -978,8 +1058,8 @@
         "domain": "kansasreflector.com",
         "feed": "https://kansasreflector.com/feed/",
         "items": 100,
-        "medianChars": 4826,
-        "maxChars": 11075,
+        "medianChars": 4610,
+        "maxChars": 11065,
         "usableShare": 1,
         "identity": "https://kansasreflector.com/?p=63108|https://kansasreflector.com/?post_type=republished&#038;p=63030|https://kansasreflector.com/?post_type=republished&#038;p=63113"
       },
@@ -1004,6 +1084,7 @@
         "identity": "https://www.ksnt.com/?p=3168069|https://www.ksnt.com/?p=3168597|https://www.ksnt.com/?p=3168184"
       }
     ],
+    "pages": [],
     "none": [
       "kansas.com",
       "kcur.org",
@@ -1023,17 +1104,17 @@
         "items": 12,
         "medianChars": 4493,
         "maxChars": 40290,
-        "usableShare": 1,
+        "usableShare": 0.92,
         "identity": "https://www.lpm.org/news/2026-10-16/lawsuit-alleges-feds-gathered-sensitive-data-on-kentucky-voters|https://www.lpm.org/news/2026-10-16/dark-money-billionaires-fuel-campaign-ads-in-kentuckys-alvarado-dembo-race|https://www.lpm.org/news/2026-10-16/longtime-louisville-youth-choir-leader-to-retire"
       },
       {
         "domain": "kentuckylantern.com",
         "feed": "https://kentuckylantern.com/feed/",
         "items": 100,
-        "medianChars": 4242,
-        "maxChars": 21019,
-        "usableShare": 1,
-        "identity": "https://kentuckylantern.com/?p=42733|https://kentuckylantern.com/?post_type=republished&#038;p=42729|https://kentuckylantern.com/?p=42725"
+        "medianChars": 4236,
+        "maxChars": 21001,
+        "usableShare": 0.92,
+        "identity": "https://kentuckylantern.com/?p=42704|https://kentuckylantern.com/?p=42733|https://kentuckylantern.com/?post_type=republished&#038;p=42729"
       },
       {
         "domain": "wfpl.org",
@@ -1041,7 +1122,7 @@
         "items": 12,
         "medianChars": 2938,
         "maxChars": 40290,
-        "usableShare": 1,
+        "usableShare": 0.92,
         "identity": "https://www.lpm.org/news/2026-10-16/lawsuit-alleges-feds-gathered-sensitive-data-on-kentucky-voters|https://www.lpm.org/music/2026-10-16/new-music-friday-the-best-albums-out-oct-16|https://www.lpm.org/news/2026-10-16/dark-money-billionaires-fuel-campaign-ads-in-kentuckys-alvarado-dembo-race"
       },
       {
@@ -1051,7 +1132,7 @@
         "medianChars": 1122,
         "maxChars": 9797,
         "usableShare": 0.92,
-        "identity": "https://www.wdrbwave.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.wdrbwave.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/|https://www.wdrbwave.com/2026/10/16/forecast-blustery-evening-with-gusty-showers/"
+        "identity": "https://www.wdrbwave.com/2026/10/17/forecast-chilly-sunny-weather-start-weekend/|https://www.wdrbwave.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.wdrbwave.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/"
       },
       {
         "domain": "wkyt.com",
@@ -1064,6 +1145,7 @@
       }
     ],
     "weak": [],
+    "pages": [],
     "none": [
       "courier-journal.com"
     ]
@@ -1075,8 +1157,8 @@
         "domain": "lailluminator.com",
         "feed": "https://lailluminator.com/feed/",
         "items": 100,
-        "medianChars": 4585,
-        "maxChars": 13426,
+        "medianChars": 4561,
+        "maxChars": 13160,
         "usableShare": 1,
         "identity": "https://lailluminator.com/?p=35783|https://lailluminator.com/?post_type=republished&#038;p=35781|https://lailluminator.com/?p=35779"
       },
@@ -1095,7 +1177,7 @@
         "items": 20,
         "medianChars": 1698,
         "maxChars": 26637,
-        "usableShare": 1,
+        "usableShare": 0.83,
         "identity": "https://www.kplctv.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.kplctv.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/|https://www.kplctv.com/2026/10/15/tdl-week-7-scores-highlights/"
       },
       {
@@ -1109,6 +1191,7 @@
       }
     ],
     "weak": [],
+    "pages": [],
     "none": [
       "nola.com"
     ]
@@ -1120,17 +1203,17 @@
         "domain": "mainemorningstar.com",
         "feed": "https://mainemorningstar.com/feed/",
         "items": 100,
-        "medianChars": 6716,
-        "maxChars": 21019,
-        "usableShare": 1,
-        "identity": "https://mainemorningstar.com/?post_type=republished&#038;p=17742|https://mainemorningstar.com/?post_type=republished&#038;p=17746|https://mainemorningstar.com/?p=17741"
+        "medianChars": 6600,
+        "maxChars": 21001,
+        "usableShare": 0.92,
+        "identity": "https://mainemorningstar.com/?post_type=republished&#038;p=17744|https://mainemorningstar.com/?post_type=republished&#038;p=17742|https://mainemorningstar.com/?post_type=republished&#038;p=17746"
       },
       {
         "domain": "bangordailynews.com",
         "feed": "https://www.bangordailynews.com/feed/",
         "items": 20,
-        "medianChars": 3808,
-        "maxChars": 7835,
+        "medianChars": 3802,
+        "maxChars": 7787,
         "usableShare": 0.92,
         "identity": "https://www.bangordailynews.com/?p=3733063|https://www.bangordailynews.com/2026/10/17/uncategorized/retail-price-impacts-from-the-iran-war-are-uneven-but-add-up-for-us-households-before-midterms/|https://www.bangordailynews.com/?p=3732994"
       },
@@ -1142,6 +1225,24 @@
         "maxChars": 2737,
         "usableShare": 0.83,
         "identity": "https://www.wabi.tv/2026/10/17/blustery-cold-today-less-windy-tomorrow-then-calm-week/|https://www.wabi.tv/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.wabi.tv/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/"
+      },
+      {
+        "domain": "pressherald.com",
+        "feed": "https://pressherald.com/news/feed/",
+        "items": 50,
+        "medianChars": 701,
+        "maxChars": 1123,
+        "usableShare": 0.83,
+        "identity": "https://www.pressherald.com/?p=7748552|https://www.pressherald.com/?p=7741166|https://www.pressherald.com/?p=7749491"
+      },
+      {
+        "domain": "pressherald.com",
+        "feed": "https://pressherald.com/politics/feed/",
+        "items": 50,
+        "medianChars": 553,
+        "maxChars": 955,
+        "usableShare": 0.67,
+        "identity": "https://www.pressherald.com/?p=7749352|https://www.pressherald.com/?p=7749491|https://www.pressherald.com/?p=7749357"
       }
     ],
     "weak": [
@@ -1149,30 +1250,13 @@
         "domain": "pressherald.com",
         "feed": "https://www.pressherald.com/feed/",
         "items": 50,
-        "medianChars": 119,
-        "maxChars": 359,
-        "usableShare": 0,
+        "medianChars": 353,
+        "maxChars": 1078,
+        "usableShare": 0.42,
         "identity": "https://www.pressherald.com/?p=7746766|https://www.pressherald.com/?p=7749491|https://www.pressherald.com/?p=7749357"
-      },
-      {
-        "domain": "pressherald.com",
-        "feed": "https://pressherald.com/news/feed/",
-        "items": 50,
-        "medianChars": 119,
-        "maxChars": 175,
-        "usableShare": 0,
-        "identity": "https://www.pressherald.com/?p=7748552|https://www.pressherald.com/?p=7741166|https://www.pressherald.com/?p=7749491"
-      },
-      {
-        "domain": "pressherald.com",
-        "feed": "https://pressherald.com/politics/feed/",
-        "items": 50,
-        "medianChars": 104,
-        "maxChars": 162,
-        "usableShare": 0,
-        "identity": "https://www.pressherald.com/?p=7749352|https://www.pressherald.com/?p=7749491|https://www.pressherald.com/?p=7749357"
       }
     ],
+    "pages": [],
     "none": [
       "mainepublic.org"
     ]
@@ -1184,8 +1268,8 @@
         "domain": "marylandreporter.com",
         "feed": "https://marylandreporter.com/feed/",
         "items": 10,
-        "medianChars": 6525,
-        "maxChars": 9062,
+        "medianChars": 6489,
+        "maxChars": 9020,
         "usableShare": 1,
         "identity": "https://marylandreporter.com/?p=4832501|https://marylandreporter.com/?p=4832492|https://marylandreporter.com/?p=4832483"
       },
@@ -1193,7 +1277,7 @@
         "domain": "marylandmatters.org",
         "feed": "https://marylandmatters.org/feed/",
         "items": 100,
-        "medianChars": 5927,
+        "medianChars": 5885,
         "maxChars": 12700,
         "usableShare": 1,
         "identity": "https://marylandmatters.org/?p=101700|https://marylandmatters.org/?p=101701|https://marylandmatters.org/?post_type=republished&#038;p=101704"
@@ -1202,26 +1286,26 @@
         "domain": "wtop.com",
         "feed": "https://wtop.com/local/feed/",
         "items": 10,
-        "medianChars": 3227,
-        "maxChars": 8202,
+        "medianChars": 3080,
+        "maxChars": 7700,
         "usableShare": 1,
-        "identity": "https://wtop.com/?p=30568791|https://wtop.com/?p=30564482|https://wtop.com/?p=30567780"
+        "identity": "https://wtop.com/?p=30565246|https://wtop.com/?p=30556402|https://wtop.com/?p=30568791"
       },
       {
         "domain": "wtop.com",
         "feed": "https://wtop.com/feed/",
         "items": 10,
-        "medianChars": 3141,
-        "maxChars": 8037,
-        "usableShare": 0.9,
-        "identity": "https://wtop.com/?p=30570699|https://wtop.com/?p=30570961|https://wtop.com/?p=30570879"
+        "medianChars": 2158,
+        "maxChars": 7893,
+        "usableShare": 1,
+        "identity": "https://wtop.com/?p=30565246|https://wtop.com/?p=30556402|https://wtop.com/?p=30571072"
       },
       {
         "domain": "baltimorefishbowl.com",
         "feed": "https://baltimorefishbowl.com/feed/",
         "items": 15,
         "medianChars": 1605,
-        "maxChars": 8460,
+        "maxChars": 8134,
         "usableShare": 1,
         "identity": "https://baltimorefishbowl.com/?p=244012|https://baltimorefishbowl.com/?p=244006|https://baltimorefishbowl.com/?p=243983"
       }
@@ -1240,7 +1324,7 @@
         "domain": "thedailyrecord.com",
         "feed": "https://thedailyrecord.com/feed/",
         "items": 10,
-        "medianChars": 248,
+        "medianChars": 247,
         "maxChars": 355,
         "usableShare": 0,
         "identity": "https://thedailyrecord.com/?p=752680|https://thedailyrecord.com/?p=752698|https://thedailyrecord.com/?p=752691"
@@ -1249,12 +1333,13 @@
         "domain": "wtop.com",
         "feed": "https://wtop.com/rss/",
         "items": 10,
-        "medianChars": 333,
-        "maxChars": 403,
+        "medianChars": 328,
+        "maxChars": 397,
         "usableShare": 0,
-        "identity": "https://wtop.com/national/2026/10/airstrike-kills-3-children-in-yemen-and-other-middle-east-developments/|https://wtop.com/national/2026/10/hurricane-trudy-makes-its-way-toward-mexico-as-typhoon-champi-threatens-guam/|https://wtop.com/world/2026/10/the-vatican-says-pope-leo-will-be-released-from-the-hospital-saturday-four-days-after-lung-cancer-surgery/"
+        "identity": "https://wtop.com/business-money/2026/10/saturday-steals-tech-to-help-out-around-the-house/|https://wtop.com/business-money/2026/10/united-bank-growing/|https://wtop.com/world/2026/10/zelenskyy-urges-support-for-new-us-sanctions-on-russia-after-trump-puts-them-on-hold/"
       }
     ],
+    "pages": [],
     "none": [
       "baltimorebanner.com",
       "baltimoresun.com",
@@ -1268,11 +1353,29 @@
     "state": "massachusetts",
     "usable": [
       {
+        "domain": "bostonmagazine.com",
+        "feed": "https://bostonmagazine.com/news/feed/",
+        "items": 10,
+        "medianChars": 12731,
+        "maxChars": 51208,
+        "usableShare": 0.7,
+        "identity": "https://www.bostonmagazine.com/news/2026/10/13/marcel-vernon-mass-convention/|https://www.bostonmagazine.com/arts-entertainment/2026/09/29/massachusetts-best-state-data/|https://www.bostonmagazine.com/news/2026/09/29/best-dentists-greater-boston/"
+      },
+      {
+        "domain": "newbedfordlight.org",
+        "feed": "https://newbedfordlight.org/feed/",
+        "items": 10,
+        "medianChars": 8458,
+        "maxChars": 21383,
+        "usableShare": 0.9,
+        "identity": "https://newbedfordlight.org/?p=230062|https://newbedfordlight.org/?p=229884|https://newbedfordlight.org/?p=229891"
+      },
+      {
         "domain": "commonwealthbeacon.org",
         "feed": "https://commonwealthbeacon.org/feed/",
         "items": 10,
-        "medianChars": 5566,
-        "maxChars": 13886,
+        "medianChars": 5835,
+        "maxChars": 13417,
         "usableShare": 1,
         "identity": "https://commonwealthbeacon.org/?p=323273|https://commonwealthbeacon.org/?p=323258|https://commonwealthbeacon.org/?p=323243"
       },
@@ -1280,10 +1383,28 @@
         "domain": "bostonglobe.com",
         "feed": "https://bostonglobe.com/arc/outboundfeeds/rss/?outputType=xml",
         "items": 100,
-        "medianChars": 5126,
+        "medianChars": 4760,
         "maxChars": 12088,
         "usableShare": 1,
-        "identity": "https://www.bostonglobe.com/2026/10/17/world/pope-leo-to-be-released-from-hospital/|https://www.bostonglobe.com/2026/10/17/metro/autumn-leaves-changing-weather-dave-epstein/|https://www.bostonglobe.com/2026/10/17/business/boston-ad-agency-colossus-chemistry-private-equity-backed/"
+        "identity": "https://www.bostonglobe.com/2026/10/17/world/zelenskyy-urges-support-for-sanctions-on-russia-trump-puts-them-on-hold/|https://www.bostonglobe.com/2026/10/17/opinion/project-labor-agreement-sagamore-bridge/|https://www.bostonglobe.com/2026/10/17/world/pope-leo-to-be-released-from-hospital/"
+      },
+      {
+        "domain": "bostonmagazine.com",
+        "feed": "https://bostonmagazine.com/feed/",
+        "items": 10,
+        "medianChars": 3789,
+        "maxChars": 51208,
+        "usableShare": 0.9,
+        "identity": "https://www.bostonmagazine.com/?p=2935297|https://www.bostonmagazine.com/?p=2934293|https://www.bostonmagazine.com/?p=2935237"
+      },
+      {
+        "domain": "universalhub.com",
+        "feed": "https://universalhub.com/rss.xml",
+        "items": 10,
+        "medianChars": 1075,
+        "maxChars": 2505,
+        "usableShare": 0.9,
+        "identity": "134834 at https://www.universalhub.com|134833 at https://www.universalhub.com|134832 at https://www.universalhub.com"
       }
     ],
     "weak": [
@@ -1291,7 +1412,7 @@
         "domain": "wwlp.com",
         "feed": "https://wwlp.com/feed/",
         "items": 50,
-        "medianChars": 117,
+        "medianChars": 136,
         "maxChars": 321,
         "usableShare": 0,
         "identity": "https://www.wwlp.com/?p=3190677|https://www.wwlp.com/?p=3190415|https://www.wwlp.com/?p=3190456"
@@ -1300,10 +1421,10 @@
         "domain": "wwlp.com",
         "feed": "https://wwlp.com/news/feed/",
         "items": 50,
-        "medianChars": 136,
+        "medianChars": 135,
         "maxChars": 237,
         "usableShare": 0,
-        "identity": "https://www.wwlp.com/?p=3191469|https://www.wwlp.com/?p=3191466|https://www.wwlp.com/?p=3191475"
+        "identity": "https://www.wwlp.com/?p=3189374|https://www.wwlp.com/?post_type=nota_script&#038;p=3190486|https://www.wwlp.com/?p=3191469"
       },
       {
         "domain": "wbur.org",
@@ -1322,8 +1443,36 @@
         "maxChars": 412,
         "usableShare": 0,
         "identity": "https://www.dotnews.com/?p=80394|https://www.dotnews.com/?p=80383|https://www.dotnews.com/?p=80365"
+      },
+      {
+        "domain": "cambridgeday.com",
+        "feed": "https://www.cambridgeday.com/feed/",
+        "items": 15,
+        "medianChars": 364,
+        "maxChars": 476,
+        "usableShare": 0,
+        "identity": "https://www.cambridgeday.com/?p=164487|https://www.cambridgeday.com/?p=164274|https://www.cambridgeday.com/?p=164453"
+      },
+      {
+        "domain": "eagletribune.com",
+        "feed": "http://www.eagletribune.com/search/?f=rss&amp;t=article&amp;l=50&amp;s=start_time&amp;sd=desc&amp;k%5B%5D=%23topstory",
+        "items": 10,
+        "medianChars": 223,
+        "maxChars": 280,
+        "usableShare": 0,
+        "identity": "http://www.eagletribune.com/tncms/asset/editorial/df085326-e556-52bd-85c3-801f3af15daf|http://www.eagletribune.com/tncms/asset/editorial/eabe05a8-e957-5570-a7de-cdd9f324e88e|http://www.eagletribune.com/tncms/asset/editorial/058983cd-6698-5a8b-b04b-4bd77537b752"
+      },
+      {
+        "domain": "itemlive.com",
+        "feed": "https://itemlive.com/feed/",
+        "items": 20,
+        "medianChars": 236,
+        "maxChars": 264,
+        "usableShare": 0,
+        "identity": "https://itemlive.com/?p=763411|https://itemlive.com/?p=763406|https://itemlive.com/?p=763398"
       }
     ],
+    "pages": [],
     "none": [
       "masslive.com",
       "bostonherald.com",
@@ -1331,7 +1480,11 @@
       "telegram.com",
       "berkshireeagle.com",
       "capecodtimes.com",
-      "nbcboston.com"
+      "nbcboston.com",
+      "lowellsun.com",
+      "metrowestdailynews.com",
+      "patriotledger.com",
+      "wcvb.com"
     ]
   },
   {
@@ -1341,8 +1494,8 @@
         "domain": "bridgemi.com",
         "feed": "https://bridgemi.com/feed/",
         "items": 10,
-        "medianChars": 6771,
-        "maxChars": 11625,
+        "medianChars": 6991,
+        "maxChars": 14975,
         "usableShare": 1,
         "identity": "https://bridgemi.com/?p=81391|https://bridgemi.com/?p=81389|https://bridgemi.com/?p=81372"
       },
@@ -1360,9 +1513,9 @@
         "feed": "https://michiganadvance.com/feed/",
         "items": 100,
         "medianChars": 3343,
-        "maxChars": 13111,
+        "maxChars": 13015,
         "usableShare": 1,
-        "identity": "https://michiganadvance.com/?p=114554|https://michiganadvance.com/?post_type=republished&#038;p=114552|https://michiganadvance.com/?post_type=republished&#038;p=114547"
+        "identity": "https://michiganadvance.com/?p=114536|https://michiganadvance.com/?p=114554|https://michiganadvance.com/?post_type=republished&#038;p=114552"
       },
       {
         "domain": "wilx.com",
@@ -1394,6 +1547,7 @@
         "identity": "https://bridgemi.com/?p=81391|https://bridgemi.com/?p=81372|https://bridgemi.com/?p=81359"
       }
     ],
+    "pages": [],
     "none": []
   },
   {
@@ -1403,8 +1557,8 @@
         "domain": "sahanjournal.com",
         "feed": "https://sahanjournal.com/feed/",
         "items": 10,
-        "medianChars": 7427,
-        "maxChars": 13850,
+        "medianChars": 10897,
+        "maxChars": 18845,
         "usableShare": 1,
         "identity": "https://sahanjournal.com/?p=88238|https://sahanjournal.com/?p=88231|https://sahanjournal.com/?p=88233"
       },
@@ -1413,7 +1567,7 @@
         "feed": "https://minnesotareformer.com/feed/",
         "items": 100,
         "medianChars": 6600,
-        "maxChars": 18693,
+        "maxChars": 18663,
         "usableShare": 1,
         "identity": "https://minnesotareformer.com/?p=39261|https://minnesotareformer.com/?p=39260|https://minnesotareformer.com/?post_type=republished&#038;p=39254"
       },
@@ -1447,6 +1601,7 @@
         "identity": "601899220|601899597|601902240"
       }
     ],
+    "pages": [],
     "none": []
   },
   {
@@ -1456,7 +1611,7 @@
         "domain": "mississippitoday.org",
         "feed": "https://mississippitoday.org/feed/",
         "items": 12,
-        "medianChars": 3415,
+        "medianChars": 3403,
         "maxChars": 15266,
         "usableShare": 1,
         "identity": "https://mississippitoday.org/?p=1196102|https://mississippitoday.org/?p=1196092|https://mississippitoday.org/?p=1196082"
@@ -1465,9 +1620,9 @@
         "domain": "mississippitoday.org",
         "feed": "https://mississippitoday.org/news/feed/",
         "items": 12,
-        "medianChars": 3415,
-        "maxChars": 27236,
-        "usableShare": 0.92,
+        "medianChars": 3403,
+        "maxChars": 27212,
+        "usableShare": 0.83,
         "identity": "https://mississippitoday.org/?p=1196092|https://mississippitoday.org/?p=1196082|https://mississippitoday.org/?p=1196064"
       },
       {
@@ -1490,6 +1645,7 @@
       }
     ],
     "weak": [],
+    "pages": [],
     "none": [
       "clarionledger.com",
       "mpbonline.org"
@@ -1502,10 +1658,10 @@
         "domain": "missouriindependent.com",
         "feed": "https://missouriindependent.com/feed/",
         "items": 100,
-        "medianChars": 6701,
-        "maxChars": 21019,
-        "usableShare": 1,
-        "identity": "https://missouriindependent.com/?post_type=republished&#038;p=33292|https://missouriindependent.com/?post_type=republished&#038;p=33294|https://missouriindependent.com/?post_type=republished&#038;p=33287"
+        "medianChars": 6671,
+        "maxChars": 21001,
+        "usableShare": 0.92,
+        "identity": "https://missouriindependent.com/?p=33283|https://missouriindependent.com/?post_type=republished&#038;p=33292|https://missouriindependent.com/?post_type=republished&#038;p=33294"
       },
       {
         "domain": "ky3.com",
@@ -1520,10 +1676,10 @@
         "domain": "kfvs12.com",
         "feed": "https://kfvs12.com/arc/outboundfeeds/rss/?outputType=xml",
         "items": 20,
-        "medianChars": 1088,
+        "medianChars": 875,
         "maxChars": 2968,
         "usableShare": 0.92,
-        "identity": "https://www.kfvs12.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.kfvs12.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/|https://www.kfvs12.com/2026/10/16/ky-239-fulton-county-blocked-just-north-ky-166-due-overturned-semi/"
+        "identity": "https://www.kfvs12.com/2026/10/17/chilly-dry-weekend-ahead/|https://www.kfvs12.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.kfvs12.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/"
       }
     ],
     "weak": [
@@ -1531,21 +1687,22 @@
         "domain": "stltoday.com",
         "feed": "http://www.stltoday.com/search/?f=rss&amp;t=article&amp;l=50&amp;s=start_time&amp;sd=desc&amp;k%5B%5D=%23topstory",
         "items": 10,
-        "medianChars": 68,
-        "maxChars": 224,
+        "medianChars": 162,
+        "maxChars": 193,
         "usableShare": 0,
-        "identity": "http://www.stltoday.com/tncms/asset/editorial/947e4921-4b4d-4907-b337-1a0c2b50e389|http://www.stltoday.com/tncms/asset/editorial/5905c769-f580-5f36-a6ae-406e3e47a1ee|http://www.stltoday.com/tncms/asset/editorial/21ef281a-85c4-54f6-9e57-b17dc68ccbfe"
+        "identity": "http://www.stltoday.com/tncms/asset/editorial/17d3e2c5-9f4a-4ec9-8325-26ca8bb81162|http://www.stltoday.com/tncms/asset/editorial/f257c9f9-d419-4288-9fd3-bfa5638b5240|http://www.stltoday.com/tncms/asset/editorial/2d2de3a7-a68f-4789-bab1-0ceffb2e8224"
       },
       {
         "domain": "stltoday.com",
         "feed": "https://stltoday.com/rss/news",
         "items": 10,
         "medianChars": 38,
-        "maxChars": 166,
+        "maxChars": 167,
         "usableShare": 0,
-        "identity": "http://www.stltoday.com/tncms/asset/editorial/947e4921-4b4d-4907-b337-1a0c2b50e389|http://www.stltoday.com/tncms/asset/editorial/689fe14d-7eed-51e9-a482-47f86403baeb|http://www.stltoday.com/tncms/asset/editorial/40187aef-ca0a-5343-95e6-61a34958a5f2"
+        "identity": "http://www.stltoday.com/tncms/asset/editorial/d17eb9f2-2d74-4839-a6ed-83cf9ff2c195|http://www.stltoday.com/tncms/asset/editorial/791fcc98-ee81-413b-a211-86cdef9e6289|http://www.stltoday.com/tncms/asset/editorial/947e4921-4b4d-4907-b337-1a0c2b50e389"
       }
     ],
+    "pages": [],
     "none": [
       "stlpublicradio.org"
     ]
@@ -1557,8 +1714,8 @@
         "domain": "montanafreepress.org",
         "feed": "https://montanafreepress.org/feed/",
         "items": 8,
-        "medianChars": 5950,
-        "maxChars": 16091,
+        "medianChars": 5938,
+        "maxChars": 16043,
         "usableShare": 1,
         "identity": "https://montanafreepress.org/?p=282845|https://montanafreepress.org/?p=282844|https://montanafreepress.org/?p=282826"
       },
@@ -1566,28 +1723,28 @@
         "domain": "dailymontanan.com",
         "feed": "https://dailymontanan.com/feed/",
         "items": 100,
-        "medianChars": 4585,
-        "maxChars": 9176,
+        "medianChars": 4561,
+        "maxChars": 8838,
         "usableShare": 1,
         "identity": "https://dailymontanan.com/?post_type=republished&#038;p=39546|https://dailymontanan.com/?post_type=republished&#038;p=39543|https://dailymontanan.com/?post_type=republished&#038;p=39540"
-      },
-      {
-        "domain": "flatheadbeacon.com",
-        "feed": "https://flatheadbeacon.com/feed/",
-        "items": 10,
-        "medianChars": 4518,
-        "maxChars": 14255,
-        "usableShare": 1,
-        "identity": "https://flatheadbeacon.com/?p=153146|https://flatheadbeacon.com/?p=153145|https://flatheadbeacon.com/?p=153035"
       },
       {
         "domain": "dailymontanan.com",
         "feed": "https://dailymontanan.com/feed/localFeed/",
         "items": 100,
         "medianChars": 4428,
-        "maxChars": 12430,
+        "maxChars": 12298,
         "usableShare": 1,
         "identity": "https://dailymontanan.com/?p=39533|https://dailymontanan.com/?p=39500|https://dailymontanan.com/?p=39527"
+      },
+      {
+        "domain": "flatheadbeacon.com",
+        "feed": "https://flatheadbeacon.com/feed/",
+        "items": 10,
+        "medianChars": 4119,
+        "maxChars": 13664,
+        "usableShare": 1,
+        "identity": "https://flatheadbeacon.com/?p=153146|https://flatheadbeacon.com/?p=153145|https://flatheadbeacon.com/?p=153035"
       },
       {
         "domain": "kpax.com",
@@ -1617,21 +1774,14 @@
         "maxChars": 238,
         "usableShare": 0,
         "identity": "http://billingsgazette.com/tncms/asset/editorial/59c005df-6d48-5fbb-8530-c263494ac430|http://billingsgazette.com/tncms/asset/editorial/d05c93de-4530-52f1-a630-1e2c201ed52d|http://billingsgazette.com/tncms/asset/editorial/1ff648d3-ef35-52cf-872f-50aa5b319ff8"
-      },
-      {
-        "domain": "helenair.com",
-        "feed": "http://helenair.com/search/?f=rss&amp;t=article&amp;l=50&amp;s=start_time&amp;sd=desc&amp;k%5B%5D=%23topstory",
-        "items": 10,
-        "medianChars": 133,
-        "maxChars": 238,
-        "usableShare": 0,
-        "identity": "http://helenair.com/tncms/asset/editorial/bcf5bf3c-f124-55cd-b061-d2f62e179539|http://helenair.com/tncms/asset/editorial/f3008581-d71e-508b-9a30-9ca41fc5adc7|http://helenair.com/tncms/asset/editorial/320288f2-3ad6-5fcc-a669-b2fa8594ccb4"
       }
     ],
+    "pages": [],
     "none": [
       "mtpr.org",
       "kulr8.com",
       "missoulian.com",
+      "helenair.com",
       "bozemandailychronicle.com",
       "nbcmontana.com"
     ]
@@ -1653,7 +1803,7 @@
         "feed": "https://nebraskaexaminer.com/feed/",
         "items": 100,
         "medianChars": 3856,
-        "maxChars": 12564,
+        "maxChars": 12486,
         "usableShare": 1,
         "identity": "https://nebraskaexaminer.com/?post_type=republished&#038;p=45239|https://nebraskaexaminer.com/?post_type=republished&#038;p=45237|https://nebraskaexaminer.com/?post_type=republished&#038;p=45233"
       },
@@ -1672,12 +1822,13 @@
         "domain": "omaha.com",
         "feed": "http://omaha.com/search/?f=rss&amp;t=article&amp;l=50&amp;s=start_time&amp;sd=desc&amp;k%5B%5D=%23topstory",
         "items": 10,
-        "medianChars": 106,
-        "maxChars": 236,
+        "medianChars": 115,
+        "maxChars": 230,
         "usableShare": 0,
-        "identity": "http://omaha.com/tncms/asset/editorial/bfcf7b75-a762-5c38-903d-5bb707ccb1a9|http://omaha.com/tncms/asset/editorial/d84d054e-ad04-426d-af30-a0ad2eaa4751|http://omaha.com/tncms/asset/editorial/929a32e8-c075-58e2-97ee-ef1db3ecd8f9"
+        "identity": "http://omaha.com/tncms/asset/editorial/64782eee-63f5-5e37-a63b-3c8e6f42a711|http://omaha.com/tncms/asset/editorial/438c2123-3618-5db4-be84-c4abfffb74ef|http://omaha.com/tncms/asset/editorial/bfcf7b75-a762-5c38-903d-5bb707ccb1a9"
       }
     ],
+    "pages": [],
     "none": [
       "netnebraska.org"
     ]
@@ -1686,20 +1837,11 @@
     "state": "nevada",
     "usable": [
       {
-        "domain": "thenevadaindependent.com",
-        "feed": "https://thenevadaindependent.com/feed/",
-        "items": 100,
-        "medianChars": 6021,
-        "maxChars": 11515,
-        "usableShare": 1,
-        "identity": "https://thenevadaindependent.com/?post_type=article&#038;p=206870|https://thenevadaindependent.com/?post_type=article&#038;p=206900|https://thenevadaindependent.com/?post_type=article&#038;p=206888"
-      },
-      {
         "domain": "nevadacurrent.com",
         "feed": "https://nevadacurrent.com/politics/feed/",
         "items": 100,
-        "medianChars": 5435,
-        "maxChars": 7209,
+        "medianChars": 5399,
+        "maxChars": 7161,
         "usableShare": 1,
         "identity": "https://nevadacurrent.com/?post_type=republished&#038;p=220251|https://nevadacurrent.com/?p=220223|https://nevadacurrent.com/?p=219939"
       },
@@ -1707,10 +1849,19 @@
         "domain": "nevadacurrent.com",
         "feed": "https://nevadacurrent.com/feed/",
         "items": 100,
-        "medianChars": 5327,
-        "maxChars": 21019,
-        "usableShare": 1,
+        "medianChars": 5321,
+        "maxChars": 21001,
+        "usableShare": 0.92,
         "identity": "https://nevadacurrent.com/?p=220281|https://nevadacurrent.com/?p=220279|https://nevadacurrent.com/?post_type=republished&#038;p=220271"
+      },
+      {
+        "domain": "thenevadaindependent.com",
+        "feed": "https://thenevadaindependent.com/feed/",
+        "items": 100,
+        "medianChars": 5043,
+        "maxChars": 11515,
+        "usableShare": 1,
+        "identity": "https://thenevadaindependent.com/?post_type=article&#038;p=206870|https://thenevadaindependent.com/?post_type=article&#038;p=206900|https://thenevadaindependent.com/?post_type=article&#038;p=206888"
       }
     ],
     "weak": [
@@ -1728,7 +1879,7 @@
         "feed": "https://reviewjournal.com/feed/",
         "items": 30,
         "medianChars": 116,
-        "maxChars": 172,
+        "maxChars": 166,
         "usableShare": 0,
         "identity": "https://www.reviewjournal.com/?p=3901404|https://www.reviewjournal.com/?p=3901377|https://www.reviewjournal.com/?p=3901360"
       },
@@ -1736,8 +1887,8 @@
         "domain": "reviewjournal.com",
         "feed": "https://reviewjournal.com/news/feed/",
         "items": 30,
-        "medianChars": 159,
-        "maxChars": 217,
+        "medianChars": 154,
+        "maxChars": 211,
         "usableShare": 0,
         "identity": "https://www.reviewjournal.com/?p=3901215|https://www.reviewjournal.com/?p=3901186|https://www.reviewjournal.com/?p=3901056"
       },
@@ -1745,12 +1896,13 @@
         "domain": "reviewjournal.com",
         "feed": "https://reviewjournal.com/local/feed/",
         "items": 30,
-        "medianChars": 158,
-        "maxChars": 189,
+        "medianChars": 154,
+        "maxChars": 183,
         "usableShare": 0,
         "identity": "https://www.reviewjournal.com/?p=3901215|https://www.reviewjournal.com/?p=3901154|https://www.reviewjournal.com/?p=3901120"
       }
     ],
+    "pages": [],
     "none": [
       "knpr.org"
     ]
@@ -1762,8 +1914,8 @@
         "domain": "newhampshirebulletin.com",
         "feed": "https://newhampshirebulletin.com/feed/",
         "items": 100,
-        "medianChars": 4784,
-        "maxChars": 10121,
+        "medianChars": 4772,
+        "maxChars": 10067,
         "usableShare": 1,
         "identity": "https://newhampshirebulletin.com/?p=28776|https://newhampshirebulletin.com/?p=28760|https://newhampshirebulletin.com/?post_type=republished&#038;p=28773"
       },
@@ -1781,21 +1933,21 @@
         "feed": "https://indepthnh.org/feed/",
         "items": 15,
         "medianChars": 3619,
-        "maxChars": 15433,
+        "maxChars": 14875,
         "usableShare": 0.83,
         "identity": "https://indepthnh.org/?p=6842261|https://indepthnh.org/?p=6842991|https://indepthnh.org/?p=6842850"
-      }
-    ],
-    "weak": [
+      },
       {
         "domain": "unionleader.com",
         "feed": "https://unionleader.com/rss.xml",
         "items": 20,
-        "medianChars": 309,
-        "maxChars": 3819,
-        "usableShare": 0.42,
-        "identity": "https://www.unionleader.com/lifestyles/travel-tips-2026-holiday-travel-cheat-sheet-how-to-hack-airfares-and-score-deals-c990ec26|https://www.unionleader.com/columns/be-warned-of-drained-batteries-9641c83f|https://www.unionleader.com/columns/daughter-with-grudges-makes-herself-hard-to-love-92c3d382"
-      },
+        "medianChars": 1187,
+        "maxChars": 12611,
+        "usableShare": 0.58,
+        "identity": "https://www.unionleader.com/news/local-news/nashua-man-pleads-guilty-to-citizens-bank-robbery-929b45d7|https://www.unionleader.com/news/politics/state-house-dome-nh-gun-owners-get-an-october-suprise-e2fadfd6|https://www.unionleader.com/sports/local-high-school-sports/pinciaro-rushes-for-3-tds-reaches-1000-yards-in-campbell-football-teams-win-over-gilford-67b32f82"
+      }
+    ],
+    "weak": [
       {
         "domain": "nhpr.org",
         "feed": "https://nhpr.org/rss.xml",
@@ -1803,7 +1955,7 @@
         "medianChars": 162,
         "maxChars": 316,
         "usableShare": 0,
-        "identity": "https://www.nhpr.org/show/check-this-out/2026-10-17/check-this-out-in-retro-jessica-goldstein-creates-a-luxury-time-travel-agency|https://www.nhpr.org/environment/2026-10-17/outside-in-the-secret-origins-of-commercial-coyote-urine|https://www.nhpr.org/nh-news/2026-10-17/concord-housing-sensors-minut-monitoring-aclu-nh-surveillance"
+        "identity": "https://www.nhpr.org/show/homegrown-nh/2026-10-17/homegrown-nh-a-long-term-plan-to-get-rid-of-japanese-knotweed|https://www.nhpr.org/environment/2026-10-17/outside-in-the-secret-origins-of-commercial-coyote-urine|https://www.nhpr.org/show/check-this-out/2026-10-17/check-this-out-in-retro-jessica-goldstein-creates-a-luxury-time-travel-agency"
       },
       {
         "domain": "concordmonitor.com",
@@ -1819,11 +1971,12 @@
         "feed": "https://manchesterinklink.com/feed/",
         "items": 20,
         "medianChars": 220,
-        "maxChars": 521,
+        "maxChars": 516,
         "usableShare": 0.08,
         "identity": "https://manchester.inklink.news/?p=290052|https://manchester.inklink.news/?p=290049|https://manchester.inklink.news/?p=290019"
       }
     ],
+    "pages": [],
     "none": [
       "wmur.com",
       "sentinelsource.com",
@@ -1839,7 +1992,7 @@
         "feed": "https://newjerseymonitor.com/feed/",
         "items": 100,
         "medianChars": 3856,
-        "maxChars": 7861,
+        "maxChars": 7837,
         "usableShare": 1,
         "identity": "https://newjerseymonitor.com/?post_type=republished&#038;p=25775|https://newjerseymonitor.com/?p=25770|https://newjerseymonitor.com/?p=25769"
       },
@@ -1847,19 +2000,37 @@
         "domain": "newjerseyglobe.com",
         "feed": "https://newjerseyglobe.com/feed/",
         "items": 10,
-        "medianChars": 3032,
-        "maxChars": 5577,
+        "medianChars": 3008,
+        "maxChars": 5571,
         "usableShare": 1,
         "identity": "https://newjerseyglobe.com/?p=170372|https://newjerseyglobe.com/?p=170364|https://newjerseyglobe.com/?p=170345"
+      },
+      {
+        "domain": "njbiz.com",
+        "feed": "https://njbiz.com/feed/",
+        "items": 25,
+        "medianChars": 2929,
+        "maxChars": 5417,
+        "usableShare": 1,
+        "identity": "https://njbiz.com/?p=569239|https://njbiz.com/?p=569220|https://njbiz.com/?p=569210"
       },
       {
         "domain": "jerseydigs.com",
         "feed": "https://jerseydigs.com/feed/",
         "items": 10,
-        "medianChars": 2420,
-        "maxChars": 6130,
+        "medianChars": 2402,
+        "maxChars": 6052,
         "usableShare": 1,
         "identity": "https://jerseydigs.com/?p=100798|https://jerseydigs.com/?p=100788|https://jerseydigs.com/?p=100794"
+      },
+      {
+        "domain": "whyy.org",
+        "feed": "https://whyy.org/feed/",
+        "items": 20,
+        "medianChars": 1280,
+        "maxChars": 2987,
+        "usableShare": 0.58,
+        "identity": "https://whyy.org/?post_type=article&#038;p=756658|https://whyy.org/?post_type=article&#038;p=756670|https://whyy.org/?post_type=article&#038;p=756656"
       }
     ],
     "weak": [
@@ -1867,7 +2038,7 @@
         "domain": "njspotlightnews.org",
         "feed": "https://www.njspotlightnews.org/feed/",
         "items": 10,
-        "medianChars": 194,
+        "medianChars": 192,
         "maxChars": 242,
         "usableShare": 0,
         "identity": "https://www.njspotlightnews.org/?p=597422|https://www.njspotlightnews.org/?p=597464|https://www.njspotlightnews.org/?p=597430"
@@ -1876,19 +2047,10 @@
         "domain": "njspotlightnews.org",
         "feed": "https://njspotlightnews.org/politics/feed/",
         "items": 10,
-        "medianChars": 226,
+        "medianChars": 223,
         "maxChars": 249,
         "usableShare": 0,
         "identity": "https://www.njspotlightnews.org/?p=597437|https://www.njspotlightnews.org/?p=597355|https://www.njspotlightnews.org/?p=597247"
-      },
-      {
-        "domain": "whyy.org",
-        "feed": "https://whyy.org/feed/",
-        "items": 20,
-        "medianChars": 395,
-        "maxChars": 3023,
-        "usableShare": 0.5,
-        "identity": "https://whyy.org/?post_type=article&#038;p=756670|https://whyy.org/?post_type=article&#038;p=756656|https://whyy.org/?post_type=article&#038;p=756648"
       },
       {
         "domain": "nj1015.com",
@@ -1900,11 +2062,11 @@
         "identity": "https://nj1015.com/?p=923773|https://nj1015.com/?p=2520000000705495|https://nj1015.com/?p=1397057"
       }
     ],
+    "pages": [],
     "none": [
       "nj.com",
       "northjersey.com",
       "app.com",
-      "njbiz.com",
       "courierpostonline.com",
       "tapinto.net"
     ]
@@ -1916,19 +2078,46 @@
         "domain": "searchlightnm.org",
         "feed": "https://searchlightnm.org/feed/",
         "items": 10,
-        "medianChars": 6976,
-        "maxChars": 18532,
-        "usableShare": 1,
+        "medianChars": 8671,
+        "maxChars": 20918,
+        "usableShare": 0.9,
         "identity": "https://searchlightnm.org/?p=122894|https://searchlightnm.org/?p=122886|https://searchlightnm.org/?p=122878"
+      },
+      {
+        "domain": "nmpolitics.net",
+        "feed": "https://nmpolitics.net/index/feed/",
+        "items": 10,
+        "medianChars": 6687,
+        "maxChars": 13373,
+        "usableShare": 1,
+        "identity": "https://nmpolitics.net/index/?p=757196|https://nmpolitics.net/index/?p=735792|https://nmpolitics.net/index/?p=730144"
       },
       {
         "domain": "sourcenm.com",
         "feed": "https://sourcenm.com/feed/",
         "items": 100,
         "medianChars": 3547,
-        "maxChars": 7142,
+        "maxChars": 6816,
         "usableShare": 1,
         "identity": "https://sourcenm.com/?p=33186|https://sourcenm.com/?post_type=republished&#038;p=33195|https://sourcenm.com/?post_type=republished&#038;p=33193"
+      },
+      {
+        "domain": "kob.com",
+        "feed": "https://kob.com/feed/",
+        "items": 24,
+        "medianChars": 1177,
+        "maxChars": 3552,
+        "usableShare": 0.67,
+        "identity": "https://www.kob.com/?p=1159373|https://www.kob.com/?p=1159214|https://www.kob.com/?p=1159324"
+      },
+      {
+        "domain": "losalamosreporter.com",
+        "feed": "https://losalamosreporter.com/feed/",
+        "items": 50,
+        "medianChars": 1158,
+        "maxChars": 4638,
+        "usableShare": 0.83,
+        "identity": "https://losalamosreporter.com/?p=158219|https://losalamosreporter.com/?p=158032|https://losalamosreporter.com/?p=158211"
       }
     ],
     "weak": [
@@ -1937,7 +2126,7 @@
         "feed": "http://www.santafenewmexican.com/search/?f=rss&amp;t=article&amp;l=50&amp;s=start_time&amp;sd=desc&amp;k%5B%5D=%23topstory",
         "items": 10,
         "medianChars": 144,
-        "maxChars": 276,
+        "maxChars": 270,
         "usableShare": 0,
         "identity": "http://www.santafenewmexican.com/tncms/asset/editorial/3d7fa45e-9911-453a-aa85-064b02ac8b05|http://www.santafenewmexican.com/tncms/asset/editorial/68f48aad-fb50-4575-89c7-eb2cd6e6c320|http://www.santafenewmexican.com/tncms/asset/editorial/74fa0ac0-71cf-53fd-9985-2131e8ec8d73"
       },
@@ -1963,19 +2152,42 @@
         "domain": "nmindepth.com",
         "feed": "https://nmindepth.com/feed/",
         "items": 10,
-        "medianChars": 348,
-        "maxChars": 383,
+        "medianChars": 327,
+        "maxChars": 371,
         "usableShare": 0,
         "identity": "https://nmindepth.com/?p=1427095|https://nmindepth.com/?p=1426432|https://nmindepth.com/?p=1425354"
+      },
+      {
+        "domain": "riograndesun.com",
+        "feed": "https://riograndesun.com/feed/",
+        "items": 10,
+        "medianChars": 424,
+        "maxChars": 456,
+        "usableShare": 0,
+        "identity": "https://riograndesun.com/?p=163566|https://riograndesun.com/?p=163552|https://riograndesun.com/?p=163531"
+      },
+      {
+        "domain": "taosnews.com",
+        "feed": "http://www.taosnews.com/search/?f=rss&amp;t=article&amp;l=50&amp;s=start_time&amp;sd=desc&amp;k%5B%5D=%23topstory",
+        "items": 10,
+        "medianChars": 141,
+        "maxChars": 250,
+        "usableShare": 0,
+        "identity": "http://www.taosnews.com/tncms/asset/editorial/cc85ae09-c1fa-506f-9a33-826a0b0d3dc0|http://www.taosnews.com/tncms/asset/editorial/cf4982bf-11f2-5008-9517-271447184cf1|http://www.taosnews.com/tncms/asset/editorial/c6dace21-e952-57be-a238-e7584024e771"
       }
     ],
+    "pages": [],
     "none": [
       "abqjournal.com",
       "kunm.org",
       "koat.com",
       "nmpoliticalreport.com",
       "lcsun-news.com",
-      "lascrucesbulletin.com"
+      "lascrucesbulletin.com",
+      "krwg.org",
+      "carlsbadcurrentargus.com",
+      "daily-times.com",
+      "alamogordonews.com"
     ]
   },
   {
@@ -1985,8 +2197,8 @@
         "domain": "nysfocus.com",
         "feed": "https://nysfocus.com/feed",
         "items": 50,
-        "medianChars": 7067,
-        "maxChars": 12023,
+        "medianChars": 6702,
+        "maxChars": 12018,
         "usableShare": 1,
         "identity": "425502|425510|425495"
       },
@@ -1994,8 +2206,8 @@
         "domain": "citylimits.org",
         "feed": "https://citylimits.org/feed/",
         "items": 10,
-        "medianChars": 5736,
-        "maxChars": 11478,
+        "medianChars": 5444,
+        "maxChars": 11072,
         "usableShare": 1,
         "identity": "https://citylimits.org/?p=22458418|https://citylimits.org/?p=22458412|https://citylimits.org/?p=22458409"
       },
@@ -2003,8 +2215,8 @@
         "domain": "thecity.nyc",
         "feed": "https://thecity.nyc/feed/",
         "items": 10,
-        "medianChars": 4346,
-        "maxChars": 11169,
+        "medianChars": 4220,
+        "maxChars": 10725,
         "usableShare": 1,
         "identity": "https://www.thecityreporter.nyc/?p=85857|https://www.thecityreporter.nyc/?p=85852|https://www.thecityreporter.nyc/?p=85797"
       }
@@ -2014,12 +2226,13 @@
         "domain": "gothamist.com",
         "feed": "https://gothamist.com/feed/",
         "items": 40,
-        "medianChars": 421,
-        "maxChars": 760,
-        "usableShare": 0.42,
-        "identity": "https://gothamist.com/news/deer-are-all-over-new-jersey-roads-looking-for-sex-state-officials-warn|https://gothamist.com/news/man-messaged-i-got-straight-poison-before-giving-nyc-college-students-fentanyl-feds-say|https://gothamist.com/news/inside-the-plan-to-fix-the-nearly-collapsed-pfizer-building-164th-of-an-inch-at-a-time"
+        "medianChars": 171,
+        "maxChars": 357,
+        "usableShare": 0,
+        "identity": "https://gothamist.com/news/tompkins-square-park-is-getting-a-makeover-some-say-its-too-much|https://gothamist.com/news/deer-are-all-over-new-jersey-roads-looking-for-sex-state-officials-warn|https://gothamist.com/news/man-messaged-i-got-straight-poison-before-giving-nyc-college-students-fentanyl-feds-say"
       }
     ],
+    "pages": [],
     "none": [
       "syracuse.com"
     ]
@@ -2031,8 +2244,8 @@
         "domain": "ncnewsline.com",
         "feed": "https://ncnewsline.com/feed/",
         "items": 100,
-        "medianChars": 4422,
-        "maxChars": 12511,
+        "medianChars": 4290,
+        "maxChars": 12499,
         "usableShare": 1,
         "identity": "https://ncnewsline.com/?p=195518|https://ncnewsline.com/?post_type=republished&#038;p=195515|https://ncnewsline.com/?post_type=republished&#038;p=195513"
       },
@@ -2056,6 +2269,7 @@
       }
     ],
     "weak": [],
+    "pages": [],
     "none": [
       "newsobserver.com",
       "wunc.org"
@@ -2068,17 +2282,17 @@
         "domain": "northdakotamonitor.com",
         "feed": "https://northdakotamonitor.com/feed/",
         "items": 100,
-        "medianChars": 5491,
-        "maxChars": 21019,
-        "usableShare": 1,
+        "medianChars": 5419,
+        "maxChars": 21001,
+        "usableShare": 0.92,
         "identity": "https://northdakotamonitor.com/?p=22837|https://northdakotamonitor.com/?p=22804|https://northdakotamonitor.com/?post_type=republished&#038;p=22834"
       },
       {
         "domain": "inforum.com",
         "feed": "https://www.inforum.com/index.rss",
         "items": 77,
-        "medianChars": 3657,
-        "maxChars": 6229,
+        "medianChars": 3239,
+        "maxChars": 7721,
         "usableShare": 1,
         "identity": "https://www.inforum.com/sports/prep/god-pulled-through-for-me-dgf-football-player-zander-opsahl-released-from-hospital-following-injury-scare|https://www.inforum.com/news/fargo/court-documents-reveal-new-details-in-attempted-murder-case|https://www.inforum.com/news/north-dakota/2-arrested-in-deadly-bismarck-street-racing-crash-police-say"
       },
@@ -2102,6 +2316,7 @@
       }
     ],
     "weak": [],
+    "pages": [],
     "none": [
       "prairiepublic.org"
     ]
@@ -2113,8 +2328,8 @@
         "domain": "signalcleveland.org",
         "feed": "https://signalcleveland.org/feed/",
         "items": 10,
-        "medianChars": 6299,
-        "maxChars": 8650,
+        "medianChars": 6281,
+        "maxChars": 8632,
         "usableShare": 1,
         "identity": "https://signalcleveland.org/?p=84833|https://signalcleveland.org/?p=84811|https://signalcleveland.org/?p=84764"
       },
@@ -2123,16 +2338,16 @@
         "feed": "https://ohiocapitaljournal.com/feed/localFeed/",
         "items": 100,
         "medianChars": 4430,
-        "maxChars": 12421,
-        "usableShare": 1,
+        "maxChars": 20677,
+        "usableShare": 0.92,
         "identity": "https://ohiocapitaljournal.com/?p=42304|https://ohiocapitaljournal.com/?p=42299|https://ohiocapitaljournal.com/?p=42345"
       },
       {
         "domain": "ohiocapitaljournal.com",
         "feed": "https://ohiocapitaljournal.com/feed/",
         "items": 100,
-        "medianChars": 3856,
-        "maxChars": 17232,
+        "medianChars": 3838,
+        "maxChars": 17154,
         "usableShare": 1,
         "identity": "https://ohiocapitaljournal.com/?post_type=republished&#038;p=42367|https://ohiocapitaljournal.com/?post_type=republished&#038;p=42349|https://ohiocapitaljournal.com/?post_type=republished&#038;p=42351"
       }
@@ -2143,27 +2358,27 @@
         "feed": "https://www.wtol.com/feeds/syndication/rss/news",
         "items": 40,
         "medianChars": 124,
-        "maxChars": 162,
+        "maxChars": 161,
         "usableShare": 0,
-        "identity": "71d0d46f-1428-45f9-ad35-0fb03ccfa0e8|5faa5cc4-60db-43f2-ab42-d4145843ad5e|bbead4ed-b634-40c5-9d20-1bf64a17e251"
+        "identity": "676742d0-f3e6-41d7-8115-8b566476cb7a|995e5e6f-dd6d-46c7-9201-e5051a59c4f1|71d0d46f-1428-45f9-ad35-0fb03ccfa0e8"
       },
       {
         "domain": "daytondailynews.com",
         "feed": "http://www.daytondailynews.com/search/?f=rss&amp;t=article&amp;l=50&amp;s=start_time&amp;sd=desc&amp;k%5B%5D=%23topstory",
         "items": 10,
-        "medianChars": 213,
-        "maxChars": 232,
+        "medianChars": 187,
+        "maxChars": 238,
         "usableShare": 0,
-        "identity": "http://www.daytondailynews.com/tncms/asset/editorial/f0611464-8c12-56f3-8152-b9e2fbb15b78|http://www.daytondailynews.com/tncms/asset/editorial/3b4031db-53af-5576-8314-192ccbd773bc|http://www.daytondailynews.com/tncms/asset/editorial/ddcecc97-a0df-5c60-9a5c-b821ffc7a945"
+        "identity": "http://www.daytondailynews.com/tncms/asset/editorial/1a42768b-f2e7-5f4a-8713-77bf4a177f43|http://www.daytondailynews.com/tncms/asset/editorial/88d15aff-c7f5-52b7-91c8-1f946d163edc|http://www.daytondailynews.com/tncms/asset/editorial/166c3ba0-3d48-5924-abff-59f1782ae639"
       },
       {
         "domain": "toledoblade.com",
         "feed": "https://toledoblade.com/rss/",
         "items": 19,
-        "medianChars": 169,
-        "maxChars": 291,
+        "medianChars": 172,
+        "maxChars": 285,
         "usableShare": 0,
-        "identity": "https://www.toledoblade.com/business/personal-finance/2026/10/17/seniors-struggle-inflation-outpace-social-security-benefits/stories/20261017007|https://www.toledoblade.com/sports/high-school/2026/10/16/high-school-football-liberty-center-archbold-stay-unbeaten/stories/20261016134|https://www.toledoblade.com/sports/bgsu/2026/10/16/bgsu-hockey-falls-niagara-ot/stories/20261016135"
+        "identity": "https://www.toledoblade.com/business/automotive/2026/10/17/hyundai-santa-fe-vs-nissan-pathfinder-three-row-suv-comparison/stories/20261017009|https://www.toledoblade.com/business/real-estate/2026/10/17/some-churches-turning-empty-lots-affordable-housing/stories/20261017005|https://www.toledoblade.com/business/personal-finance/2026/10/17/seniors-struggle-inflation-outpace-social-security-benefits/stories/20261017007"
       },
       {
         "domain": "toledoblade.com",
@@ -2178,12 +2393,13 @@
         "domain": "eyeonohio.com",
         "feed": "https://eyeonohio.com/feed/",
         "items": 10,
-        "medianChars": 346,
-        "maxChars": 386,
+        "medianChars": 340,
+        "maxChars": 368,
         "usableShare": 0,
         "identity": "https://eyeonohio.com/?p=127844|https://eyeonohio.com/?p=127831|https://eyeonohio.com/?p=127754"
       }
     ],
+    "pages": [],
     "none": [
       "woio.com",
       "cleveland.com",
@@ -2201,8 +2417,8 @@
         "domain": "readfrontier.org",
         "feed": "https://readfrontier.org/politics/feed/",
         "items": 10,
-        "medianChars": 6587,
-        "maxChars": 11815,
+        "medianChars": 6365,
+        "maxChars": 11085,
         "usableShare": 1,
         "identity": "https://www.readfrontier.org/?post_type=stories&#038;p=32167|https://www.readfrontier.org/?post_type=stories&#038;p=31682|https://www.readfrontier.org/?post_type=stories&#038;p=31650"
       },
@@ -2210,8 +2426,8 @@
         "domain": "readfrontier.org",
         "feed": "https://www.readfrontier.org/feed/",
         "items": 10,
-        "medianChars": 6362,
-        "maxChars": 12223,
+        "medianChars": 6326,
+        "maxChars": 12103,
         "usableShare": 0.9,
         "identity": "https://www.readfrontier.org/?p=17189|http://www.readfrontier.org/?p=9572|http://www.readfrontier.org/?p=8751"
       },
@@ -2219,9 +2435,9 @@
         "domain": "oklahomavoice.com",
         "feed": "https://oklahomavoice.com/feed/",
         "items": 100,
-        "medianChars": 5110,
-        "maxChars": 21019,
-        "usableShare": 1,
+        "medianChars": 5086,
+        "maxChars": 21001,
+        "usableShare": 0.92,
         "identity": "https://oklahomavoice.com/?post_type=republished&#038;p=22115|https://oklahomavoice.com/?p=22114|https://oklahomavoice.com/?post_type=republished&#038;p=22111"
       },
       {
@@ -2237,10 +2453,10 @@
         "domain": "kswo.com",
         "feed": "https://kswo.com/arc/outboundfeeds/rss/?outputType=xml",
         "items": 20,
-        "medianChars": 995,
+        "medianChars": 960,
         "maxChars": 2580,
-        "usableShare": 1,
-        "identity": "https://www.kswo.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.kswo.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/|https://www.kswo.com/2026/10/16/high-school-student-shot-killed-interstate-police-say/"
+        "usableShare": 0.92,
+        "identity": "https://www.kswo.com/2026/10/17/cold-start-weekend-gradual-warm-up-next-week-1017-am/|https://www.kswo.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.kswo.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/"
       }
     ],
     "weak": [
@@ -2248,8 +2464,8 @@
         "domain": "nondoc.com",
         "feed": "https://nondoc.com/feed/",
         "items": 10,
-        "medianChars": 460,
-        "maxChars": 541,
+        "medianChars": 454,
+        "maxChars": 511,
         "usableShare": 0.1,
         "identity": "https://nondoc.com/?p=62280|https://nondoc.com/?p=62117|https://nondoc.com/?p=62099"
       },
@@ -2257,10 +2473,10 @@
         "domain": "tulsaworld.com",
         "feed": "http://tulsaworld.com/search/?f=rss&amp;t=article&amp;l=50&amp;s=start_time&amp;sd=desc&amp;k%5B%5D=%23topstory",
         "items": 10,
-        "medianChars": 35,
-        "maxChars": 268,
+        "medianChars": 90,
+        "maxChars": 235,
         "usableShare": 0,
-        "identity": "http://tulsaworld.com/tncms/asset/editorial/dd74cf1a-2027-5332-af1e-e7298c1bc0b0|http://tulsaworld.com/tncms/asset/editorial/39db95ac-f09a-518b-8ba7-b34a619b40c5|http://tulsaworld.com/tncms/asset/editorial/cf364db2-c596-5ad7-9bf5-a133e32cf72d"
+        "identity": "http://tulsaworld.com/tncms/asset/editorial/ff40d34e-6cb3-4ebc-9914-418481c4bf0a|http://tulsaworld.com/tncms/asset/editorial/b41aa5ce-8cb0-5a68-8164-215a8eebdd7d|http://tulsaworld.com/tncms/asset/editorial/9aae5edf-fb97-5b30-89d0-f2d8a8423a59"
       },
       {
         "domain": "news9.com",
@@ -2275,7 +2491,7 @@
         "domain": "kfor.com",
         "feed": "https://kfor.com/feed/",
         "items": 20,
-        "medianChars": 267,
+        "medianChars": 277,
         "maxChars": 337,
         "usableShare": 0,
         "identity": "https://kfor.com/?p=3520891|https://kfor.com/?p=3521557|https://kfor.com/?p=3521186"
@@ -2287,9 +2503,10 @@
         "medianChars": 220,
         "maxChars": 357,
         "usableShare": 0,
-        "identity": "https://kfor.com/?p=3521725|https://kfor.com/?p=3521557|https://kfor.com/?p=3520958"
+        "identity": "https://kfor.com/?p=3521767|https://kfor.com/?p=3521725|https://kfor.com/?p=3521557"
       }
     ],
+    "pages": [],
     "none": [
       "oklahoman.com",
       "kosu.org",
@@ -2304,9 +2521,9 @@
         "domain": "oregoncapitalchronicle.com",
         "feed": "https://oregoncapitalchronicle.com/feed/",
         "items": 100,
-        "medianChars": 5719,
-        "maxChars": 21019,
-        "usableShare": 1,
+        "medianChars": 5713,
+        "maxChars": 21001,
+        "usableShare": 0.92,
         "identity": "https://oregoncapitalchronicle.com/?p=23888|https://oregoncapitalchronicle.com/?post_type=republished&#038;p=23886|https://oregoncapitalchronicle.com/?p=23885"
       },
       {
@@ -2322,8 +2539,8 @@
         "domain": "ktvz.com",
         "feed": "https://ktvz.com/feed/",
         "items": 50,
-        "medianChars": 1842,
-        "maxChars": 5440,
+        "medianChars": 1306,
+        "maxChars": 5235,
         "usableShare": 0.92,
         "identity": "https://ktvz.com/?p=1661381|https://ktvz.com/?p=1661379|https://ktvz.com/?p=1661367"
       },
@@ -2331,13 +2548,14 @@
         "domain": "ktvz.com",
         "feed": "https://ktvz.com/local-news/feed/",
         "items": 50,
-        "medianChars": 1496,
-        "maxChars": 5440,
+        "medianChars": 867,
+        "maxChars": 4070,
         "usableShare": 1,
         "identity": "https://ktvz.com/?p=1661300|https://ktvz.com/?post_type=nota_script&#038;p=1661158|https://ktvz.com/?post_type=nota_script&#038;p=1661151"
       }
     ],
     "weak": [],
+    "pages": [],
     "none": [
       "oregonlive.com",
       "willametteweek.com"
@@ -2350,8 +2568,8 @@
         "domain": "penncapital-star.com",
         "feed": "https://penncapital-star.com/feed/",
         "items": 100,
-        "medianChars": 3766,
-        "maxChars": 17242,
+        "medianChars": 3760,
+        "maxChars": 17159,
         "usableShare": 1,
         "identity": "https://penncapital-star.com/?post_type=republished&#038;p=69923|https://penncapital-star.com/?post_type=republished&#038;p=69920|https://penncapital-star.com/?post_type=republished&#038;p=69913"
       },
@@ -2359,17 +2577,17 @@
         "domain": "inquirer.com",
         "feed": "https://inquirer.com/arc/outboundfeeds/rss/?outputType=xml",
         "items": 100,
-        "medianChars": 2371,
-        "maxChars": 6156,
+        "medianChars": 2268,
+        "maxChars": 8193,
         "usableShare": 1,
-        "identity": "https://www.inquirer.com/news/philadelphia/christmas-village-accessibility-changes-ada-philadelphia-booths-20261017.html|https://www.inquirer.com/news/philadelphia/rocky-meat-punching-reading-terminal-market-20261017.html|https://www.inquirer.com/business/boeing-delaware-county-plant-funding-cuts-20261017.html"
+        "identity": "https://www.inquirer.com/wires/ap/fire-guts-bangladeshi-beach-resort-killing-10-people-20261017.html|https://www.inquirer.com/wires/ap/protesters-across-france-rally-over-rising-living-costs-joining-students-grievances-20261017.html|https://www.inquirer.com/wires/ap/ap-top-news-232-am-edt-20261017.html"
       },
       {
         "domain": "witf.org",
         "feed": "https://witf.org/feed/",
         "items": 50,
         "medianChars": 1503,
-        "maxChars": 11089,
+        "maxChars": 10849,
         "usableShare": 1,
         "identity": "https://witf.io/?p=274869|https://witf.io/?p=274792|https://witf.io/?p=274788"
       }
@@ -2388,12 +2606,13 @@
         "domain": "wtaj.com",
         "feed": "https://wtaj.com/news/feed/",
         "items": 50,
-        "medianChars": 350,
+        "medianChars": 351,
         "maxChars": 408,
         "usableShare": 0,
-        "identity": "https://www.wtaj.com/news/national-news/ap-us-news/ap-us-coast-guard-says-it-has-rescued-at-least-16-from-the-water-off-mexicos-baja-coast/|https://www.wtaj.com/news/national-news/ap-us-news/ap-governor-praises-local-who-helped-end-the-mass-shooting-at-an-oregon-elementary-school/|https://www.wtaj.com/us-politics/ap-politics/ap-trump-casts-doubt-on-press-secretary-zacharias-future/"
+        "identity": "https://www.wtaj.com/news/national-news/ap-hurricane-trudy-makes-its-way-toward-mexico-as-typhoon-champi-threatens-guam/|https://www.wtaj.com/news/national-news/ap-us-news/ap-us-coast-guard-says-it-has-rescued-at-least-16-from-the-water-off-mexicos-baja-coast/|https://www.wtaj.com/news/national-news/ap-us-news/ap-governor-praises-local-who-helped-end-the-mass-shooting-at-an-oregon-elementary-school/"
       }
     ],
+    "pages": [],
     "none": [
       "spotlightpa.org"
     ]
@@ -2405,8 +2624,8 @@
         "domain": "ecori.org",
         "feed": "https://ecori.org/feed/",
         "items": 10,
-        "medianChars": 6056,
-        "maxChars": 19641,
+        "medianChars": 6044,
+        "maxChars": 19545,
         "usableShare": 1,
         "identity": "https://ecori.org/?p=106821|https://ecori.org/?p=106702|https://ecori.org/?p=106777"
       },
@@ -2414,10 +2633,37 @@
         "domain": "rhodeislandcurrent.com",
         "feed": "https://rhodeislandcurrent.com/feed/",
         "items": 100,
-        "medianChars": 4585,
-        "maxChars": 21019,
-        "usableShare": 1,
+        "medianChars": 4561,
+        "maxChars": 21001,
+        "usableShare": 0.92,
         "identity": "https://rhodeislandcurrent.com/?p=34173|https://rhodeislandcurrent.com/?post_type=republished&#038;p=34178|https://rhodeislandcurrent.com/?p=34167"
+      },
+      {
+        "domain": "whatsupnewp.com",
+        "feed": "https://whatsupnewp.com/feed/",
+        "items": 100,
+        "medianChars": 3062,
+        "maxChars": 20303,
+        "usableShare": 0.92,
+        "identity": "https://whatsupnewp.com/?p=532878|https://whatsupnewp.com/?p=532872|https://whatsupnewp.com/?p=532867"
+      },
+      {
+        "domain": "rimonthly.com",
+        "feed": "https://www.rimonthly.com/feed/",
+        "items": 10,
+        "medianChars": 2346,
+        "maxChars": 30430,
+        "usableShare": 0.8,
+        "identity": "https://www.rimonthly.com/?p=317534|https://www.rimonthly.com/?p=317481|https://www.rimonthly.com/?p=317428"
+      },
+      {
+        "domain": "jamestownpress.com",
+        "feed": "https://jamestownpress.com/feed/",
+        "items": 10,
+        "medianChars": 1468,
+        "maxChars": 5408,
+        "usableShare": 0.7,
+        "identity": "https://www.jamestownpress.com/?post_type=oht_article&#038;p=146241|https://www.jamestownpress.com/?post_type=oht_article&#038;p=146245|https://www.jamestownpress.com/?post_type=oht_article&#038;p=146257"
       }
     ],
     "weak": [
@@ -2425,9 +2671,9 @@
         "domain": "thepublicsradio.org",
         "feed": "https://thepublicsradio.org/feed/",
         "items": 1000,
-        "medianChars": 264,
-        "maxChars": 504,
-        "usableShare": 0.08,
+        "medianChars": 259,
+        "maxChars": 499,
+        "usableShare": 0,
         "identity": "https://thepublicsradio.org/?p=113685|https://thepublicsradio.org/?p=113651|https://thepublicsradio.org/?p=113608"
       },
       {
@@ -2435,7 +2681,7 @@
         "feed": "https://wpri.com/feed/",
         "items": 30,
         "medianChars": 110,
-        "maxChars": 362,
+        "maxChars": 301,
         "usableShare": 0,
         "identity": "https://www.wpri.com/?p=3202096|https://www.wpri.com/?p=3202588|https://www.wpri.com/?p=3203427"
       },
@@ -2456,15 +2702,45 @@
         "maxChars": 261,
         "usableShare": 0,
         "identity": "https://upriseri.com/article/ri-jobs-fell-1600-in-september-as-rate-dips-to-36percent/|https://upriseri.com/article/maines-utility-playbook-has-a-rhode-island-echo/|https://upriseri.com/article/who-really-owns-that-amazon-bestseller-pillow/"
+      },
+      {
+        "domain": "warwickpost.com",
+        "feed": "https://warwickpost.com/feed/",
+        "items": 40,
+        "medianChars": 182,
+        "maxChars": 229,
+        "usableShare": 0,
+        "identity": "https://warwickpost.com/?p=176635|https://warwickpost.com/?p=176614|https://warwickpost.com/?p=176619"
+      },
+      {
+        "domain": "ricentral.com",
+        "feed": "http://www.ricentral.com/search/?f=rss&amp;t=article&amp;l=50&amp;s=start_time&amp;sd=desc&amp;k%5B%5D=%23topstory",
+        "items": 10,
+        "medianChars": 141,
+        "maxChars": 250,
+        "usableShare": 0,
+        "identity": "http://www.ricentral.com/tncms/asset/editorial/6604add4-015f-58c6-be5c-6ce0e64ef697|http://www.ricentral.com/tncms/asset/editorial/d430b53f-3bc5-54a2-aebf-7f5a47931b07|http://www.ricentral.com/tncms/asset/editorial/18379124-6daf-5ad8-a805-91836e9acec8"
+      },
+      {
+        "domain": "pbn.com",
+        "feed": "https://pbn.com/feed/",
+        "items": 10,
+        "medianChars": 350,
+        "maxChars": 368,
+        "usableShare": 0,
+        "identity": "https://pbn.com/?p=535254|https://pbn.com/?p=535293|https://pbn.com/?p=535265"
       }
     ],
+    "pages": [],
     "none": [
       "wjar.com",
       "providencejournal.com",
       "abc6.com",
       "golocalprov.com",
       "newportri.com",
-      "valleybreeze.com"
+      "valleybreeze.com",
+      "eastbayri.com",
+      "independentri.com"
     ]
   },
   {
@@ -2474,8 +2750,8 @@
         "domain": "scdailygazette.com",
         "feed": "https://scdailygazette.com/feed/",
         "items": 100,
-        "medianChars": 4925,
-        "maxChars": 13187,
+        "medianChars": 4685,
+        "maxChars": 12843,
         "usableShare": 1,
         "identity": "https://scdailygazette.com/?p=15551|https://scdailygazette.com/?p=15546|https://scdailygazette.com/?post_type=republished&#038;p=15542"
       },
@@ -2503,12 +2779,13 @@
         "domain": "postandcourier.com",
         "feed": "https://www.postandcourier.com/search/?f=rss&amp;t=article&amp;l=50&amp;s=start_time&amp;sd=desc&amp;k%5B%5D=%23topstory",
         "items": 10,
-        "medianChars": 138,
-        "maxChars": 255,
+        "medianChars": 179,
+        "maxChars": 254,
         "usableShare": 0,
-        "identity": "http://www.postandcourier.com/tncms/asset/editorial/c9689d9c-e25f-4313-835a-5c57a453f4cb|http://www.postandcourier.com/tncms/asset/editorial/1ad31262-e3ac-4221-9fe4-9af4c9b0e158|http://www.postandcourier.com/tncms/asset/editorial/0af56298-fab4-499a-a9ca-7c31d50fb278"
+        "identity": "http://www.postandcourier.com/tncms/asset/editorial/c55aa196-b161-45c6-ada8-057fc922ab5f|http://www.postandcourier.com/tncms/asset/editorial/376a0d74-803c-4848-a90a-1654e8a58940|http://www.postandcourier.com/tncms/asset/editorial/c9689d9c-e25f-4313-835a-5c57a453f4cb"
       }
     ],
+    "pages": [],
     "none": [
       "scpublicradio.org"
     ]
@@ -2520,8 +2797,8 @@
         "domain": "southdakotasearchlight.com",
         "feed": "https://southdakotasearchlight.com/feed/",
         "items": 100,
-        "medianChars": 4696,
-        "maxChars": 11124,
+        "medianChars": 4684,
+        "maxChars": 11052,
         "usableShare": 1,
         "identity": "https://southdakotasearchlight.com/?p=25462|https://southdakotasearchlight.com/?p=25458|https://southdakotasearchlight.com/?p=25440"
       },
@@ -2545,6 +2822,7 @@
       }
     ],
     "weak": [],
+    "pages": [],
     "none": [
       "argusleader.com",
       "sdpb.org"
@@ -2557,8 +2835,8 @@
         "domain": "tennesseelookout.com",
         "feed": "https://tennesseelookout.com/feed/",
         "items": 100,
-        "medianChars": 4584,
-        "maxChars": 15165,
+        "medianChars": 4561,
+        "maxChars": 15159,
         "usableShare": 1,
         "identity": "https://tennesseelookout.com/?post_type=republished&#038;p=36187|https://tennesseelookout.com/?p=36184|https://tennesseelookout.com/?p=36177"
       },
@@ -2566,8 +2844,8 @@
         "domain": "wpln.org",
         "feed": "https://wpln.org/feed/",
         "items": 16,
-        "medianChars": 2937,
-        "maxChars": 8502,
+        "medianChars": 3266,
+        "maxChars": 9306,
         "usableShare": 0.83,
         "identity": "https://wpln.org/?p=197308|https://wpln.org/?p=197221|https://wpln.org/?p=196293"
       },
@@ -2575,10 +2853,10 @@
         "domain": "wvlt.tv",
         "feed": "https://wvlt.tv/arc/outboundfeeds/rss/?outputType=xml",
         "items": 20,
-        "medianChars": 1345,
+        "medianChars": 1266,
         "maxChars": 5680,
         "usableShare": 1,
-        "identity": "https://www.wvlt.tv/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.wvlt.tv/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/|https://www.wvlt.tv/2026/10/17/east-tennessee-high-school-football-scores-week-9/"
+        "identity": "https://www.wvlt.tv/2026/10/17/cold-front-brings-weekend-chance-frost/|https://www.wvlt.tv/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.wvlt.tv/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/"
       },
       {
         "domain": "wmcactionnews5.com",
@@ -2587,10 +2865,11 @@
         "medianChars": 1122,
         "maxChars": 4550,
         "usableShare": 1,
-        "identity": "https://www.actionnews5.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.actionnews5.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/|https://www.actionnews5.com/2026/10/17/friday-football-fever-week-9-mus-ends-centrals-perfect-season-game-week-more/"
+        "identity": "https://www.actionnews5.com/2026/10/17/crisp-cool-fall-air-takes-over-mid-south-today/|https://www.actionnews5.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.actionnews5.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/"
       }
     ],
     "weak": [],
+    "pages": [],
     "none": [
       "tennessean.com"
     ]
@@ -2602,8 +2881,8 @@
         "domain": "sacurrent.com",
         "feed": "https://www.sacurrent.com/feed/",
         "items": 10,
-        "medianChars": 3630,
-        "maxChars": 10793,
+        "medianChars": 4953,
+        "maxChars": 12189,
         "usableShare": 1,
         "identity": "https://www.sacurrent.com/?p=426244|https://www.sacurrent.com/?p=426164|https://www.sacurrent.com/?p=426172"
       },
@@ -2640,12 +2919,13 @@
         "domain": "texastribune.org",
         "feed": "https://www.texastribune.org/feed/",
         "items": 20,
-        "medianChars": 155,
+        "medianChars": 143,
         "maxChars": 222,
         "usableShare": 0,
-        "identity": "https://www.texastribune.org/?p=236623|https://www.texastribune.org/?p=246932|https://www.texastribune.org/?p=246639"
+        "identity": "https://www.texastribune.org/?p=246976|https://www.texastribune.org/?p=236623|https://www.texastribune.org/?p=246932"
       }
     ],
+    "pages": [],
     "none": [
       "houstonchronicle.com"
     ]
@@ -2666,8 +2946,8 @@
         "domain": "utahnewsdispatch.com",
         "feed": "https://utahnewsdispatch.com/feed/",
         "items": 100,
-        "medianChars": 4340,
-        "maxChars": 10189,
+        "medianChars": 4329,
+        "maxChars": 10135,
         "usableShare": 1,
         "identity": "https://utahnewsdispatch.com/?post_type=republished&#038;p=20423|https://utahnewsdispatch.com/?p=20421|https://utahnewsdispatch.com/?post_type=republished&#038;p=20419"
       },
@@ -2696,7 +2976,7 @@
         "feed": "https://ksl.com/rss/news",
         "items": 20,
         "medianChars": 142,
-        "maxChars": 223,
+        "maxChars": 213,
         "usableShare": 0,
         "identity": "https://www.ksl.com/article/51637416/utah-adds-25200-jobs-over-the-past-year-as-unemployment-holds-steady-at-35|https://www.ksl.com/article/51637481/pope-leos-diagnosis-puts-spotlight-on-lung-cancer-risks-beyond-smoking|https://www.ksl.com/article/51637508/motorcyclist-critically-injured-in-ogden-crash"
       },
@@ -2719,6 +2999,7 @@
         "identity": "https://www.abc4.com/?p=3178081|https://www.abc4.com/?p=3178051|https://www.abc4.com/?p=3178052"
       }
     ],
+    "pages": [],
     "none": [
       "kuer.org",
       "kslnewsradio.com",
@@ -2732,30 +3013,30 @@
     "state": "vermont",
     "usable": [
       {
-        "domain": "vermontbiz.com",
-        "feed": "https://vermontbiz.com/rss.xml",
-        "items": 10,
-        "medianChars": 6481,
-        "maxChars": 52770,
-        "usableShare": 1,
-        "identity": "244960 at https://vermontbiz.com|239005 at https://vermontbiz.com|212556 at https://vermontbiz.com"
-      },
-      {
         "domain": "vtdigger.org",
         "feed": "https://vtdigger.org/feed/",
         "items": 30,
-        "medianChars": 5290,
-        "maxChars": 8583,
+        "medianChars": 6782,
+        "maxChars": 11882,
         "usableShare": 1,
         "identity": "https://vtdigger.org/?p=657111|https://vtdigger.org/?p=657103|https://vtdigger.org/?p=657087"
+      },
+      {
+        "domain": "vermontbiz.com",
+        "feed": "https://vermontbiz.com/rss.xml",
+        "items": 10,
+        "medianChars": 3009,
+        "maxChars": 11169,
+        "usableShare": 0.9,
+        "identity": "244960 at https://vermontbiz.com|239005 at https://vermontbiz.com|212556 at https://vermontbiz.com"
       },
       {
         "domain": "sevendaysvt.com",
         "feed": "https://www.sevendaysvt.com/feed/",
         "items": 10,
-        "medianChars": 2340,
-        "maxChars": 33198,
-        "usableShare": 0.9,
+        "medianChars": 2732,
+        "maxChars": 46893,
+        "usableShare": 0.8,
         "identity": "https://www.sevendaysvt.com/?p=221178|https://www.sevendaysvt.com/?p=221179|https://www.sevendaysvt.com/?p=221134"
       },
       {
@@ -2771,7 +3052,7 @@
         "domain": "newportdispatch.com",
         "feed": "https://www.newportdispatch.com/feed/",
         "items": 100,
-        "medianChars": 1128,
+        "medianChars": 1122,
         "maxChars": 2277,
         "usableShare": 0.92,
         "identity": "https://www.newportdispatch.com/2026/10/16/woman-arrested-on-larceny-charge-in-east-fishkill/|https://www.newportdispatch.com/2026/10/16/11-arrested-on-drug-charges-in-newburgh/|https://www.newportdispatch.com/2026/10/16/man-arrested-on-child-exploitation-charges-in-cobleskill/"
@@ -2785,16 +3066,16 @@
         "medianChars": 154,
         "maxChars": 301,
         "usableShare": 0,
-        "identity": "https://www.vermontpublic.org/show/vermont-this-week/2026-10-16/in-review-heating-oil-housing-market-affordability-in-vermont|https://www.vermontpublic.org/show/vermont-edition/2026-10-16/vermont-author-dana-mashoian-walrath-unflinching-disaster-comic-the-book-of-genocides|https://www.vermontpublic.org/local-news/2026-10-16/vermont-schoolteacher-musician-mines-family-mythology-in-new-song"
+        "identity": "https://www.vermontpublic.org/show/vermont-this-week/2026-10-16/in-review-heating-oil-housing-market-affordability-in-vermont|https://www.vermontpublic.org/show/vermont-edition/2026-10-16/vermont-author-dana-mashoian-walrath-unflinching-disaster-comic-the-book-of-genocides|https://www.vermontpublic.org/local-news/2026-10-16/an-evening-of-folk-and-classical-music-styles-that-share-roots-and-themes-in-nature"
       },
       {
-        "domain": "rutlandherald.com",
-        "feed": "http://www.rutlandherald.com/search/?f=rss&amp;t=article&amp;l=50&amp;s=start_time&amp;sd=desc&amp;k%5B%5D=%23topstory",
+        "domain": "timesargus.com",
+        "feed": "http://www.timesargus.com/search/?f=rss&amp;t=article&amp;l=50&amp;s=start_time&amp;sd=desc&amp;k%5B%5D=%23topstory",
         "items": 10,
-        "medianChars": 254,
-        "maxChars": 299,
+        "medianChars": 180,
+        "maxChars": 238,
         "usableShare": 0,
-        "identity": "http://www.rutlandherald.com/tncms/asset/editorial/aeb7fd71-5499-5316-96c2-af4a0e26e099|http://www.rutlandherald.com/tncms/asset/editorial/38c12d47-2895-54ea-b784-6d4c856d3f15|http://www.rutlandherald.com/tncms/asset/editorial/875cc810-5652-5371-b4dc-5eb751770ed5"
+        "identity": "http://www.timesargus.com/tncms/asset/editorial/3212ed8d-9dbd-5d23-a768-294afa943b25|http://www.timesargus.com/tncms/asset/editorial/0e80692f-8520-5466-9c09-0947f5b60c4a|http://www.timesargus.com/tncms/asset/editorial/7937cb1d-da1b-5c1e-aae2-b70b9c62dc19"
       },
       {
         "domain": "newportdispatch.com",
@@ -2824,9 +3105,10 @@
         "identity": "https://www.mychamplainvalley.com/?p=3181715|https://www.mychamplainvalley.com/?p=3181451|https://www.mychamplainvalley.com/?p=3181557"
       }
     ],
+    "pages": [],
     "none": [
       "burlingtonfreepress.com",
-      "timesargus.com",
+      "rutlandherald.com",
       "benningtonbanner.com"
     ]
   },
@@ -2838,7 +3120,7 @@
         "feed": "https://virginiamercury.com/feed/",
         "items": 100,
         "medianChars": 4439,
-        "maxChars": 7883,
+        "maxChars": 7817,
         "usableShare": 1,
         "identity": "https://virginiamercury.com/?post_type=republished&#038;p=49434|https://virginiamercury.com/?p=49440|https://virginiamercury.com/?p=49441"
       },
@@ -2847,9 +3129,9 @@
         "feed": "https://wdbj7.com/arc/outboundfeeds/rss/?outputType=xml",
         "items": 20,
         "medianChars": 1741,
-        "maxChars": 10852,
-        "usableShare": 1,
-        "identity": "https://www.wdbj7.com/2026/10/16/first-alert-drastic-drop-temperatures-this-weekend/|https://www.wdbj7.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.wdbj7.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/"
+        "maxChars": 10871,
+        "usableShare": 0.92,
+        "identity": "https://www.wdbj7.com/2026/10/17/hometown-birthdays-anniversaries-oct-17/|https://www.wdbj7.com/2026/10/16/first-alert-drastic-drop-temperatures-this-weekend/|https://www.wdbj7.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/"
       },
       {
         "domain": "whsv.com",
@@ -2862,6 +3144,7 @@
       }
     ],
     "weak": [],
+    "pages": [],
     "none": [
       "richmond.com",
       "vpm.org"
@@ -2893,7 +3176,7 @@
         "feed": "https://www.cascadiadaily.com/feed/",
         "items": 10,
         "medianChars": 4608,
-        "maxChars": 11402,
+        "maxChars": 11012,
         "usableShare": 1,
         "identity": "https://www.cascadiadaily.com/?p=536412|https://www.cascadiadaily.com/?p=535452|https://www.cascadiadaily.com/?p=536379"
       },
@@ -2901,8 +3184,8 @@
         "domain": "washingtonstatestandard.com",
         "feed": "https://washingtonstatestandard.com/feed/",
         "items": 100,
-        "medianChars": 4048,
-        "maxChars": 17242,
+        "medianChars": 4042,
+        "maxChars": 17159,
         "usableShare": 1,
         "identity": "https://washingtonstatestandard.com/?p=17586|https://washingtonstatestandard.com/?post_type=republished&#038;p=17559|https://washingtonstatestandard.com/?post_type=republished&#038;p=17577"
       },
@@ -2910,8 +3193,8 @@
         "domain": "thestranger.com",
         "feed": "https://www.thestranger.com/feed/",
         "items": 10,
-        "medianChars": 1899,
-        "maxChars": 8699,
+        "medianChars": 1875,
+        "maxChars": 8717,
         "usableShare": 1,
         "identity": "https://www.thestranger.com/?p=333236|https://www.thestranger.com/?p=333224|https://www.thestranger.com/?p=333149"
       }
@@ -2930,39 +3213,31 @@
         "domain": "king5.com",
         "feed": "https://www.king5.com/feeds/syndication/rss/news",
         "items": 40,
-        "medianChars": 134,
-        "maxChars": 163,
+        "medianChars": 135,
+        "maxChars": 159,
         "usableShare": 0,
-        "identity": "1971dacc-f59b-4414-a8da-66d7342e3aeb|a3980daf-c157-4b9c-bc35-d4a7f4a93840|9ff2d07b-9d3d-4bef-8e4e-7079458cc81b"
+        "identity": "676742d0-f3e6-41d7-8115-8b566476cb7a|995e5e6f-dd6d-46c7-9201-e5051a59c4f1|1971dacc-f59b-4414-a8da-66d7342e3aeb"
       },
       {
         "domain": "heraldnet.com",
         "feed": "https://heraldnet.com/feed/",
         "items": 10,
         "medianChars": 83,
-        "maxChars": 1430,
+        "maxChars": 1346,
         "usableShare": 0.1,
         "identity": "https://www.heraldnet.com/2026/10/17/editorial-cartoons-for-saturday-october-17/|https://www.heraldnet.com/2026/10/16/meadowdale-football-wins-wesco-3a-south-on-2-point-stop-in-ot/|https://www.heraldnet.com/2026/10/16/everett-police-cold-case-investigation-featured-on-48-hours-season-debut/"
-      },
-      {
-        "domain": "yakimaherald.com",
-        "feed": "http://www.yakimaherald.com/search/?f=rss&amp;t=article&amp;l=50&amp;s=start_time&amp;sd=desc&amp;k%5B%5D=%23topstory",
-        "items": 10,
-        "medianChars": 144,
-        "maxChars": 275,
-        "usableShare": 0,
-        "identity": "http://www.yakimaherald.com/tncms/asset/editorial/8a876ca4-3d8f-5126-b9f6-82202a0958fc|http://www.yakimaherald.com/tncms/asset/editorial/5e80d836-e9ac-5f2b-a9aa-cda1473f7e0b|http://www.yakimaherald.com/tncms/asset/editorial/15056ec6-b883-5a70-8fe4-a80436527c14"
       },
       {
         "domain": "publicola.com",
         "feed": "https://publicola.com/feed/",
         "items": 10,
-        "medianChars": 271,
-        "maxChars": 337,
+        "medianChars": 258,
+        "maxChars": 319,
         "usableShare": 0,
         "identity": "https://publicola.com/?p=55925|https://publicola.com/?p=55878|https://publicola.com/?p=55879"
       }
     ],
+    "pages": [],
     "none": [
       "seattletimes.com",
       "kuow.org",
@@ -2970,6 +3245,7 @@
       "komonews.com",
       "thenewstribune.com",
       "tri-cityherald.com",
+      "yakimaherald.com",
       "theolympian.com"
     ]
   },
@@ -2980,7 +3256,7 @@
         "domain": "westvirginiawatch.com",
         "feed": "https://westvirginiawatch.com/feed/",
         "items": 100,
-        "medianChars": 6125,
+        "medianChars": 5771,
         "maxChars": 11068,
         "usableShare": 1,
         "identity": "https://westvirginiawatch.com/?post_type=republished&#038;p=20025|https://westvirginiawatch.com/?post_type=republished&#038;p=20022|https://westvirginiawatch.com/?post_type=republished&#038;p=20019"
@@ -3001,7 +3277,7 @@
         "medianChars": 636,
         "maxChars": 2195,
         "usableShare": 0.58,
-        "identity": "https://www.wsaz.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.wsaz.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/|https://www.wsaz.com/2026/10/17/cell-phone-addiction-can-be-scary/"
+        "identity": "https://www.wsaz.com/2026/01/17/first-alert-forecast/|https://www.wsaz.com/2026/10/17/mom-hunts-once-in-a-lifetime-moose-4-days-after-c-section-birth/|https://www.wsaz.com/2026/10/17/woman-previously-convicted-killing-husband-arrested-again-new-charge/"
       }
     ],
     "weak": [
@@ -3009,12 +3285,13 @@
         "domain": "wvgazettemail.com",
         "feed": "http://www.wvgazettemail.com/search/?f=rss&amp;t=article&amp;l=50&amp;s=start_time&amp;sd=desc&amp;k%5B%5D=%23topstory",
         "items": 10,
-        "medianChars": 92,
-        "maxChars": 241,
+        "medianChars": 90,
+        "maxChars": 235,
         "usableShare": 0,
-        "identity": "http://www.wvgazettemail.com/tncms/asset/editorial/dead9e4a-079f-4194-b08d-11d99b85c25c|http://www.wvgazettemail.com/tncms/asset/editorial/c65ad115-983b-4d80-af83-0c1b8ad569b9|http://www.wvgazettemail.com/tncms/asset/editorial/9acbc337-14be-4421-98cf-dc07dcca7254"
+        "identity": "http://www.wvgazettemail.com/tncms/asset/editorial/2e37f7c8-1d3d-47b8-98b5-ef2333b1ceb2|http://www.wvgazettemail.com/tncms/asset/editorial/dead9e4a-079f-4194-b08d-11d99b85c25c|http://www.wvgazettemail.com/tncms/asset/editorial/c65ad115-983b-4d80-af83-0c1b8ad569b9"
       }
     ],
+    "pages": [],
     "none": [
       "wvpublic.org"
     ]
@@ -3026,8 +3303,8 @@
         "domain": "wisconsinexaminer.com",
         "feed": "https://wisconsinexaminer.com/feed/",
         "items": 100,
-        "medianChars": 4585,
-        "maxChars": 10062,
+        "medianChars": 4561,
+        "maxChars": 9882,
         "usableShare": 1,
         "identity": "https://wisconsinexaminer.com/?p=48394|https://wisconsinexaminer.com/?post_type=republished&#038;p=48392|https://wisconsinexaminer.com/?post_type=republished&#038;p=48386"
       },
@@ -3061,6 +3338,7 @@
         "identity": "https://www.wpr.org/?p=491941|https://www.wpr.org/?p=491906|https://www.wpr.org/?p=491832"
       }
     ],
+    "pages": [],
     "none": [
       "jsonline.com"
     ]
@@ -3069,47 +3347,47 @@
     "state": "wyoming",
     "usable": [
       {
-        "domain": "oilcity.news",
-        "feed": "https://oilcity.news/politics/feed/",
-        "items": 51,
-        "medianChars": 5758,
-        "maxChars": 13643,
-        "usableShare": 1,
-        "identity": "https://oilcity.news/?p=404699|https://oilcity.news/?p=404345|https://oilcity.news/?p=403792"
-      },
-      {
         "domain": "capcity.news",
         "feed": "https://capcity.news/politics/feed/",
         "items": 51,
-        "medianChars": 5758,
-        "maxChars": 13643,
+        "medianChars": 6221,
+        "maxChars": 14366,
         "usableShare": 1,
         "identity": "https://capcity.news/?p=177876|https://capcity.news/?p=177630|https://capcity.news/?p=177192"
+      },
+      {
+        "domain": "oilcity.news",
+        "feed": "https://oilcity.news/politics/feed/",
+        "items": 51,
+        "medianChars": 6078,
+        "maxChars": 14382,
+        "usableShare": 1,
+        "identity": "https://oilcity.news/?p=404699|https://oilcity.news/?p=404345|https://oilcity.news/?p=403792"
       },
       {
         "domain": "wyofile.com",
         "feed": "https://wyofile.com/feed/",
         "items": 10,
         "medianChars": 5585,
-        "maxChars": 110854,
-        "usableShare": 1,
+        "maxChars": 110398,
+        "usableShare": 0.9,
         "identity": "https://wyofile.com/?p=131876|https://wyofile.com/?p=131879|https://wyofile.com/?p=131795"
       },
       {
         "domain": "oilcity.news",
         "feed": "https://oilcity.news/feed/",
         "items": 51,
-        "medianChars": 3182,
-        "maxChars": 10666,
-        "usableShare": 1,
+        "medianChars": 3114,
+        "maxChars": 41370,
+        "usableShare": 0.92,
         "identity": "https://oilcity.news/?p=405776|https://oilcity.news/?p=405746|https://oilcity.news/?p=405735"
       },
       {
         "domain": "capcity.news",
         "feed": "https://capcity.news/feed/",
         "items": 51,
-        "medianChars": 1803,
-        "maxChars": 6177,
+        "medianChars": 1970,
+        "maxChars": 9551,
         "usableShare": 1,
         "identity": "https://capcity.news/?p=178085|https://capcity.news/?p=178080|https://capcity.news/?p=177942"
       },
@@ -3117,8 +3395,8 @@
         "domain": "capcity.news",
         "feed": "https://capcity.news/news/feed/",
         "items": 51,
-        "medianChars": 1803,
-        "maxChars": 6177,
+        "medianChars": 1970,
+        "maxChars": 9551,
         "usableShare": 1,
         "identity": "https://capcity.news/?p=178080|https://capcity.news/?p=177942|https://capcity.news/?p=178072"
       },
@@ -3126,8 +3404,8 @@
         "domain": "sheridanmedia.com",
         "feed": "https://sheridanmedia.com/feed/",
         "items": 10,
-        "medianChars": 1634,
-        "maxChars": 3121,
+        "medianChars": 1628,
+        "maxChars": 3106,
         "usableShare": 0.9,
         "identity": "https://sheridanmedia.com/?p=253497|https://sheridanmedia.com/?p=253489|https://sheridanmedia.com/?p=253426"
       },
@@ -3135,8 +3413,8 @@
         "domain": "county10.com",
         "feed": "https://county10.com/feed/",
         "items": 25,
-        "medianChars": 1578,
-        "maxChars": 4335,
+        "medianChars": 1567,
+        "maxChars": 4221,
         "usableShare": 0.92,
         "identity": "https://county10.com/?p=494715|https://county10.com/?p=494593|https://county10.com/?p=494549"
       },
@@ -3145,20 +3423,29 @@
         "feed": "https://sheridanmedia.com/news/feed/",
         "items": 10,
         "medianChars": 1091,
-        "maxChars": 2721,
+        "maxChars": 2715,
         "usableShare": 0.8,
         "identity": "https://sheridanmedia.com/?p=253465|https://sheridanmedia.com/?p=253459|https://sheridanmedia.com/?p=253457"
+      },
+      {
+        "domain": "buckrail.com",
+        "feed": "https://buckrail.com/feed/",
+        "items": 60,
+        "medianChars": 638,
+        "maxChars": 845,
+        "usableShare": 0.92,
+        "identity": "https://buckrail.com/?p=286328|https://buckrail.com/?p=286333|https://buckrail.com/?p=286192"
       }
     ],
     "weak": [
       {
-        "domain": "trib.com",
-        "feed": "http://trib.com/search/?f=rss&amp;t=article&amp;l=50&amp;s=start_time&amp;sd=desc&amp;k%5B%5D=%23topstory",
+        "domain": "wyomingnews.com",
+        "feed": "http://www.wyomingnews.com/search/?f=rss&amp;t=article&amp;l=50&amp;s=start_time&amp;sd=desc&amp;k%5B%5D=%23topstory",
         "items": 10,
-        "medianChars": 25,
-        "maxChars": 269,
+        "medianChars": 150,
+        "maxChars": 266,
         "usableShare": 0,
-        "identity": "http://trib.com/tncms/asset/editorial/272dfc94-9fa8-5fde-b438-7f0a0f3e578e|http://trib.com/tncms/asset/editorial/92a1c7c3-fe1b-5544-a94b-3e63b24e78eb|http://trib.com/tncms/asset/editorial/7bd2887c-c478-5517-8c16-ecc3c6ca70d5"
+        "identity": "http://www.wyomingnews.com/tncms/asset/editorial/89fa62b8-df0c-4cd4-ac15-47fc3b5ce7a4|http://www.wyomingnews.com/tncms/asset/editorial/0635a088-ca7d-49c3-8d1c-3c7acee41b96|http://www.wyomingnews.com/tncms/asset/editorial/e9009b62-0f3c-4929-af8c-a8e91417bfc9"
       },
       {
         "domain": "cowboystatedaily.com",
@@ -3168,29 +3455,13 @@
         "maxChars": 301,
         "usableShare": 0,
         "identity": "https://cowboystatedaily.com/2026/10/16/wyoming-legislator-says-hell-push-anti-dark-money-measure-after-committee-doesnt/|https://cowboystatedaily.com/2026/10/16/your-wyoming-sunrise-saturday-october-17-2026/|https://cowboystatedaily.com/2026/10/16/one-more-for-the-road-saturday-october-17-2026/"
-      },
-      {
-        "domain": "gillettenewsrecord.com",
-        "feed": "http://www.gillettenewsrecord.com/search/?f=rss&amp;t=article&amp;l=50&amp;s=start_time&amp;sd=desc&amp;k%5B%5D=%23topstory",
-        "items": 10,
-        "medianChars": 94,
-        "maxChars": 256,
-        "usableShare": 0,
-        "identity": "http://www.gillettenewsrecord.com/tncms/asset/editorial/df789889-acbf-5a15-bf27-e670cbba4104|http://www.gillettenewsrecord.com/tncms/asset/editorial/2d739c37-56e5-575e-94e4-579943905b9d|http://www.gillettenewsrecord.com/tncms/asset/editorial/187e53c3-f935-507f-873e-5e3e32ae943a"
-      },
-      {
-        "domain": "buckrail.com",
-        "feed": "https://buckrail.com/feed/",
-        "items": 60,
-        "medianChars": 469,
-        "maxChars": 527,
-        "usableShare": 0.17,
-        "identity": "https://buckrail.com/?p=286328|https://buckrail.com/?p=286333|https://buckrail.com/?p=286192"
       }
     ],
+    "pages": [],
     "none": [
-      "wyomingnews.com",
+      "trib.com",
       "wyomingpublicmedia.org",
+      "gillettenewsrecord.com",
       "jhnewsandguide.com"
     ]
   }
