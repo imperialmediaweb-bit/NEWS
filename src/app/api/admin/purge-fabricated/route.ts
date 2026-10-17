@@ -194,15 +194,30 @@ export async function GET(req: NextRequest) {
     client.release();
   }
 
-  const [{ rows: left }, { rows: logged }] = await Promise.all([
-    pool.query(`SELECT count(*)::int AS n FROM articles a WHERE ${where}`, PATTERNS),
-    pool.query("SELECT count(*)::int AS n FROM purged_articles"),
-  ]);
-  const remaining = Number(left[0]?.n) || 0;
+  // Counting what is left means ten ILIKE patterns across every remaining row
+  // — a full scan, on every call, which is what pushed these requests past
+  // the gateway timeout and returned 502 mid-run.
+  //
+  // It is also unnecessary most of the time. A batch that came back full
+  // cannot be the last one, so there is nothing to count: say so and move on.
+  // The count runs only when a batch comes back short, which happens once.
+  const fullBatch = deleted >= limit;
+  const { rows: logged } = await pool.query(
+    "SELECT count(*)::int AS n FROM purged_articles"
+  );
+  let remaining = -1;
+  if (!fullBatch) {
+    const { rows: left } = await pool.query(
+      `SELECT count(*)::int AS n FROM articles a WHERE ${where}`,
+      PATTERNS
+    );
+    remaining = Number(left[0]?.n) || 0;
+  }
 
   return NextResponse.json({
     deleted,
-    remaining,
+    // -1 means "not counted, because a full batch proves there is more left".
+    remaining: remaining < 0 ? "more (not counted — batch came back full)" : remaining,
     // Reported so the record can be checked rather than assumed. If this
     // stops tracking the number deleted, the transaction is not doing what
     // the comment above claims and the run should stop.
@@ -213,8 +228,11 @@ export async function GET(req: NextRequest) {
     // these pages came back "URL is unknown to Google", so spending 62,778
     // Indexing API requests to retract pages Google never had would burn a
     // 200/day quota the live network needs.
+    // remaining is -1 when a full batch made counting unnecessary, so this
+    // tests against zero rather than for a positive number — otherwise every
+    // uncounted batch would claim there is nothing left to do.
     next:
-      remaining > 0
+      remaining !== 0
         ? `/api/admin/purge-fabricated?key=…&confirm=${CONFIRM}&limit=${limit}`
         : null,
   });
