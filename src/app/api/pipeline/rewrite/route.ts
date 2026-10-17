@@ -37,12 +37,49 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ message: "Pipeline disabled" });
   }
 
+  const body = await req.json().catch(() => ({}));
+  const batchSize = body.batchSize || 10;
+
+  // Which states would this batch serve, without claiming or publishing
+  // anything. The selection is the part of this route that has gone wrong
+  // twice — once taking the stalest items, once taking the same ten states
+  // every run — and both times it was invisible, because nothing failed. This
+  // answers "who is next" directly, and it answers it outside publishing
+  // hours, which is when you are usually asking.
+  if (body.dryRun) {
+    const { rows } = await pool.query(
+      `WITH silence AS (
+         SELECT s.state, max(a.published_at) AS last_published
+           FROM sites s
+           LEFT JOIN articles a ON a.site_id = s.id
+          GROUP BY s.state
+       )
+       SELECT ranked.state, ranked.rn, silence.last_published
+         FROM (
+           SELECT id, state,
+                  row_number() OVER (PARTITION BY state ORDER BY created_at DESC) AS rn
+             FROM feed_items
+            WHERE status = 'pending'
+              AND created_at > NOW() - INTERVAL '24 hours'
+         ) ranked
+         LEFT JOIN silence ON silence.state = ranked.state
+        ORDER BY ranked.rn ASC, silence.last_published ASC NULLS FIRST
+        LIMIT $1`,
+      [batchSize]
+    );
+    return NextResponse.json({
+      dryRun: true,
+      batchSize,
+      wouldServe: rows.map((r) => ({
+        state: r.state,
+        lastPublished: r.last_published,
+      })),
+    });
+  }
+
   if (!isPublishingHours()) {
     return NextResponse.json({ message: "Outside publishing hours (6 AM - 10 PM ET)" });
   }
-
-  const body = await req.json().catch(() => ({}));
-  const batchSize = body.batchSize || 10;
 
   const startTime = Date.now();
   const runId = await logRunStart("rewrite");
