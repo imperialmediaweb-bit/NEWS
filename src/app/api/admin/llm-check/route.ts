@@ -145,6 +145,28 @@ async function checkOpenAI(model: string): Promise<ProviderReport> {
     report.error = "OPENAI_API_KEY not set";
     return report;
   }
+
+  // What this key may actually use. Model names and tiers change often enough
+  // that picking "the cheap one" from memory is how you end up configuring a
+  // name that no longer resolves — which is exactly how Anthropic's entry in
+  // this file came to 404. Listing is one call and it is authoritative.
+  try {
+    const list = await fetch("https://api.openai.com/v1/models", {
+      headers: { Authorization: `Bearer ${apiKey}` },
+    });
+    if (list.ok) {
+      const data = await list.json();
+      report.availableModels = (data?.data || [])
+        .map((m: { id?: string }) => String(m.id || ""))
+        // Chat models only: the list also carries embeddings, audio, image
+        // and moderation models, which are not candidates here.
+        .filter((id: string) => /^(gpt|o[0-9]|chatgpt)/.test(id))
+        .sort();
+    }
+  } catch {
+    // A failed listing is not a failed provider — the probe below decides.
+  }
+
   try {
     const res = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
