@@ -3,7 +3,7 @@ import { feeds, STATE_BATCHES, isPublishingHours } from "@/config/feeds";
 import { feedsForState } from "@/config/state-feeds";
 import { isRelevantToState } from "@/lib/pipeline/relevance";
 import { parseFeed } from "@/lib/pipeline/rss-parser";
-import { duplicateReason, insertFeedItem, loadDedupContext } from "@/lib/pipeline/dedup";
+import { duplicateReason, guidHolder, insertFeedItem, loadDedupContext } from "@/lib/pipeline/dedup";
 import {
   logRunStart,
   logRunEnd,
@@ -138,6 +138,7 @@ export async function POST(req: NextRequest) {
       read: number;
       inserted: number;
       seenBefore: number;
+      heldBy: Record<string, number>;
       similarTitle: number;
       offTopic: number;
       insertRejected: number;
@@ -162,6 +163,8 @@ export async function POST(req: NextRequest) {
       read: 0,
       inserted: 0,
       seenBefore: 0,
+      // Which states already hold the articles this state was offered.
+      heldBy: {} as Record<string, number>,
       similarTitle: 0,
       offTopic: 0,
       insertRejected: 0,
@@ -224,7 +227,11 @@ export async function POST(req: NextRequest) {
             // Seen before (correct) and "looks like something else we have"
             // (a threshold, and therefore a judgement that can be wrong) are
             // different problems with opposite fixes. Count them apart.
-            if (dup === "guid") tally.seenBefore++;
+            if (dup === "guid") {
+              tally.seenBefore++;
+              const holder = guidHolder();
+              tally.heldBy[holder] = (tally.heldBy[holder] || 0) + 1;
+            }
             else {
               tally.similarTitle++;
               if (!tally.similarExample) tally.similarExample = item.title.slice(0, 90);

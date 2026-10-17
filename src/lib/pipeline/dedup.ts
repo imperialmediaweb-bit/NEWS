@@ -60,18 +60,44 @@ function jaccardSimilarity(a: Set<string>, b: Set<string>): number {
  */
 export type DuplicateReason = "" | "guid" | "title";
 
+/**
+ * Which state already holds the GUID that just matched.
+ *
+ * Module-level rather than part of the return value because the fetch loop is
+ * strictly sequential per item — it awaits each check before the next — so
+ * there is no interleaving to get this wrong. It is diagnostic only; nothing
+ * branches on it.
+ */
+let lastGuidHolder = "";
+
+export function guidHolder(): string {
+  return lastGuidHolder;
+}
+
 export async function duplicateReason(
   item: FeedItem,
   ctx?: DedupContext
 ): Promise<DuplicateReason> {
   const guid = generateGuid(item);
 
-  // Layer 1: GUID check
+  // Layer 1: GUID check.
+  //
+  // Deliberately not scoped to a state, and the state it IS filed under is
+  // reported back: the nonprofit state newsrooms republish each other, so the
+  // same article arrives in several states' feeds and whichever state is
+  // processed first claims it. That is the intended outcome for wire copy —
+  // fifty sites running one story is the pattern this network must not match
+  // — but it also means a state whose feeds are mostly syndicated gets
+  // nothing at all, and from the outside that is indistinguishable from a
+  // broken feed. Naming the holder is what tells the two apart.
   const { rows: guidRows } = await pool.query(
-    "SELECT id FROM feed_items WHERE guid = $1",
+    "SELECT state FROM feed_items WHERE guid = $1 LIMIT 1",
     [guid]
   );
-  if (guidRows.length > 0) return "guid";
+  if (guidRows.length > 0) {
+    lastGuidHolder = (guidRows[0].state as string) || "(none)";
+    return "guid";
+  }
 
   // Layer 2: title similarity against recent items. Callers should pass a
   // DedupContext so the 48h lookback is fetched and normalized ONCE per run
