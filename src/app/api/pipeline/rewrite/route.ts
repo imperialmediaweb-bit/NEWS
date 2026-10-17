@@ -15,6 +15,9 @@ import { sites } from "@/config/sites";
  */
 const MIN_SOURCE_CHARS = 500;
 
+/** Past this it is a page, not an article. See where it is applied below. */
+const MAX_SOURCE_CHARS = 20000;
+
 function hostOf(url: string): string {
   try {
     return new URL(url).hostname.replace(/^www\./, "");
@@ -188,6 +191,16 @@ export async function POST(req: NextRequest) {
           publisher = source.publisher || "";
           sourceLink = source.finalUrl || item.source_url;
         }
+      }
+
+      // Bound what goes to the model. A long investigative piece runs around
+      // 12,000 characters, so anything past this is a feed carrying the whole
+      // rendered page — navigation, sidebars, inline ad scripts — and paying
+      // per token to send a model a site's furniture buys nothing. Discovery
+      // keeps page-shaped feeds out of the config; this is the backstop for
+      // the ones already in it.
+      if (material.length > MAX_SOURCE_CHARS) {
+        material = material.slice(0, MAX_SOURCE_CHARS);
       }
 
       if (material.length < MIN_SOURCE_CHARS) {

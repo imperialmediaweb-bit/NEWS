@@ -88,6 +88,19 @@ function declaredFeeds(html, domain) {
  */
 const MIN_TEXT = 500;
 
+/**
+ * Above this, the item is not an article.
+ *
+ * A long investigative piece runs 12,000 characters. Cape Gazette's feed
+ * measured 29,000 per item because each one is the whole rendered page —
+ * navigation, a "Most Popular" sidebar, and inline ad-slot JavaScript — with
+ * maybe five hundred characters of story inside it. That measured as the
+ * richest feed in the run and would have been handed to the model as the
+ * source to report from, which is exactly how a feed produces articles about
+ * nothing. A feed serving pages instead of articles is worse than no feed.
+ */
+const MAX_TEXT = 20000;
+
 const UA =
   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36";
 
@@ -105,17 +118,41 @@ async function get(url, timeoutMs = 15000) {
   }
 }
 
-function stripTags(s) {
+function decodeEntities(s) {
   return s
-    .replace(/<[^>]+>/g, " ")
     .replace(/&nbsp;/g, " ")
-    .replace(/&amp;/g, "&")
     .replace(/&quot;/g, '"')
     .replace(/&#39;|&apos;/g, "'")
     .replace(/&lt;/g, "<")
     .replace(/&gt;/g, ">")
-    .replace(/\s+/g, " ")
-    .trim();
+    .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)))
+    .replace(/&amp;/g, "&");
+}
+
+/**
+ * Plain text, with the markup actually gone.
+ *
+ * Stripping tags before decoding entities leaves escaped markup behind as
+ * literal text, and some publishers escape their HTML twice: Cape Gazette's
+ * items arrive as `&amp;lt;span class="field field-name-title"&amp;gt;`, so
+ * one strip-then-decode pass measured 5,200 characters of article as 135,000
+ * characters of Drupal field markup — by far the richest feed in the run, and
+ * entirely noise. Decoding first and repeating until the text settles handles
+ * both depths; &amp; is decoded last so it cannot manufacture a new entity.
+ */
+function stripTags(s) {
+  let out = s;
+  for (let pass = 0; pass < 3; pass++) {
+    // Script and style bodies are not markup — dropping the tags alone leaves
+    // the JavaScript behind as prose.
+    const stripped = decodeEntities(out)
+      .replace(/<script[\s\S]*?<\/script>/gi, " ")
+      .replace(/<style[\s\S]*?<\/style>/gi, " ")
+      .replace(/<[^>]+>/g, " ");
+    if (stripped === out) break;
+    out = stripped;
+  }
+  return out.replace(/\s+/g, " ").trim();
 }
 
 /** The longest text this item carries, from whichever field holds it. */
@@ -143,7 +180,7 @@ function analyse(xml) {
 
   const lengths = items.slice(0, 12).map((i) => itemText(i).length).sort((a, b) => b - a);
   const median = lengths[Math.floor(lengths.length / 2)] || 0;
-  const usable = lengths.filter((l) => l >= MIN_TEXT).length;
+  const usable = lengths.filter((l) => l >= MIN_TEXT && l <= MAX_TEXT).length;
 
   return {
     items: items.length,
@@ -208,7 +245,11 @@ async function probeDomain(domain) {
 
     // Stop once this publisher has given us enough: the rest of its sections
     // repeat the same stories, and we are being polite about it.
-    if (feeds.filter((f) => f.medianChars >= MIN_TEXT).length >= MAX_PER_DOMAIN) break;
+    if (
+      feeds.filter((f) => f.medianChars >= MIN_TEXT && f.medianChars <= MAX_TEXT)
+        .length >= MAX_PER_DOMAIN
+    )
+      break;
   }
 
   return feeds.length ? feeds : [{ domain, feed: null }];
@@ -218,7 +259,7 @@ async function probeState(state) {
   const domains = CANDIDATES[state.toLowerCase()];
   if (!domains) {
     console.error(`No candidate list for "${state}" — add one to feed-candidates.mjs`);
-    return { state, usable: [], weak: [], none: [] };
+    return { state, usable: [], weak: [], pages: [], none: [] };
   }
 
   const results = [];
@@ -242,9 +283,11 @@ async function probeState(state) {
   return {
     state,
     usable: withFeed
-      .filter((r) => r.medianChars >= MIN_TEXT)
+      .filter((r) => r.medianChars >= MIN_TEXT && r.medianChars <= MAX_TEXT)
       .sort((a, b) => b.medianChars - a.medianChars),
     weak: withFeed.filter((r) => r.medianChars < MIN_TEXT),
+    // Not short — the wrong shape. These carry whole pages, not articles.
+    pages: withFeed.filter((r) => r.medianChars > MAX_TEXT),
     none: results.filter((r) => !r.feed).map((r) => r.domain),
   };
 }
@@ -266,10 +309,15 @@ for (const state of states) {
   console.error(
     `${state.padEnd(16)} usable ${String(r.usable.length).padStart(2)}  weak ${String(
       r.weak.length
-    ).padStart(2)}  none ${r.none.length}`
+    ).padStart(2)}  pages ${String((r.pages || []).length).padStart(2)}  none ${r.none.length}`
   );
   for (const u of r.usable) {
     console.error(`    ${u.feed}  median ${u.medianChars} chars, ${u.items} items`);
+  }
+  // Worth naming: a feed serving whole pages looks like the richest one in
+  // the run, so without this it reads as a feed we inexplicably skipped.
+  for (const p of r.pages || []) {
+    console.error(`    rejected (whole pages, not articles): ${p.feed}  ${p.medianChars} chars`);
   }
 }
 

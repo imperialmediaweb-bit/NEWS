@@ -17,6 +17,22 @@ function longest(candidates: string[]): string {
 const parser = new XMLParser({
   ignoreAttributes: false,
   attributeNamePrefix: "@_",
+  // fast-xml-parser caps entity expansions at 1,000 per document to stop a
+  // "billion laughs" attack. That cap is far too tight for a real feed: LAist
+  // publishes 100 items and every apostrophe and ampersand in them counts, so
+  // it hit 1,052 and the whole California feed was thrown away with
+  // "Entity expansion limit exceeded" — an error that looks like a broken
+  // publisher and is not.
+  //
+  // The guard that actually matters against that attack is expansion DEPTH,
+  // which stays at its default of 10: nesting is what makes the blowup
+  // exponential. Raising the count and the total expanded size only allows a
+  // long document, which is what a news feed is.
+  processEntities: {
+    enabled: true,
+    maxTotalExpansions: 100_000,
+    maxExpandedLength: 8_000_000,
+  },
 });
 
 export async function parseFeed(url: string): Promise<FeedItem[]> {
@@ -144,12 +160,37 @@ function decodeHtmlEntities(text: string): string {
   return result;
 }
 
+/**
+ * Feed text as plain text, with the markup actually gone.
+ *
+ * This stripped tags and then decoded entities, in that order, which leaves
+ * escaped markup intact as literal text. Plenty of publishers escape their
+ * HTML, and some escape it twice: Cape Gazette's items arrive as
+ * `&amp;lt;span class="field field-name-title"&amp;gt;`, so one pass of
+ * strip-then-decode turned 5,200 characters of article into 135,000
+ * characters of Drupal field markup — which measured as an unusually rich
+ * feed and would have been handed to the model as the source text to report
+ * from.
+ *
+ * Decoding first and repeating until the text stops changing handles both
+ * depths. Three passes is enough for anything a feed has produced; the bound
+ * is there so a pathological item cannot spin.
+ */
 function stripCDATA(text: string): string {
-  return decodeHtmlEntities(
-    text
-      .replace(/<!\[CDATA\[/g, "")
-      .replace(/\]\]>/g, "")
-      .replace(/<[^>]+>/g, "")
-      .trim()
-  );
+  let out = text.replace(/<!\[CDATA\[/g, "").replace(/\]\]>/g, "");
+
+  for (let pass = 0; pass < 3; pass++) {
+    const decoded = decodeHtmlEntities(out);
+    // Script and style bodies are not markup — removing the tags leaves the
+    // JavaScript behind as prose. Cape Gazette's feed carries its ad-slot
+    // code inline, and `googletag.pubads().getSlots()` read as article text.
+    const stripped = decoded
+      .replace(/<script[\s\S]*?<\/script>/gi, " ")
+      .replace(/<style[\s\S]*?<\/style>/gi, " ")
+      .replace(/<[^>]+>/g, " ");
+    if (stripped === out) break;
+    out = stripped;
+  }
+
+  return out.replace(/\s+/g, " ").trim();
 }
