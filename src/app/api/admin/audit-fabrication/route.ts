@@ -78,23 +78,57 @@ export async function GET(req: NextRequest) {
     }
 
     const orClause = PATTERNS.map((_, i) => `a.content ILIKE $${i + 1}`).join(" OR ");
-    // TABLESAMPLE rather than ORDER BY random(): random() has to scan all
-    // 765,000 rows and apply ten ILIKE patterns to each before it can sort,
-    // which took the request past its timeout and returned a 502. Sampling 3%
-    // of the table's pages first keeps the scan small and the sample
-    // representative of the whole archive rather than of its most recent
-    // weeks, which matters here — recent articles are the most likely to be
-    // indexed, so a recency-biased sample would overstate the cost of
-    // removal.
-    const { rows } = await pool.query(
-      `SELECT a.title, a.slug, a.category, a.published_at, a.source_url, s.domain
-         FROM articles a TABLESAMPLE SYSTEM (3)
-         JOIN sites s ON a.site_id = s.id
-        WHERE (${orClause})
-          AND a.wp_original_id IS NULL
-        LIMIT $${PATTERNS.length + 1}`,
-      [...PATTERNS.map((p) => p.sql), inspectCount]
+
+    // Sampling this set is harder than it looks, and two obvious ways are
+    // both wrong.
+    //
+    // ORDER BY random() has to scan all 765,000 rows and apply ten ILIKE
+    // patterns before it can sort: the request timed out with a 502.
+    //
+    // TABLESAMPLE plus LIMIT looked fine and was worse than useless. It
+    // samples pages at random but still scans them in page order, so LIMIT
+    // stops at whichever sampled page comes first — and that is always near
+    // the start of the table. Seventy inspections across five runs returned
+    // delaware-express every single time. A uniform result from a sample that
+    // only ever reads one site is not evidence about the archive.
+    //
+    // So: anchor at random points across the primary key and take the first
+    // match at or after each. Every read is an index scan from a random
+    // offset, which is cheap, and the anchors are spread across the whole id
+    // range, which means across every site and every period.
+    const { rows: bounds } = await pool.query(
+      "SELECT min(id)::bigint AS lo, max(id)::bigint AS hi FROM articles"
     );
+    const lo = Number(bounds[0]?.lo || 0);
+    const hi = Number(bounds[0]?.hi || 0);
+
+    const rows: {
+      title: string;
+      slug: string;
+      category: string | null;
+      published_at: string;
+      source_url: string | null;
+      domain: string;
+    }[] = [];
+    const seenSlugs = new Set<string>();
+
+    for (let n = 0; n < inspectCount * 2 && rows.length < inspectCount; n++) {
+      const anchor = lo + Math.floor(Math.random() * Math.max(1, hi - lo));
+      const { rows: hit } = await pool.query(
+        `SELECT a.title, a.slug, a.category, a.published_at, a.source_url, s.domain
+           FROM articles a JOIN sites s ON a.site_id = s.id
+          WHERE a.id >= $${PATTERNS.length + 1}
+            AND a.wp_original_id IS NULL
+            AND (${orClause})
+          ORDER BY a.id
+          LIMIT 1`,
+        [...PATTERNS.map((p) => p.sql), anchor]
+      );
+      const row = hit[0];
+      if (!row || seenSlugs.has(row.slug)) continue;
+      seenSlugs.add(row.slug);
+      rows.push(row);
+    }
 
     const token = await getGscToken();
     const properties = await listProperties(token);
