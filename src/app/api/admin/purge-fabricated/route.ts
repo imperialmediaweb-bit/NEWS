@@ -60,6 +60,22 @@ const PATTERNS = [
 
 const CONFIRM = "delete-fabricated";
 
+/**
+ * The day the fabricating prompt was replaced (commit b4dcbdf).
+ *
+ * Articles published from this date are written from fetched source text with
+ * real attribution, so a phrase like "a spokesperson said" in one of them is
+ * a quote, not an invention — the same situation as the imported articles,
+ * and equally not ours to delete. The phrase match cannot distinguish them,
+ * so the date does it instead.
+ */
+const PROMPT_FIXED = "2026-09-19";
+
+const where = `a.wp_original_id IS NULL
+    AND a.published_at < DATE '${PROMPT_FIXED}'
+    AND (${PATTERNS.map((_, i) => `a.content ILIKE $${i + 1}`).join(" OR ")})`;
+
+
 async function ensurePurgeLog() {
   await pool.query(`
     CREATE TABLE IF NOT EXISTS purged_articles (
@@ -94,10 +110,6 @@ export async function GET(req: NextRequest) {
     Math.max(1, parseInt(req.nextUrl.searchParams.get("limit") || "1000", 10) || 1000)
   );
 
-  const where = `a.wp_original_id IS NULL AND (${PATTERNS.map(
-    (_, i) => `a.content ILIKE $${i + 1}`
-  ).join(" OR ")})`;
-
   if (confirm !== CONFIRM) {
     const [{ rows: counts }, { rows: sample }, { rows: safe }] = await Promise.all([
       pool.query(`SELECT count(*)::int AS n FROM articles a WHERE ${where}`, PATTERNS),
@@ -117,10 +129,30 @@ export async function GET(req: NextRequest) {
       ),
     ]);
 
+    // What a completed run actually removed, by period.
+    //
+    // The fabricating prompt was replaced on 2026-09-19. An article written
+    // after that date quotes a named source from fetched text, so "a
+    // spokesperson said" in it is a real attribution — ordinary journalism,
+    // exactly like the imported articles this endpoint protects. The phrase
+    // match cannot tell the two apart, and the first run did not try: it was
+    // written against an archive that predated the fix and applied to
+    // everything.
+    const { rows: purgedByEra } = await pool
+      .query(
+        `SELECT
+           count(*) FILTER (WHERE published_at <  DATE '2026-09-19')::int AS beforePromptFix,
+           count(*) FILTER (WHERE published_at >= DATE '2026-09-19')::int AS afterPromptFix,
+           count(*)::int AS total
+         FROM purged_articles`
+      )
+      .catch(() => ({ rows: [{}] }));
+
     return NextResponse.json({
       dryRun: true,
       wouldDelete: Number(counts[0]?.n) || 0,
       protectedImported: Number(safe[0]?.n) || 0,
+      alreadyPurged: purgedByEra[0] || {},
       note:
         "Nothing was deleted. protectedImported are WordPress imports — real reporting that uses the same phrases — and are never touched.",
       sample: sample.map((r) => ({
