@@ -317,3 +317,75 @@ export async function autoSetup(options: { limit?: number } = {}): Promise<AutoS
     results,
   };
 }
+
+/**
+ * Ask Google what it has actually done with one URL.
+ *
+ * `coverageState` is where the useful distinctions live:
+ *
+ *   "Submitted and indexed"               it is in the index
+ *   "Crawled - currently not indexed"     Google fetched it and chose not to
+ *                                         keep it — a quality judgement
+ *   "Discovered - currently not indexed"  Google knows the URL and has not
+ *                                         bothered to fetch it
+ *   "Duplicate, Google chose different canonical"
+ *
+ * One call per URL against a 2,000/day per-property quota, so callers sample.
+ * Lives here rather than in a route because two routes need the same answer
+ * and a second copy of this would drift from the first.
+ */
+export async function inspectUrl(
+  token: string,
+  siteUrl: string,
+  inspectionUrl: string
+): Promise<Record<string, unknown>> {
+  try {
+    const res = await fetch("https://searchconsole.googleapis.com/v1/urlInspection/index:inspect", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ inspectionUrl, siteUrl, languageCode: "en-US" }),
+      signal: AbortSignal.timeout(20000),
+    });
+
+    if (!res.ok) {
+      return { error: `HTTP ${res.status} ${(await res.text()).slice(0, 200)}` };
+    }
+
+    const body = (await res.json()) as {
+      inspectionResult?: {
+        indexStatusResult?: {
+          verdict?: string;
+          coverageState?: string;
+          robotsTxtState?: string;
+          indexingState?: string;
+          lastCrawlTime?: string;
+          googleCanonical?: string;
+          userCanonical?: string;
+          pageFetchState?: string;
+        };
+      };
+    };
+
+    const r = body.inspectionResult?.indexStatusResult;
+    if (!r) return { error: "No indexStatusResult in response" };
+
+    return {
+      verdict: r.verdict,
+      coverageState: r.coverageState,
+      robotsTxtState: r.robotsTxtState,
+      indexingState: r.indexingState,
+      pageFetchState: r.pageFetchState,
+      lastCrawlTime: r.lastCrawlTime || null,
+      // A mismatch here means Google picked a different canonical than we
+      // declared, which quietly removes the page from the index under its own
+      // URL.
+      ...(r.googleCanonical &&
+        r.userCanonical &&
+        r.googleCanonical !== r.userCanonical && {
+          canonicalMismatch: { google: r.googleCanonical, ours: r.userCanonical },
+        }),
+    };
+  } catch (e) {
+    return { error: e instanceof Error ? e.message : String(e) };
+  }
+}

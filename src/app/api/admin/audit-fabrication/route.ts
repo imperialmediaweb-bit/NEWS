@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import pool from "@/lib/db";
+import { getGscToken, listProperties, inspectUrl, hasGscCredentials } from "@/lib/gsc";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 300;
@@ -50,6 +51,79 @@ export async function GET(req: NextRequest) {
 
   const sampleSize = Math.min(50, Math.max(0, parseInt(req.nextUrl.searchParams.get("sample") || "0", 10) || 0));
   const phrase = req.nextUrl.searchParams.get("phrase");
+
+  // Ask Google whether these articles are actually in its index.
+  //
+  //   GET /api/admin/audit-fabrication?key=…&inspect=30
+  //
+  // This decides how to remove them, not whether to. Deleting pages Google
+  // holds and ranks is a different act from deleting pages it fetched and
+  // declined to keep: the first needs 410s and sitemap removal so the
+  // disappearance reads as intentional, the second costs nothing because
+  // nothing is there. Guessing between those two is not acceptable when the
+  // answer is one API call per URL against a 2,000/day quota.
+  //
+  // Only generated articles are sampled. The imported ones are somebody's
+  // real reporting and are not candidates for removal.
+  const inspectCount = Math.min(
+    50,
+    Math.max(0, parseInt(req.nextUrl.searchParams.get("inspect") || "0", 10) || 0)
+  );
+  if (inspectCount > 0) {
+    if (!hasGscCredentials()) {
+      return NextResponse.json(
+        { error: "No Search Console credentials configured" },
+        { status: 400 }
+      );
+    }
+
+    const orClause = PATTERNS.map((_, i) => `a.content ILIKE $${i + 1}`).join(" OR ");
+    const { rows } = await pool.query(
+      `SELECT a.title, a.slug, a.category, a.published_at, a.source_url, s.domain
+         FROM articles a JOIN sites s ON a.site_id = s.id
+        WHERE (${orClause})
+          AND a.wp_original_id IS NULL
+        ORDER BY random()
+        LIMIT $${PATTERNS.length + 1}`,
+      [...PATTERNS.map((p) => p.sql), inspectCount]
+    );
+
+    const token = await getGscToken();
+    const properties = await listProperties(token);
+
+    const coverage: Record<string, number> = {};
+    const inspected: {
+      url: string;
+      coverageState: string | null;
+      lastCrawl: string | null;
+    }[] = [];
+
+    for (const r of rows) {
+      const url = `https://${r.domain}/${r.category || "local-news"}/${r.slug}`;
+      const props = properties.get(r.domain as string);
+      const property = props?.[0]?.siteUrl;
+      if (!property) {
+        coverage["no verified property"] = (coverage["no verified property"] || 0) + 1;
+        continue;
+      }
+      const result = await inspectUrl(token, property, url);
+      const state = typeof result.coverageState === "string" ? result.coverageState : null;
+      const key = state || "inspection failed";
+      coverage[key] = (coverage[key] || 0) + 1;
+      inspected.push({
+        url,
+        coverageState: state,
+        lastCrawl: typeof result.lastCrawlTime === "string" ? result.lastCrawlTime : null,
+      });
+    }
+
+    return NextResponse.json({
+      inspectedCount: rows.length,
+      scope: "generated articles matching a fabricated-attribution phrase",
+      coverageStates: coverage,
+      inspected,
+    });
+  }
 
   // A sample of actual articles for one phrase, so the number can be checked.
   if (phrase) {
