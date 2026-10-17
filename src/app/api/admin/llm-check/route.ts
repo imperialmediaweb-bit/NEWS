@@ -185,9 +185,14 @@ async function checkOpenAI(model: string): Promise<ProviderReport> {
       },
       body: JSON.stringify({
         model,
-        max_tokens: 32,
         response_format: { type: "json_object" },
         messages: [{ role: "user", content: PING }],
+        // Must match what the rewriter sends, or this checks a request shape
+        // nothing actually uses. The gpt-5 family and o-series reject
+        // max_tokens and take max_completion_tokens instead.
+        ...(/^(gpt-[5-9]|o[0-9])/.test(model)
+          ? { max_completion_tokens: 512 }
+          : { max_tokens: 32 }),
       }),
     });
     if (!res.ok) {

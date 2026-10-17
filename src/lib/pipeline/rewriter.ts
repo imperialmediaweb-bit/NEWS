@@ -365,6 +365,23 @@ async function callGemini(prompt: string): Promise<RewriteResult> {
   return parseRewriteResponse(text);
 }
 
+/**
+ * The token-limit and temperature parameters this OpenAI model accepts.
+ *
+ * The reasoning models — the gpt-5 family and the o-series — reject
+ * `max_tokens` outright ("Unsupported parameter ... use max_completion_tokens
+ * instead") and only accept the default temperature. Everything before them
+ * takes `max_tokens` and an arbitrary temperature. There is no parameter set
+ * that satisfies both, so the model name has to decide, and configuring a
+ * cheaper model is otherwise an instant 400.
+ */
+function openAiLimits(model: string): Record<string, unknown> {
+  if (/^(gpt-[5-9]|o[0-9])/.test(model)) {
+    return { max_completion_tokens: 4096 };
+  }
+  return { max_tokens: 4096, temperature: 0.7 };
+}
+
 async function callOpenAI(prompt: string): Promise<RewriteResult> {
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) throw new Error("OPENAI_API_KEY not set");
@@ -378,10 +395,9 @@ async function callOpenAI(prompt: string): Promise<RewriteResult> {
     },
     body: JSON.stringify({
       model,
-      temperature: 0.7,
-      max_tokens: 4096,
       response_format: { type: "json_object" },
       messages: [{ role: "user", content: prompt }],
+      ...openAiLimits(model),
     }),
   });
 
