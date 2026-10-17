@@ -262,7 +262,14 @@ export async function GET(req: NextRequest) {
     if (!value) continue;
     // Model names are plain identifiers. Anything else is a mistake, or an
     // attempt to put something odd in a value we interpolate into a URL.
-    if (!/^[A-Za-z0-9._:-]{1,80}$/.test(value)) {
+    //
+    // set_provider is the exception: llm_provider accepts an explicit
+    // fallback chain, "gemini,openai,anthropic". The model-name pattern was
+    // applied to it as well, so the one field that is meant to hold commas
+    // was the one field that rejected them.
+    const pattern =
+      param === "set_provider" ? /^[A-Za-z0-9._:,-]{1,120}$/ : /^[A-Za-z0-9._:-]{1,80}$/;
+    if (!pattern.test(value)) {
       return NextResponse.json(
         { error: `${param} must be a plain model name, got: ${value.slice(0, 80)}` },
         { status: 400 }
