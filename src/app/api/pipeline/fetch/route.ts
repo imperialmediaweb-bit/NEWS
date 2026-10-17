@@ -132,6 +132,17 @@ export async function POST(req: NextRequest) {
   // publishers or fell back to Google News, and the two produce very
   // different material.
   const feedsUsed = new Map<string, number>();
+  const perState = new Map<
+    string,
+    {
+      read: number;
+      inserted: number;
+      duplicate: number;
+      offTopic: number;
+      insertRejected: number;
+      offTopicExample: string;
+    }
+  >();
   for (const site of siteEntries) {
     if (Date.now() - startTime > RUN_BUDGET_MS) {
       skipped.push(site.state);
@@ -140,6 +151,20 @@ export async function POST(req: NextRequest) {
     const runId = await logRunStart("fetch", site.state);
     let siteFetched = 0;
     let siteFailed = 0;
+
+    // Where this state's items went. Three states fetched successfully for
+    // weeks and queued nothing, and the run-level totals could not say
+    // whether that was duplicates, the relevance filter or feeds returning
+    // empty — so it stayed a guess. Per state, it is an answer.
+    const tally = {
+      read: 0,
+      inserted: 0,
+      duplicate: 0,
+      offTopic: 0,
+      insertRejected: 0,
+      offTopicExample: "",
+    };
+    perState.set(site.state, tally);
 
     // The state's own publisher feeds come first. Google News only ever gave a
     // headline and a sentence, behind a link that can no longer be resolved to
@@ -187,9 +212,11 @@ export async function POST(req: NextRequest) {
           const longest = Math.max(...items.map((i) => (i.description || "").length));
           feedsUsed.set(feed.id, Math.max(feedsUsed.get(feed.id) ?? 0, longest));
         }
+        tally.read += items.length;
         for (const item of items) {
           if (await isDuplicate(item, dedupCtx)) {
             totalSkipped++;
+            tally.duplicate++;
             continue;
           }
 
@@ -207,12 +234,21 @@ export async function POST(req: NextRequest) {
           if (!relevance.relevant) {
             totalSkipped++;
             offTopic++;
+            tally.offTopic++;
+            // One example per state, so a filter that is wrong can be seen to
+            // be wrong rather than inferred from a count.
+            if (!tally.offTopicExample) tally.offTopicExample = item.title.slice(0, 90);
             continue;
           }
           const id = await insertFeedItem(item, feed.id, feed.category, site.state);
           if (id) {
             siteFetched++;
             totalFetched++;
+            tally.inserted++;
+          } else {
+            // insertFeedItem swallows a unique-constraint collision and
+            // returns null, which counted as nothing at all.
+            tally.insertRejected++;
           }
         }
       }
@@ -235,6 +271,7 @@ export async function POST(req: NextRequest) {
     states: statesToProcess,
     startedAt: siteEntries[0]?.state,
     feedsUsed: Object.fromEntries(feedsUsed),
+    perState: Object.fromEntries(perState),
     feeds: activeFeeds.length,
     fetched: totalFetched,
     skipped: totalSkipped,
