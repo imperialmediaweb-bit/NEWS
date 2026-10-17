@@ -7,12 +7,12 @@ export interface RewriteResult {
   suggestedImageQuery: string;
 }
 
-type LLMProvider = "gemini" | "openai" | "anthropic";
+type LLMProvider = "gemini" | "openai" | "anthropic" | "xai";
 
 // Round-robin counter stored in memory (resets on deploy, which is fine)
 let rotationIndex = 0;
 
-const PROVIDER_ORDER: LLMProvider[] = ["gemini", "openai", "anthropic"];
+const PROVIDER_ORDER: LLMProvider[] = ["gemini", "openai", "anthropic", "xai"];
 
 async function getConfig(key: string, fallback: string): Promise<string> {
   try {
@@ -411,6 +411,49 @@ async function callOpenAI(prompt: string): Promise<RewriteResult> {
   return parseRewriteResponse(text);
 }
 
+/**
+ * Grok, through xAI's API.
+ *
+ * The request is OpenAI's: xAI implements /v1/chat/completions compatibly, so
+ * this is the same call with a different base URL, and openAiLimits applies
+ * unchanged.
+ *
+ * The key must come from console.x.ai and starts with "xai-". A key issued at
+ * grok.com/dashboard/api-keys looks plausible, starts with "grok_", and is
+ * rejected here with "Incorrect API key provided" — it is scoped to the Cursor
+ * agent API, which runs coding agents and does not generate text. Checked
+ * against the live endpoint rather than assumed.
+ */
+async function callXai(prompt: string): Promise<RewriteResult> {
+  const apiKey = process.env.XAI_API_KEY;
+  if (!apiKey) throw new Error("XAI_API_KEY not set");
+
+  const model = await getConfig("llm_model_xai", "grok-4-fast-non-reasoning");
+  const res = await fetch("https://api.x.ai/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${apiKey}`,
+    },
+    body: JSON.stringify({
+      model,
+      response_format: { type: "json_object" },
+      messages: [{ role: "user", content: prompt }],
+      max_tokens: 4096,
+      temperature: 0.7,
+    }),
+  });
+
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`xAI API error ${res.status}: ${err}`);
+  }
+
+  const data = await res.json();
+  const text = data?.choices?.[0]?.message?.content || "";
+  return parseRewriteResponse(text);
+}
+
 async function callAnthropic(prompt: string): Promise<RewriteResult> {
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) throw new Error("ANTHROPIC_API_KEY not set");
@@ -447,6 +490,7 @@ const PROVIDER_FNS: Record<LLMProvider, (prompt: string) => Promise<RewriteResul
   gemini: callGemini,
   openai: callOpenAI,
   anthropic: callAnthropic,
+  xai: callXai,
 };
 
 function parseRewriteResponse(text: string): RewriteResult {

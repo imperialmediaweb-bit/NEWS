@@ -245,6 +245,78 @@ async function checkAnthropic(model: string): Promise<ProviderReport> {
   return report;
 }
 
+/**
+ * Grok, through xAI.
+ *
+ * The key must come from console.x.ai and starts with "xai-". A key issued at
+ * grok.com/dashboard/api-keys starts with "grok_", looks entirely plausible,
+ * and is rejected by this endpoint with "Incorrect API key provided" — it is
+ * scoped to the Cursor agent API, which runs coding agents and does not
+ * generate text. The check says so, because that error otherwise reads as a
+ * revoked key and sends you to regenerate the same wrong kind.
+ */
+async function checkXai(model: string): Promise<ProviderReport> {
+  const apiKey = process.env.XAI_API_KEY;
+  const report: ProviderReport = {
+    provider: "xai",
+    keyPresent: Boolean(apiKey),
+    configuredModel: model,
+    ok: false,
+  };
+  if (!apiKey) {
+    report.error = "XAI_API_KEY not set";
+    return report;
+  }
+  if (apiKey.startsWith("grok_")) {
+    report.error =
+      "This is a grok.com agent key (grok_...), which cannot generate text. " +
+      "Create a model API key at console.x.ai — it starts with xai-.";
+    return report;
+  }
+
+  try {
+    const list = await fetch("https://api.x.ai/v1/models", {
+      headers: { Authorization: `Bearer ${apiKey}` },
+    });
+    if (list.ok) {
+      const data = await list.json();
+      report.availableModels = (data?.data || [])
+        .map((m: { id?: string }) => String(m.id || ""))
+        .filter(Boolean)
+        .sort();
+    } else {
+      report.listError = `${list.status}: ${(await list.text()).slice(0, 200)}`;
+    }
+  } catch (e) {
+    report.listError = e instanceof Error ? e.message : String(e);
+  }
+
+  try {
+    const res = await fetch("https://api.x.ai/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model,
+        max_tokens: 32,
+        response_format: { type: "json_object" },
+        messages: [{ role: "user", content: PING }],
+      }),
+    });
+    if (!res.ok) {
+      report.error = `${res.status}: ${(await res.text()).slice(0, 400)}`;
+      return report;
+    }
+    await res.json();
+    report.ok = true;
+  } catch (e) {
+    report.error = e instanceof Error ? e.message : String(e);
+  }
+  return report;
+}
+
 export async function GET(req: NextRequest) {
   const key =
     req.nextUrl.searchParams.get("key") ||
@@ -261,6 +333,7 @@ export async function GET(req: NextRequest) {
     ["set_gemini", "llm_model_gemini"],
     ["set_openai", "llm_model_openai"],
     ["set_anthropic", "llm_model_anthropic"],
+    ["set_xai", "llm_model_xai"],
     ["set_provider", "llm_provider"],
   ] as const) {
     const value = params.get(param)?.trim();
@@ -284,17 +357,20 @@ export async function GET(req: NextRequest) {
     changed[configKey] = value;
   }
 
-  const [provider, geminiModel, openaiModel, anthropicModel] = await Promise.all([
-    getConfig("llm_provider", "rotation"),
-    getConfig("llm_model_gemini", "gemini-2.0-flash"),
-    getConfig("llm_model_openai", "gpt-4o-mini"),
-    getConfig("llm_model_anthropic", "claude-haiku-4-5"),
-  ]);
+  const [provider, geminiModel, openaiModel, anthropicModel, xaiModel] =
+    await Promise.all([
+      getConfig("llm_provider", "rotation"),
+      getConfig("llm_model_gemini", "gemini-2.0-flash"),
+      getConfig("llm_model_openai", "gpt-4o-mini"),
+      getConfig("llm_model_anthropic", "claude-haiku-4-5"),
+      getConfig("llm_model_xai", "grok-4-fast-non-reasoning"),
+    ]);
 
   const providers = await Promise.all([
     checkGemini(geminiModel),
     checkOpenAI(openaiModel),
     checkAnthropic(anthropicModel),
+    checkXai(xaiModel),
   ]);
 
   const working = providers.filter((p) => p.ok).map((p) => p.provider);
