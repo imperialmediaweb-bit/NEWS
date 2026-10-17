@@ -92,11 +92,37 @@ export async function GET(req: NextRequest) {
   );
   const affected = Number(anyRows[0]?.n) || 0;
 
+  // Split the matches by who wrote them. This is the whole decision.
+  //
+  // wp_original_id marks an article imported from a WordPress site that
+  // already existed — someone's actual reporting. "A spokesperson said" is
+  // ordinary journalism in that half of the archive, and 56,085 articles match
+  // that phrase alone. Treating the two halves alike once produced a
+  // recommendation to delete most of the archive, which was wrong; the phrase
+  // only indicates fabrication in text this pipeline generated under a prompt
+  // that instructed it to manufacture sourcing.
+  const { rows: provRows } = await pool.query(
+    `SELECT
+       count(*) FILTER (WHERE wp_original_id IS NOT NULL)::int AS imported,
+       count(*) FILTER (WHERE wp_original_id IS NULL)::int     AS generated,
+       count(*) FILTER (WHERE wp_original_id IS NULL
+                          AND (source_url IS NULL OR source_url = ''))::int
+         AS generatedNoSource
+     FROM articles WHERE ${orClause}`,
+    PATTERNS.map((p) => p.sql)
+  );
+
   return NextResponse.json({
     totalArticles: total,
     articlesWithAtLeastOnePattern: affected,
     percentage: total > 0 ? Number(((affected / total) * 100).toFixed(1)) : 0,
     byPhrase: counts,
+    // imported: real reporting that happens to use the phrase. Not ours to
+    // judge and not fabricated.
+    // generated: written by this pipeline under the fabricating prompt.
+    // generatedNoSource: the same, with no source URL, so there is nothing to
+    //   check the claims against and no way to rebuild the article honestly.
+    byProvenance: provRows[0] || {},
     caveat:
       "A match means the phrase is present, not that it is false — an article whose source genuinely quoted a named agency matches too. Use &phrase=<text>&sample=20 to read real examples before drawing conclusions.",
   });
