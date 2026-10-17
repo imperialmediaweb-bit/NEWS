@@ -302,6 +302,22 @@ export function middleware(req: NextRequest) {
     pathname.startsWith("/admin") ||
     pathname.startsWith("/api/") ||
     pathname.startsWith("/_next/");
+  // Admin and pipeline endpoints must never be cached, and saying nothing
+  // about caching is not the same as saying no.
+  //
+  // A deletion loop called the same purge URL sixty times. Cloudflare served
+  // the first response to all sixty — identical URL, cacheable by whatever
+  // rule the zone has — so fifty-nine calls never reached the origin, and
+  // every one of them reported 2,000 articles deleted. It very nearly went
+  // into a report as 120,000 deletions when the real figure was 4,000. A
+  // cached GET that is actually a mutation fails silently and lies about it.
+  const isControlPath =
+    pathname.startsWith("/api/admin") || pathname.startsWith("/api/pipeline");
+  if (isControlPath) {
+    response.headers.set("Cache-Control", "no-store, no-cache, must-revalidate");
+    response.headers.set("CDN-Cache-Control", "no-store");
+  }
+
   if (!isPrivatePath) {
     // An article never changes once published, but a listing does every time
     // something is published into it. Giving both the same ten minutes meant
