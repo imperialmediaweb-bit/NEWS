@@ -61,17 +61,37 @@ export async function POST(req: NextRequest) {
   // before taking a second from any, so a large backlog can no longer starve
   // anyone. Restricting to the last day both bounds the scan and stops us
   // publishing two-week-old items as news.
+  //
+  // `ORDER BY rn ASC` alone was still not enough, and this is the subtle part.
+  // Around forty states have a pending item at any moment, so forty rows tie at
+  // rn = 1 and a batch of ten takes whichever ten Postgres happens to produce
+  // first. That is not random: the same plan returns the same rows in the same
+  // order every run, so the same ten states were served every time and the rest
+  // were never reached at all. Sixteen sites went quiet for two days with
+  // healthy queues — Texas sitting on 261 pending items, Tennessee 196 — and
+  // nothing in the logs to show it, because nothing had failed.
+  //
+  // Breaking the tie by how long each state has gone without publishing turns
+  // the batch into a queue the quietest state is always at the front of. A
+  // state that has never published sorts first of all.
   const { rows: pending } = await pool.query(
-    `UPDATE feed_items SET status = 'processing'
+    `WITH silence AS (
+       SELECT s.state, max(a.published_at) AS last_published
+         FROM sites s
+         LEFT JOIN articles a ON a.site_id = s.id
+        GROUP BY s.state
+     )
+     UPDATE feed_items SET status = 'processing'
      WHERE id IN (
-       SELECT id FROM (
-         SELECT id,
+       SELECT ranked.id FROM (
+         SELECT id, state,
                 row_number() OVER (PARTITION BY state ORDER BY created_at DESC) AS rn
            FROM feed_items
           WHERE status = 'pending'
             AND created_at > NOW() - INTERVAL '24 hours'
        ) ranked
-       ORDER BY rn ASC
+       LEFT JOIN silence ON silence.state = ranked.state
+       ORDER BY ranked.rn ASC, silence.last_published ASC NULLS FIRST
        LIMIT $1
      )
      RETURNING *`,

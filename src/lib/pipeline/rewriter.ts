@@ -35,6 +35,24 @@ async function getConfig(key: string, fallback: string): Promise<string> {
 async function getProviderChain(): Promise<LLMProvider[]> {
   const strategy = await getConfig("llm_provider", "rotation");
 
+  // An explicit chain: "openai,anthropic,gemini". Worth having because the
+  // single-provider form always falls back in the same fixed order, so a
+  // provider whose key has been revoked stays wedged in the middle of the
+  // chain, costing a failed round trip on every article until someone
+  // notices. Naming the order lets a dead provider be moved to the back
+  // without a deploy.
+  if (strategy.includes(",")) {
+    const named = strategy
+      .split(",")
+      .map((s) => s.trim() as LLMProvider)
+      .filter((p) => PROVIDER_ORDER.includes(p));
+    if (named.length > 0) {
+      // Anything not named still goes on the end: a chain that silently
+      // excluded a working provider would be worse than a slow one.
+      return [...named, ...PROVIDER_ORDER.filter((p) => !named.includes(p))];
+    }
+  }
+
   if (strategy === "rotation") {
     const idx = rotationIndex % PROVIDER_ORDER.length;
     rotationIndex++;
@@ -381,7 +399,7 @@ async function callAnthropic(prompt: string): Promise<RewriteResult> {
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) throw new Error("ANTHROPIC_API_KEY not set");
 
-  const model = await getConfig("llm_model_anthropic", "claude-haiku-4-5-20241022");
+  const model = await getConfig("llm_model_anthropic", "claude-haiku-4-5");
   const res = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
     headers: {
@@ -434,6 +452,27 @@ function parseRewriteResponse(text: string): RewriteResult {
  * Call LLM with automatic fallback chain.
  * Tries each provider in the chain until one succeeds.
  */
+/**
+ * One provider's failure, short enough that three of them fit in the column
+ * this gets stored in.
+ *
+ * The providers answer errors with a pretty-printed JSON object several
+ * hundred characters long. Three of those concatenated overflowed
+ * feed_items.error_message, which truncated the message after the first
+ * provider — so for days the queue read "All LLM providers failed: gemini:
+ * API key not valid…" and nothing at all about OpenAI or Anthropic, which is
+ * where the actual answer was. The status code and the provider's own message
+ * are the whole diagnosis; the rest is formatting.
+ */
+function compactError(error: unknown): string {
+  const text = error instanceof Error ? error.message : String(error);
+  const status = text.match(/\b(\d{3})\b/)?.[1];
+  const message =
+    text.match(/"message"\s*:\s*"((?:[^"\\]|\\.)*)"/)?.[1] ||
+    text.replace(/\s+/g, " ").slice(0, 120);
+  return [status, message.slice(0, 120)].filter(Boolean).join(" ");
+}
+
 async function callWithFallback(prompt: string): Promise<RewriteResult> {
   const chain = await getProviderChain();
   const errors: string[] = [];
@@ -443,7 +482,7 @@ async function callWithFallback(prompt: string): Promise<RewriteResult> {
       const result = await PROVIDER_FNS[provider](prompt);
       return result;
     } catch (error) {
-      errors.push(`${provider}: ${String(error)}`);
+      errors.push(`${provider}: ${compactError(error)}`);
       console.error(`LLM ${provider} failed, trying next...`, error);
     }
   }

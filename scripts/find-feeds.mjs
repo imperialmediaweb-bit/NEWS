@@ -35,7 +35,51 @@ const FEED_PATHS = [
   "/feeds/rss",
   "/feed",
   "/index.rss",
+  // Public radio on NPR's CMS, which a lot of the state-level nonprofits use.
+  "/api/rss",
+  "/rss/news",
+  "/news/feed/",
+  "/local/feed/",
+  "/local-news/feed/",
+  "/politics/feed/",
+  "/index.xml",
+  "/atom.xml",
 ];
+
+/**
+ * Every publisher that answers at all declares its feeds in the page head:
+ *
+ *   <link rel="alternate" type="application/rss+xml" href="…">
+ *
+ * Guessing paths found one feed per publisher at best, and missed outright
+ * every site whose feed is not at a conventional path — which is why seven
+ * states ended up with a single feed and stopped producing articles. Reading
+ * the declaration finds those, and finds a publisher's section feeds, which
+ * is what turns one feed into four.
+ */
+function declaredFeeds(html, domain) {
+  const found = [];
+  const links = html.match(/<link[^>]+>/gi) || [];
+  for (const tag of links) {
+    if (!/rel=["']?alternate/i.test(tag)) continue;
+    if (!/type=["']?application\/(rss|atom)\+xml/i.test(tag)) continue;
+    const href = tag.match(/href=["']([^"']+)["']/i)?.[1];
+    if (!href) continue;
+    try {
+      const url = new URL(href, `https://${domain}`);
+      // Stay on the publisher: an alternate link can point at a syndication
+      // service, and a feed we cannot attribute to a state publisher is no
+      // use to us.
+      if (!url.hostname.endsWith(domain.replace(/^www\./, ""))) continue;
+      // Comment feeds are WordPress noise, never articles.
+      if (/\/comments\/feed|comment-rss|\?feed=comments/i.test(url.href)) continue;
+      found.push(url.href);
+    } catch {
+      // Malformed href; nothing to recover.
+    }
+  }
+  return [...new Set(found)];
+}
 
 /**
  * Minimum characters of article text an item must average before the feed is
@@ -106,20 +150,68 @@ function analyse(xml) {
     medianChars: median,
     maxChars: lengths[0] || 0,
     usableShare: Number((usable / lengths.length).toFixed(2)),
+    // WordPress answers /feed/, /rss/ and ?feed=rss2 with the same feed, and
+    // a publisher's "news" and "local" sections often differ only in name.
+    // Counting those as separate feeds is how a state looks covered while
+    // actually having one source. Identity is what the feed contains.
+    identity: fingerprint(items),
   };
 }
 
+/** The first few item links — same links, same feed, whatever the URL says. */
+function fingerprint(items) {
+  return items
+    .slice(0, 3)
+    .map(
+      (i) =>
+        i.match(/<guid[^>]*>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/guid>/)?.[1] ||
+        i.match(/<link[^>]*>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/link>/)?.[1] ||
+        i.match(/<link[^>]+href=["']([^"']+)["']/)?.[1] ||
+        ""
+    )
+    .map((s) => s.trim())
+    .join("|");
+}
+
+/** How many feeds to keep from one publisher, best first. */
+const MAX_PER_DOMAIN = 3;
+
+/**
+ * Every feed this publisher has that carries enough text to write from.
+ *
+ * Returning all of them rather than the first is the point: a state served by
+ * one feed runs dry the moment that publisher has a quiet day, and the
+ * pipeline then shows "pending 0, failed 0" — nothing wrong, nothing to do.
+ */
 async function probeDomain(domain) {
-  for (const path of FEED_PATHS) {
-    const url = `https://${domain}${path}`;
+  const urls = [];
+
+  const home = await get(`https://${domain}/`, 12000);
+  if (home) urls.push(...declaredFeeds(home, domain));
+  for (const path of FEED_PATHS) urls.push(`https://${domain}${path}`);
+
+  const seen = new Set();
+  const identities = new Set();
+  const feeds = [];
+  for (const url of urls) {
+    const normalised = url.replace(/\/$/, "");
+    if (seen.has(normalised)) continue;
+    seen.add(normalised);
+
     const xml = await get(url);
     if (!xml || !/<rss|<feed|<item>/i.test(xml)) continue;
-
     const stats = analyse(xml);
     if (!stats) continue;
-    return { domain, feed: url, ...stats };
+    if (stats.identity && identities.has(stats.identity)) continue;
+    if (stats.identity) identities.add(stats.identity);
+    feeds.push({ domain, feed: url, ...stats });
+
+    // Stop once this publisher has given us enough: the rest of its sections
+    // repeat the same stories, and we are being polite about it.
+    if (feeds.filter((f) => f.medianChars >= MIN_TEXT).length >= MAX_PER_DOMAIN) break;
   }
-  return { domain, feed: null };
+
+  return feeds.length ? feeds : [{ domain, feed: null }];
 }
 
 async function probeState(state) {
@@ -133,13 +225,26 @@ async function probeState(state) {
   // A few at a time: polite to the publishers, and fast enough for 50 states.
   for (let i = 0; i < domains.length; i += 4) {
     const group = domains.slice(i, i + 4);
-    results.push(...(await Promise.all(group.map(probeDomain))));
+    const found = await Promise.all(group.map(probeDomain));
+    results.push(...found.flat());
   }
+
+  // Two publishers can carry the same syndicated feed, so dedupe by content
+  // across the whole state as well as within each publisher.
+  const dedup = new Map();
+  for (const r of results) {
+    if (!r.feed) continue;
+    const key = r.identity || r.feed;
+    if (!dedup.has(key)) dedup.set(key, r);
+  }
+  const withFeed = [...dedup.values()];
 
   return {
     state,
-    usable: results.filter((r) => r.feed && r.medianChars >= MIN_TEXT),
-    weak: results.filter((r) => r.feed && r.medianChars < MIN_TEXT),
+    usable: withFeed
+      .filter((r) => r.medianChars >= MIN_TEXT)
+      .sort((a, b) => b.medianChars - a.medianChars),
+    weak: withFeed.filter((r) => r.medianChars < MIN_TEXT),
     none: results.filter((r) => !r.feed).map((r) => r.domain),
   };
 }

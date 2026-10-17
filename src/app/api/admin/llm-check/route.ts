@@ -245,7 +245,7 @@ export async function GET(req: NextRequest) {
     getConfig("llm_provider", "rotation"),
     getConfig("llm_model_gemini", "gemini-2.0-flash"),
     getConfig("llm_model_openai", "gpt-4o-mini"),
-    getConfig("llm_model_anthropic", "claude-haiku-4-5-20241022"),
+    getConfig("llm_model_anthropic", "claude-haiku-4-5"),
   ]);
 
   const providers = await Promise.all([
