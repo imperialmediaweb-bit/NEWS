@@ -89,6 +89,17 @@ export default function Header({ site, asHeading = false }: HeaderProps) {
                 </Link>
               </li>
             ))}
+            {/* The one commercial item in a row of sections: inverted so it
+                reads as an action rather than another category to browse. */}
+            <li className="ml-2">
+              <Link
+                href="/order"
+                className="block px-4 lg:px-5 py-3 text-[14px] font-bold uppercase tracking-wider bg-white text-[var(--accent)] hover:bg-gray-100 transition-colors cursor-pointer"
+                style={{ fontFamily: "'Oswald', sans-serif" }}
+              >
+                Order
+              </Link>
+            </li>
           </ul>
         </div>
       </nav>
@@ -107,6 +118,10 @@ export default function Header({ site, asHeading = false }: HeaderProps) {
                     style={{ fontFamily: "'Oswald', sans-serif" }}>{item}</Link>
                 </li>
               ))}
+              <li>
+                <Link href="/order" className="block px-6 py-3 text-sm font-bold uppercase tracking-wide text-[var(--accent)] bg-white/5 hover:bg-gray-900 transition-colors cursor-pointer"
+                  style={{ fontFamily: "'Oswald', sans-serif" }}>Order a campaign</Link>
+              </li>
             </ul>
           </motion.div>
         )}
