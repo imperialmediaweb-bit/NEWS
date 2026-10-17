@@ -301,7 +301,9 @@ export function middleware(req: NextRequest) {
   const isPrivatePath =
     pathname.startsWith("/admin") ||
     pathname.startsWith("/api/") ||
-    pathname.startsWith("/_next/");
+    pathname.startsWith("/_next/") ||
+    // A client's own report. Never a public page, never cacheable.
+    pathname.startsWith("/report/");
   // Admin and pipeline endpoints must never be cached, and saying nothing
   // about caching is not the same as saying no.
   //
@@ -311,8 +313,20 @@ export function middleware(req: NextRequest) {
   // every one of them reported 2,000 articles deleted. It very nearly went
   // into a report as 120,000 deletions when the real figure was 4,000. A
   // cached GET that is actually a mutation fails silently and lies about it.
+  // /report/<token> belongs here too, and for a worse reason than the others.
+  //
+  // It is a client's live campaign report, the one thing in this system whose
+  // entire value is being current: it fills in as each of the forty-nine
+  // newspapers publishes. The route sets no-store. The caching rule below
+  // overrode it, because a two-segment path ending in a long string is
+  // exactly the shape of an article URL — so isImmutablePage matched the
+  // token and Cloudflare held the report for 24 hours, serving it stale for a
+  // week. The client watching their campaign go live would have seen
+  // yesterday.
   const isControlPath =
-    pathname.startsWith("/api/admin") || pathname.startsWith("/api/pipeline");
+    pathname.startsWith("/api/admin") ||
+    pathname.startsWith("/api/pipeline") ||
+    pathname.startsWith("/report/");
   if (isControlPath) {
     response.headers.set("Cache-Control", "no-store, no-cache, must-revalidate");
     response.headers.set("CDN-Cache-Control", "no-store");
