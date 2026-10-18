@@ -13,6 +13,7 @@ import {
   Zap,
   BarChart3,
   Facebook,
+  ShoppingCart,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -21,6 +22,7 @@ const navItems = [
   { href: "/admin/articles", label: "Articles", icon: FileText },
   { href: "/admin/sites", label: "Sites", icon: Globe },
   { href: "/admin/publish", label: "Publish", icon: Send },
+  { href: "/admin/orders", label: "Orders", icon: ShoppingCart },
   { href: "/admin/import", label: "Import", icon: Download },
   { href: "/admin/domains", label: "Domains", icon: Globe },
   { href: "/admin/settings", label: "Settings & SEO", icon: Settings },
