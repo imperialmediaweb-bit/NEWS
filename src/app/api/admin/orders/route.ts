@@ -123,7 +123,14 @@ export async function POST(req: NextRequest) {
       body.category || null,
       Boolean(body.identicalText),
       Boolean(body.importedText),
-      body.siteInstructions ? JSON.stringify(body.siteInstructions) : null,
+      // TEXT column, one line per site. JSON.stringify would wrap a plain
+      // string in quotes and the publisher would read them as part of the
+      // instruction.
+      typeof body.siteInstructions === "string"
+        ? body.siteInstructions || null
+        : body.siteInstructions
+          ? JSON.stringify(body.siteInstructions)
+          : null,
       newReportToken(),
     ]
   );
@@ -169,6 +176,11 @@ export async function PATCH(req: NextRequest) {
     status: "status",
     category: "category",
     identicalText: "identical_text",
+    // Editable, because the per-paper brief is the field most likely to be
+    // corrected after the client sees the first article. It was in the
+    // creation payload and not in this map, so a change made in the panel
+    // was accepted and silently dropped.
+    siteInstructions: "site_instructions",
   };
 
   const sets: string[] = [];
@@ -194,4 +206,44 @@ export async function PATCH(req: NextRequest) {
   }
 
   return NextResponse.json({ ok: true, order: rows[0] });
+}
+
+/**
+ * Delete an order.
+ *
+ * Only for orders that never went anywhere — a test row, a duplicate, a
+ * mistyped entry. An order with placements has articles live on the network
+ * under its name, and deleting the record while the articles stand leaves
+ * the client's report pointing at nothing and no way to answer what was
+ * published. Those are cancelled, not deleted.
+ */
+export async function DELETE(req: NextRequest) {
+  if (!authorised(req)) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  const id = Number(req.nextUrl.searchParams.get("id"));
+  if (!id) {
+    return NextResponse.json({ error: "id is required" }, { status: 400 });
+  }
+
+  await ensureOrdersSchema();
+
+  const { rows: placed } = await pool.query(
+    "SELECT count(*)::int AS n FROM order_placements WHERE order_id = $1",
+    [id]
+  );
+  if (Number(placed[0]?.n) > 0) {
+    return NextResponse.json(
+      {
+        error: `This order has ${placed[0].n} published articles on the network. Cancel it instead — deleting the record would leave those articles live with nothing explaining them.`,
+      },
+      { status: 409 }
+    );
+  }
+
+  const { rowCount } = await pool.query("DELETE FROM orders WHERE id = $1", [id]);
+  if (!rowCount) {
+    return NextResponse.json({ error: "Order not found" }, { status: 404 });
+  }
+  return NextResponse.json({ ok: true, deleted: id });
 }
