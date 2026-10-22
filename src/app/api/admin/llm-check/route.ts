@@ -49,6 +49,17 @@ type ProviderReport = {
   availableModels?: string[];
   /** Why the model list could not be fetched, when it could not. */
   listError?: string;
+  /**
+   * The key, masked the way a provider's console and its breach notices show
+   * it — enough to say WHICH key is deployed, never enough to use it.
+   *
+   * Added during the Railway environment-variable breach: Anthropic wrote to
+   * say "sk-ant-api03-qrG...9gAA may have been exposed", and there was no way
+   * to tell whether that was the key this network runs on. Railway returns
+   * variable names without values, so the only place the answer existed was
+   * the running process.
+   */
+  keyFingerprint?: string;
 };
 
 async function getConfig(key: string, fallback: string): Promise<string> {
@@ -72,6 +83,18 @@ async function setConfig(key: string, value: string) {
   );
 }
 
+
+/**
+ * First twelve and last four characters, which is how every provider
+ * identifies a key in its own console and in its breach notices. The middle
+ * is what makes a key secret and it never leaves the process.
+ */
+function fingerprint(key: string | undefined): string | undefined {
+  if (!key) return undefined;
+  if (key.length < 20) return "(too short to be a real key)";
+  return `${key.slice(0, 12)}…${key.slice(-4)} (${key.length} chars)`;
+}
+
 /** A trivial prompt: enough to prove the round trip, cheap enough to run often. */
 const PING = 'Reply with exactly this JSON and nothing else: {"ok":true}';
 
@@ -80,6 +103,7 @@ async function checkGemini(model: string): Promise<ProviderReport> {
   const report: ProviderReport = {
     provider: "gemini",
     keyPresent: Boolean(apiKey),
+    keyFingerprint: fingerprint(apiKey),
     configuredModel: model,
     ok: false,
   };
@@ -140,6 +164,7 @@ async function checkOpenAI(model: string): Promise<ProviderReport> {
   const report: ProviderReport = {
     provider: "openai",
     keyPresent: Boolean(apiKey),
+    keyFingerprint: fingerprint(apiKey),
     configuredModel: model,
     ok: false,
   };
@@ -212,6 +237,7 @@ async function checkAnthropic(model: string): Promise<ProviderReport> {
   const report: ProviderReport = {
     provider: "anthropic",
     keyPresent: Boolean(apiKey),
+    keyFingerprint: fingerprint(apiKey),
     configuredModel: model,
     ok: false,
   };
@@ -260,6 +286,7 @@ async function checkXai(model: string): Promise<ProviderReport> {
   const report: ProviderReport = {
     provider: "xai",
     keyPresent: Boolean(apiKey),
+    keyFingerprint: fingerprint(apiKey),
     configuredModel: model,
     ok: false,
   };
