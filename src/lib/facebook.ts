@@ -443,30 +443,29 @@ export async function postArticleToFacebookPage(opts: {
   link: string;
   caption_source: "ai" | "template";
 }> {
-  const { pageId, accessToken, article, siteDomain, siteCity, siteState } = opts;
+  const { pageId, accessToken, article, siteDomain } = opts;
   const link = buildArticleUrl(siteDomain, article);
 
-  let caption: string | null = null;
-  let captionSource: "ai" | "template" = "template";
-  try {
-    const { generateFbCaptionWithAI } = await import("./fb-caption");
-    const ai = await generateFbCaptionWithAI({
-      title: article.title,
-      excerpt: article.excerpt || "",
-      category: article.category_slug,
-      city: siteCity || article.site_slug,
-      state: siteState || "",
-    });
-    if (ai) {
-      caption = ai;
-      captionSource = "ai";
-    }
-  } catch {
-    // fallback to template
-  }
-  if (!caption) {
-    caption = buildFbCaption(article, { city: siteCity, state: siteState });
-  }
+  // The headline. Nothing else.
+  //
+  // What was here before: an AI call to write a "social" caption, falling
+  // back to a template of hooks, questions and share prompts. Both were bad.
+  //
+  // The AI call asked for gemini-2.0-flash, a model Google has retired — it
+  // returned 404 every time, so the template ran on every post and nobody
+  // noticed the generator was dead.
+  //
+  // The template produced engagement bait: "Have you seen similar cases?" on
+  // a football score, and "Share this with a friend from" — cut off
+  // mid-sentence, because the city it meant to name was missing. Meta names
+  // that pattern in its policy and demotes it, and one of these Pages is now
+  // temporarily blocked from posting. Whatever the cause there, inviting
+  // shares on fifty automated pages is not a risk worth carrying for a
+  // sentence nobody reads.
+  //
+  // A headline and a link is what a newspaper posts.
+  const caption = article.title.trim();
+  const captionSource: "ai" | "template" = "template";
 
   if (!article.featured_image) {
     const r = await postToPage(pageId, accessToken, caption, link);
