@@ -24,8 +24,18 @@ export const FB_PERMISSIONS = [
   "pages_show_list",
   "pages_read_engagement",
   "pages_manage_posts",
-  "business_management",
 ];
+
+// business_management is gone too. It only matters for Pages owned by a
+// Business Manager, and it costs an extra consent screen asking which
+// Businesses to grant — a screen the owner could not answer, because none of
+// the six listed held the newspapers. Pages administered from a personal
+// account appear in /me/accounts without it.
+//
+// If a newspaper's Page turns out to be Business-owned, it will simply be
+// missing from the list after connecting. Add this back then, rather than
+// asking for access to every Business on the account on the chance that one
+// of them matters.
 
 /**
  * The address a browser can actually reach, for redirects.
