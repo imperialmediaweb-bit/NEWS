@@ -13,6 +13,23 @@ export const FB_PERMISSIONS = [
   "business_management",
 ];
 
+/**
+ * The address a browser can actually reach, for redirects.
+ *
+ * Behind Railway's proxy the request's own URL is http://localhost:8080/… —
+ * the port the container binds, not the domain the reader typed. Redirecting
+ * to `new URL(path, req.url)` therefore sent people to localhost:8080, which
+ * refuses the connection on their machine. The public host only survives in
+ * the forwarded headers.
+ */
+export function publicBase(req: { headers: { get(name: string): string | null } }): string {
+  const env = process.env.NEXT_PUBLIC_SITE_URL;
+  if (env) return env.replace(/\/$/, "");
+  const proto = req.headers.get("x-forwarded-proto") || "https";
+  const host = req.headers.get("x-forwarded-host") || req.headers.get("host") || "";
+  return `${proto}://${host}`;
+}
+
 export function getRedirectUri(): string {
   const base = process.env.NEXT_PUBLIC_SITE_URL || "https://news-production-dd80.up.railway.app";
   return `${base.replace(/\/$/, "")}/api/auth/facebook/callback`;

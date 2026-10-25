@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { FB_OAUTH, FB_PERMISSIONS, getRedirectUri, makeState } from "@/lib/facebook";
+import { FB_OAUTH, FB_PERMISSIONS, getRedirectUri, makeState, publicBase } from "@/lib/facebook";
 
 export const dynamic = "force-dynamic";
 
@@ -7,7 +7,9 @@ export async function GET(req: NextRequest) {
   const adminCookie = req.cookies.get("admin_token")?.value;
   const adminSecret = process.env.CRON_SECRET || "admin123";
   if (adminCookie !== adminSecret) {
-    return NextResponse.redirect(new URL("/admin-login?redirect=/admin/facebook", req.url));
+    return NextResponse.redirect(
+      new URL("/admin-login?redirect=/admin/facebook", publicBase(req))
+    );
   }
 
   const appId = process.env.FACEBOOK_APP_ID;

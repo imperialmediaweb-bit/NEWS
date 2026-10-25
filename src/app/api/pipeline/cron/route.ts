@@ -88,6 +88,26 @@ export async function POST(req: NextRequest) {
     actions.push("notify");
   }
 
+  // ─── Facebook: post the newest article to each page's own slot ───
+  //
+  // The route was written, complete with posting hours, a per-page hourly
+  // quota and an anti-ban stagger, and then nothing ever called it. Fifty
+  // pages were connected in May and have posted nothing since.
+  //
+  // Claimed on every tick rather than every five minutes, which looks
+  // wasteful and is not. The route splits the hour into twelve five-minute
+  // slots and serves only the pages whose hash lands in the current one, so
+  // it has to be running when each slot comes round. The ticker fires every
+  // two minutes, so a five-minute claim would actually land every six and
+  // drift straight past two slots an hour — those pages would silently post
+  // less than the rest. Running every tick visits each slot two or three
+  // times, and the route's own one-per-hour quota is what stops a page
+  // posting twice. The cost is a query over ~4 pages.
+  if ((await claimJob("facebook_post", 110)).claimed) {
+    fireAndForgetGet(baseUrl, "cron/facebook-post", secret);
+    actions.push("facebook_post");
+  }
+
   // ─── Opinion: every 12h ───
   if ((await claimJob("opinion", 12 * 60 * 60)).claimed) {
     fireAndForget(baseUrl, "pipeline/opinion", {}, secret);
@@ -164,6 +184,20 @@ function getBaseUrl(req: NextRequest): string {
  * Fire and forget — send request but don't wait for response.
  * This ensures the cron endpoint returns fast (< 5s).
  */
+/**
+ * Same as fireAndForget, for a route that only answers GET and takes its key
+ * in the query string rather than an Authorization header. cron/facebook-post
+ * is one; posting a body at it would get a 405 and the failure would be
+ * invisible, since nothing waits for the answer.
+ */
+function fireAndForgetGet(baseUrl: string, path: string, secret: string): void {
+  fetch(`${baseUrl}/api/${path}?key=${encodeURIComponent(secret)}`, {
+    method: "GET",
+  }).catch((err) => {
+    console.error(`Fire-and-forget failed for ${path}:`, err);
+  });
+}
+
 function fireAndForget(
   baseUrl: string,
   path: string,

@@ -6,6 +6,7 @@ import {
   fetchUserPages,
   savePages,
   verifyState,
+  publicBase,
   FbPageData,
 } from "@/lib/facebook";
 import { sites } from "@/config/sites";
@@ -13,16 +14,8 @@ import { sites } from "@/config/sites";
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
-function getPublicBase(req: NextRequest): string {
-  const env = process.env.NEXT_PUBLIC_SITE_URL;
-  if (env) return env.replace(/\/$/, "");
-  const proto = req.headers.get("x-forwarded-proto") || "https";
-  const host = req.headers.get("x-forwarded-host") || req.headers.get("host") || "";
-  return `${proto}://${host}`;
-}
-
 function redirectTo(req: NextRequest, params: Record<string, string>): NextResponse {
-  const base = getPublicBase(req);
+  const base = publicBase(req);
   const url = new URL("/admin/facebook", base);
   for (const [k, v] of Object.entries(params)) url.searchParams.set(k, v);
   return NextResponse.redirect(url.toString());
