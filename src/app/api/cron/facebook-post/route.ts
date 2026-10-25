@@ -14,6 +14,27 @@ interface PageRow {
 }
 
 // Words that trigger Facebook content moderation — skip these articles
+/**
+ * Posts per newspaper per day. The owner's figure.
+ *
+ * One of these Pages has already been restricted by Facebook, cause unknown.
+ * Until that is understood, the safe direction for every number here is
+ * downward: a quiet page is recoverable, a banned one is not.
+ */
+const MAX_PER_DAY = parseInt(process.env.FB_MAX_PER_DAY || "10", 10) || 10;
+
+/**
+ * Stop posting to a page that keeps failing.
+ *
+ * When Facebook restricts a Page its API starts refusing, and without this
+ * the cron would keep trying every cycle for days — hundreds of refused
+ * writes against an account already under review, which is precisely the
+ * behaviour that turns a warning into a ban. Three failures in a row and the
+ * page is left alone for six hours.
+ */
+const FAILURES_BEFORE_PAUSE = 3;
+const PAUSE_HOURS = 6;
+
 const SENSITIVE_KEYWORDS = [
   "killed", "murder", "rape", "sexual assault", "suicide", "dead body",
   "mass shooting", "school shooting", "child abuse", "child exploitation",
@@ -39,14 +60,53 @@ async function postOneArticleForSite(siteSlug: string, maxPerHour: number): Prom
   const page = pageRes.rows[0] as PageRow | undefined;
   if (!page) return { ok: false, reason: "no_fb_page_for_site" };
 
-  // Check hourly quota (1 post per hour per page)
-  const quotaRes = await query(
-    `SELECT COUNT(*)::int AS cnt FROM facebook_posts
-     WHERE page_id = $1 AND status = 'success' AND posted_at >= NOW() - INTERVAL '1 hour'`,
+  // Back off from a page that is refusing us.
+  const recentRes = await query(
+    `SELECT status FROM facebook_posts
+      WHERE page_id = $1 AND posted_at >= NOW() - INTERVAL '${PAUSE_HOURS} hours'
+      ORDER BY posted_at DESC
+      LIMIT ${FAILURES_BEFORE_PAUSE}`,
     [page.page_id]
   );
-  if ((quotaRes.rows[0]?.cnt || 0) >= maxPerHour) {
+  const recent = recentRes.rows as { status: string }[];
+  if (
+    recent.length >= FAILURES_BEFORE_PAUSE &&
+    recent.every((r) => r.status !== "success")
+  ) {
+    return {
+      ok: false,
+      reason: `paused: ${FAILURES_BEFORE_PAUSE} consecutive failures — check this page's status on Facebook`,
+    };
+  }
+
+  // Two ceilings, and they do different jobs.
+  //
+  // The hourly one stops a burst: a page that posts twice in ten minutes
+  // looks automated and Facebook cuts its reach.
+  //
+  // The daily one is the owner's: ten per newspaper per day. Without it the
+  // hourly limit alone permits fifteen, because the posting window runs from
+  // 7am to 10pm — the cap would be set by the length of the day rather than
+  // by anything anyone chose.
+  //
+  // The day is Eastern, matching the window above; counting from "24 hours
+  // ago" instead would let a page post ten in the evening and ten again the
+  // next morning.
+  const quotaRes = await query(
+    `SELECT
+       COUNT(*) FILTER (WHERE posted_at >= NOW() - INTERVAL '1 hour')::int AS last_hour,
+       COUNT(*) FILTER (WHERE (posted_at AT TIME ZONE 'America/New_York')::date
+                            = (NOW() AT TIME ZONE 'America/New_York')::date)::int AS today
+     FROM facebook_posts
+     WHERE page_id = $1 AND status = 'success'`,
+    [page.page_id]
+  );
+  const used = quotaRes.rows[0] || { last_hour: 0, today: 0 };
+  if ((used.last_hour || 0) >= maxPerHour) {
     return { ok: false, reason: "hourly_quota_reached" };
+  }
+  if ((used.today || 0) >= MAX_PER_DAY) {
+    return { ok: false, reason: `daily_quota_reached (${used.today}/${MAX_PER_DAY})` };
   }
 
   // SUA adaptation: JOIN sites to get site_slug, map summary→excerpt, category→category_slug
