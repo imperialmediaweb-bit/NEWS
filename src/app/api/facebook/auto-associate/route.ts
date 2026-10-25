@@ -38,8 +38,21 @@ export async function POST(req: NextRequest) {
       const normalizedSlug = normalize(s.slug);
       return normalizedPage === normalizedName
         || normalizedPage === normalizedSlug
-        || normalizedPage.includes(normalizedName)
-        || normalizedName.includes(normalizedPage);
+        // The page's name may carry a suffix — "Texas Express News",
+        // "Texas Express | Local" — so a page containing a site's full name
+        // still matches.
+        || normalizedPage.includes(normalizedName);
+      // Deliberately NOT the other direction.
+      //
+      // `normalizedName.includes(normalizedPage)` matched whenever a page's
+      // name was merely a FRAGMENT of a newspaper's. A page called "Expres"
+      // normalises to "expres", which is a substring of "alabamaexpress" —
+      // so a Romanian page would have been bound to Alabama Express and, from
+      // then on, this network's articles would have been posted to it. The
+      // owner has seen pages get rewired on every connect; this is how.
+      //
+      // A page whose name is too short to identify a newspaper is not a
+      // match. It goes to `unmatched`, to be linked by hand or left alone.
     });
 
     if (match) {
