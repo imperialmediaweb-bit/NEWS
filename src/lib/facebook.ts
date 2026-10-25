@@ -464,8 +464,23 @@ export async function postArticleToFacebookPage(opts: {
   // sentence nobody reads.
   //
   // A headline and a link is what a newspaper posts.
-  const caption = article.title.trim();
-  const captionSource: "ai" | "template" = "template";
+  let caption = article.title.trim();
+  let captionSource: "ai" | "template" = "template";
+  try {
+    const { shortenHeadline } = await import("./fb-caption");
+    const short = await shortenHeadline(caption);
+    if (short) {
+      caption = short;
+      captionSource = "ai";
+    }
+  } catch {
+    // Cosmetic only — the original headline is already a good post.
+  }
+
+  // Say the picture is not of the event. Every image here comes from a stock
+  // library, picked by a search query; the first post out of this system put
+  // the Parc des Princes above a match played at the Stade de France.
+  const { PHOTO_DISCLAIMER } = await import("./fb-caption");
 
   if (!article.featured_image) {
     const r = await postToPage(pageId, accessToken, caption, link);
@@ -486,16 +501,16 @@ export async function postArticleToFacebookPage(opts: {
   // tokens can comment. Reconnecting the pages is what changes that, and
   // nothing here can do it on their behalf.
   const linkInComment = process.env.FB_LINK_IN_COMMENT === "1";
-  const photoCaption = linkInComment ? caption : `${caption}\n\n${link}`;
+  const photoCaption = [caption, PHOTO_DISCLAIMER, linkInComment ? null : link]
+    .filter(Boolean)
+    .join("\n\n");
 
   const photo = await postPhotoToPage(pageId, accessToken, article.featured_image, photoCaption);
   let comment_id: string | null = null;
   let comment_error: string | null = linkInComment ? null : "link_in_caption";
   try {
     if (!linkInComment) throw new Error("skipped: link is in the caption");
-    const { pickCommentTemplate } = await import("./fb-caption");
-    const tpl = pickCommentTemplate(article.id);
-    const c = await commentOnPost(photo.post_id, accessToken, `${tpl}${link}`);
+    const c = await commentOnPost(photo.post_id, accessToken, `📰 Full article 👉 ${link}`);
     comment_id = c.id;
   } catch (e) {
     if (linkInComment) comment_error = e instanceof Error ? e.message : String(e);
