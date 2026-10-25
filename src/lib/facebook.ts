@@ -5,11 +5,25 @@ export const FB_API_VERSION = "v21.0";
 export const FB_GRAPH = `https://graph.facebook.com/${FB_API_VERSION}`;
 export const FB_OAUTH = `https://www.facebook.com/${FB_API_VERSION}/dialog/oauth`;
 
+/**
+ * What this app actually needs.
+ *
+ * pages_manage_engagement is gone. It grants comment and reaction
+ * moderation, and the only function here that would use it —
+ * commentOnPost — is called by nothing. Asking for a permission no code
+ * exercises costs twice: it makes App Review harder to justify, and Meta
+ * pairs it with pages_read_user_content, which it has since retired. The
+ * authorization dialog refused the whole request with "Invalid Scopes:
+ * pages_read_user_content" — a permission that appears nowhere in this
+ * codebase and nowhere in the request URL.
+ *
+ * Add it back if comment moderation is ever built, and expect to deal with
+ * the retired pairing then.
+ */
 export const FB_PERMISSIONS = [
   "pages_show_list",
   "pages_read_engagement",
   "pages_manage_posts",
-  "pages_manage_engagement",
   "business_management",
 ];
 
