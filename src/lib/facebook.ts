@@ -6,24 +6,29 @@ export const FB_GRAPH = `https://graph.facebook.com/${FB_API_VERSION}`;
 export const FB_OAUTH = `https://www.facebook.com/${FB_API_VERSION}/dialog/oauth`;
 
 /**
- * What this app actually needs.
+ * What this app needs, and why every one of them is here.
  *
- * pages_manage_engagement is gone. It grants comment and reaction
- * moderation, and the only function here that would use it —
- * commentOnPost — is called by nothing. Asking for a permission no code
- * exercises costs twice: it makes App Review harder to justify, and Meta
- * pairs it with pages_read_user_content, which it has since retired. The
- * authorization dialog refused the whole request with "Invalid Scopes:
- * pages_read_user_content" — a permission that appears nowhere in this
- * codebase and nowhere in the request URL.
+ * pages_manage_engagement was removed once, to get past an authorization
+ * dialog that refused the request with "Invalid Scopes:
+ * pages_read_user_content" — a retired permission that appears nowhere in
+ * this codebase or in the request URL, which Meta appears to pair with it.
+ * Removing it did clear the dialog, and broke the thing the posting exists
+ * for: every article went up as a photo with no link, because the link goes
+ * in the first comment and commenting needs this permission. Eleven posts
+ * went out that way before it was noticed.
  *
- * Add it back if comment moderation is ever built, and expect to deal with
- * the retired pairing then.
+ * The Romanian network requests the same permission and has been commenting
+ * for months, so it is not broken in general — whatever Meta objects to is
+ * specific to this app's configuration. If the dialog refuses again, the
+ * place to look is the use case's permission list at
+ * developers.facebook.com, not this array.
  */
 export const FB_PERMISSIONS = [
   "pages_show_list",
   "pages_read_engagement",
   "pages_manage_posts",
+  // Required to put the article link in the first comment.
+  "pages_manage_engagement",
 ];
 
 // business_management is gone too. It only matters for Pages owned by a
@@ -468,16 +473,33 @@ export async function postArticleToFacebookPage(opts: {
     return { post_id: r.id, comment_id: null, comment_error: "no_featured_image", link, caption_source: captionSource };
   }
 
-  const photo = await postPhotoToPage(pageId, accessToken, article.featured_image, caption);
+  // Where the link goes.
+  //
+  // The first comment is better: Facebook cuts the reach of posts carrying an
+  // external link, and a link in the comment avoids that. But commenting
+  // needs pages_manage_engagement, and a page token only ever carries the
+  // permissions granted when it was issued — a token cannot gain one later.
+  // Every page currently connected was authorised without it, so the comment
+  // fails and the post goes up with no link at all: a photo and a headline
+  // and nothing to click. Eleven went out like that.
+  //
+  // So the link is attached before posting unless the caller is confident the
+  // tokens can comment. Reconnecting the pages is what changes that, and
+  // nothing here can do it on their behalf.
+  const linkInComment = process.env.FB_LINK_IN_COMMENT === "1";
+  const photoCaption = linkInComment ? caption : `${caption}\n\n${link}`;
+
+  const photo = await postPhotoToPage(pageId, accessToken, article.featured_image, photoCaption);
   let comment_id: string | null = null;
-  let comment_error: string | null = null;
+  let comment_error: string | null = linkInComment ? null : "link_in_caption";
   try {
+    if (!linkInComment) throw new Error("skipped: link is in the caption");
     const { pickCommentTemplate } = await import("./fb-caption");
     const tpl = pickCommentTemplate(article.id);
     const c = await commentOnPost(photo.post_id, accessToken, `${tpl}${link}`);
     comment_id = c.id;
   } catch (e) {
-    comment_error = e instanceof Error ? e.message : String(e);
+    if (linkInComment) comment_error = e instanceof Error ? e.message : String(e);
   }
   return { post_id: photo.post_id, comment_id, comment_error, link, caption_source: captionSource };
 }
