@@ -33,10 +33,11 @@ export async function POST(req: NextRequest) {
 }
 
 async function run(req: NextRequest, body: Record<string, unknown> | null) {
-  const key = keyFromRequest(req, body?.key as string | undefined);
-  if (!orderKeyAccepted(key)) {
+  const presented = keyFromRequest(req, body?.key as string | undefined);
+  if (!orderKeyAccepted(presented)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+  const key = presented as string;
 
   await ensureOrdersSchema();
 
@@ -78,9 +79,18 @@ async function run(req: NextRequest, body: Record<string, unknown> | null) {
     );
 
     try {
-      const res = await fetch(`${origin}/api/admin/orders/publish`, {
+      // The key travels three ways on purpose. The middleware gate in front of
+      // /api/admin reads it from the Authorization header, the `key` query
+      // parameter or a cookie — never from the body — so a call that carries
+      // it only in the body is refused before the route runs, and the route's
+      // own logging stays silent while you hunt for the reason.
+      const url = `${origin}/api/admin/orders/publish?key=${encodeURIComponent(key)}`;
+      const res = await fetch(url, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${key}`,
+        },
         body: JSON.stringify({ key, orderId: order.id, perRun }),
       });
       const data = (await res.json().catch(() => ({}))) as Record<string, unknown>;
