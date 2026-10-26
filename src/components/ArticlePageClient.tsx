@@ -105,7 +105,21 @@ export default function ArticlePageClient({ site, article, related, categorySlug
               what the headline describes. These are stock photographs chosen by
               a keyword search, so on a story about a named person the picture is
               a stranger — the first thing one such person wrote in to say. */}
-          <img src={displayImage} alt="" className="w-full h-full object-cover" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+          {/* A blurred copy fills the band; the real image sits on top whole.
+              The hero is a fixed-height strip and object-cover crops whatever
+              does not match it — fine for a landscape photograph, ruinous for
+              anything taller than it is wide. A book cover came through with
+              its title sliced off at both ends, unreadable, which is the one
+              thing a cover has to be. object-contain never crops, and the
+              blurred backdrop keeps the strip from showing bars. */}
+          <img
+            src={displayImage}
+            alt=""
+            aria-hidden="true"
+            className="absolute inset-0 w-full h-full object-cover scale-110 blur-2xl opacity-60"
+            onError={(e) => { e.currentTarget.style.display = 'none'; }}
+          />
+          <img src={displayImage} alt="" className="relative w-full h-full object-contain" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
           <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10">
             <div className="max-w-[1300px] mx-auto">
