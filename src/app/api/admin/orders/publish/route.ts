@@ -95,6 +95,30 @@ export async function POST(req: NextRequest) {
   const category = String(order.category || "business")
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-");
+
+  // The image the client sent. Paid placements were going out with
+  // featured_image unset — a book announcement with no cover on forty-nine
+  // papers — because this route never passed one, unlike the Romanian network
+  // it was ported from. Stored as a JSON array; the first usable URL wins.
+  const orderImage = (() => {
+    const raw = order.images;
+    if (!raw) return null;
+    try {
+      const list = typeof raw === "string" ? JSON.parse(raw) : raw;
+      if (Array.isArray(list)) {
+        const first = list.find(
+          (u) => typeof u === "string" && /^https?:\/\//.test(u)
+        );
+        return (first as string) || null;
+      }
+    } catch {
+      // A plain URL in the column rather than JSON is still a usable answer.
+      if (typeof raw === "string" && /^https?:\/\//.test(raw.trim())) {
+        return raw.trim();
+      }
+    }
+    return null;
+  })();
   const results: Record<string, unknown>[] = [];
 
   for (const slug of batch) {
@@ -145,11 +169,11 @@ export async function POST(req: NextRequest) {
 
       const { rows: inserted } = await pool.query(
         `INSERT INTO articles
-           (site_id, title, slug, content, summary, category, author, published_at)
-         VALUES ($1,$2,$3,$4,$5,$6,$7, NOW())
+           (site_id, title, slug, content, summary, category, author, featured_image, published_at)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8, NOW())
          ON CONFLICT (site_id, slug) DO NOTHING
          RETURNING id`,
-        [siteId, title, articleSlug, html, summary, category, "Sponsored Content"]
+        [siteId, title, articleSlug, html, summary, category, "Sponsored Content", orderImage]
       );
 
       if (inserted.length === 0) {

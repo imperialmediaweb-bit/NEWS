@@ -47,6 +47,9 @@ export default function NewOrderForm({
           category: f.get("category"),
           identicalText: f.get("identicalText") === "on",
           siteInstructions: String(f.get("siteInstructions") || "").trim() || null,
+          images: String(f.get("imageUrl") || "").trim()
+            ? [String(f.get("imageUrl")).trim()]
+            : undefined,
         }),
       });
       const data = await res.json();
@@ -86,6 +89,18 @@ export default function NewOrderForm({
             placeholder="https://theircompany.com/page"
             className={INPUT}
           />
+        </div>
+        <div>
+          <label className={LABEL} htmlFor="imageUrl">Image</label>
+          <input
+            id="imageUrl"
+            name="imageUrl"
+            placeholder="https://… the client's own photo, logo or book cover"
+            className={INPUT}
+          />
+          <p className="text-xs text-gray-500 mt-1">
+            Used on every paper. Left empty, the article goes out without one.
+          </p>
         </div>
         <div>
           <label className={LABEL} htmlFor="email">Email</label>
