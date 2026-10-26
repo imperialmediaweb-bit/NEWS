@@ -86,6 +86,20 @@ export async function ensureOrdersSchema(): Promise<void> {
   // optional; only which section it files under changes.
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS category TEXT`);
 
+  // The pace the buyer chose: how many sites go out per run, and how long to
+  // wait before the next one. Two numbers rather than one because the same
+  // fifty sites are sold both as "everything inside half an hour" and as "five
+  // a day for ten days", and those differ in the gap, not the batch.
+  //
+  // next_publish_at is what makes it run without anybody pressing a button:
+  // the cron takes every paid order that is due, publishes one run, and pushes
+  // the stamp forward. NULL means nothing is scheduled — the order is only
+  // published by hand — so an order that was never given a pace cannot start
+  // publishing itself behind someone's back.
+  await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS pace_per_run INT`);
+  await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS pace_every_minutes INT`);
+  await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS next_publish_at TIMESTAMPTZ`);
+
   await pool.query(
     `CREATE UNIQUE INDEX IF NOT EXISTS idx_orders_token ON orders(token) WHERE token IS NOT NULL`
   );
@@ -93,6 +107,9 @@ export async function ensureOrdersSchema(): Promise<void> {
     `CREATE INDEX IF NOT EXISTS idx_order_placements_order ON order_placements(order_id)`
   );
   await pool.query(`CREATE INDEX IF NOT EXISTS idx_orders_status ON orders(status)`);
+  await pool.query(
+    `CREATE INDEX IF NOT EXISTS idx_orders_due ON orders(next_publish_at) WHERE next_publish_at IS NOT NULL`
+  );
 
   ready = true;
 }

@@ -93,14 +93,23 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  // A run of 0 would schedule an order that never advances, and a gap of 0
+  // would empty the network in a loop, so both have to be real numbers to
+  // count. Out-of-range values are clamped rather than refused: the pace is a
+  // preference, and a bad one is not worth losing a paid order over.
+  const pacePerRun = clampOrNull(body.pacePerRun, 1, 50);
+  const paceEveryMinutes = clampOrNull(body.paceEveryMinutes, 1, 60 * 24 * 7);
+
   await ensureOrdersSchema();
 
   const { rows } = await pool.query(
     `INSERT INTO orders
        (external_ref, client, email, phone, client_url, package, price, currency,
         paid, title, material, images, notes, category, identical_text,
-        imported_text, site_instructions, token)
-     VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18)
+        imported_text, site_instructions, token,
+        pace_per_run, pace_every_minutes, next_publish_at)
+     VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,
+             $19,$20,$21)
      ON CONFLICT (external_ref) DO NOTHING
      RETURNING id, token`,
     [
@@ -129,6 +138,11 @@ export async function POST(req: NextRequest) {
           ? JSON.stringify(body.siteInstructions)
           : null,
       newReportToken(),
+      // The pace is optional: an order that names none is published by hand,
+      // exactly as before. Giving it one is what schedules it.
+      pacePerRun,
+      paceEveryMinutes,
+      pacePerRun && paceEveryMinutes ? new Date() : null,
     ]
   );
 
@@ -243,4 +257,11 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ error: "Order not found" }, { status: 404 });
   }
   return NextResponse.json({ ok: true, deleted: id });
+}
+
+/** A whole number inside the range, or null when there is no usable number. */
+function clampOrNull(value: unknown, min: number, max: number): number | null {
+  const n = Number(value);
+  if (!Number.isFinite(n) || n <= 0) return null;
+  return Math.min(max, Math.max(min, Math.round(n)));
 }
