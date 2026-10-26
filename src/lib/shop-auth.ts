@@ -19,18 +19,41 @@ export function orderKeyAccepted(candidate: string | null | undefined): boolean 
   const key = (candidate || "").trim();
   if (!key) return false;
 
-  const accepted = [process.env.CRON_SECRET, process.env.SHOP_KEY].filter(
+  // Read through the object rather than as `process.env.SHOP_KEY`, which a
+  // bundler is free to replace with whatever the value was at build time —
+  // and this one is set after the build as often as before it.
+  const env = process.env as Record<string, string | undefined>;
+  const accepted = [env["CRON_SECRET"], env["SHOP_KEY"]].filter(
     (v): v is string => typeof v === "string" && v.length > 0
   );
 
+  if (accepted.length === 0) {
+    console.error("[shop-auth] neither CRON_SECRET nor SHOP_KEY is set");
+    return false;
+  }
+
   // Compared byte by byte in constant time: a plain === leaks, through how
   // long it takes to fail, how much of a guess was right.
-  return accepted.some((valid) => {
+  const ok = accepted.some((valid) => {
     const a = Buffer.from(key);
     const b = Buffer.from(valid);
     if (a.length !== b.length) return false;
     return crypto.timingSafeEqual(a, b);
   });
+
+  if (!ok) {
+    // Lengths only — enough to tell "the wrong key" from "the key is not
+    // loaded here", without putting either secret in a log.
+    console.error(
+      "[shop-auth] rejected a key of length",
+      key.length,
+      "| cron set:",
+      Boolean(env["CRON_SECRET"]),
+      "| shop set:",
+      Boolean(env["SHOP_KEY"])
+    );
+  }
+  return ok;
 }
 
 /** The key presented on a request: body, query string or bearer header. */
