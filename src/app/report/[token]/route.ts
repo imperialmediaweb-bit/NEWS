@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import pool from "@/lib/db";
 import { ensureOrdersSchema } from "@/lib/orders-schema";
+import { excelFilename, orderExcel } from "@/lib/order-excel";
 
 export const dynamic = "force-dynamic";
 
@@ -44,7 +45,37 @@ export async function GET(req: NextRequest, ctx: { params: { token: string } }) 
     [order.id]
   );
 
-  return new NextResponse(render(order, placements), {
+  // Same token, same order, as a spreadsheet. A client who wants the links in
+  // a file should not need a second address or a password for it.
+  if (req.nextUrl.searchParams.get("format") === "xlsx") {
+    const file = orderExcel(
+      {
+        client: String(order.client || ""),
+        title: order.title as string | null,
+        client_url: order.client_url as string | null,
+        package: order.package as string | null,
+        created_at: order.created_at as string | null,
+        published_at: order.published_at as string | null,
+      },
+      placements.map((p) => ({
+        site_slug: String(p.site_slug || ""),
+        url: (p.url as string | null) ?? null,
+        placed_at: (p.placed_at as string | null) ?? null,
+        title: (p.title as string | null) ?? null,
+      }))
+    );
+    return new NextResponse(Buffer.from(file), {
+      headers: {
+        "Content-Type":
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "Content-Disposition": `attachment; filename="${excelFilename(String(order.client || ""))}"`,
+        "X-Robots-Tag": "noindex, nofollow",
+        "Cache-Control": "no-store",
+      },
+    });
+  }
+
+  return new NextResponse(render(order, placements, token), {
     headers: {
       "Content-Type": "text/html; charset=utf-8",
       "X-Robots-Tag": "noindex, nofollow",
@@ -62,7 +93,8 @@ function notFound() {
 
 function render(
   order: Record<string, unknown>,
-  placements: Record<string, unknown>[]
+  placements: Record<string, unknown>[],
+  token: string
 ): string {
   const date = (v: unknown) =>
     v
@@ -109,6 +141,11 @@ function render(
   td { padding: 10px 10px 10px 0; border-bottom: 1px solid #f0f0f0; vertical-align: top; }
   td a { color: #0b5ea8; word-break: break-all; }
   .date { white-space: nowrap; color: #777; }
+  .download { margin: -8px 0 24px; }
+  .download a { display: inline-block; background: #0b5ea8; color: #fff; text-decoration: none;
+                padding: 9px 16px; border-radius: 6px; font-size: .88rem; font-weight: 600; }
+  .download span { color: #888; font-size: .82rem; margin-left: 10px; }
+  @media print { .download { display: none; } }
   footer { margin-top: 36px; padding-top: 16px; border-top: 1px solid #e5e5e5;
            color: #777; font-size: .82rem; }
   @media print { body { padding: 0; } a { color: #111; } }
@@ -125,6 +162,13 @@ function render(
     <div><span>Ordered</span><strong>${date(order.created_at)}</strong></div>
     <div><span>First published</span><strong>${date(order.published_at)}</strong></div>
   </div>
+
+  ${
+    placements.length
+      ? `<p class="download"><a href="/report/${esc(token)}?format=xlsx">Download as Excel</a>
+         <span>every link, sortable, in one file</span></p>`
+      : ""
+  }
 
   ${
     placements.length === 0
