@@ -3,6 +3,7 @@ import pool from "@/lib/db";
 import { sites } from "@/config/sites";
 import { getSiteId } from "@/lib/site-id";
 import { ensureOrdersSchema } from "@/lib/orders-schema";
+import { keyFromRequest, orderKeyAccepted } from "@/lib/shop-auth";
 import { rewriteCampaignForSite } from "@/lib/pipeline/rewriter";
 import { submitToAllEngines } from "@/lib/indexing";
 import { submitToIndexNow } from "@/lib/indexnow";
@@ -31,11 +32,7 @@ export const maxDuration = 300;
  */
 export async function POST(req: NextRequest) {
   const body = await req.json().catch(() => ({}));
-  const key =
-    body.key ||
-    req.nextUrl.searchParams.get("key") ||
-    req.headers.get("authorization")?.replace("Bearer ", "");
-  if (!process.env.CRON_SECRET || key !== process.env.CRON_SECRET) {
+  if (!orderKeyAccepted(keyFromRequest(req, body.key))) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

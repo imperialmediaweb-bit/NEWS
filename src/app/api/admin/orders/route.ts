@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import pool from "@/lib/db";
 import { ensureOrdersSchema, newReportToken, clientDomain } from "@/lib/orders-schema";
+import { keyFromRequest, orderKeyAccepted } from "@/lib/shop-auth";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 120;
@@ -8,7 +9,7 @@ export const maxDuration = 120;
 /**
  * Paid placement orders.
  *
- *   GET  /api/admin/orders?key=CRON_SECRET            list, with progress
+ *   GET  /api/admin/orders?key=KEY                     list, with progress
  *   GET  /api/admin/orders?key=...&id=12              one order and its placements
  *   POST /api/admin/orders   { key, client, clientUrl, ... }   create
  *   PATCH /api/admin/orders  { key, id, ...fields }            update
@@ -19,11 +20,7 @@ export const maxDuration = 120;
  */
 
 function authorised(req: NextRequest, bodyKey?: string): boolean {
-  const key =
-    bodyKey ||
-    req.nextUrl.searchParams.get("key") ||
-    req.headers.get("authorization")?.replace("Bearer ", "");
-  return Boolean(process.env.CRON_SECRET) && key === process.env.CRON_SECRET;
+  return orderKeyAccepted(keyFromRequest(req, bodyKey));
 }
 
 export async function GET(req: NextRequest) {
