@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import pool from "@/lib/db";
 import { ensureOrdersSchema } from "@/lib/orders-schema";
 import { excelFilename, orderExcel } from "@/lib/order-excel";
+import { orderPdf, pdfFilename } from "@/lib/order-pdf";
 
 export const dynamic = "force-dynamic";
 
@@ -45,25 +46,41 @@ export async function GET(req: NextRequest, ctx: { params: { token: string } }) 
     [order.id]
   );
 
+  const asOrder = () => ({
+    client: String(order.client || ""),
+    title: order.title as string | null,
+    client_url: order.client_url as string | null,
+    package: order.package as string | null,
+    created_at: order.created_at as string | null,
+    published_at: order.published_at as string | null,
+  });
+  const asRows = () =>
+    placements.map((p) => ({
+      site_slug: String(p.site_slug || ""),
+      url: (p.url as string | null) ?? null,
+      placed_at: (p.placed_at as string | null) ?? null,
+      title: (p.title as string | null) ?? null,
+    }));
+
+  // The PDF is the copy a client forwards or prints; the spreadsheet is the
+  // one they sort. Same token, same rows, so neither can show a placement the
+  // other does not.
+  if (req.nextUrl.searchParams.get("format") === "pdf") {
+    const file = await orderPdf(asOrder(), asRows());
+    return new NextResponse(Buffer.from(file), {
+      headers: {
+        "Content-Type": "application/pdf",
+        "Content-Disposition": `attachment; filename="${pdfFilename(String(order.client || ""))}"`,
+        "X-Robots-Tag": "noindex, nofollow",
+        "Cache-Control": "no-store",
+      },
+    });
+  }
+
   // Same token, same order, as a spreadsheet. A client who wants the links in
   // a file should not need a second address or a password for it.
   if (req.nextUrl.searchParams.get("format") === "xlsx") {
-    const file = orderExcel(
-      {
-        client: String(order.client || ""),
-        title: order.title as string | null,
-        client_url: order.client_url as string | null,
-        package: order.package as string | null,
-        created_at: order.created_at as string | null,
-        published_at: order.published_at as string | null,
-      },
-      placements.map((p) => ({
-        site_slug: String(p.site_slug || ""),
-        url: (p.url as string | null) ?? null,
-        placed_at: (p.placed_at as string | null) ?? null,
-        title: (p.title as string | null) ?? null,
-      }))
-    );
+    const file = orderExcel(asOrder(), asRows());
     return new NextResponse(Buffer.from(file), {
       headers: {
         "Content-Type":
@@ -144,6 +161,7 @@ function render(
   .download { margin: -8px 0 24px; }
   .download a { display: inline-block; background: #0b5ea8; color: #fff; text-decoration: none;
                 padding: 9px 16px; border-radius: 6px; font-size: .88rem; font-weight: 600; }
+  .download a.alt { background: #fff; color: #0b5ea8; border: 1px solid #cfd8e3; margin-left: 8px; }
   .download span { color: #888; font-size: .82rem; margin-left: 10px; }
   @media print { .download { display: none; } }
   footer { margin-top: 36px; padding-top: 16px; border-top: 1px solid #e5e5e5;
@@ -165,8 +183,9 @@ function render(
 
   ${
     placements.length
-      ? `<p class="download"><a href="/report/${esc(token)}?format=xlsx">Download as Excel</a>
-         <span>every link, sortable, in one file</span></p>`
+      ? `<p class="download"><a href="/report/${esc(token)}?format=pdf">Download as PDF</a>
+         <a class="alt" href="/report/${esc(token)}?format=xlsx">Download as Excel</a>
+         <span>every link, in one file</span></p>`
       : ""
   }
 
