@@ -45,7 +45,7 @@ async function run(req: NextRequest, body: Record<string, unknown> | null) {
   // count is what says finished — status is set by whoever last touched the
   // order and is not reliable enough to decide on.
   const { rows: due } = await pool.query(
-    `SELECT o.id, o.pace_per_run, o.pace_every_minutes,
+    `SELECT o.id, o.pace_per_run, o.pace_every_minutes, COALESCE(o.pace_runs, 0) AS pace_runs,
             (SELECT COUNT(*) FROM order_placements p WHERE p.order_id = o.id) AS placed
        FROM orders o
       WHERE o.paid = TRUE
@@ -70,11 +70,32 @@ async function run(req: NextRequest, body: Record<string, unknown> | null) {
     const perRun = Number(order.pace_per_run);
     const everyMinutes = Number(order.pace_every_minutes);
 
+    // Given up on. Whatever is left is not going to publish itself, and an
+    // order retried forever is noise that hides the ones that need looking at.
+    const runsNeeded = Math.ceil(50 / perRun);
+    if (Number(order.pace_runs) >= runsNeeded * 3) {
+      await pool.query(`UPDATE orders SET next_publish_at = NULL WHERE id = $1`, [order.id]);
+      console.error(
+        `[cron/orders-publish] order ${order.id} stopped after ${order.pace_runs} runs with ${order.placed} of 50 placed — the rest needs a look`
+      );
+      ran.push({
+        orderId: order.id,
+        ok: false,
+        stopped: true,
+        placed: Number(order.placed),
+        error: "Too many runs without finishing",
+      });
+      continue;
+    }
+
     // Move the clock before publishing, not after. A run that takes four
     // minutes would otherwise still be due when the next tick arrives, and the
     // same sites would be attempted twice.
     await pool.query(
-      `UPDATE orders SET next_publish_at = NOW() + ($2 || ' minutes')::interval WHERE id = $1`,
+      `UPDATE orders
+          SET next_publish_at = NOW() + ($2 || ' minutes')::interval,
+              pace_runs = COALESCE(pace_runs, 0) + 1
+        WHERE id = $1`,
       [order.id, String(everyMinutes)]
     );
 

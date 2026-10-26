@@ -100,6 +100,14 @@ export async function ensureOrdersSchema(): Promise<void> {
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS pace_every_minutes INT`);
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS next_publish_at TIMESTAMPTZ`);
 
+  // How many scheduled runs this order has had. A site can fail in a way that
+  // never resolves — no site row, a database it cannot reach — and that site
+  // stays in "remaining" forever, so without a count the cron would retry the
+  // same order every gap until somebody noticed. The schedule stops at three
+  // times the number of runs the pace needs, which leaves plenty of room for
+  // a site that is merely having a bad morning.
+  await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS pace_runs INT DEFAULT 0`);
+
   await pool.query(
     `CREATE UNIQUE INDEX IF NOT EXISTS idx_orders_token ON orders(token) WHERE token IS NOT NULL`
   );
