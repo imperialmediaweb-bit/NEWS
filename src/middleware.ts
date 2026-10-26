@@ -274,7 +274,15 @@ export function middleware(req: NextRequest) {
       req.headers.get("authorization")?.replace("Bearer ", "") ||
       req.nextUrl.searchParams.get("key") ||
       req.cookies.get("admin_token")?.value;
-    if (token !== process.env.CRON_SECRET) {
+
+    // SHOP_KEY belongs here as well as on the order routes. Adding it only
+    // there achieved nothing: this gate runs first, rejected the shop's calls
+    // as Unauthorized, and the route never ran — so even the logging added to
+    // diagnose it stayed silent. A second credential has to be accepted
+    // everywhere the first one is, or it is not a credential.
+    const env = process.env as Record<string, string | undefined>;
+    const accepted = [env["CRON_SECRET"], env["SHOP_KEY"]].filter(Boolean);
+    if (!token || !accepted.includes(token)) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
   }
