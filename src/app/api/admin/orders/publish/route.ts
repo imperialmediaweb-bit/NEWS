@@ -7,6 +7,7 @@ import { keyFromRequest, orderKeyAccepted } from "@/lib/shop-auth";
 import { rewriteCampaignForSite } from "@/lib/pipeline/rewriter";
 import { submitToAllEngines } from "@/lib/indexing";
 import { submitToIndexNow } from "@/lib/indexnow";
+import { paragraphize } from "@/lib/paragraphs";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 300;
@@ -244,18 +245,22 @@ function buildSlug(title: string, suffix: string): string {
  */
 function renderSponsored(
   content: string,
-  city: string,
-  state: string,
+  _city: string,
+  _state: string,
   client: string,
   clientUrl: string
 ): string {
-  const disclosure = `<p><em>This is sponsored content${
+  // One notice, not two. There used to be a second line naming the city as
+  // well, so every placement opened with two stacked disclaimers before the
+  // client's first word — which reads badly and says nothing the first line
+  // does not. The remaining line stays and is not configurable: it is the
+  // difference between selling advertising and passing an advertisement off
+  // as the newsroom's work.
+  const disclosure = `<p style="margin:0 0 20px;font-size:0.85em;color:#666;"><em>Sponsored content${
     client ? ` paid for by ${escapeHtml(client)}` : ""
-  }. It was not produced by our newsroom.</em></p>`;
+  } — not produced by our newsroom.</em></p>`;
 
-  const intro = `<p>The following is a sponsored message for readers in ${escapeHtml(
-    city
-  )}, ${escapeHtml(state)}.</p>`;
+  const intro = "";
 
   const footer = clientUrl
     ? `<p><a href="${escapeHtml(
@@ -265,7 +270,10 @@ function renderSponsored(
       }</a></p>`
     : "";
 
-  return `${disclosure}${intro}${content}${footer}`;
+  // The client's copy is plain text: without this it reaches the page as one
+  // unbroken block, which is how fifty newspapers ran a thousand words with no
+  // paragraph breaks at all.
+  return `${disclosure}${intro}${paragraphize(content)}${footer}`;
 }
 
 function escapeHtml(s: string): string {

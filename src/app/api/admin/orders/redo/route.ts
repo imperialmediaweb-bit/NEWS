@@ -11,7 +11,7 @@ export const maxDuration = 120;
  * Take a placement back so the order can publish it again.
  *
  *   POST /api/admin/orders/redo
- *     { key, orderId, sites: ["alabama-express", ...], dryRun? }
+ *     { key, orderId, sites?: ["alabama-express", ...], urls?: ["https://…"], dryRun? }
  *
  * This exists because of a real mistake rather than a hypothetical one. A
  * client bought their exact words on fifty papers; the first nineteen went out
@@ -41,12 +41,18 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "orderId is required" }, { status: 400 });
   }
 
-  const requested: string[] = Array.isArray(body.sites)
-    ? (body.sites as unknown[]).filter((s): s is string => typeof s === "string")
-    : [];
-  if (requested.length === 0) {
+  const asList = (value: unknown): string[] =>
+    Array.isArray(value) ? value.filter((v): v is string => typeof v === "string" && !!v) : [];
+
+  const requested = asList(body.sites);
+  // Addresses are the safer way to name a placement from outside: the caller
+  // has the published URLs in hand and does not have to guess this network's
+  // slug from a hostname that may be spelled nothing like it.
+  const urls = asList(body.urls);
+
+  if (requested.length === 0 && urls.length === 0) {
     return NextResponse.json(
-      { error: "sites is required — name the sites to redo, one slug each" },
+      { error: "Name what to redo: `sites` as slugs, or `urls` as published addresses" },
       { status: 400 }
     );
   }
@@ -65,14 +71,15 @@ export async function POST(req: NextRequest) {
     `SELECT p.site_slug, p.article_id, p.url, a.title
        FROM order_placements p
        LEFT JOIN articles a ON a.id = p.article_id
-      WHERE p.order_id = $1 AND p.site_slug = ANY($2::text[])`,
-    [orderId, requested]
+      WHERE p.order_id = $1
+        AND (p.site_slug = ANY($2::text[]) OR p.url = ANY($3::text[]))`,
+    [orderId, requested, urls]
   );
 
   if (targets.length === 0) {
     return NextResponse.json({
       orderId,
-      message: "No placements on those sites for this order — nothing to take back",
+      message: "No placements matched for this order — nothing to take back",
       removed: [],
     });
   }

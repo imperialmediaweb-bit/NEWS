@@ -104,11 +104,18 @@ const getArticleData = cache(async (siteSlug: string, articleSlug: string, domai
     );
 
     // Inject internal links into article content
-    const enrichedContent = injectInternalLinks(
-      (article.content as string) || "",
-      linkRows as { title: string; slug: string; category: string }[],
-      domain
-    );
+    // Paid placements are left alone. A "Related:" box about high-school
+    // cross country dropped into the middle of an article somebody bought is
+    // the newsroom talking over the advertiser, and it is the first thing the
+    // advertiser sees when they open the page they paid for.
+    const isSponsored = String(article.author || "").toLowerCase() === "sponsored content";
+    const enrichedContent = isSponsored
+      ? ((article.content as string) || "")
+      : injectInternalLinks(
+          (article.content as string) || "",
+          linkRows as { title: string; slug: string; category: string }[],
+          domain
+        );
 
     const format = (row: Record<string, unknown>, useEnrichedContent = false) => ({
       title: row.title as string,
