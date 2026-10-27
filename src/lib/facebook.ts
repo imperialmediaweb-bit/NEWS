@@ -29,18 +29,25 @@ export const FB_PERMISSIONS = [
   "pages_manage_posts",
   // Required to put the article link in the first comment.
   "pages_manage_engagement",
+  // Required for Pages owned by a Business Manager, which most of these are.
+  "business_management",
 ];
 
-// business_management is gone too. It only matters for Pages owned by a
-// Business Manager, and it costs an extra consent screen asking which
-// Businesses to grant — a screen the owner could not answer, because none of
-// the six listed held the newspapers. Pages administered from a personal
-// account appear in /me/accounts without it.
+// business_management was removed once, because requesting it adds a consent
+// screen listing every Business on the account and the owner could not tell
+// which of the six held the newspapers. The note here said that if a Page
+// turned out to be Business-owned it would simply be missing after
+// connecting, and to add this back then.
 //
-// If a newspaper's Page turns out to be Business-owned, it will simply be
-// missing from the list after connecting. Add this back then, rather than
-// asking for access to every Business on the account on the chance that one
-// of them matters.
+// That is exactly what happened, and the numbers say so plainly: the old app,
+// which asked for this, returned 33 Pages. The new one, without it, returned
+// 12 — and the account has Pages for all fifty papers. Nothing else about the
+// request changed.
+//
+// So most of these Pages are Business-owned and do not appear in
+// /me/accounts without it. The consent screen is the price, and the answer to
+// it is "all Businesses" — not because that is tidy, but because the Pages
+// are spread across them and nobody knows which.
 
 /**
  * The address a browser can actually reach, for redirects.
