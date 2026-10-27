@@ -579,6 +579,42 @@ export async function rewriteArticle(
  * explicit that facts, names, figures and offers are to be carried over
  * untouched.
  */
+/**
+ * A distinct way in for each outlet.
+ *
+ * Fifty sites were handed the same instruction — "rewrite so it does not read
+ * identically" — and a model given the same instruction fifty times lands in
+ * the same place fifty times. The first real campaign went out as
+ * "Exploring The Mesopotamian by novelist Fazle Chowdhury", "Exploring The
+ * Mesopotamian by Fazle Chowdhury" and "Exploring Fazle Chowdhury's novel
+ * The Mesopotamian": three headlines, one headline. A search engine reads
+ * those as one source, which is the whole thing the rewrite was paid for.
+ *
+ * So each outlet is given an angle instead: a different true thing to lead
+ * with, out of the same facts. Picked from the site name, so a site keeps its
+ * angle between runs and a resumed campaign does not start over.
+ */
+const ANGLES: string[] = [
+  "Lead with the person at the centre of it — who they are and what they did.",
+  "Lead with the single most concrete number, date or measurement in the copy.",
+  "Lead with what changes for the reader: what they can do now that they could not before.",
+  "Lead with the problem this exists to solve, stated plainly before the solution.",
+  "Lead with the timing — why now, what makes this the moment.",
+  "Lead with the comparison: what this replaces, and how the old way worked.",
+  "Lead with the thing most readers would get wrong about this, then correct it.",
+  "Lead with the origin: where it started and what it was built out of.",
+  "Lead with the scale of it — how many, how far, how long.",
+  "Lead with the detail a careless writer would leave out, and build from there.",
+];
+
+function angleFor(siteName: string): string {
+  let hash = 0;
+  for (let i = 0; i < siteName.length; i++) {
+    hash = (hash * 31 + siteName.charCodeAt(i)) >>> 0;
+  }
+  return ANGLES[hash % ANGLES.length]!;
+}
+
 export async function rewriteCampaignForSite(
   siteName: string,
   state: string,
@@ -591,7 +627,10 @@ export async function rewriteCampaignForSite(
 
 You are preparing a piece of SPONSORED CONTENT for publication. The sponsor is ${sponsorName || "the advertiser"}.
 
-Rewrite the copy below in your own words so it reads naturally to a reader in ${city}, ${state}, and does not read identically to the version running on other outlets.
+Rewrite the copy below in your own words so it reads naturally to a reader in ${city}, ${state}.
+
+YOUR ANGLE FOR THIS OUTLET: ${angleFor(siteName)}
+Every outlet running this story has been given a different angle. Yours is the one above. Build the opening and the headline around it, using only facts already in the copy.
 
 ABSOLUTE RULES — breaking any of these is worse than a dull rewrite:
 - Do NOT invent, add, change or remove any fact, claim, statistic, price, date, product name, company name, contact detail or offer. Everything factual must come from the source copy and survive unchanged.
@@ -600,9 +639,16 @@ ABSOLUTE RULES — breaking any of these is worse than a dull rewrite:
 - Do NOT write it as news. It is an advertisement and must not imitate newsroom reporting.
 - Keep roughly the same length as the source.
 
+THE HEADLINE IS THE PART THAT GOES WRONG. It must:
+- come out of your angle, not out of the source headline;
+- NOT reuse the source headline's wording, word order or shape — rearranging its words into a new order is the failure this is meant to prevent;
+- NOT begin with the same word as the source headline;
+- read like a sentence somebody would say, not a title with the words shuffled.
+A headline that a reader could not tell apart from the source headline is a failed rewrite, however good the body is.
+
 Return ONLY valid JSON, no markdown fences:
 {
-  "title": "a rewritten headline, plain and non-sensational",
+  "title": "a headline built on YOUR ANGLE — 6 to 12 words, plain, non-sensational",
   "summary": "one or two sentences, under 200 characters",
   "content": "the rewritten body as HTML using only <p>, <h2>, <ul>, <li>, <strong> tags",
   "suggestedImageQuery": "2-4 English keywords describing a suitable photo"
