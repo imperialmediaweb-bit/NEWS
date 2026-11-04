@@ -73,15 +73,19 @@ export async function GET(req: NextRequest) {
   // rewritten, which is what VACUUM FULL does. It takes an exclusive lock on
   // the table for the duration, so it is a separate, deliberate step.
   if (req.nextUrl.searchParams.get("action") === "vacuum") {
+    // Only tables the daily cleanup deletes from; the name goes into SQL, so
+    // it is matched against this list, never taken from the request as-is.
+    const VACUUMABLE = ["articles", "page_views", "feed_items", "facebook_posts"];
+    const table = VACUUMABLE.find((t) => t === req.nextUrl.searchParams.get("table")) || "articles";
     const before = await pool.query(
-      `SELECT pg_size_pretty(pg_total_relation_size('articles')) AS articles_table,
+      `SELECT pg_size_pretty(pg_total_relation_size('${table}')) AS table_size,
               pg_size_pretty(pg_database_size(current_database())) AS database`
     );
     const started = Date.now();
     const client = await pool.connect();
     try {
       await client.query("SET statement_timeout = 0");
-      await client.query("VACUUM FULL ANALYZE articles");
+      await client.query(`VACUUM FULL ANALYZE ${table}`);
     } catch (e) {
       return NextResponse.json(
         { error: e instanceof Error ? e.message : String(e), before: before.rows[0] },
@@ -91,11 +95,11 @@ export async function GET(req: NextRequest) {
       client.release();
     }
     const after = await pool.query(
-      `SELECT pg_size_pretty(pg_total_relation_size('articles')) AS articles_table,
+      `SELECT pg_size_pretty(pg_total_relation_size('${table}')) AS table_size,
               pg_size_pretty(pg_database_size(current_database())) AS database`
     );
     return NextResponse.json({
-      vacuumed: "articles",
+      vacuumed: table,
       seconds: Math.round((Date.now() - started) / 1000),
       before: before.rows[0],
       after: after.rows[0],
