@@ -67,6 +67,40 @@ export async function GET(req: NextRequest) {
     parseInt(req.nextUrl.searchParams.get("olderThanDays") || "365", 10) || 365
   );
   const confirm = req.nextUrl.searchParams.get("confirm");
+
+  // Deleting rows marks their space reusable; it does not give it back to the
+  // disk. The volume (and its bill) only shrinks when the table file is
+  // rewritten, which is what VACUUM FULL does. It takes an exclusive lock on
+  // the table for the duration, so it is a separate, deliberate step.
+  if (req.nextUrl.searchParams.get("action") === "vacuum") {
+    const before = await pool.query(
+      `SELECT pg_size_pretty(pg_total_relation_size('articles')) AS articles_table,
+              pg_size_pretty(pg_database_size(current_database())) AS database`
+    );
+    const started = Date.now();
+    const client = await pool.connect();
+    try {
+      await client.query("SET statement_timeout = 0");
+      await client.query("VACUUM FULL ANALYZE articles");
+    } catch (e) {
+      return NextResponse.json(
+        { error: e instanceof Error ? e.message : String(e), before: before.rows[0] },
+        { status: 500 }
+      );
+    } finally {
+      client.release();
+    }
+    const after = await pool.query(
+      `SELECT pg_size_pretty(pg_total_relation_size('articles')) AS articles_table,
+              pg_size_pretty(pg_database_size(current_database())) AS database`
+    );
+    return NextResponse.json({
+      vacuumed: "articles",
+      seconds: Math.round((Date.now() - started) / 1000),
+      before: before.rows[0],
+      after: after.rows[0],
+    });
+  }
   const limit = Math.min(
     10000,
     Math.max(1, parseInt(req.nextUrl.searchParams.get("limit") || "5000", 10) || 5000)
