@@ -130,7 +130,14 @@ export async function GET(req: NextRequest) {
         ]),
         pool.query(
           `SELECT pg_size_pretty(pg_total_relation_size('articles')) AS articles_table,
-                  pg_size_pretty(pg_database_size(current_database())) AS database`
+                  pg_size_pretty(pg_database_size(current_database())) AS database,
+                  pg_size_pretty((SELECT sum(size) FROM pg_ls_waldir())) AS wal,
+                  (SELECT string_agg(datname || ' ' || pg_size_pretty(pg_database_size(datname)), ', ')
+                     FROM pg_database) AS all_databases,
+                  (SELECT string_agg(relname || ' ' || pg_size_pretty(pg_total_relation_size(oid)), ', ')
+                     FROM (SELECT oid, relname FROM pg_class WHERE relkind = 'r'
+                             AND relnamespace = 'public'::regnamespace
+                            ORDER BY pg_total_relation_size(oid) DESC LIMIT 8) t) AS largest_tables`
         ),
         pool.query(
           `SELECT extract(year FROM a.published_at)::int AS year, count(*)::int AS n
