@@ -70,7 +70,7 @@ ${urls}
       "Content-Type": "application/xml",
       // Older pages never change, but they all go through this one route, so
       // an hour at the edge is the compromise.
-      "Cache-Control": "public, max-age=900, s-maxage=3600, stale-while-revalidate=86400",
+      "Cache-Control": "public, max-age=900, s-maxage=86400, stale-while-revalidate=604800",
       Vary: "Host",
     },
   });
