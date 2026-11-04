@@ -132,34 +132,28 @@ export async function GET(req: NextRequest) {
   try {
     await client.query("BEGIN");
     const { rows: batch } = await client.query(
-      `SELECT a.id, a.title, a.slug, a.category, a.published_at, a.source_url, s.domain
-         FROM articles a JOIN sites s ON a.site_id = s.id
+      `SELECT a.id
+         FROM articles a
         WHERE ${candidateWhere}
         ORDER BY a.published_at ASC
         LIMIT $2
-        FOR UPDATE OF a SKIP LOCKED`,
+        FOR UPDATE SKIP LOCKED`,
       [olderThanDays, limit]
     );
 
     if (batch.length > 0) {
-      const values: unknown[] = [];
-      const tuples = batch.map((r, i) => {
-        const b = i * 8;
-        values.push(
-          r.id, r.domain, r.slug, r.category, r.title, r.published_at, r.source_url,
-          `older than ${olderThanDays}d, no visit in ${RECENT_VIEW_DAYS}d`
-        );
-        return `($${b + 1},$${b + 2},$${b + 3},$${b + 4},$${b + 5},$${b + 6},$${b + 7},$${b + 8})`;
-      });
+      // One array parameter, whatever the batch size: a VALUES list of
+      // 10,000 rows is 80,000 parameters and Postgres binds at most 65,535.
+      const ids = batch.map((r) => Number(r.id));
       await client.query(
         `INSERT INTO pruned_articles
            (article_id, domain, slug, category, title, published_at, source_url, reason)
-         VALUES ${tuples.join(",")}`,
-        values
+         SELECT a.id, s.domain, a.slug, a.category, a.title, a.published_at, a.source_url, $2
+           FROM articles a LEFT JOIN sites s ON a.site_id = s.id
+          WHERE a.id = ANY($1::int[])`,
+        [ids, `older than ${olderThanDays}d, no visit in ${RECENT_VIEW_DAYS}d`]
       );
-      const res = await client.query(`DELETE FROM articles WHERE id = ANY($1::int[])`, [
-        batch.map((r) => r.id),
-      ]);
+      const res = await client.query(`DELETE FROM articles WHERE id = ANY($1::int[])`, [ids]);
       deleted = res.rowCount || 0;
     }
     await client.query("COMMIT");
