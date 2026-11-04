@@ -155,6 +155,15 @@ export async function POST(req: NextRequest) {
     actions.push("optimize_db");
   }
 
+  // ─── Table compaction: weekly ───
+  // The daily cleanup deletes from feed_items, facebook_posts and page_views
+  // but a delete never shrinks the file; feed_items reached 385 MB for 29 MB
+  // of rows. VACUUM FULL rewrites them, locking each for a few seconds.
+  if ((await claimJob("compact_db", 7 * 24 * 60 * 60)).claimed) {
+    fireAndForgetGet(baseUrl, "admin/archive-prune?action=compact", secret);
+    actions.push("compact_db");
+  }
+
   if (actions.length === 0) {
     actions.push("nothing_due");
   }
@@ -191,7 +200,8 @@ function getBaseUrl(req: NextRequest): string {
  * invisible, since nothing waits for the answer.
  */
 function fireAndForgetGet(baseUrl: string, path: string, secret: string): void {
-  fetch(`${baseUrl}/api/${path}?key=${encodeURIComponent(secret)}`, {
+  const sep = path.includes("?") ? "&" : "?";
+  fetch(`${baseUrl}/api/${path}${sep}key=${encodeURIComponent(secret)}`, {
     method: "GET",
   }).catch((err) => {
     console.error(`Fire-and-forget failed for ${path}:`, err);

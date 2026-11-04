@@ -72,7 +72,33 @@ export async function GET(req: NextRequest) {
   // disk. The volume (and its bill) only shrinks when the table file is
   // rewritten, which is what VACUUM FULL does. It takes an exclusive lock on
   // the table for the duration, so it is a separate, deliberate step.
-  if (req.nextUrl.searchParams.get("action") === "vacuum") {
+  const action = req.nextUrl.searchParams.get("action");
+
+  // Weekly, from the cron dispatcher: rewrite the three tables the daily
+  // cleanup deletes from. Left alone they grew to 385 MB and 216 MB holding
+  // 29 MB and 0.5 MB of live rows. Each lock lasts seconds; `articles` is not
+  // in the list because it only grows and its rewrite takes a minute.
+  if (action === "compact") {
+    const sizes = async (t: string) =>
+      (await pool.query(`SELECT pg_size_pretty(pg_total_relation_size('${t}')) AS s`)).rows[0].s;
+    const report: Record<string, string> = {};
+    const client = await pool.connect();
+    try {
+      await client.query("SET statement_timeout = 0");
+      for (const t of ["feed_items", "facebook_posts", "page_views"]) {
+        const before = await sizes(t);
+        await client.query(`VACUUM FULL ANALYZE ${t}`);
+        report[t] = `${before} -> ${await sizes(t)}`;
+      }
+    } catch (e) {
+      report.error = e instanceof Error ? e.message : String(e);
+    } finally {
+      client.release();
+    }
+    return NextResponse.json({ compacted: report });
+  }
+
+  if (action === "vacuum") {
     // Only tables the daily cleanup deletes from; the name goes into SQL, so
     // it is matched against this list, never taken from the request as-is.
     const VACUUMABLE = ["articles", "page_views", "feed_items", "facebook_posts"];
