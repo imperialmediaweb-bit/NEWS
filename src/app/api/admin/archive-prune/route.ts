@@ -1,0 +1,199 @@
+import { NextRequest, NextResponse } from "next/server";
+import pool from "@/lib/db";
+
+export const dynamic = "force-dynamic";
+export const maxDuration = 300;
+
+/**
+ * Remove old articles nobody reads.
+ *
+ *   GET /api/admin/archive-prune?key=…&olderThanDays=365
+ *       → what would go and what it is worth. Deletes nothing.
+ *   GET /api/admin/archive-prune?key=…&olderThanDays=365&confirm=prune-archive&limit=5000
+ *       → deletes up to `limit`, repeat until remaining is 0.
+ *
+ * Why this exists: the archive is 713,000 articles, 85% of them from 2024
+ * and earlier, and it is what the database bill is made of — 5 GB on disk,
+ * a 2.2 GB working set, a backup of both. Search Console shows the whole
+ * network earning 44 clicks in 28 days. The old rows cost money every month
+ * and bring in nothing measurable.
+ *
+ * What it will NOT delete, and this is the whole design:
+ *
+ * An article anyone has opened in the last 60 days stays, however old. Page
+ * views are recorded by path, so each candidate is joined to its own URL in
+ * page_views. "Old" is not the criterion — "old and unread" is. An article
+ * from 2024 that still gets a visitor a week is the kind of page an archive
+ * is for.
+ *
+ * Every removed row is recorded in pruned_articles — title, URL, date, source
+ * — inside the same transaction. A deletion this size without a record is a
+ * disappearance. The body is not kept: Railway's own database backups hold
+ * it for the backup window, which is the real safety net here.
+ */
+
+const CONFIRM = "prune-archive";
+// The cleanup job keeps page_views for 60 days; a longer window would be a
+// claim the data cannot back.
+const RECENT_VIEW_DAYS = 60;
+
+async function ensureLog() {
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS pruned_articles (
+      id SERIAL PRIMARY KEY,
+      article_id INTEGER NOT NULL,
+      domain VARCHAR(255),
+      slug VARCHAR(500),
+      category VARCHAR(100),
+      title VARCHAR(500),
+      published_at TIMESTAMP,
+      source_url VARCHAR(1000),
+      reason VARCHAR(200) NOT NULL,
+      pruned_at TIMESTAMP DEFAULT NOW()
+    )
+  `);
+}
+
+export async function GET(req: NextRequest) {
+  const key =
+    req.nextUrl.searchParams.get("key") ||
+    req.headers.get("authorization")?.replace("Bearer ", "");
+  if (!process.env.CRON_SECRET || key !== process.env.CRON_SECRET) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const olderThanDays = Math.max(
+    30,
+    parseInt(req.nextUrl.searchParams.get("olderThanDays") || "365", 10) || 365
+  );
+  const confirm = req.nextUrl.searchParams.get("confirm");
+  const limit = Math.min(
+    10000,
+    Math.max(1, parseInt(req.nextUrl.searchParams.get("limit") || "5000", 10) || 5000)
+  );
+
+  // Candidates: older than the cutoff, with no view on their own URL in the
+  // last 90 days. The path page_views stores is "/<category>/<slug>".
+  const candidateWhere = `
+    a.published_at < NOW() - make_interval(days => $1)
+    AND NOT EXISTS (
+      SELECT 1 FROM page_views v
+       WHERE v.site_id = a.site_id
+         AND v.path = '/' || COALESCE(a.category, 'local-news') || '/' || a.slug
+         AND v.created_at >= NOW() - INTERVAL '${RECENT_VIEW_DAYS} days'
+    )`;
+
+  if (confirm !== CONFIRM) {
+    const [{ rows: total }, { rows: old }, { rows: cand }, { rows: size }, { rows: byYear }] =
+      await Promise.all([
+        pool.query("SELECT count(*)::int AS n FROM articles"),
+        pool.query(
+          "SELECT count(*)::int AS n FROM articles a WHERE a.published_at < NOW() - make_interval(days => $1)",
+          [olderThanDays]
+        ),
+        pool.query(`SELECT count(*)::int AS n FROM articles a WHERE ${candidateWhere}`, [
+          olderThanDays,
+        ]),
+        pool.query(
+          `SELECT pg_size_pretty(pg_total_relation_size('articles')) AS articles_table,
+                  pg_size_pretty(pg_database_size(current_database())) AS database`
+        ),
+        pool.query(
+          `SELECT extract(year FROM a.published_at)::int AS year, count(*)::int AS n
+             FROM articles a WHERE ${candidateWhere}
+            GROUP BY 1 ORDER BY 1`,
+          [olderThanDays]
+        ),
+      ]);
+
+    const oldN = Number(old[0]?.n) || 0;
+    const candN = Number(cand[0]?.n) || 0;
+
+    return NextResponse.json({
+      dryRun: true,
+      olderThanDays,
+      totalArticles: Number(total[0]?.n) || 0,
+      olderThanCutoff: oldN,
+      // The gap between these two is the point: old articles that someone
+      // has opened recently, which stay.
+      oldButStillRead: oldN - candN,
+      wouldDelete: candN,
+      wouldDeleteByYear: byYear,
+      sizeNow: size[0],
+      note: `Nothing was deleted. "Still read" means at least one visit to the article's own URL in the last ${RECENT_VIEW_DAYS} days; those stay whatever their age.`,
+      toDelete: `add &confirm=${CONFIRM}&limit=${limit} and repeat until remaining is 0`,
+    });
+  }
+
+  await ensureLog();
+
+  const client = await pool.connect();
+  let deleted = 0;
+  try {
+    await client.query("BEGIN");
+    const { rows: batch } = await client.query(
+      `SELECT a.id, a.title, a.slug, a.category, a.published_at, a.source_url, s.domain
+         FROM articles a JOIN sites s ON a.site_id = s.id
+        WHERE ${candidateWhere}
+        ORDER BY a.published_at ASC
+        LIMIT $2
+        FOR UPDATE OF a SKIP LOCKED`,
+      [olderThanDays, limit]
+    );
+
+    if (batch.length > 0) {
+      const values: unknown[] = [];
+      const tuples = batch.map((r, i) => {
+        const b = i * 8;
+        values.push(
+          r.id, r.domain, r.slug, r.category, r.title, r.published_at, r.source_url,
+          `older than ${olderThanDays}d, no visit in ${RECENT_VIEW_DAYS}d`
+        );
+        return `($${b + 1},$${b + 2},$${b + 3},$${b + 4},$${b + 5},$${b + 6},$${b + 7},$${b + 8})`;
+      });
+      await client.query(
+        `INSERT INTO pruned_articles
+           (article_id, domain, slug, category, title, published_at, source_url, reason)
+         VALUES ${tuples.join(",")}`,
+        values
+      );
+      const res = await client.query(`DELETE FROM articles WHERE id = ANY($1::int[])`, [
+        batch.map((r) => r.id),
+      ]);
+      deleted = res.rowCount || 0;
+    }
+    await client.query("COMMIT");
+  } catch (e) {
+    await client.query("ROLLBACK");
+    return NextResponse.json(
+      { error: e instanceof Error ? e.message : String(e), deleted: 0 },
+      { status: 500 }
+    );
+  } finally {
+    client.release();
+  }
+
+  // A full batch proves there is more; counting the rest every call is a
+  // full scan the request does not have time for.
+  const fullBatch = deleted >= limit;
+  const { rows: logged } = await pool.query("SELECT count(*)::int AS n FROM pruned_articles");
+  let remaining: number | string = "more (batch came back full)";
+  if (!fullBatch) {
+    const { rows } = await pool.query(
+      `SELECT count(*)::int AS n FROM articles a WHERE ${candidateWhere}`,
+      [olderThanDays]
+    );
+    remaining = Number(rows[0]?.n) || 0;
+  }
+
+  return NextResponse.json({
+    deleted,
+    recorded: Number(logged[0]?.n) || 0,
+    remaining,
+    done: remaining === 0,
+    // Deleted rows do not shrink the file until VACUUM runs; the optimize_db
+    // job does that on its daily pass. The size on disk moves after it, not
+    // after this.
+    next: remaining !== 0 ? `same URL again` : "run optimize_db, then check sizeNow",
+  });
+}
