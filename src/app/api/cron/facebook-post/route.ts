@@ -21,7 +21,16 @@ interface PageRow {
  * Until that is understood, the safe direction for every number here is
  * downward: a quiet page is recoverable, a banned one is not.
  */
-const MAX_PER_DAY = parseInt(process.env.FB_MAX_PER_DAY || "10", 10) || 10;
+// 0 means off. The earlier `|| 10` turned an explicit 0 back into 10, so
+// the switch that was meant to stop posting after Meta suspended Pages for
+// "inauthentic behavior" did nothing, and the job kept hitting dead tokens
+// 100 times a day.
+const MAX_PER_DAY = (() => {
+  const raw = process.env.FB_MAX_PER_DAY;
+  if (raw === undefined || raw === "") return 10;
+  const n = parseInt(raw, 10);
+  return Number.isFinite(n) && n >= 0 ? n : 10;
+})();
 
 /**
  * Stop posting to a page that keeps failing.
@@ -179,6 +188,12 @@ export async function GET(req: NextRequest) {
   const secret = process.env.CRON_SECRET;
   if (secret && key !== secret) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  // The off switch, checked before anything else so a disabled network
+  // makes no Facebook calls at all and writes no error rows.
+  if (MAX_PER_DAY <= 0) {
+    return NextResponse.json({ message: "Facebook posting is off (FB_MAX_PER_DAY=0)", posted: 0 });
   }
 
   // Only post during US hours: 7 AM - 10 PM EST (UTC-5)
