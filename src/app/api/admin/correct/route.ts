@@ -81,7 +81,23 @@ export async function POST(req: NextRequest) {
     String(correction).trim()
   )}</p><hr />`;
 
-  const newContent = body.content ? notice + body.content : notice + existing.content;
+  // A one-word fix (a name, an affiliation) should not need the whole body
+  // retyped. `replace` swaps exact strings in the stored text and refuses if
+  // any of them is not there, so a typo in the request cannot pass as a fix.
+  let base: string = body.content || existing.content;
+  if (Array.isArray(body.replace)) {
+    for (const r of body.replace as { from?: string; to?: string }[]) {
+      if (!r?.from || typeof r.to !== "string" || !base.includes(r.from)) {
+        return NextResponse.json(
+          { error: `replace: text not found in the article: ${String(r?.from).slice(0, 120)}` },
+          { status: 400 }
+        );
+      }
+      base = base.split(r.from).join(r.to);
+    }
+  }
+
+  const newContent = notice + base;
 
   const sets: string[] = ["content = $2"];
   const params: unknown[] = [existing.id, newContent];
