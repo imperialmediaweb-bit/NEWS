@@ -234,6 +234,7 @@ SOURCING — this is what makes the piece worth publishing:
 - Every fact, name, figure, date and quotation must come from the source text below. Nothing else exists.
 - Quote real people by name where the source quotes them by name, using their words verbatim inside quotation marks. Real quotes are the point; do not paraphrase a quote into your own words and leave it in quotation marks.
 - Name the real institutions, agencies, companies and officials the source names, and attribute to them only what the source attributes to them.
+- Copy every name of a person, organization, place and program EXACTLY as the source spells it, letter for letter, and IN FULL. Never correct, simplify or shorten a name: "Debus" stays "Debus" even if it looks unusual, and "Ohio Environmental Council Action Fund" stays all five words, never "Ohio Environmental Council". Job titles are copied as written too.
 - NEVER write "officials confirmed", "a spokesperson said", "sources familiar with the matter" or any other unnamed attribution that is not in the source. If the source does not say who, write the fact plainly.
 - Invent nothing. No extra context, no background you were not given, no speculation about what happens next, no local impact you were not told about.
 - If the source contradicts itself or leaves something unclear, leave it out rather than resolving it yourself.
@@ -271,7 +272,80 @@ Return ONLY valid JSON, no markdown fences:
   "suggestedImageQuery": "2-4 words describing a generic scene, never a specific person"
 }`;
 
-  return callWithFallback(prompt);
+  return restoreSourceSpellings(await callWithFallback(prompt), sourceText);
+}
+
+/**
+ * Put the source's own spelling back on names the model altered.
+ *
+ * Two correction requests in one week were the same failure: the model
+ * rewrote "Debus" as "Debas" and "Rutschilling" as "Ruschilling", an
+ * unusual name nudged toward a more familiar one. A prompt rule lowers the
+ * rate; it cannot make it zero for that kind of error. This does.
+ *
+ * Every capitalised word in the output that does not occur in the source is
+ * compared with the source's capitalised words. If one starts the same and is
+ * one letter off (two for long words), it is a misspelling of that name and
+ * is replaced with the source's form. A word with no near match is left
+ * alone: ordinary sentence-initial words have nothing close in the source.
+ */
+function editDistance(a: string, b: string): number {
+  if (Math.abs(a.length - b.length) > 2) return 99;
+  const prev = Array.from({ length: b.length + 1 }, (_, i) => i);
+  for (let i = 1; i <= a.length; i++) {
+    let diag = prev[0]!;
+    prev[0] = i;
+    for (let j = 1; j <= b.length; j++) {
+      const tmp = prev[j]!;
+      prev[j] = Math.min(prev[j]! + 1, prev[j - 1]! + 1, diag + (a[i - 1] === b[j - 1] ? 0 : 1));
+      diag = tmp;
+    }
+  }
+  return prev[b.length]!;
+}
+
+export function restoreSourceSpellings(result: RewriteResult, sourceText: string): RewriteResult {
+  const NAME = /\b[A-Z][a-zA-Z'’-]{3,}\b/g;
+  const sourceNames = new Set(sourceText.replace(/<[^>]*>/g, " ").match(NAME) || []);
+  if (sourceNames.size === 0) return result;
+  const candidates = Array.from(sourceNames);
+
+  const fixes = new Map<string, string>();
+  const scan = (text: string) => {
+    for (const word of Array.from(new Set((text || "").replace(/<[^>]*>/g, " ").match(NAME) || []))) {
+      if (sourceNames.has(word) || fixes.has(word)) continue;
+      let best = "";
+      let bestD = 3;
+      for (const c of candidates) {
+        if (c[0] !== word[0] || c.toLowerCase() === word.toLowerCase()) continue;
+        // "Debus's", "Americans", "Republican": an ending added to a source
+        // word is grammar, not a misspelling.
+        if (word.startsWith(c) || c.startsWith(word)) continue;
+        const d = editDistance(word, c);
+        if (d < bestD) {
+          bestD = d;
+          best = c;
+        }
+      }
+      // One letter changed, dropped or added. Two would turn "Coloradans"
+      // into "Colorado"; the names that were actually mangled were one off.
+      if (best && bestD === 1 && word.length >= 5) fixes.set(word, best);
+    }
+  };
+  scan(result.title);
+  scan(result.summary);
+  scan(result.content);
+  if (fixes.size === 0) return result;
+
+  const apply = (text: string) => {
+    let out = text || "";
+    for (const [wrong, right] of Array.from(fixes)) {
+      out = out.replace(new RegExp(`\\b${wrong.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "g"), right);
+    }
+    return out;
+  };
+  console.log(`[rewriter] restored source spellings: ${Array.from(fixes).map(([w, r]) => `${w}->${r}`).join(", ")}`);
+  return { ...result, title: apply(result.title), summary: apply(result.summary), content: apply(result.content) };
 }
 
 export function buildOpinionPrompt(
