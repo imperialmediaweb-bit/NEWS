@@ -28,9 +28,11 @@ export async function POST(req: NextRequest) {
   const body = await req.json().catch(() => ({}));
   const prompt = String(body.prompt || "").slice(0, 30000);
   if (prompt.length < 20) return NextResponse.json({ error: "prompt required" }, { status: 400 });
-  const size = ["1024x1536", "1536x1024", "1024x1024"].includes(body.size) ? body.size : "1024x1536";
-  const quality = ["low", "medium", "high"].includes(body.quality) ? body.quality : "high";
-  const model = body.model === "gpt-image-1-mini" ? "gpt-image-1-mini" : "gpt-image-1";
+  // Size and model are passed through: newer image models accept larger and
+  // taller canvases than gpt-image-1, and OpenAI rejects what a model cannot do.
+  const size = /^\d{3,4}x\d{3,4}$|^auto$/.test(String(body.size || "")) ? String(body.size) : "1024x1536";
+  const quality = ["low", "medium", "high", "auto"].includes(body.quality) ? body.quality : "high";
+  const model = /^[a-z0-9.\-]{3,40}$/.test(String(body.model || "")) ? String(body.model) : "gpt-image-1";
 
   const started = Date.now();
   let res: Response;
@@ -63,4 +65,21 @@ export async function POST(req: NextRequest) {
   const b64 = json?.data?.[0]?.b64_json;
   if (!b64) return NextResponse.json({ error: "no image in response", raw: JSON.stringify(json).slice(0, 300) }, { status: 502 });
   return NextResponse.json({ b64, model, ms: Date.now() - started, usage: json.usage || null });
+}
+
+// Which image models this key can use, newest first.
+export async function GET(req: NextRequest) {
+  const key = req.nextUrl.searchParams.get("key");
+  if (!process.env.CRON_SECRET || key !== process.env.CRON_SECRET) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  const r = await fetch("https://api.openai.com/v1/models", {
+    headers: { Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
+  });
+  const j = await r.json().catch(() => ({}));
+  const models = (j?.data || [])
+    .filter((m: { id: string }) => /image|dall-e/i.test(m.id))
+    .sort((a: { created: number }, b: { created: number }) => b.created - a.created)
+    .map((m: { id: string; created: number }) => ({ id: m.id, created: new Date(m.created * 1000).toISOString().slice(0, 10) }));
+  return NextResponse.json({ status: r.status, models });
 }
