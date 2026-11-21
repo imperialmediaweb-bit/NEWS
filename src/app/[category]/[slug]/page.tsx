@@ -308,7 +308,7 @@ export default async function ArticlePage({
     design.family === "live"
       ? await Promise.all([getHomepageArticles(site), getCityForecast(site.state)]).then(([home, forecast]) => ({
           latest: home?.pool || home?.latestPosts || [],
-          mostRead: home?.popular || [],
+          mostRead: (home?.trending || []).concat(home?.popular || []),
           forecast,
         }))
       : null;
