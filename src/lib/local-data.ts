@@ -178,3 +178,77 @@ export async function getStateAlerts(abbr: string): Promise<WeatherAlert[] | nul
       .slice(0, 4);
   });
 }
+
+// ── weekly retail gasoline prices, U.S. Energy Information Administration ──
+// EIA publishes nine states on their own; the rest are shown as their region,
+// and labelled as such.
+const EIA_STATE: Record<string, string> = { Texas: "stx", California: "sca", Colorado: "sco", Florida: "sfl", Massachusetts: "sma", Minnesota: "smn", "New York": "sny", Ohio: "soh", Washington: "swa" };
+const EIA_REGION: Array<[string, string, string[]]> = [
+  ["r1x", "New England", ["Connecticut", "Maine", "New Hampshire", "Rhode Island", "Vermont"]],
+  ["r1y", "Central Atlantic", ["Delaware", "Maryland", "New Jersey", "Pennsylvania"]],
+  ["r1z", "Lower Atlantic", ["Georgia", "North Carolina", "South Carolina", "Virginia", "West Virginia"]],
+  ["r20", "Midwest", ["Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Michigan", "Missouri", "Nebraska", "North Dakota", "Oklahoma", "South Dakota", "Tennessee", "Wisconsin"]],
+  ["r30", "Gulf Coast", ["Alabama", "Arkansas", "Louisiana", "Mississippi", "New Mexico"]],
+  ["r40", "Rocky Mountain", ["Idaho", "Montana", "Utah", "Wyoming"]],
+  ["r50", "West Coast", ["Alaska", "Arizona", "Hawaii", "Nevada", "Oregon"]],
+];
+
+export interface GasPrices {
+  area: string;
+  isRegion: boolean;
+  week: string;
+  grades: Array<{ grade: string; price: number; change: number }>;
+}
+
+export async function getGasPrices(state: string): Promise<GasPrices | null> {
+  let code = EIA_STATE[state];
+  let area = state;
+  let isRegion = false;
+  if (!code) {
+    const r = EIA_REGION.find(([, , list]) => list.includes(state));
+    if (!r) return null;
+    [code, area] = [r[0], `${r[1]} region`];
+    isRegion = true;
+  }
+  return cached(`eia:${code}`, async () => {
+    const res = await fetch(`https://www.eia.gov/dnav/pet/pet_pri_gnd_dcus_${code}_w.htm`, { headers: { "User-Agent": UA }, signal: AbortSignal.timeout(8000), cache: "no-store" });
+    if (!res.ok) throw new Error(`eia ${res.status}`);
+    const h = await res.text();
+    const grades: GasPrices["grades"] = [];
+    for (const row of h.split(/<tr class="DataRow">/).slice(1)) {
+      const name = (row.match(/class="DataStub1">([\s\S]*?)<\/td>/)?.[1] || "").replace(/<[^>]+>/g, "").trim();
+      if (!["Regular", "Midgrade", "Premium"].includes(name)) continue;
+      const vals = Array.from(row.matchAll(/class="(?:Current2|DataB)"[^>]*>([\d.]+)</g)).map((m) => parseFloat(m[1]));
+      if (vals.length < 2) continue;
+      const [prev, cur] = vals.slice(-2);
+      grades.push({ grade: name, price: cur, change: Math.round((cur - prev) * 1000) / 1000 });
+    }
+    const weeks = Array.from(h.matchAll(/class="Series5"[^>]*>([^<]+)</g)).map((m) => m[1].trim());
+    if (grades.length === 0) throw new Error("eia: no rows");
+    return { area, isRegion, week: weeks[weeks.length - 1] || "", grades };
+  });
+}
+
+// ── lottery: latest Powerball and Mega Millions draws (New York State open data) ──
+export interface LotteryDraw {
+  game: string;
+  date: string;
+  numbers: string[];
+  bonus: string;
+}
+
+export async function getLottery(): Promise<LotteryDraw[] | null> {
+  return cached("lottery", async () => {
+    const [pb, mm] = await Promise.all([
+      getJson("https://data.ny.gov/resource/d6yy-54nr.json?$limit=1&$order=draw_date%20DESC"),
+      getJson("https://data.ny.gov/resource/5xaw-6ayf.json?$limit=1&$order=draw_date%20DESC"),
+    ]);
+    const out: LotteryDraw[] = [];
+    if (pb?.[0]) {
+      const n = String(pb[0].winning_numbers).trim().split(/\s+/);
+      out.push({ game: "Powerball", date: pb[0].draw_date, numbers: n.slice(0, 5), bonus: n[5] || "" });
+    }
+    if (mm?.[0]) out.push({ game: "Mega Millions", date: mm[0].draw_date, numbers: String(mm[0].winning_numbers).trim().split(/\s+/), bonus: mm[0].mega_ball || "" });
+    return out;
+  });
+}

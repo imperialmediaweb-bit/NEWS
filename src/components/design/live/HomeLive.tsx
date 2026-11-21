@@ -1,6 +1,6 @@
 import type { SiteConfig } from "@/config/site-config";
 import type { HomeArticles, HomeArticle } from "@/lib/homepage-data";
-import type { CityWeather, Storm, WeatherAlert } from "@/lib/local-data";
+import type { CityWeather, Storm, WeatherAlert, GasPrices, LotteryDraw } from "@/lib/local-data";
 import CountySearch from "./CountySearch";
 import AlertsBox from "./AlertsBox";
 import MobileMenu from "./MobileMenu";
@@ -22,6 +22,8 @@ export default function HomeLive({
   counties,
   sections,
   alerts,
+  gas,
+  lottery,
 }: {
   site: SiteConfig;
   articles: HomeArticles;
@@ -30,6 +32,8 @@ export default function HomeLive({
   counties: string[];
   sections?: Record<string, HomeArticle[]>;
   alerts?: WeatherAlert[] | null;
+  gas?: GasPrices | null;
+  lottery?: LotteryDraw[] | null;
 }) {
   const pal = PALETTE[site.slug] || { ink: "#14213d", acc: site.accent };
   const tz = TZ[site.state] || "America/New_York";
@@ -224,12 +228,13 @@ export default function HomeLive({
 
         {/* weather strip */}
         {weather.length > 0 && (
-          <section id="weather" className="mt-6 border border-[#dde1ea]">
+          <div className={`mt-6 grid gap-5 ${gas ? "lg:grid-cols-[2fr_1fr]" : ""}`}>
+          <section id="weather" className="border border-[#dde1ea]">
             <div className="flex items-center justify-between bg-[var(--lv-ink)] px-4 py-2.5 text-white">
               <h2 className="text-[16px] font-extrabold uppercase">Weather across {site.state}</h2>
               <a href="https://www.weather.gov/" target="_blank" rel="noopener" className="text-[12px] font-semibold hover:underline">National Weather Service →</a>
             </div>
-            <ul className="grid grid-cols-2 divide-x divide-y divide-[#e3e6ee] sm:grid-cols-4 lg:grid-cols-8 lg:divide-y-0">
+            <ul className={`grid grid-cols-2 divide-x divide-y divide-[#e3e6ee] sm:grid-cols-4 ${gas ? "" : "lg:grid-cols-8 lg:divide-y-0"}`}>
               {weather.map((w) => (
                 <li key={w.city} className="flex flex-col items-center gap-1 px-2 py-3 text-center">
                   <span className="text-[13px] font-bold text-[var(--lv-ink)]">{w.city}</span>
@@ -246,6 +251,30 @@ export default function HomeLive({
               ))}
             </ul>
           </section>
+          {gas && (
+            <section className="border border-[#dde1ea]">
+              <div className="bg-[var(--lv-ink)] px-4 py-2.5 text-white">
+                <h2 className="text-[16px] font-extrabold uppercase">Gas prices this week</h2>
+              </div>
+              <div className="p-4">
+                <p className="text-[12px] font-bold uppercase tracking-wide text-[#5a6275]">{gas.isRegion ? `${gas.area} average` : `${gas.area} average`}</p>
+                {gas.grades[0] && (
+                  <p className="mt-1 flex items-end gap-3">
+                    <span className={`${serif.className} text-[44px] font-extrabold leading-none text-[var(--lv-ink)]`}>${gas.grades[0].price.toFixed(2)}</span>
+                    <span className="pb-1 text-[13px] text-[#5a6275]">/gal regular</span>
+                  </p>
+                )}
+                {gas.grades[0] && <p className={`mt-1 text-[13px] font-bold ${gas.grades[0].change > 0 ? "text-[#c62828]" : "text-[#1f7a3f]"}`}>{gas.grades[0].change > 0 ? "▲" : "▼"} {Math.abs(gas.grades[0].change * 100).toFixed(1)}¢ from last week</p>}
+                <ul className="mt-3 divide-y divide-[#e3e6ee] border-t border-[#e3e6ee] text-[14px]">
+                  {gas.grades.slice(1).map((g) => (
+                    <li key={g.grade} className="flex justify-between py-2"><span>{g.grade}</span><b>${g.price.toFixed(2)}</b></li>
+                  ))}
+                </ul>
+                <p className="mt-2 text-[11px] text-[#6b7386]">U.S. Energy Information Administration · week of {gas.week}</p>
+              </div>
+            </section>
+          )}
+          </div>
         )}
 
         {/* official weather alerts */}
@@ -360,6 +389,27 @@ export default function HomeLive({
                 </a>
               ))}
             </div>
+          </section>
+        )}
+
+        {/* lottery */}
+        {lottery && lottery.length > 0 && (
+          <section className="mt-12 grid gap-5 md:grid-cols-2">
+            {lottery.map((d) => (
+              <div key={d.game} className="border border-[#dde1ea] p-5">
+                <div className="flex items-baseline justify-between">
+                  <h2 className="text-[18px] font-extrabold uppercase text-[var(--lv-ink)]">{d.game}</h2>
+                  <span className="text-[12px] text-[#6b7386]">{new Date(d.date).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", timeZone: "UTC" })}</span>
+                </div>
+                <div className="mt-3 flex flex-wrap items-center gap-2">
+                  {d.numbers.map((n, i) => (
+                    <span key={i} className="flex h-11 w-11 items-center justify-center rounded-full border-2 border-[var(--lv-ink)] text-[17px] font-extrabold text-[var(--lv-ink)]">{n.replace(/^0/, "")}</span>
+                  ))}
+                  {d.bonus && <span className={`flex h-11 w-11 items-center justify-center rounded-full text-[17px] font-extrabold text-white ${d.game === "Powerball" ? "bg-[#d32f2f]" : "bg-[#f2b705] !text-[#1b2233]"}`}>{d.bonus.replace(/^0/, "")}</span>}
+                </div>
+                <p className="mt-3 text-[11px] text-[#6b7386]">Winning numbers from the official draw record (New York State open data). Always check your ticket with the official lottery.</p>
+              </div>
+            ))}
           </section>
         )}
 

@@ -6,7 +6,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import type { Metadata } from "next";
 import { designState } from "@/lib/design-nou";
-import { getStateWeather, getActiveStorms, countiesOf, getStateAlerts } from "@/lib/local-data";
+import { getStateWeather, getActiveStorms, countiesOf, getStateAlerts, getGasPrices, getLottery } from "@/lib/local-data";
 import { getCategoryArticles } from "@/lib/category-data";
 import HomeLive from "@/components/design/live/HomeLive";
 
@@ -60,14 +60,16 @@ export default async function Home({ searchParams }: Props) {
 
   if (design.family === "live") {
     const SECTIONS = ["politics", "sports", "business", "life"];
-    const [weather, storms, alerts, ...lists] = await Promise.all([
+    const [weather, storms, alerts, gas, lottery, ...lists] = await Promise.all([
       getStateWeather(site.state),
       getActiveStorms(),
       getStateAlerts(site.stateAbbr),
+      getGasPrices(site.state),
+      getLottery(),
       ...SECTIONS.map((c) => getCategoryArticles(site.slug, c, 1)),
     ]);
     const sections = Object.fromEntries(SECTIONS.map((c, i) => [c, lists[i].articles]));
-    return <HomeLive site={site} articles={articles} weather={weather} storms={storms} counties={countiesOf(site.state)} sections={sections} alerts={alerts} />;
+    return <HomeLive site={site} articles={articles} weather={weather} storms={storms} counties={countiesOf(site.state)} sections={sections} alerts={alerts} gas={gas} lottery={lottery} />;
   }
 
   return <HomeClient site={site} articles={articles} />;
