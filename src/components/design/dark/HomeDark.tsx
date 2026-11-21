@@ -296,7 +296,7 @@ export default function HomeDark({
           <span className="absolute inset-0"><Img a={feature} /></span>
           <span className="absolute inset-0 bg-[linear-gradient(0deg,rgba(18,15,14,1),rgba(18,15,14,.5)_45%,rgba(18,15,14,.15))]" />
           <span className={`${W} relative flex min-h-[inherit] flex-col justify-end pb-14`}>
-            <DLabel>Under the desert sun</DLabel>
+            <DLabel>The big story</DLabel>
             <span className={`${spectral.className} block max-w-[820px] text-[40px] font-semibold leading-[1.05] text-white md:text-[60px]`}>{feature.title}</span>
             {feature.summary && <span className="mt-3 block max-w-[620px] text-[17px] text-white/80">{feature.summary}</span>}
           </span>

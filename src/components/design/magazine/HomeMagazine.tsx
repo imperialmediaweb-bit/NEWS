@@ -304,7 +304,7 @@ export default function HomeMagazine({
           <span className="absolute inset-0"><Img a={feature} /></span>
           <span className="absolute inset-0 bg-[linear-gradient(90deg,rgba(8,24,44,.88),rgba(8,24,44,.35)_60%,transparent)]" />
           <span className={`${W} relative flex min-h-[inherit] flex-col justify-center py-16 text-white`}>
-            <span className="text-[13px] font-bold uppercase tracking-[.2em] text-[var(--mg-gold)]">The California story</span>
+            <span className="text-[13px] font-bold uppercase tracking-[.2em] text-[var(--mg-gold)]">The big story</span>
             <span className={`${serifM.className} mt-3 block max-w-[720px] text-[40px] font-semibold leading-[1.05] md:text-[62px]`}>{feature.title}</span>
             {feature.summary && <span className="mt-4 block max-w-[560px] text-[18px] leading-relaxed text-white/85">{feature.summary}</span>}
             <span className="mt-6 w-fit border-b-2 border-[var(--mg-acc)] pb-0.5 text-[16px] font-semibold">Read the story ›</span>
