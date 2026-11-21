@@ -7,6 +7,7 @@ import MobileMenu from "../live/MobileMenu";
 import { TZ, href, hour, ago, WxIcon, TOPIC_RE } from "../live/shared";
 import HeroCinema from "../live/HeroCinema";
 import PeachFx from "./PeachFx";
+import Extras from "../extras/Extras";
 import { display, body, peachOf, peachVars, PHead, Ico, PeachTopBar, PeachHeader, PeachFooter } from "./shared";
 
 /**
@@ -405,7 +406,7 @@ export default function HomePeach({
         {opinion.length > 0 && (
           <section className="pc-in pc-up mt-12">
             <PHead icon={Ico.quote} link="/opinion" more="More opinion">Opinion</PHead>
-            <div className="pc-stagger pc-in grid gap-6 md:grid-cols-3 md:divide-x md:divide-[var(--pc-cu)]/25">
+            <div className="pc-stagger pc-in grid gap-6 lg:[grid-template-columns:repeat(auto-fit,minmax(260px,1fr))] md:divide-x md:divide-[var(--pc-cu)]/25">
               {opinion.map((a, i) => (
                 <a key={a.slug} href={href(a)} className={`group flex gap-4 ${i > 0 ? "md:pl-6" : ""}`}>
                   <span className={`${display.className} flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-[var(--pc-acc)]/15 text-[26px] font-extrabold text-[var(--pc-acc)]`}>{(a.author || site.name).trim().charAt(0)}</span>
@@ -421,15 +422,15 @@ export default function HomePeach({
         )}
 
         {/* safety · schools · most read */}
-        {(safety.length + schools.length + mostRead.length) > 0 && (
-          <section className="pc-in pc-stagger mt-12 grid gap-6 lg:grid-cols-3">
-            {safety.length > 0 && (
+        {(safety.length > 1 || schools.length > 1 || mostRead.length > 0) && (
+          <section className="pc-in pc-stagger mt-12 grid gap-6 lg:[grid-template-columns:repeat(auto-fit,minmax(280px,1fr))]">
+            {safety.length > 1 && (
               <div className={`${card} p-5`}>
                 <PHead icon={Ico.shield}>Crime &amp; safety</PHead>
                 {safety.map((a) => <a key={a.slug} href={href(a)} className="block border-t border-[var(--pc-cu)]/20 py-2.5 text-[15px] font-semibold leading-snug text-[var(--pc-ink)] first:border-0 hover:text-[var(--pc-acc)]">{a.title}<span className="block text-[12px] font-normal text-[#8a7a72]">{ago(a)}</span></a>)}
               </div>
             )}
-            {schools.length > 0 && (
+            {schools.length > 1 && (
               <div className={`${card} p-5`}>
                 <PHead icon={Ico.cap}>Education</PHead>
                 {schools.map((a) => <a key={a.slug} href={href(a)} className="block border-t border-[var(--pc-cu)]/20 py-2.5 text-[15px] font-semibold leading-snug text-[var(--pc-ink)] first:border-0 hover:text-[var(--pc-acc)]">{a.title}<span className="block text-[12px] font-normal text-[#8a7a72]">{ago(a)}</span></a>)}
@@ -471,6 +472,8 @@ export default function HomePeach({
         )}
 
         {/* latest grid */}
+        <Extras site={site} pool={pool} used={used} weather={weather} gas={gas} counties={counties} theme={{ ink: p.ink, acc: p.acc, bg: p.paper, line: p.copper, text: "#2b1d17", head: display.className }} />
+
         {latest.length >= 3 && (
           <section className="pc-in pc-up mt-12">
             <PHead icon={Ico.brief} link="/local-news">Latest news</PHead>

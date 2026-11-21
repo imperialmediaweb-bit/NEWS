@@ -8,6 +8,7 @@ import HeroCinema from "../live/HeroCinema";
 import { TZ, href, hour, ago, WxIcon, TOPIC_RE } from "../live/shared";
 import PeachFx, { SplitWords } from "../peach/PeachFx";
 import AdSlot from "../AdSlot";
+import Extras from "../extras/Extras";
 import QuakeMap, { quakeColor } from "./QuakeMap";
 import { serifM, sansM, magOf, magVars, MHead, Label, MagTopBar, MagHeader, MagFooter } from "./shared";
 
@@ -331,7 +332,7 @@ export default function HomeMagazine({
         {opinion.length > 0 && (
           <section className="pc-in pc-up mt-14">
             <MHead link="/opinion" more="More opinion">Opinion</MHead>
-            <div className="pc-in pc-stagger grid gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:divide-x lg:divide-[#e6ddcc]">
+            <div className="pc-in pc-stagger grid gap-6 sm:grid-cols-2 lg:[grid-template-columns:repeat(auto-fit,minmax(260px,1fr))] lg:divide-x lg:divide-[#e6ddcc]">
               {opinion.map((a, i) => (
                 <a key={a.slug} href={href(a)} className={`group flex gap-4 ${i > 0 ? "lg:pl-6" : ""}`}>
                   <span className={`${serifM.className} flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[#f3ede1] text-[24px] font-semibold italic text-[var(--mg-ink)]`}>{(a.author || site.name).trim().charAt(0)}</span>
@@ -345,15 +346,15 @@ export default function HomeMagazine({
           </section>
         )}
 
-        {(safety.length + schools.length + mostRead.length) > 0 && (
-          <section className="pc-in pc-stagger mt-14 grid gap-10 lg:grid-cols-3">
-            {safety.length > 0 && (
+        {(safety.length > 1 || schools.length > 1 || mostRead.length > 0) && (
+          <section className="pc-in pc-stagger mt-14 grid gap-10 lg:[grid-template-columns:repeat(auto-fit,minmax(280px,1fr))]">
+            {safety.length > 1 && (
               <div>
                 <MHead>Public safety</MHead>
                 {safety.map((a) => <a key={a.slug} href={href(a)} className={`${serifM.className} block border-b border-[#eee] py-2.5 text-[18px] font-semibold leading-snug hover:text-[var(--mg-acc)]`}>{a.title}</a>)}
               </div>
             )}
-            {schools.length > 0 && (
+            {schools.length > 1 && (
               <div>
                 <MHead>Education</MHead>
                 {schools.map((a) => <a key={a.slug} href={href(a)} className={`${serifM.className} block border-b border-[#eee] py-2.5 text-[18px] font-semibold leading-snug hover:text-[var(--mg-acc)]`}>{a.title}</a>)}
@@ -389,6 +390,8 @@ export default function HomeMagazine({
             ))}
           </section>
         )}
+
+        <Extras site={site} pool={pool} used={used} weather={weather} gas={gas} counties={counties} theme={{ ink: m.ink, acc: m.acc, bg: "#ffffff", line: "#e6ddcc", text: "#222222", head: serifM.className }} />
 
         {latest.length >= 3 && (
           <section className="pc-in pc-up mt-14">

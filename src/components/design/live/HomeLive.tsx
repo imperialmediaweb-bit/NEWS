@@ -6,6 +6,8 @@ import AlertsBox from "./AlertsBox";
 import MobileMenu from "./MobileMenu";
 import HeroCinema from "./HeroCinema";
 import Reveal from "./Reveal";
+import Extras from "../extras/Extras";
+import PeachFx from "../peach/PeachFx";
 import { serif, sans, PALETTE, TZ, href, hour, ago, WxIcon, SectionTitle, NAV, LiveTopBar, LiveFooter } from "./shared";
 
 /**
@@ -111,6 +113,7 @@ export default function HomeLive({
 
   return (
     <div className={`${sans.className} min-h-screen overflow-x-hidden bg-white text-[#1b2233]`} style={{ ["--lv-ink" as string]: pal.ink, ["--lv-acc" as string]: pal.acc }}>
+      <PeachFx />
       <LiveTopBar site={site} capital={capital} />
       {/* masthead */}
       <header className="border-b border-[#dde1ea]">
@@ -430,6 +433,8 @@ export default function HomeLive({
         )}
 
         {/* latest news grid */}
+        <Extras site={site} pool={pool} used={used} weather={weather} gas={gas} counties={counties} theme={{ ink: pal.ink, acc: pal.acc, bg: "#ffffff", line: "#dde1ea", text: "#1b2233", head: serif.className }} />
+
         {latestGrid.length >= 3 && (
           <section className="lv-reveal mt-10">
             <SectionTitle href="/local-news">Latest news</SectionTitle>
@@ -523,7 +528,7 @@ export default function HomeLive({
         {opinion.length > 0 && (
           <section className="lv-reveal mt-8">
             <SectionTitle href="/opinion">Opinion</SectionTitle>
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-5 sm:grid-cols-2 lg:[grid-template-columns:repeat(auto-fit,minmax(260px,1fr))]">
               {opinion.map((a, i) => (
                 <a key={a.slug} href={href(a)} className={`group flex gap-3 ${i > 0 ? "lg:border-l lg:border-[#e3e6ee] lg:pl-5" : ""}`}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}

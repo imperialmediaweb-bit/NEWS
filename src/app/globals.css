@@ -314,3 +314,25 @@ body {
 .dk-root .pc-article a { color: #fff; text-decoration-color: var(--dk-acc); }
 .dk-root .pc-article blockquote { color: #fff; border-left-color: var(--dk-cu); }
 .dk-root .pc-dropcap > p:first-of-type::first-letter { color: var(--dk-cu); }
+/* ── Premium sections shared by every family (extras) ── */
+.x-numbers, .x-gallery { margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw); }
+.x-numbers { background: radial-gradient(ellipse at 15% 0%, color-mix(in srgb, var(--x-acc) 45%, transparent), transparent 55%), linear-gradient(135deg, var(--x-ink), color-mix(in srgb, var(--x-ink) 70%, #000)); color: #fff; }
+.x-gallery { background: color-mix(in srgb, var(--x-ink) 7%, var(--x-bg)); }
+.x-dark .x-gallery { background: color-mix(in srgb, #fff 4%, var(--x-bg)); }
+.x-tab { border-color: var(--x-line); }
+.x-tab:hover { border-color: var(--x-acc); color: var(--x-acc); }
+.x-tab.is-on { background: var(--x-acc); border-color: var(--x-acc); color: #fff; }
+.x-fade { animation: x-fade .45s ease both; }
+@keyframes x-fade { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+.x-zoom img { transition: transform 1.1s cubic-bezier(.2,.7,.2,1); }
+.x-tilt:hover .x-zoom img, .x-zoom:hover img { transform: scale(1.07); }
+.x-tilt { transition: transform .35s cubic-bezier(.2,.7,.2,1), box-shadow .35s; will-change: transform; }
+.x-tilt.is-tilt { box-shadow: 0 26px 50px -30px rgba(0,0,0,.6); transition: transform .08s linear, box-shadow .35s; }
+.x-tilt:hover .x-title { color: var(--x-acc); }
+.x-glow::after { content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 2px; background: linear-gradient(120deg, transparent 30%, var(--x-acc), transparent 70%) border-box; -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; opacity: 0; transition: opacity .4s; pointer-events: none; }
+.x-glow:hover::after { opacity: 1; }
+.x-drag { cursor: grab; scrollbar-width: thin; }
+.x-drag.is-drag { cursor: grabbing; scroll-snap-type: none; user-select: none; }
+.x-arrow { border-color: var(--x-line); transition: background .25s, color .25s; }
+.x-arrow:hover { background: var(--x-acc); border-color: var(--x-acc); color: #fff; }
+@media (prefers-reduced-motion: reduce) { .x-fade { animation: none; } .x-tilt, .x-tilt.is-tilt { transform: none !important; } }

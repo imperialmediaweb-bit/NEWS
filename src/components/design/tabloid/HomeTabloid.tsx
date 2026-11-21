@@ -8,6 +8,7 @@ import HeroCinema from "../live/HeroCinema";
 import { TZ, href, hour, ago, WxIcon, TOPIC_RE } from "../live/shared";
 import PeachFx from "../peach/PeachFx";
 import AdSlot from "../AdSlot";
+import Extras from "../extras/Extras";
 import Countdown from "./Countdown";
 import { cond, text, tabOf, tabVars, THead, Slant, TabTopBar, TabHeader, TabFooter } from "./shared";
 
@@ -386,7 +387,7 @@ export default function HomeTabloid({
         {opinion.length > 0 && (
           <section className="pc-in pc-up mt-12">
             <THead link="/opinion" more="More opinion">Opinion</THead>
-            <div className="pc-in pc-stagger grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="pc-in pc-stagger grid gap-6 sm:grid-cols-2 lg:[grid-template-columns:repeat(auto-fit,minmax(260px,1fr))]">
               {opinion.map((a) => (
                 <a key={a.slug} href={href(a)} className="group flex gap-3">
                   <span className={`${cond.className} flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[var(--tb-ink)] text-[24px] font-black text-white`}>{(a.author || site.name).trim().charAt(0)}</span>
@@ -401,15 +402,15 @@ export default function HomeTabloid({
           </section>
         )}
 
-        {(safety.length + schools.length + mostRead.length) > 0 && (
-          <section className="pc-in pc-stagger mt-12 grid gap-6 lg:grid-cols-3">
-            {safety.length > 0 && (
+        {(safety.length > 1 || schools.length > 1 || mostRead.length > 0) && (
+          <section className="pc-in pc-stagger mt-12 grid gap-6 lg:[grid-template-columns:repeat(auto-fit,minmax(280px,1fr))]">
+            {safety.length > 1 && (
               <div className="border-t-[6px] border-[#111] pt-3">
                 <THead>Crime &amp; courts</THead>
                 {safety.map((a) => <a key={a.slug} href={href(a)} className={`${cond.className} block border-b border-[#e2e2e2] py-2.5 text-[20px] font-bold leading-tight hover:text-[var(--tb-acc)]`}>{a.title}</a>)}
               </div>
             )}
-            {schools.length > 0 && (
+            {schools.length > 1 && (
               <div className="border-t-[6px] border-[var(--tb-ink)] pt-3">
                 <THead>Schools</THead>
                 {schools.map((a) => <a key={a.slug} href={href(a)} className={`${cond.className} block border-b border-[#e2e2e2] py-2.5 text-[20px] font-bold leading-tight hover:text-[var(--tb-acc)]`}>{a.title}</a>)}
@@ -443,6 +444,8 @@ export default function HomeTabloid({
             ))}
           </section>
         )}
+
+        <Extras site={site} pool={pool} used={used} weather={weather} gas={gas} counties={counties} theme={{ ink: t.ink, acc: t.acc, bg: "#ffffff", line: "#e2e2e2", text: "#141414", head: `${cond.className} italic uppercase` }} />
 
         {latest.length >= 3 && (
           <section className="pc-in pc-up mt-12">

@@ -8,6 +8,7 @@ import HeroCinema from "../live/HeroCinema";
 import { TZ, href, hour, ago, WxIcon, TOPIC_RE } from "../live/shared";
 import PeachFx, { SplitWords } from "../peach/PeachFx";
 import AdSlot from "../AdSlot";
+import Extras from "../extras/Extras";
 import StateMap from "../StateMap";
 import { spectral, mont, dkOf, dkVars, DHead, DLabel, DkTopBar, DkHeader, DkFooter } from "./shared";
 
@@ -321,7 +322,7 @@ export default function HomeDark({
         {opinion.length > 0 && (
           <section className="pc-in pc-up mt-12">
             <DHead link="/opinion" more="More opinion">Opinion</DHead>
-            <div className="pc-in pc-stagger grid gap-6 md:grid-cols-3 md:divide-x md:divide-white/10">
+            <div className="pc-in pc-stagger grid gap-6 lg:[grid-template-columns:repeat(auto-fit,minmax(260px,1fr))] md:divide-x md:divide-white/10">
               {opinion.map((a, i) => (
                 <a key={a.slug} href={href(a)} className={`group flex gap-4 ${i ? "md:pl-6" : ""}`}>
                   <span className={`${spectral.className} flex h-16 w-16 shrink-0 items-center justify-center rounded-full border border-[var(--dk-cu)] text-[26px] text-[var(--dk-cu)]`}>{(a.author || site.name).trim().charAt(0)}</span>
@@ -335,15 +336,15 @@ export default function HomeDark({
           </section>
         )}
 
-        {(safety.length + schools.length + mostRead.length) > 0 && (
-          <section className="pc-in pc-stagger mt-12 grid gap-6 lg:grid-cols-3">
-            {safety.length > 0 && (
+        {(safety.length > 1 || schools.length > 1 || mostRead.length > 0) && (
+          <section className="pc-in pc-stagger mt-12 grid gap-6 lg:[grid-template-columns:repeat(auto-fit,minmax(280px,1fr))]">
+            {safety.length > 1 && (
               <div className={`${panel} p-5`}>
                 <DHead>Public safety</DHead>
                 {safety.map((a) => <a key={a.slug} href={href(a)} className={`${spectral.className} block border-b border-white/10 py-2 text-[16.5px] leading-snug hover:text-[var(--dk-acc)]`}>{a.title}</a>)}
               </div>
             )}
-            {schools.length > 0 && (
+            {schools.length > 1 && (
               <div className={`${panel} p-5`}>
                 <DHead>Education</DHead>
                 {schools.map((a) => <a key={a.slug} href={href(a)} className={`${spectral.className} block border-b border-white/10 py-2 text-[16.5px] leading-snug hover:text-[var(--dk-acc)]`}>{a.title}</a>)}
@@ -377,6 +378,8 @@ export default function HomeDark({
             ))}
           </section>
         )}
+
+        <Extras site={site} pool={pool} used={used} weather={weather} gas={gas} counties={counties} theme={{ ink: d.deep, acc: d.acc, bg: d.bg, line: d.cu, text: "#e9ddd3", head: spectral.className, dark: true }} />
 
         {latest.length >= 3 && (
           <section className="pc-in pc-up mt-12">

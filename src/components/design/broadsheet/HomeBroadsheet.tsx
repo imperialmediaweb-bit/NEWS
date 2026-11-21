@@ -8,6 +8,7 @@ import HeroCinema from "../live/HeroCinema";
 import { TZ, href, hour, ago, WxIcon, TOPIC_RE } from "../live/shared";
 import PeachFx, { SplitWords } from "../peach/PeachFx";
 import AdSlot from "../AdSlot";
+import Extras from "../extras/Extras";
 import { caslon, pub, bsOf, bsVars, BHead, Kick, Double, BsTopBar, BsHeader, BsFooter } from "./shared";
 
 /**
@@ -341,15 +342,15 @@ export default function HomeBroadsheet({
           </section>
         )}
 
-        {(safety.length + schools.length + mostRead.length) > 0 && (
-          <section className="pc-in pc-stagger mt-12 grid gap-8 lg:grid-cols-3 lg:divide-x lg:divide-[var(--bs-gold)]">
-            {safety.length > 0 && (
+        {(safety.length > 1 || schools.length > 1 || mostRead.length > 0) && (
+          <section className="pc-in pc-stagger mt-12 grid gap-8 lg:[grid-template-columns:repeat(auto-fit,minmax(280px,1fr))] lg:divide-x lg:divide-[var(--bs-gold)]">
+            {safety.length > 1 && (
               <div>
                 <BHead>Crime &amp; justice</BHead>
                 {safety.map((a) => <a key={a.slug} href={href(a)} className={`${caslon.className} block border-b border-[#e3dccb] py-2 text-[16px] leading-snug hover:text-[var(--bs-acc)]`}>{a.title}</a>)}
               </div>
             )}
-            {schools.length > 0 && (
+            {schools.length > 1 && (
               <div className="lg:pl-8">
                 <BHead>Education</BHead>
                 {schools.map((a) => <a key={a.slug} href={href(a)} className={`${caslon.className} block border-b border-[#e3dccb] py-2 text-[16px] leading-snug hover:text-[var(--bs-acc)]`}>{a.title}</a>)}
@@ -388,6 +389,8 @@ export default function HomeBroadsheet({
             <p className="mt-2 text-[11px] text-[#888]">From the New York State open data record of official draws. Always check your ticket with the New York Lottery.</p>
           </section>
         )}
+
+        <Extras site={site} pool={pool} used={used} weather={weather} gas={gas} counties={counties} theme={{ ink: "#1a1a1a", acc: b.acc, bg: "#fdfcf9", line: b.gold, text: "#1a1a1a", head: caslon.className }} />
 
         {latest.length >= 3 && (
           <section className="pc-in pc-up mt-12">

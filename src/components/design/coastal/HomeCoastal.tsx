@@ -8,6 +8,7 @@ import HeroCinema from "../live/HeroCinema";
 import { TZ, href, hour, ago, WxIcon, TOPIC_RE } from "../live/shared";
 import PeachFx, { SplitWords } from "../peach/PeachFx";
 import AdSlot from "../AdSlot";
+import Extras from "../extras/Extras";
 import { crimson, nunito, coOf, coVars, CHead, CoTopBar, CoHeader, CoFooter , ok } from "./shared";
 
 /**
@@ -297,7 +298,7 @@ export default function HomeCoastal({
         {opinion.length > 0 && (
           <section className="pc-in pc-up mt-12">
             <CHead link="/opinion" more="More opinion">Opinion</CHead>
-            <div className="pc-in pc-stagger grid gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:divide-x lg:divide-[#e4edf1]">
+            <div className="pc-in pc-stagger grid gap-6 sm:grid-cols-2 lg:[grid-template-columns:repeat(auto-fit,minmax(260px,1fr))] lg:divide-x lg:divide-[#e4edf1]">
               {opinion.map((a, i) => (
                 <a key={a.slug} href={href(a)} className={`group flex gap-3 ${i ? "lg:pl-6" : ""}`}>
                   <span className={`${crimson.className} flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[#e6f3f7] text-[24px] font-semibold text-[var(--co-ink)]`}>{(a.author || site.name).trim().charAt(0)}</span>
@@ -312,15 +313,15 @@ export default function HomeCoastal({
           </section>
         )}
 
-        {(safety.length + schools.length + mostRead.length) > 0 && (
-          <section className="pc-in pc-stagger mt-12 grid gap-6 lg:grid-cols-3">
-            {safety.length > 0 && (
+        {(safety.length > 1 || schools.length > 1 || mostRead.length > 0) && (
+          <section className="pc-in pc-stagger mt-12 grid gap-6 lg:[grid-template-columns:repeat(auto-fit,minmax(280px,1fr))]">
+            {safety.length > 1 && (
               <div className={`${card} p-5`}>
                 <CHead>Public safety</CHead>
                 {safety.map((a) => <a key={a.slug} href={href(a)} className={`${crimson.className} block border-b border-[#e4edf1] py-2 text-[17px] font-semibold leading-snug hover:text-[var(--co-acc)]`}>{ok(a.title)}</a>)}
               </div>
             )}
-            {schools.length > 0 && (
+            {schools.length > 1 && (
               <div className={`${card} p-5`}>
                 <CHead>Education</CHead>
                 {schools.map((a) => <a key={a.slug} href={href(a)} className={`${crimson.className} block border-b border-[#e4edf1] py-2 text-[17px] font-semibold leading-snug hover:text-[var(--co-acc)]`}>{ok(a.title)}</a>)}
@@ -339,6 +340,8 @@ export default function HomeCoastal({
             )}
           </section>
         )}
+
+        <Extras site={site} pool={pool} used={used} weather={weather} gas={gas} counties={counties} theme={{ ink: c.ink, acc: c.acc, bg: "#ffffff", line: c.gold, text: "#24323c", head: crimson.className }} />
 
         {latest.length >= 3 && (
           <section className="pc-in pc-up mt-12">
