@@ -20,7 +20,7 @@ export default function CountySearch({ state, counties, popular }: { state: stri
         id="county-q"
         value={q}
         onChange={(e) => setQ(e.target.value)}
-        placeholder="Search a county (e.g., Travis, Harris)"
+        placeholder={popular.length >= 2 ? `Search a county (e.g., ${popular[0]}, ${popular[1]})` : "Search a county"}
         className="w-full border border-[#c9cfdc] px-3 py-2 text-[14px] outline-none focus:border-[var(--lv-ink)]"
       />
       <p className="mt-3 mb-1 text-[12px] font-semibold uppercase tracking-wider text-[#5a6275]">{q ? "Matches" : all ? `All ${counties.length} counties` : "Popular counties"}</p>

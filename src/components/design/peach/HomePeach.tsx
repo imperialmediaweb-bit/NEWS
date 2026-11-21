@@ -91,7 +91,7 @@ export default function HomePeach({
   const opinion = take(articles.opinion, 3);
   const safety = take(pool.filter((a) => SAFETY.test(a.title)), 4);
   const schools = take(pool.filter((a) => SCHOOL.test(a.title)), 4);
-  const mostRead = take(articles.popular.concat(articles.trending), 5);
+  const mostRead = take(articles.popular.concat(articles.trending, pool), 5);
   const latest = take(pool, 6);
   const more = take(pool, 20);
   const ribbon = articles.latestPosts.slice(0, 10);
@@ -340,7 +340,7 @@ export default function HomePeach({
         <section className="pc-in pc-up bg-[var(--pc-ink)] py-10 text-white">
           <div className={W}>
             <PHead icon={Ico.leaf} link="/life" light>Life in {site.state}</PHead>
-            <div className="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-3 [scrollbar-width:thin]">
+            <div className="-mx-4 flex snap-x snap-mandatory scroll-px-4 gap-4 overflow-x-auto px-4 pb-3 [scrollbar-width:thin]">
               {life.map((a) => (
                 <a key={a.slug} href={href(a)} className="pc-card group w-[78%] shrink-0 snap-start sm:w-[42%] lg:w-[23.5%]">
                   <span className="pc-zoom block aspect-[4/5] overflow-hidden rounded-md"><Img a={a} /></span>

@@ -97,7 +97,6 @@ export function PeachTopBar({ site, capital }: { site: SiteConfig; capital?: Cit
 /** Big centred masthead (homepage) or slim one (article, section). */
 export function PeachHeader({ site, MobileMenu, compact = false, active }: { site: SiteConfig; MobileMenu: React.ComponentType<{ nav: Array<[string, string]> }>; compact?: boolean; active?: string }) {
   const logo = `/logos/${site.slug}.svg`;
-  const p = peachOf(site);
   return (
     <header className="border-b border-[var(--pc-cu)]/40 bg-[var(--pc-paper)]">
       <div className="flex items-center justify-between px-2 py-1 md:hidden">
@@ -131,9 +130,8 @@ export function PeachHeader({ site, MobileMenu, compact = false, active }: { sit
           <div className="mx-auto hidden max-w-[1360px] px-4 pt-3 text-center md:block">
             <a href="/" aria-label={site.name} className="inline-block">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={logo} alt={site.name} width={340} height={170} className="mx-auto h-[150px] w-auto" />
+              <img src={logo} alt={site.name} width={340} height={170} className="mx-auto h-[170px] w-auto" />
             </a>
-            <p className={`${display.className} -mt-1 pb-2 text-[15px] italic text-[var(--pc-ink)]/70`}>{p.slogan}</p>
           </div>
           <nav className="mx-auto hidden max-w-[1360px] border-t border-[var(--pc-cu)]/40 px-4 md:block">
             <ul className={`${display.className} flex items-center justify-center text-[19px] font-semibold text-[var(--pc-ink)]`}>
@@ -153,7 +151,6 @@ export function PeachHeader({ site, MobileMenu, compact = false, active }: { sit
 }
 
 export function PeachFooter({ site }: { site: SiteConfig }) {
-  const p = peachOf(site);
   const cols: Array<[string, Array<[string, string]>]> = [
     ["News", [["Local", "/local-news"], ["Politics", "/politics"], ["Business", "/business"], ["Sports", "/sports"], ["Weather", "/#weather"]]],
     ["Opinion & Life", [["Opinion", "/opinion"], ["Life", "/life"], ["Search", "/search"]]],
@@ -170,7 +167,6 @@ export function PeachFooter({ site }: { site: SiteConfig }) {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={`/logos/white/${site.slug}.svg`} alt={site.name} width={260} height={130} className="h-auto w-[240px]" loading="lazy" />
             </a>
-            <p className={`${display.className} mt-3 text-[17px] italic text-white/80`}>{p.slogan}</p>
           </div>
           <div className="grid grid-cols-2 gap-8 text-[14px] sm:grid-cols-4">
             {cols.map(([t, links]) => (
