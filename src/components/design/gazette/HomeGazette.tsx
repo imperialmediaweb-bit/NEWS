@@ -181,7 +181,7 @@ export default function HomeGazette({
             <div className="p-4">
               {outline && (
                 <div className="mb-3">
-                  <StateMap outline={outline} fill={severe.length ? "#fde3a1" : "#f4ecd6"} stroke="#3d2f12" label="#3d2f12" font="var(--gz-serif), Georgia, serif" cities={[["Des Moines", 41.59, -93.62], ["Cedar Rapids", 41.98, -91.67], ["Sioux City", 42.5, -96.4], ["Davenport", 41.52, -90.58]]} />
+                  <StateMap outline={outline} fill={severe.length ? "#fde3a1" : "#f4ecd6"} stroke="#3d2f12" label="#3d2f12" font="var(--gz-serif), Georgia, serif" cities={[["Des Moines", 41.59, -93.62], ["Cedar Rapids", 41.98, -91.67], ["Sioux City", 42.5, -96.4], ["Waterloo", 42.49, -92.34]]} />
                 </div>
               )}
               {severe.length ? (
