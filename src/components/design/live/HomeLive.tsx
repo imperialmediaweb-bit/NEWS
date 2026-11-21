@@ -3,6 +3,7 @@ import type { SiteConfig } from "@/config/site-config";
 import type { HomeArticles, HomeArticle } from "@/lib/homepage-data";
 import type { CityWeather, Storm } from "@/lib/local-data";
 import CountySearch from "./CountySearch";
+import AlertsBox from "./AlertsBox";
 
 /**
  * "Live news" family — built from the generated Texas mockup (21.11.2026):
@@ -94,21 +95,26 @@ export default function HomeLive({
   const pool = articles.pool || articles.latestPosts;
   const brief = take(articles.trending.concat(articles.popular, articles.localNews, pool), 5);
   const opinion = take(articles.opinion, 4);
-  // Three section blocks: the state's real sections when they have stories,
-  // otherwise the next one that does, so the page never shows an empty block.
-  const candidates: Array<[string, string, HomeArticle[]]> = [
-    ["Politics", "/politics", articles.politics],
-    ["Business", "/business", articles.business],
-    ["Sports", "/sports", articles.sports],
-    ["Local", "/local-news", articles.localNews],
-    ["Entertainment", "/entertainment", articles.entertainment],
-    ["Across " + site.state, "/local-news", pool],
+  // Three section blocks. The pipeline files nearly every story under
+  // local-news, so the tagged sections are usually empty; stories are grouped
+  // by what their headline is about instead, and a block appears only when it
+  // has at least two stories that really belong in it.
+  const TOPICS: Array<[string, RegExp, HomeArticle[]]> = [
+    ["Politics", /\b(governor|gov\.|abbott|senat|legislat|lawmaker|congress|election|vote|voter|ballot|mayor|council|commissioner|statehouse|capitol|campaign|republican|democrat|policy|bill)\b/i, articles.politics],
+    ["Business", /\b(business|compan|jobs?|hiring|layoff|plant|factory|econom|market|price|sales|retail|store|restaurant|opens?|opening|invest|startup|bank|oil|energy|tax|budget|million|billion)\b/i, articles.business],
+    ["Sports", /\b(game|coach|football|basketball|baseball|soccer|playoff|season|team|athlet|longhorns|aggies|cowboys|texans|rangers|astros|mavericks|spurs|rockets|isd football|tournament|championship|win|wins|score)\b/i, articles.sports],
+    ["Crime & Safety", /\b(police|sheriff|deput|arrest|charged|indicted|court|judge|crash|fire|shooting|killed|death|investigat|trooper|jail|prison|execution)\b/i, []],
+    ["Education", /\b(school|isd|student|teacher|college|universit|campus|education|graduat)\b/i, []],
   ];
   const blocks: Array<[string, string, HomeArticle[]]> = [];
-  for (const [label, link, list] of candidates) {
+  for (const [label, re, tagged] of TOPICS) {
     if (blocks.length >= 3) break;
-    const picked = take(list, 4);
-    if (picked.length >= 2) blocks.push([label, link, picked]);
+    const picked = take(tagged.concat(pool.filter((a) => re.test(a.title))), 4);
+    if (picked.length >= 2) blocks.push([label, "/local-news", picked]);
+  }
+  if (blocks.length < 3) {
+    const rest = take(pool, 4);
+    if (rest.length >= 2) blocks.push(["More from " + site.state, "/local-news", rest]);
   }
   const breaking = live[0] || lead;
   const capital = weather[0];
@@ -160,8 +166,9 @@ export default function HomeLive({
       {/* breaking bar */}
       <a href={href(breaking)} className="block bg-[var(--lv-acc)] text-white">
         <div className="mx-auto flex max-w-[1240px] items-center gap-4 px-4 py-2.5">
-          <span className="shrink-0 text-[17px] font-extrabold uppercase tracking-wide">Latest</span>
-          <span className="h-5 w-px bg-white/40" />
+          <span className="relative -my-2.5 -ml-4 flex shrink-0 items-center bg-[#8f0a24] py-2.5 pl-4 pr-6 text-[17px] font-extrabold uppercase tracking-wide [clip-path:polygon(0_0,calc(100%-14px)_0,100%_50%,calc(100%-14px)_100%,0_100%)]">
+            {breaking.iso && Date.now() - new Date(breaking.iso).getTime() < 90 * 60000 ? "Breaking" : "Latest"}
+          </span>
           <span className={`${serif.className} truncate text-[17px] font-semibold`}>{breaking.title}</span>
           <span className="ml-auto hidden shrink-0 items-center gap-1.5 text-[13px] font-bold uppercase sm:flex"><span className="h-2 w-2 animate-pulse rounded-full bg-white" /> Live</span>
         </div>
@@ -193,6 +200,7 @@ export default function HomeLive({
                 </li>
               ))}
             </ol>
+            <a href="/local-news" className="mt-2 block text-right text-[12px] font-bold uppercase text-[var(--lv-ink)] hover:underline">All {site.state} news →</a>
           </aside>
         </section>
 
@@ -216,27 +224,41 @@ export default function HomeLive({
                 <h2 className="text-[17px] font-extrabold uppercase">Hurricane tracker</h2>
                 <p className="text-[12px] text-white/75">Atlantic &amp; Gulf · National Hurricane Center</p>
               </div>
-              <a href="https://www.nhc.noaa.gov/gtwo.php?basin=atlc&fdays=7" target="_blank" rel="noopener" className="block">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="https://www.nhc.noaa.gov/xgtwo/two_atl_7d0.png" alt="National Hurricane Center seven-day tropical outlook for the Atlantic" className="w-full" loading="lazy" />
-              </a>
-              <div className="p-3 text-[14px]">
-                {storms.storms.length === 0 ? (
-                  <p className="font-semibold text-[#1f7a3f]">No active storms in the Atlantic or Gulf right now.</p>
-                ) : (
-                  <ul className="space-y-1">
-                    {storms.storms.map((s) => (
-                      <li key={s.name}><b>{s.classification} {s.name}</b>{s.intensity && ` · ${s.intensity}`}{s.movement && ` · moving ${s.movement}`}</li>
-                    ))}
-                  </ul>
-                )}
-                <a href="https://www.nhc.noaa.gov/" target="_blank" rel="noopener" className="mt-2 inline-block text-[12px] font-bold uppercase text-[var(--lv-ink)] hover:underline">NHC outlook →</a>
+              <div className="relative">
+                <a href="https://www.nhc.noaa.gov/gtwo.php?basin=atlc&fdays=7" target="_blank" rel="noopener" className="block">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="https://www.nhc.noaa.gov/xgtwo/two_atl_7d0.png" alt="National Hurricane Center seven-day tropical outlook for the Atlantic" className="w-full" loading="lazy" />
+                </a>
+                <div className="absolute inset-x-3 bottom-3 border border-white/30 bg-[#0b1a3a]/85 p-3 text-white backdrop-blur-sm">
+                  {storms.storms.length === 0 ? (
+                    <p className="flex items-center gap-2 text-[15px] font-bold"><span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#2e9e57] text-[12px]">✓</span> No active storms in the Atlantic or Gulf</p>
+                  ) : (
+                    <ul className="space-y-1 text-[14px]">
+                      {storms.storms.map((st) => (
+                        <li key={st.name}><b>{st.classification} {st.name}</b>{st.intensity && ` · ${st.intensity}`}{st.movement && ` · moving ${st.movement}`}</li>
+                      ))}
+                    </ul>
+                  )}
+                  <p className="mt-1 text-[12px] text-white/75">7-day outlook from the National Hurricane Center</p>
+                </div>
+              </div>
+              <div className="grid grid-cols-3 divide-x divide-[#dde1ea] border-t border-[#dde1ea] text-center text-[12px] font-bold uppercase text-[var(--lv-ink)]">
+                <a href="https://www.nhc.noaa.gov/gtwo.php?basin=atlc&fdays=7" target="_blank" rel="noopener" className="py-2 hover:bg-[#f6f7fb]">NHC outlook →</a>
+                <a href="https://www.star.nesdis.noaa.gov/GOES/sector.php?sat=G19&sector=taw" target="_blank" rel="noopener" className="py-2 hover:bg-[#f6f7fb]">Satellite →</a>
+                <a href="https://www.nhc.noaa.gov/cyclones/" target="_blank" rel="noopener" className="py-2 hover:bg-[#f6f7fb]">Tracker →</a>
               </div>
             </div>
           )}
 
           <div className="border border-[#dde1ea] p-4">
-            <SectionTitle>Your county</SectionTitle>
+            <div className="mb-3 flex items-start gap-3">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={`/logos/outline/${site.slug}.svg`} alt="" className="h-10 w-10 shrink-0" />
+              <div>
+                <h2 className="text-[19px] font-extrabold uppercase tracking-wide text-[var(--lv-ink)]">Your county</h2>
+                <p className="text-[12px] text-[#5a6275]">News for all {counties.length} {site.state} counties</p>
+              </div>
+            </div>
             <CountySearch state={site.state} counties={counties} popular={popularCounties} />
           </div>
         </section>
@@ -324,37 +346,43 @@ export default function HomeLive({
           </section>
         )}
 
-        {/* tip */}
-        <section className="mt-8 flex flex-col items-start gap-4 bg-[var(--lv-acc)] p-6 text-white sm:flex-row sm:items-center">
-          <h2 className="text-[22px] font-extrabold uppercase">Send us a tip</h2>
-          <p className={`${serif.className} text-[17px] italic text-white/90`}>Have a news tip, document or story idea from {site.state}? Our newsroom wants to hear from you.</p>
-          <a href="/contact" className="shrink-0 bg-white px-5 py-2.5 text-[14px] font-bold uppercase text-[var(--lv-acc)] sm:ml-auto">Submit a tip →</a>
+        {/* tip + alerts */}
+        <section className="mt-8 grid gap-5 lg:grid-cols-[1.6fr_1fr]">
+          <div className="flex flex-col items-start gap-3 bg-[var(--lv-acc)] p-6 text-white sm:flex-row sm:items-center">
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border-2 border-white text-[20px]" aria-hidden>✉</span>
+            <div>
+              <h2 className="text-[20px] font-extrabold uppercase">Send us a tip</h2>
+              <p className={`${serif.className} text-[16px] italic text-white/90`}>Have a news tip, document or story idea? Our newsroom wants to hear from you.</p>
+            </div>
+            <a href="/contact" className="shrink-0 bg-white px-5 py-2.5 text-[14px] font-bold uppercase text-[var(--lv-acc)] sm:ml-auto">Submit a tip →</a>
+          </div>
+          <AlertsBox name={site.name} state={site.state} />
         </section>
       </main>
 
       {/* footer */}
-      <footer className="mt-10 border-t-4 border-[var(--lv-acc)] bg-[#f3f4f8]">
+      <footer className="mt-10 bg-[var(--lv-ink)] text-white">
         <div className="mx-auto grid max-w-[1240px] gap-8 px-4 py-10 md:grid-cols-[260px_1fr]">
           <a href="/" aria-label={site.name}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={logo} alt={site.name} width={260} height={130} className="h-auto w-[240px]" loading="lazy" />
+            <img src={`/logos/white/${site.slug}.svg`} alt={site.name} width={260} height={130} className="h-auto w-[240px]" loading="lazy" />
           </a>
           <div className="grid grid-cols-2 gap-6 text-[14px] sm:grid-cols-3">
             <div>
-              <p className="mb-2 font-bold uppercase text-[var(--lv-ink)]">Sections</p>
-              {nav.filter(([, h]) => h.startsWith("/")).map(([l, h]) => <a key={l} href={h} className="block py-0.5 hover:text-[var(--lv-acc)]">{l}</a>)}
+              <p className="mb-2 font-bold uppercase tracking-wide">Sections</p>
+              {nav.filter(([, h]) => h.startsWith("/")).map(([l, h]) => <a key={l} href={h} className="block py-0.5 text-white/80 hover:text-white">{l}</a>)}
             </div>
             <div>
-              <p className="mb-2 font-bold uppercase text-[var(--lv-ink)]">About</p>
-              {[["About us", "/about"], ["Editorial policy", "/editorial-policy"], ["Ethics", "/ethics"], ["Corrections", "/corrections"], ["Careers", "/careers"]].map(([l, h]) => <a key={l} href={h} className="block py-0.5 hover:text-[var(--lv-acc)]">{l}</a>)}
+              <p className="mb-2 font-bold uppercase tracking-wide">About</p>
+              {[["About us", "/about"], ["Editorial policy", "/editorial-policy"], ["Ethics", "/ethics"], ["Corrections", "/corrections"], ["Careers", "/careers"]].map(([l, h]) => <a key={l} href={h} className="block py-0.5 text-white/80 hover:text-white">{l}</a>)}
             </div>
             <div>
-              <p className="mb-2 font-bold uppercase text-[var(--lv-ink)]">Contact</p>
-              {[["Contact", "/contact"], ["Advertise", "/advertise"], ["Privacy", "/privacy"], ["Terms", "/terms"]].map(([l, h]) => <a key={l} href={h} className="block py-0.5 hover:text-[var(--lv-acc)]">{l}</a>)}
+              <p className="mb-2 font-bold uppercase tracking-wide">Contact</p>
+              {[["Contact the newsroom", "/contact"], ["Advertise", "/advertise"], ["Privacy", "/privacy"], ["Terms", "/terms"]].map(([l, h]) => <a key={l} href={h} className="block py-0.5 text-white/80 hover:text-white">{l}</a>)}
             </div>
           </div>
         </div>
-        <div className="border-t border-[#dde1ea] py-4 text-center text-[12px] text-[#6b7386]">© {new Date().getFullYear()} {site.name}. All rights reserved.</div>
+        <div className="border-t border-white/15 py-4 text-center text-[12px] text-white/60">© {new Date().getFullYear()} {site.name}. All rights reserved.</div>
       </footer>
     </div>
   );

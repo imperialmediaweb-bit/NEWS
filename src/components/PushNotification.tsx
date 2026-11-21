@@ -35,6 +35,13 @@ export default function PushNotification() {
     }
   }, []);
 
+  // The live designs' "Turn on alerts" button asks for the same subscription.
+  useEffect(() => {
+    const on = () => { void subscribe(); };
+    window.addEventListener("express:alerts", on);
+    return () => window.removeEventListener("express:alerts", on);
+  });
+
   async function subscribe() {
     try {
       // Register service worker
