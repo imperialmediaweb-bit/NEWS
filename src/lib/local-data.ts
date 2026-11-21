@@ -56,6 +56,16 @@ export const WEATHER_CITIES: Record<string, Array<[string, number, number]>> = {
     ["Fort Myers", 26.6406, -81.8723],
     ["Key West", 24.5551, -81.78],
   ],
+  Arizona: [
+    ["Phoenix", 33.4484, -112.074],
+    ["Tucson", 32.2226, -110.9747],
+    ["Flagstaff", 35.1983, -111.6513],
+    ["Prescott", 34.54, -112.4685],
+    ["Yuma", 32.6927, -114.6277],
+    ["Lake Havasu City", 34.4839, -114.3225],
+    ["Sedona", 34.8697, -111.761],
+    ["Page", 36.9147, -111.4558],
+  ],
   Hawaii: [
     ["Honolulu", 21.3069, -157.8583],
     ["Hilo", 19.7241, -155.0868],
@@ -390,6 +400,7 @@ export async function getSpaceCoastLaunches(): Promise<Launch[] | null> {
 /** Airports shown in each state's airport module (FAA codes). */
 export const STATE_AIRPORTS: Record<string, Array<[string, string]>> = {
   Georgia: [["ATL", "Atlanta Hartsfield-Jackson"], ["SAV", "Savannah/Hilton Head"]],
+  Arizona: [["PHX", "Phoenix Sky Harbor"], ["TUS", "Tucson"], ["FLG", "Flagstaff"]],
   Hawaii: [["HNL", "Honolulu"], ["OGG", "Kahului, Maui"], ["KOA", "Kona"], ["ITO", "Hilo"], ["LIH", "Lihue, Kauai"]],
   "New York": [["JFK", "Kennedy"], ["LGA", "LaGuardia"], ["BUF", "Buffalo"], ["ALB", "Albany"]],
   California: [["LAX", "Los Angeles"], ["SFO", "San Francisco"], ["SAN", "San Diego"], ["SJC", "San Jose"], ["SMF", "Sacramento"]],
@@ -427,18 +438,20 @@ export async function getStateQuakes(state: string): Promise<Quake[] | null> {
 const STATE_ABBR: Record<string, string> = { California: "CA", Alaska: "Alaska", Hawaii: "Hawaii", Oregon: "Oregon", Washington: "Washington", Nevada: "Nevada", Utah: "Utah", Idaho: "Idaho", Montana: "Montana", Wyoming: "Wyoming", Oklahoma: "Oklahoma", Texas: "Texas", "New Mexico": "New Mexico", Arizona: "Arizona" };
 
 // ── active wildfires in a state (NIFC, Wildland Fire Interagency Geospatial Services) ──
-export interface Fire { name: string; acres: number; contained: number | null; county: string; discovered: number }
+export interface Fire { name: string; acres: number; contained: number | null; county: string; discovered: number; lon: number | null; lat: number | null }
 
 export async function getStateFires(abbr: string): Promise<Fire[] | null> {
   return cached(`nifc:${abbr}`, async () => {
     const where = encodeURIComponent(`POOState='US-${abbr}' AND IncidentTypeCategory='WF' AND IncidentSize>=10 AND (PercentContained IS NULL OR PercentContained<100)`);
-    const j = await getJson(`https://services3.arcgis.com/T4QMspbfLg3qTGWY/arcgis/rest/services/WFIGS_Incident_Locations_Current/FeatureServer/0/query?where=${where}&outFields=IncidentName,IncidentSize,PercentContained,POOCounty,FireDiscoveryDateTime&orderByFields=IncidentSize%20DESC&resultRecordCount=8&f=json`, 8000);
-    return ((j.features || []) as Array<{ attributes: Record<string, unknown> }>).map((f) => ({
+    const j = await getJson(`https://services3.arcgis.com/T4QMspbfLg3qTGWY/arcgis/rest/services/WFIGS_Incident_Locations_Current/FeatureServer/0/query?where=${where}&outFields=IncidentName,IncidentSize,PercentContained,POOCounty,FireDiscoveryDateTime&orderByFields=IncidentSize%20DESC&resultRecordCount=12&returnGeometry=true&outSR=4326&f=json`, 8000);
+    return ((j.features || []) as Array<{ attributes: Record<string, unknown>; geometry?: { x: number; y: number } }>).map((f) => ({
       name: String(f.attributes.IncidentName || "").toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase()),
       acres: Math.round(Number(f.attributes.IncidentSize || 0)),
       contained: f.attributes.PercentContained == null ? null : Number(f.attributes.PercentContained),
       county: String(f.attributes.POOCounty || ""),
       discovered: Number(f.attributes.FireDiscoveryDateTime || 0),
+      lon: f.geometry ? f.geometry.x : null,
+      lat: f.geometry ? f.geometry.y : null,
     }));
   });
 }
@@ -521,4 +534,14 @@ export async function getBuoys(list: Array<[string, string]>): Promise<Buoy[] | 
   // a buoy that stopped reporting days ago is left out
   const ok = res.filter((x): x is Buoy => !!x && Date.now() - new Date(x.time).getTime() < 3 * 86400000);
   return ok.length ? ok : null;
+}
+
+// ── hourly UV index forecast for a city (EPA Envirofacts) ──
+export interface UvHour { hour: string; uv: number }
+
+export async function getUvHourly(city: string, st: string): Promise<UvHour[] | null> {
+  return cached(`uv:${city}`, async () => {
+    const j = (await getJson(`https://data.epa.gov/efservice/getEnvirofactsUVHOURLY/CITY/${encodeURIComponent(city)}/STATE/${st}/JSON`, 8000)) as Array<{ DATE_TIME: string; UV_VALUE: number }>;
+    return j.map((x) => ({ hour: x.DATE_TIME.split(" ").slice(1).join(" ").replace(/^0/, ""), uv: Number(x.UV_VALUE) }));
+  });
 }

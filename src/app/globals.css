@@ -304,3 +304,13 @@ body {
 .co-hero .lv-cinema [data-slide-subtitle] { font-family: var(--co-serif), Georgia, serif; font-style: italic; }
 .co-hero .lv-cinema [data-slide-image] > div[aria-hidden] { background: linear-gradient(180deg, rgba(0,40,60,0) 35%, rgba(0,40,60,.55) 62%, rgba(0,40,60,.92)) !important; }
 .co-hero .lv-cinema [data-slide-content] { padding-left: clamp(18px, 2.4vw, 32px); padding-right: clamp(18px, 2.4vw, 32px); }
+/* Dark premium (Arizona): slider and article type on near-black */
+.dk-hero .lv-cinema [data-slide-title] { font-family: var(--dk-serif), Georgia, serif; font-weight: 600; font-size: clamp(28px, 3vw, 46px); line-height: 1.08; }
+.dk-hero .lv-cinema [data-slide-eyebrow] { border-radius: 0; background: var(--dk-deep); letter-spacing: .16em; }
+.dk-hero .lv-cinema [data-slide-cta] { border-radius: 0; background: var(--dk-deep); border: 1px solid var(--dk-cu); }
+.dk-hero .lv-cinema [data-slide-content] { padding-left: clamp(18px, 2.4vw, 32px); padding-right: clamp(18px, 2.4vw, 32px); }
+.dk-root .pc-article { color: #e6dad0; }
+.dk-root .pc-article h2, .dk-root .pc-article h3 { color: #fff; }
+.dk-root .pc-article a { color: #fff; text-decoration-color: var(--dk-acc); }
+.dk-root .pc-article blockquote { color: #fff; border-left-color: var(--dk-cu); }
+.dk-root .pc-dropcap > p:first-of-type::first-letter { color: var(--dk-cu); }

@@ -65,6 +65,7 @@ export default function HomeCoastal({
   subway?: unknown;
   volcanoes?: VolcanoStatus[] | null;
   buoys?: Buoy[] | null;
+  uv?: unknown;
 }) {
   const c = coOf(site);
   const tz = TZ[site.state] || "America/New_York";
