@@ -2,6 +2,10 @@ import { cache } from "react";
 import { Metadata } from "next";
 import { headers } from "next/headers";
 import { notFound, redirect } from "next/navigation";
+import { designState } from "@/lib/design-nou";
+import { getCityForecast } from "@/lib/local-data";
+import { getHomepageArticles } from "@/lib/homepage-data";
+import ArticleLive from "@/components/design/live/ArticleLive";
 import { getSiteByDomain, getActiveSite } from "@/config/sites";
 import pool from "@/lib/db";
 import { getSiteId } from "@/lib/site-id";
@@ -189,8 +193,10 @@ export async function generateMetadata({
 
 export default async function ArticlePage({
   params,
+  searchParams,
 }: {
   params: { category: string; slug: string };
+  searchParams: { design?: string | string[] };
 }) {
   const site = getSiteFromHeaders();
   const { article, related } = await getArticleData(site.slug, params.slug, site.domain);
@@ -296,9 +302,21 @@ export default async function ArticlePage({
 
   const ampUrl = `https://${site.domain}/${params.category}/${params.slug}/amp`;
 
+  // Per-site design (see lib/design-nou.ts); the preview carries noindex.
+  const design = designState(site.slug, searchParams.design);
+  const liveData =
+    design.family === "live"
+      ? await Promise.all([getHomepageArticles(site), getCityForecast(site.state)]).then(([home, forecast]) => ({
+          latest: home?.latestPosts || [],
+          mostRead: home?.popular || [],
+          forecast,
+        }))
+      : null;
+
   return (
     <>
       <link rel="amphtml" href={ampUrl} />
+      {design.preview && <meta name="robots" content="noindex, nofollow" />}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(newsArticleJsonLd) }}
@@ -307,6 +325,17 @@ export default async function ArticlePage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
+      {design.family === "live" ? (
+        <ArticleLive
+          site={site}
+          article={article}
+          categorySlug={params.category}
+          related={related}
+          latest={liveData?.latest || []}
+          mostRead={liveData?.mostRead || []}
+          forecast={liveData?.forecast || null}
+        />
+      ) : (
       <ArticlePageClient
         site={site}
         article={article}
@@ -314,6 +343,7 @@ export default async function ArticlePage({
         categorySlug={params.category}
         slug={params.slug}
       />
+      )}
     </>
   );
 }

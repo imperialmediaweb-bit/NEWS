@@ -102,3 +102,41 @@ export async function getActiveStorms(): Promise<{ storms: Storm[] } | null> {
 export function countiesOf(state: string): string[] {
   return (counties as Record<string, string[]>)[state] || [];
 }
+
+// ── multi-day forecast for the state's first city (article sidebar) ──
+export interface DayForecast {
+  name: string;
+  short: string;
+  high: number | null;
+  low: number | null;
+}
+
+export async function getCityForecast(state: string): Promise<{ city: string; now: CityWeather; days: DayForecast[] } | null> {
+  const first = (WEATHER_CITIES[state] || [])[0];
+  if (!first) return null;
+  const [city, lat, lon] = first;
+  return cached(`nwsfc:${city}`, async () => {
+    const pt = await getJson(`https://api.weather.gov/points/${lat.toFixed(4)},${lon.toFixed(4)}`);
+    const fc = await getJson(pt.properties.forecast);
+    const periods = fc.properties.periods as Array<{ name: string; temperature: number; temperatureUnit: string; shortForecast: string; isDaytime: boolean }>;
+    const p0 = periods[0];
+    const now: CityWeather = {
+      city,
+      temp: p0.temperature,
+      unit: p0.temperatureUnit,
+      short: p0.shortForecast,
+      high: p0.isDaytime ? p0.temperature : periods[1]?.temperature ?? null,
+      low: p0.isDaytime ? periods[1]?.temperature ?? null : p0.temperature,
+      isDay: p0.isDaytime,
+    };
+    // The next days: each daytime period with the night that follows it.
+    const days: DayForecast[] = [];
+    for (let i = 1; i < periods.length && days.length < 4; i++) {
+      const p = periods[i];
+      if (!p.isDaytime) continue;
+      const night = periods[i + 1];
+      days.push({ name: p.name.slice(0, 3), short: p.shortForecast, high: p.temperature, low: night && !night.isDaytime ? night.temperature : null });
+    }
+    return { city, now, days };
+  });
+}

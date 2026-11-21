@@ -147,3 +147,17 @@ body {
   .animate-ticker { animation: none; }
   * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
 }
+
+/* "Live" design family — article body (components/design/live/ArticleLive.tsx) */
+.lv-article { font-size: 19px; line-height: 1.68; color: #1f2637; }
+.lv-article p { margin: 0 0 1.15em; }
+.lv-article h2, .lv-article h3 { font-weight: 700; line-height: 1.25; color: #141b2d; margin: 1.6em 0 0.6em; }
+.lv-article h2 { font-size: 27px; }
+.lv-article h3 { font-size: 22px; }
+.lv-article a { color: var(--lv-acc); text-decoration: underline; text-underline-offset: 2px; }
+.lv-article blockquote { margin: 1.6em 0; padding: 0.2em 0 0.2em 1.1em; border-left: 4px solid var(--lv-acc); font-size: 25px; font-style: italic; line-height: 1.4; color: var(--lv-ink); }
+.lv-article ul, .lv-article ol { margin: 0 0 1.15em 1.3em; }
+.lv-article ul { list-style: disc; }
+.lv-article ol { list-style: decimal; }
+.lv-article li { margin: 0.3em 0; }
+.lv-article img { max-width: 100%; height: auto; margin: 1.2em 0; }
