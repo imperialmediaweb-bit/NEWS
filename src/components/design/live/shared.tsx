@@ -19,7 +19,10 @@ export function href(a: HomeArticle) {
 }
 export function hour(a: HomeArticle, tz: string) {
   if (!a.iso) return "";
-  return new Date(a.iso).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: tz });
+  const d = new Date(a.iso);
+  // A bare time on an older story reads as today's; past a day, show the date.
+  if (Date.now() - d.getTime() > 20 * 3600 * 1000) return d.toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: tz });
+  return d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: tz });
 }
 export function ago(a: HomeArticle) {
   if (!a.iso) return a.date;
