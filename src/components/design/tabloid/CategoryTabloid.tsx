@@ -59,8 +59,11 @@ export default function CategoryTabloid({
     const out: HomeArticle[] = [];
     for (const a of list) {
       if (out.length >= n) break;
-      if (a && !used.has(a.slug)) {
+      // the same story is sometimes filed twice under two addresses
+      const t = a ? a.title.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim() : "";
+      if (a && !used.has(a.slug) && !used.has(t)) {
         used.add(a.slug);
+        used.add(t);
         out.push(a);
       }
     }

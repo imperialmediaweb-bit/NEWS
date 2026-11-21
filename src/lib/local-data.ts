@@ -327,7 +327,11 @@ export async function getAirportStatus(airports: Array<[string, string]>): Promi
       }
     }
     for (const m of Array.from(xml.matchAll(/<Airport>([\s\S]*?)<\/Airport>/g))) {
-      if (tag(m[1], "ARPT") === code) delays.push({ kind: "Closure", reason: tag(m[1], "Reason"), detail: tag(m[1], "Reopen") ? `reopens ${tag(m[1], "Reopen")}` : "" });
+      // Closure notices are mostly limits on small private planes ("CLSD TO
+      // NON SKED TRANSIENT GA ACFT", "EXC SKED"); only a full closure matters
+      // to passengers.
+      const why = tag(m[1], "Reason");
+      if (tag(m[1], "ARPT") === code && !/\bEXC\b|\bTO NON\b|NON SKED|\bGA\b|\bRWY\b|\bTWY\b/i.test(why)) delays.push({ kind: "Closure", reason: "airport closed", detail: tag(m[1], "Reopen") ? `reopens ${tag(m[1], "Reopen")}` : "" });
     }
     return { code, name, delays: delays.map((d) => ({ ...d, reason: faaReason(d.reason) })), updated };
   });
