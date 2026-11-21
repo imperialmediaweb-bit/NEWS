@@ -2,6 +2,7 @@ import { Source_Serif_4, Libre_Franklin } from "next/font/google";
 import type { SiteConfig } from "@/config/site-config";
 import type { HomeArticle } from "@/lib/homepage-data";
 import type { CityWeather } from "@/lib/local-data";
+import PreviewLinks from "./PreviewLinks";
 
 /** Shared pieces of the "live" family: fonts, palette, icons, top bar, footer. */
 export const serif = Source_Serif_4({ subsets: ["latin"], weight: ["600", "700", "800"], display: "swap" });
@@ -92,6 +93,7 @@ export function LiveFooter({ site }: { site: SiteConfig }) {
   const nav = NAV;
   return (
     <>
+      <PreviewLinks />
       {/* footer */}
       <footer className="mt-10 bg-[var(--lv-ink)] text-white">
         <div className="mx-auto grid max-w-[1240px] gap-8 px-4 py-10 md:grid-cols-[260px_1fr]">
@@ -117,5 +119,55 @@ export function LiveFooter({ site }: { site: SiteConfig }) {
         <div className="border-t border-white/15 py-4 text-center text-[12px] text-white/60">© {new Date().getFullYear()} {site.name}. All rights reserved.</div>
       </footer>
     </>
+  );
+}
+
+/**
+ * Topics the menu promises. The pipeline files nearly every story under
+ * local-news, so until stories are tagged, a section is built from recent
+ * stories whose headline is about it.
+ */
+export const TOPIC_RE: Record<string, RegExp> = {
+  politics: /\b(governor|gov\.|abbott|senat|legislat|lawmaker|congress|election|vote|voter|ballot|mayor|council|commissioner|statehouse|capitol|campaign|republican|democrat|policy|bill)\b/i,
+  business: /\b(business|compan|jobs?|hiring|layoff|plant|factory|econom|market|price|sales|retail|store|restaurant|opens?|opening|invest|startup|bank|oil|energy|tax|budget|million|billion)\b/i,
+  sports: /\b(game|coach|football|basketball|baseball|soccer|playoff|season|team|athlet|longhorns|aggies|cowboys|texans|rangers|astros|mavericks|spurs|rockets|tournament|championship|win|wins|score)\b/i,
+  life: /\b(recipe|food|holiday|festival|museum|art|arts|music|concert|travel|park|parade|celebration|christmas|thanksgiving|zoo|garden|family|community|church|lights)\b/i,
+};
+
+/** The compact masthead (logo left, menu right) with the current section underlined. */
+export function LiveCompactHeader({ site, active, MobileMenu }: { site: SiteConfig; active?: string; MobileMenu: React.ComponentType<{ nav: Array<[string, string]> }> }) {
+  const logo = `/logos/${site.slug}.svg`;
+  const search = <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" aria-hidden><circle cx="10.5" cy="10.5" r="7" /><path d="M16 16l6 6" strokeLinecap="round" /></svg>;
+  return (
+    <header className="border-b border-[#dde1ea]">
+      <div className="flex items-center justify-between px-2 py-1 md:hidden">
+        <MobileMenu nav={NAV} />
+        <a href="/" aria-label={site.name}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={logo} alt={site.name} width={200} height={100} className="h-[80px] w-auto" />
+        </a>
+        <a href="/search" aria-label="Search" className="flex h-11 w-11 items-center justify-center text-[var(--lv-ink)]">{search}</a>
+      </div>
+      <div className="mx-auto hidden max-w-[1240px] items-center gap-6 px-4 md:flex">
+        <a href="/" aria-label={site.name} className="shrink-0">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={logo} alt={site.name} width={260} height={130} className="h-[116px] w-auto" />
+        </a>
+        <span className="h-16 w-px bg-[#cfd4e0]" aria-hidden />
+        <nav className="flex-1">
+          <ul className={`${serif.className} flex items-center gap-7 whitespace-nowrap text-[19px] font-bold text-[var(--lv-ink)]`}>
+            {NAV.map(([l, h]) => {
+              const on = active && h === `/${active}`;
+              return (
+                <li key={l}>
+                  <a href={h === "#weather" ? "/#weather" : h} className={`block border-b-[3px] py-2 ${on ? "border-[var(--lv-acc)]" : "border-transparent hover:text-[var(--lv-acc)]"}`} aria-current={on ? "page" : undefined}>{l}</a>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+        <a href="/search" aria-label="Search" className="text-[var(--lv-ink)] hover:text-[var(--lv-acc)]">{search}</a>
+      </div>
+    </header>
   );
 }

@@ -42,6 +42,7 @@ export interface ListArticle {
   date: string;
   author: string;
   slug: string;
+  iso?: string;
 }
 
 export interface CategoryPage {
@@ -150,5 +151,6 @@ function toListArticle(row: Record<string, unknown>): ListArticle {
       : "",
     author: (row.author as string) || "Staff Reporter",
     slug: row.slug as string,
+    iso: row.published_at ? new Date(row.published_at as string).toISOString() : undefined,
   };
 }

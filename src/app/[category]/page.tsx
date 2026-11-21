@@ -3,6 +3,11 @@ import { headers } from "next/headers";
 import { getSiteByDomain, getActiveSite } from "@/config/sites";
 import { notFound } from "next/navigation";
 import CategoryPageClient from "@/components/CategoryPageClient";
+import { designState } from "@/lib/design-nou";
+import { getHomepageArticles } from "@/lib/homepage-data";
+import { getStateWeather, countiesOf } from "@/lib/local-data";
+import CategoryLive from "@/components/design/live/CategoryLive";
+import { TOPIC_RE } from "@/components/design/live/shared";
 import { getCategoryArticles } from "@/lib/category-data";
 
 export const dynamic = "force-dynamic";
@@ -70,7 +75,7 @@ export default async function CategoryPage({
   searchParams,
 }: {
   params: { category: string };
-  searchParams: { page?: string };
+  searchParams: { page?: string; design?: string | string[] };
 }) {
   const site = getSiteFromHeaders();
   const categoryLabel = params.category
@@ -90,7 +95,39 @@ export default async function CategoryPage({
   // a network already taking a million bot requests a day, and it broke
   // IndexNow, whose validator fetches https://<host>/<key>.txt and got HTML.
   // An empty category has nothing to show either way, so 404 it.
-  if (articles.length === 0) {
+  // Per-site design (lib/design-nou.ts). A menu section with no tagged
+  // stories yet is built from recent stories on its subject; anything else
+  // with no stories is still a 404.
+  const design = designState(site.slug, searchParams.design);
+  let live: React.ReactNode = null;
+  if (design.family === "live") {
+    const [home, weather] = await Promise.all([getHomepageArticles(site), getStateWeather(site.state)]);
+    const pool = home?.pool || [];
+    let stories = articles.map((a) => ({ ...a }));
+    let pages = totalPages;
+    if (stories.length === 0) {
+      const re = TOPIC_RE[params.category];
+      stories = params.category === "opinion" ? home?.opinion || [] : re ? pool.filter((a) => re.test(a.title)) : [];
+      pages = 1;
+    }
+    if (stories.length > 0) {
+      live = (
+        <CategoryLive
+          site={site}
+          slug={params.category}
+          label={categoryLabel}
+          stories={stories}
+          latestState={pool}
+          capital={weather[0]}
+          counties={countiesOf(site.state)}
+          page={page}
+          totalPages={pages}
+        />
+      );
+    }
+  }
+
+  if (articles.length === 0 && !live) {
     notFound();
   }
 
@@ -120,6 +157,8 @@ export default async function CategoryPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
+      {design.preview && <meta name="robots" content="noindex, nofollow" />}
+      {live || (
       <CategoryPageClient
         site={site}
         categorySlug={params.category}
@@ -128,6 +167,7 @@ export default async function CategoryPage({
         page={page}
         totalPages={totalPages}
       />
+      )}
     </>
   );
 }
