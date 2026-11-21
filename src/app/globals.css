@@ -162,3 +162,5 @@ body {
 .lv-article li { margin: 0.3em 0; }
 .lv-article img { max-width: 100%; height: auto; margin: 1.2em 0; }
 @media (max-width: 767px) { .lv-article { font-size: 18px; line-height: 1.62; } .lv-article blockquote { font-size: 21px; } }
+/* Live design: drop cap on the first paragraph of the story */
+.lv-dropcap > p:first-of-type::first-letter { float: left; font-size: 4.6em; line-height: 0.82; font-weight: 800; color: var(--lv-acc); margin: 0.06em 0.1em 0 0; }

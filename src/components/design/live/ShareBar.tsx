@@ -3,14 +3,14 @@
 import { useState } from "react";
 
 /** Share buttons with the real share URLs of each network, plus copy link. */
-export default function ShareBar({ url, title }: { url: string; title: string }) {
+export default function ShareBar({ url, title, vertical = false }: { url: string; title: string; vertical?: boolean }) {
   const [copied, setCopied] = useState(false);
   const u = encodeURIComponent(url);
   const t = encodeURIComponent(title);
   const btn = "flex h-9 w-9 items-center justify-center border border-[#c9cfdc] text-[var(--lv-ink)] hover:border-[var(--lv-ink)] hover:bg-[#f3f5fa]";
   return (
-    <div className="flex items-center gap-2">
-      <span className="mr-1 text-[14px] font-bold text-[#1b2233]">Share</span>
+    <div className={vertical ? "flex flex-col items-center gap-2" : "flex items-center gap-2"}>
+      <span className={vertical ? "mb-1 text-[11px] font-bold uppercase tracking-wider text-[#5a6275]" : "mr-1 text-[14px] font-bold text-[#1b2233]"}>Share</span>
       <a className={btn} href={`https://www.facebook.com/sharer/sharer.php?u=${u}`} target="_blank" rel="noopener" aria-label="Share on Facebook">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden><path d="M14 8V6c0-.9.6-1 1-1h2V2h-3c-3 0-4 2-4 4v2H8v3h2v11h4V11h3l.5-3H14z" /></svg>
       </a>

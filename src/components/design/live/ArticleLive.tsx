@@ -3,6 +3,7 @@ import type { HomeArticle } from "@/lib/homepage-data";
 import type { CityWeather, DayForecast } from "@/lib/local-data";
 import { serif, sans, TZ, href, hour, WxIcon, NAV, liveVars, LiveTopBar, LiveFooter } from "./shared";
 import ShareBar from "./ShareBar";
+import ReadingProgress from "./ReadingProgress";
 import MobileMenu from "./MobileMenu";
 import AlertsBox from "./AlertsBox";
 import CountySearch from "./CountySearch";
@@ -137,44 +138,73 @@ export default function ArticleLive({
         </a>
       )}
 
-      <main className="mx-auto grid max-w-[1240px] gap-10 px-4 pt-6 lg:grid-cols-[1fr_320px]">
-        <article>
-          <nav className="text-[12px] font-bold uppercase tracking-wide text-[var(--lv-ink)]" aria-label="Breadcrumb">
-            <a href="/" className="hover:text-[var(--lv-acc)]">Home</a> <span className="mx-1.5 text-[#8a91a3]">›</span>
-            <a href={`/${categorySlug}`} className="hover:text-[var(--lv-acc)]">{categoryLabel}</a>
-          </nav>
-          <p className="mt-4 text-[13px] font-extrabold uppercase tracking-wider text-[var(--lv-acc)]">{site.state} · {categoryLabel}</p>
-          <h1 className={`${serif.className} mt-2 text-[30px] font-extrabold leading-[1.12] text-[#141b2d] md:text-[44px]`}>{article.title}</h1>
-          {article.summary && <p className="mt-3 text-[17px] leading-relaxed text-[#3a4255] md:text-[19px]">{article.summary}</p>}
+      <ReadingProgress target="#lv-story" />
 
-          <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-[13px] text-[#4a5266]">
-            <span className="flex items-center gap-3">
-              <span className="flex h-11 w-11 items-center justify-center rounded-full bg-[var(--lv-ink)] text-[15px] font-bold text-white" aria-hidden>{initials(authorName || "S R")}</span>
-              <span>
-                By <a href={`/author/${(authorName || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}`} className="font-bold text-[var(--lv-ink)] hover:underline">{authorName}</a>
-                <span className="block text-[12px]">{authorTitle || `${site.name} Staff`}</span>
-              </span>
+      {/* headline across the full width */}
+      <section className="mx-auto max-w-[1240px] px-4 pt-6 md:pt-10">
+        <nav className="text-[12px] font-bold uppercase tracking-wide text-[var(--lv-ink)]" aria-label="Breadcrumb">
+          <a href="/" className="hover:text-[var(--lv-acc)]">Home</a> <span className="mx-1.5 text-[#8a91a3]">›</span>
+          <a href={`/${categorySlug}`} className="hover:text-[var(--lv-acc)]">{categoryLabel}</a>
+        </nav>
+        <div className="mt-5 flex items-center gap-3">
+          <span className="h-[3px] w-10 bg-[var(--lv-acc)]" aria-hidden />
+          <p className="text-[13px] font-extrabold uppercase tracking-[0.18em] text-[var(--lv-acc)]">{site.state} · {categoryLabel}</p>
+        </div>
+        <h1 className={`${serif.className} mt-3 max-w-[1000px] text-[32px] font-extrabold leading-[1.06] tracking-[-0.01em] text-[#101727] md:text-[56px]`}>{article.title}</h1>
+        {article.summary && <p className={`${serif.className} mt-4 max-w-[860px] text-[19px] leading-relaxed text-[#3a4255] md:text-[23px]`}>{article.summary}</p>}
+
+        <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3 border-y border-[#e3e6ee] py-4 text-[13px] text-[#4a5266]">
+          <span className="flex items-center gap-3">
+            <span className="flex h-12 w-12 items-center justify-center rounded-full bg-[var(--lv-ink)] text-[16px] font-bold text-white ring-2 ring-[var(--lv-acc)] ring-offset-2" aria-hidden>{initials(authorName || "S R")}</span>
+            <span>
+              By <a href={`/author/${(authorName || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}`} className="font-bold text-[var(--lv-ink)] hover:underline">{authorName}</a>
+              <span className="block text-[12px]">{authorTitle || `${site.name} Staff`}</span>
             </span>
-            {when && <span className="border-l border-[#cfd4e0] pl-5">{when}</span>}
-            <span className="border-l border-[#cfd4e0] pl-5">{minutes} min read</span>
-          </div>
-          <div className="mt-4"><ShareBar url={url} title={article.title} /></div>
+          </span>
+          {when && <span className="border-l border-[#cfd4e0] pl-5">{when}</span>}
+          <span className="border-l border-[#cfd4e0] pl-5">{minutes} min read</span>
+          <span className="w-full md:ml-auto md:w-auto"><ShareBar url={url} title={article.title} /></span>
+        </div>
+      </section>
 
-          {article.featured_image && (
-            <figure className="mt-5">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={article.featured_image} alt={article.title} className="aspect-[16/9] w-full object-cover" />
-              {isStockImage(article.featured_image) && (
-                <figcaption className="mt-2 border-l-2 border-[#cfd4e0] pl-3 text-[13px] italic text-[#5a6275]">
-                  Illustrative photo. This image is a stock photograph and does not depict the actual people, places or events described in this article.
-                </figcaption>
-              )}
-            </figure>
+      {/* lead photo, cinematic and full width */}
+      {article.featured_image && (
+        <figure className="mx-auto mt-6 max-w-[1240px] md:px-4">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={article.featured_image} alt={article.title} className="aspect-[16/9] w-full object-cover md:aspect-[21/9]" />
+          {isStockImage(article.featured_image) && (
+            <figcaption className="mx-4 mt-2 border-l-2 border-[#cfd4e0] pl-3 text-[13px] italic text-[#5a6275] md:mx-0">
+              Illustrative photo. This image is a stock photograph and does not depict the actual people, places or events described in this article.
+            </figcaption>
           )}
+        </figure>
+      )}
 
-          <div className={`lv-article ${serif.className} mt-6`} dangerouslySetInnerHTML={{ __html: html }} />
+      <main className="mx-auto grid max-w-[1240px] gap-10 px-4 pt-8 lg:grid-cols-[1fr_320px]">
+        <article id="lv-story" className="lg:grid lg:grid-cols-[56px_1fr] lg:gap-6">
+          {/* share rail that stays beside the story */}
+          <div className="hidden lg:block">
+            <div className="sticky top-8"><ShareBar url={url} title={article.title} vertical /></div>
+          </div>
+          <div className="max-w-[720px]">
+            <div className={`lv-article lv-dropcap ${serif.className}`} dangerouslySetInnerHTML={{ __html: html }} />
+            <div className="mt-8 border-t-2 border-[var(--lv-ink)] pt-4"><ShareBar url={url} title={article.title} /></div>
 
-          <div className="mt-8 border-t border-[#e3e6ee] pt-4"><ShareBar url={url} title={article.title} /></div>
+            {/* up next */}
+            {more[0] && (
+              <a href={`/${(more[0].category || "news").toLowerCase().replace(/\s+/g, "-")}/${more[0].slug}`} className="group mt-8 grid overflow-hidden bg-[var(--lv-ink)] text-white sm:grid-cols-[1fr_1.1fr]">
+                {more[0].img && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={more[0].img} alt="" className="aspect-[16/10] h-full w-full object-cover" loading="lazy" />
+                )}
+                <span className="flex flex-col justify-center p-5">
+                  <span className="text-[12px] font-extrabold uppercase tracking-[0.18em] text-white/70">Up next</span>
+                  <span className={`${serif.className} mt-2 text-[24px] font-bold leading-tight group-hover:underline`}>{more[0].title}</span>
+                  <span className="mt-3 text-[13px] font-bold uppercase text-[var(--lv-acc)] [filter:brightness(1.6)]">Read the story →</span>
+                </span>
+              </a>
+            )}
+          </div>
         </article>
 
         <aside className="space-y-6">
@@ -243,11 +273,11 @@ export default function ArticleLive({
         </aside>
       </main>
 
-      {more.length > 0 && (
+      {more.length > 1 && (
         <section className="mx-auto mt-10 max-w-[1240px] px-4">
           <h2 className={`${serif.className} flex items-center gap-2 text-[26px] font-bold text-[#141b2d]`}><span className="h-6 w-2 -skew-x-12 bg-[var(--lv-acc)]" /> More from {site.state}</h2>
           <div className="mt-4 grid gap-x-6 gap-y-8 md:grid-cols-3">
-            {more.map((a) => (
+            {more.slice(1).map((a) => (
               <a key={a.slug} href={`/${(a.category || "news").toLowerCase().replace(/\s+/g, "-")}/${a.slug}`} className="group block">
                 {a.img && (
                   // eslint-disable-next-line @next/next/no-img-element
