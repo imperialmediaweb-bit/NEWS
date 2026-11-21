@@ -7,6 +7,7 @@ import { designState } from "@/lib/design-nou";
 import { getHomepageArticles } from "@/lib/homepage-data";
 import { getStateWeather, countiesOf } from "@/lib/local-data";
 import CategoryLive from "@/components/design/live/CategoryLive";
+import CategoryPeach from "@/components/design/peach/CategoryPeach";
 import { TOPIC_RE } from "@/components/design/live/shared";
 import { getCategoryArticles } from "@/lib/category-data";
 
@@ -100,7 +101,7 @@ export default async function CategoryPage({
   // with no stories is still a 404.
   const design = designState(site.slug, searchParams.design);
   let live: React.ReactNode = null;
-  if (design.family === "live") {
+  if (design.family) {
     const [home, weather] = await Promise.all([getHomepageArticles(site), getStateWeather(site.state)]);
     const pool = home?.pool || [];
     let stories = articles.map((a) => ({ ...a }));
@@ -111,8 +112,9 @@ export default async function CategoryPage({
       pages = 1;
     }
     if (stories.length > 0) {
+      const CategoryView = design.family === "peach" ? CategoryPeach : CategoryLive;
       live = (
-        <CategoryLive
+        <CategoryView
           site={site}
           slug={params.category}
           label={categoryLabel}

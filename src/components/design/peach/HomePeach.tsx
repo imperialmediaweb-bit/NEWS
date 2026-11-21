@@ -5,7 +5,8 @@ import CountySearch from "../live/CountySearch";
 import AlertsBox from "../live/AlertsBox";
 import MobileMenu from "../live/MobileMenu";
 import { TZ, href, hour, ago, WxIcon, TOPIC_RE } from "../live/shared";
-import PeachFx, { SplitWords } from "./PeachFx";
+import HeroCinema from "../live/HeroCinema";
+import PeachFx from "./PeachFx";
 import { display, body, peachOf, peachVars, PHead, Ico, PeachTopBar, PeachHeader, PeachFooter } from "./shared";
 
 /**
@@ -69,6 +70,14 @@ export default function HomePeach({
     return out;
   };
   const pool = articles.pool || articles.latestPosts;
+  // The Imperial cinematic slider in the lead spot: the lead and four more top stories.
+  const heroSlides = [lead, ...articles.heroSide]
+    .filter((a, i, arr) => a && arr.findIndex((b) => b.slug === a.slug) === i)
+    .slice(0, 5)
+    .map((a) => {
+      used.add(a.slug);
+      return { id: a.slug, image: a.img, title: a.title, subtitle: a.summary, eyebrow: a.category.replace(/-/g, " ").toUpperCase(), href: href(a) };
+    });
   const live = take(articles.latestPosts.concat(articles.heroSide), 5);
   const brief = take(articles.trending.concat(articles.popular, articles.localNews, pool), 5);
   // Section columns: the section's own stories first, then recent stories
@@ -94,7 +103,7 @@ export default function HomePeach({
   const card = "pc-spot rounded-md border border-[var(--pc-cu)]/30 bg-white";
 
   return (
-    <div className={`${body.className} min-h-screen overflow-x-hidden bg-[var(--pc-paper)] text-[#2b1d17]`} style={peachVars(site)}>
+    <div className={`${body.className} ${display.variable} min-h-screen overflow-x-hidden bg-[var(--pc-paper)] text-[#2b1d17]`} style={peachVars(site)}>
       <noscript><style>{`.pc-in{opacity:1!important;translate:none!important}.pc-in *{opacity:1!important;transform:none!important;clip-path:none!important}`}</style></noscript>
       <PeachFx />
       <PeachTopBar site={site} capital={capital} />
@@ -129,16 +138,9 @@ export default function HomePeach({
       <main className={W}>
         {/* lead + live timeline */}
         <section className="mt-4 grid gap-4 lg:grid-cols-[1fr_360px]">
-          <a href={href(lead)} className="pc-kb group relative block min-h-[420px] overflow-hidden rounded-md bg-[var(--pc-ink)] md:min-h-[560px]">
-            <div className="absolute inset-0"><Img a={lead} eager /></div>
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(30,12,8,0)_30%,rgba(30,12,8,.6)_62%,rgba(30,12,8,.94)),linear-gradient(90deg,rgba(30,12,8,.55),transparent_70%)]" />
-            <div className="absolute inset-x-0 bottom-0 p-5 md:p-9">
-              <span className="rounded-sm bg-[var(--pc-acc)] px-2.5 py-1 text-[12px] font-bold uppercase tracking-[.08em] text-white">{lead.category.replace(/-/g, " ")}</span>
-              <h1 className={`${display.className} mt-3 max-w-[760px] text-[32px] font-extrabold leading-[1.06] text-white md:text-[54px]`}><SplitWords text={lead.title} /></h1>
-              {lead.summary && <p className="mt-3 line-clamp-3 max-w-[640px] text-[16px] leading-relaxed text-white/85 md:text-[18px]">{lead.summary}</p>}
-              <p className="mt-3 text-[13px] text-white/75">{lead.author ? `By ${lead.author} · ` : ""}{ago(lead)}</p>
-            </div>
-          </a>
+          <div className="pc-hero overflow-hidden rounded-md">
+            <HeroCinema slides={heroSlides} />
+          </div>
           {live.length > 0 && (
             <aside className={`${card} p-5`}>
               <div className="flex items-center justify-between">

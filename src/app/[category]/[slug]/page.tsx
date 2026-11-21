@@ -6,6 +6,7 @@ import { designState } from "@/lib/design-nou";
 import { getCityForecast, countiesOf } from "@/lib/local-data";
 import { getHomepageArticles } from "@/lib/homepage-data";
 import ArticleLive from "@/components/design/live/ArticleLive";
+import ArticlePeach from "@/components/design/peach/ArticlePeach";
 import { getSiteByDomain, getActiveSite } from "@/config/sites";
 import pool from "@/lib/db";
 import { getSiteId } from "@/lib/site-id";
@@ -305,7 +306,7 @@ export default async function ArticlePage({
   // Per-site design (see lib/design-nou.ts); the preview carries noindex.
   const design = designState(site.slug, searchParams.design);
   const liveData =
-    design.family === "live"
+    design.family
       ? await Promise.all([getHomepageArticles(site), getCityForecast(site.state)]).then(([home, forecast]) => ({
           latest: home?.pool || home?.latestPosts || [],
           mostRead: (home?.trending || []).concat(home?.popular || []),
@@ -313,6 +314,7 @@ export default async function ArticlePage({
         }))
       : null;
 
+  const ArticleView = design.family === "peach" ? ArticlePeach : ArticleLive;
   return (
     <>
       <link rel="amphtml" href={ampUrl} />
@@ -325,8 +327,8 @@ export default async function ArticlePage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
-      {design.family === "live" ? (
-        <ArticleLive
+      {design.family ? (
+        <ArticleView
           site={site}
           article={article}
           categorySlug={params.category}

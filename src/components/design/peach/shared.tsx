@@ -10,7 +10,7 @@ import { TZ, WxIcon } from "../live/shared";
  * rules; Fraunces headlines, Work Sans for everything else. Different from
  * the Texas "live" family in type, colour, masthead and section layouts.
  */
-export const display = Fraunces({ subsets: ["latin"], weight: ["600", "700", "800", "900"], display: "swap" });
+export const display = Fraunces({ subsets: ["latin"], weight: ["600", "700", "800", "900"], display: "swap", variable: "--pc-display" });
 export const body = Work_Sans({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"], display: "swap" });
 
 export const PEACH: Record<string, { ink: string; acc: string; copper: string; paper: string; slogan: string; capital: string }> = {

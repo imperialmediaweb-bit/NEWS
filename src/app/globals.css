@@ -274,3 +274,8 @@ body {
   .pc-in:not(.is-in) .pc-rule { transform: none; }
   .pc-parallax img { transform: none; }
 }
+/* Peach: the Imperial slider in the lead spot, in the Georgia colours */
+.pc-hero .lv-cinema [data-slide-title] { font-family: var(--pc-display), Georgia, serif; font-weight: 800; font-size: clamp(28px, 3.4vw, 50px); }
+.pc-hero .lv-cinema [data-slide-subtitle] { font-family: var(--pc-display), Georgia, serif; }
+.pc-hero .lv-cinema [data-slide-image] > div[aria-hidden] { background: linear-gradient(180deg, rgba(30,12,8,0) 30%, rgba(30,12,8,.6) 60%, rgba(30,12,8,.95)), linear-gradient(90deg, rgba(30,12,8,.6), transparent 65%) !important; }
+.pc-hero .lv-cinema [data-slide-content] { padding-left: clamp(18px, 2.4vw, 36px); padding-right: clamp(18px, 2.4vw, 36px); }
