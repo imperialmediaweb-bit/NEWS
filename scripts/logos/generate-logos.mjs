@@ -229,11 +229,178 @@ const S = {
 };
 
 
+// v8: every state gets its own full palette — name ink, accent, metal —
+// taken from its flag, landscape or emblems, so no two logos share colours.
+const PAL = {
+  Alabama: ["#2b0a12", "#a6192e", "gold"],
+  Alaska: ["#0b2545", "#e0a100", "silver"],
+  Arizona: ["#5a1f0e", "#13959a", "copper"],
+  Arkansas: ["#1f3b2c", "#b22234", "gold"],
+  California: ["#0d3b66", "#e8833a", "gold"],
+  Colorado: ["#12355b", "#c8102e", "gold"],
+  Connecticut: ["#1b2a41", "#5f8a63", "gold"],
+  Delaware: ["#23395b", "#b48a4a", "gold"],
+  Florida: ["#005f73", "#e5603f", "gold"],
+  Georgia: ["#3a1c14", "#e07a5f", "copper"],
+  Hawaii: ["#003c5a", "#d6336c", "gold"],
+  Idaho: ["#2d3a1f", "#c58b2a", "copper"],
+  Illinois: ["#111111", "#0066cc", "silver"],
+  Indiana: ["#0b1f3a", "#d9a300", "silver"],
+  Iowa: ["#222222", "#d19a00", "gold"],
+  Kansas: ["#1d3557", "#e9b10c", "gold"],
+  Kentucky: ["#0b2a6f", "#2e8b57", "gold"],
+  Louisiana: ["#3c1361", "#c9a227", "gold"],
+  Maine: ["#0f2b3d", "#2e7d32", "silver"],
+  Maryland: ["#111111", "#d23b2d", "gold"],
+  Massachusetts: ["#14213d", "#8b1e2d", "gold"],
+  Michigan: ["#00274c", "#e0a800", "silver"],
+  Minnesota: ["#0e3b43", "#3a86c0", "silver"],
+  Mississippi: ["#2c2c54", "#a5636f", "gold"],
+  Missouri: ["#3d0c11", "#1f6f8b", "copper"],
+  Montana: ["#1b3a4b", "#d18a04", "gold"],
+  Nebraska: ["#4a0d0d", "#c99a3b", "gold"],
+  Nevada: ["#1c1c1c", "#7b2cbf", "silver"],
+  "New Hampshire": ["#233d2b", "#8c1c13", "silver"],
+  "New Jersey": ["#2f2f2f", "#c79a2e", "gold"],
+  "New Mexico": ["#7a0019", "#e6a800", "gold"],
+  "New York": ["#0a0a0a", "#f05a28", "gold"],
+  "North Carolina": ["#13294b", "#3f8fc8", "silver"],
+  "North Dakota": ["#2a3d24", "#c9971f", "gold"],
+  Ohio: ["#1a1a1a", "#bb0000", "silver"],
+  Oklahoma: ["#1d4e6b", "#c75b12", "copper"],
+  Oregon: ["#154734", "#c9a000", "gold"],
+  Pennsylvania: ["#1f2a44", "#a8551a", "gold"],
+  "Rhode Island": ["#0c2340", "#0097a0", "gold"],
+  "South Carolina": ["#0b2340", "#6c9a4f", "silver"],
+  "South Dakota": ["#3b2a1a", "#2f6690", "gold"],
+  Tennessee: ["#232323", "#f07800", "silver"],
+  Texas: ["#002868", "#bf0a30", "silver"],
+  Utah: ["#4a1c0c", "#d9480f", "copper"],
+  Vermont: ["#0b3d20", "#b23a1e", "gold"],
+  Virginia: ["#1b1f3b", "#8c1d40", "gold"],
+  Washington: ["#0f3d2e", "#3c9a5f", "silver"],
+  "West Virginia": ["#1e2a3a", "#d99d00", "gold"],
+  Wisconsin: ["#3e2723", "#c5050c", "gold"],
+  Wyoming: ["#3d2b1f", "#b71c1c", "copper"],
+};
+const METAL = {
+  gold: ["#e3c98f", "#b98d4e", "#8c6630"],
+  silver: ["#e6e8ec", "#a7adb7", "#6e7480"],
+  copper: ["#f0b48a", "#b86b3c", "#7d3f1c"],
+};
+if (Object.keys(PAL).length !== 50) throw new Error("palette count");
+for (const [st, p] of Object.entries(PAL)) {
+  const s = SITES[st];
+  if (!s) throw new Error(`no site ${st}`);
+  s.c1 = p[1];
+  s.ink = p[0];
+  s.metal = METAL[p[2]];
+}
+
+// ── v9: one small single-colour symbol per state ──
+// Custom drawings are in a 100×100 box; phosphor icons are reused where a
+// good one exists. Every symbol is drawn in one colour (white only cuts out).
+const WHITE = "#ffffff";
+const box = (x, y, size, inner) => `<g transform="translate(${n2(x)} ${n2(y)}) scale(${n2(size / 100)})">${inner}</g>`;
+const ph = (name) => {
+  const svg = fs.readFileSync(NM(`@phosphor-icons/core/assets/fill/${name}-fill.svg`), "utf8");
+  return svg.replace(/^[\s\S]*?<svg[^>]*>/, "").replace(/<\/svg>\s*$/, "").replace(/<rect width="256" height="256" fill="none"\/>/, "");
+};
+const phBox = (name, c) => `<g transform="scale(${100 / 256})" fill="${c}">${ph(name)}</g>`;
+const rot = (d, deg) => `<g transform="rotate(${deg} 50 50)">${d}</g>`;
+
+const DRAW = {
+  keystone: (c) => `<path d="M30,8 H70 L86,92 H14 Z" fill="${c}"/><path d="M35,16 H65 L77,84 H23 Z" fill="none" stroke="${WHITE}" stroke-width="2.5"/>`,
+  tristar: (c) => `<circle cx="50" cy="50" r="46" fill="${c}"/><circle cx="50" cy="50" r="38" fill="none" stroke="${WHITE}" stroke-width="2.5"/><path d="${star(50, 30, 13)}${star(32, 61, 13)}${star(68, 61, 13)}" fill="${WHITE}"/>`,
+  zia: (c) => {
+    const rays = `<rect x="38" y="4" width="5" height="22" fill="${c}"/><rect x="45" y="0" width="5" height="26" fill="${c}"/><rect x="52" y="0" width="5" height="26" fill="${c}"/><rect x="59" y="4" width="5" height="22" fill="${c}"/>`;
+    return `${[0, 90, 180, 270].map((a) => rot(rays, a)).join("")}<circle cx="50" cy="50" r="17" fill="none" stroke="${c}" stroke-width="7"/>`;
+  },
+  lonestar: (c) => `<path d="${star(50, 53, 47)}" fill="${c}"/>`,
+  gateway: (c) => `<path d="M8,96 Q50,-78 92,96 L81,96 Q50,-52 19,96 Z" fill="${c}"/><rect x="0" y="94" width="100" height="4" fill="${c}"/>`,
+  rockarch: (c) => `<path d="M6,96 C6,40 22,16 50,16 C78,16 94,40 94,96 H76 C76,56 66,38 50,38 C34,38 24,56 24,96 Z" fill="${c}"/><rect x="0" y="94" width="100" height="4" fill="${c}"/>`,
+  fleur: (c) => `<path d="M50,4 C63,20 63,44 50,60 C37,44 37,20 50,4 Z
+M45,60 C30,63 12,55 10,40 C9,27 22,21 30,30 C21,31 19,42 27,47 C33,51 40,52 46,49 Z
+M55,60 C70,63 88,55 90,40 C91,27 78,21 70,30 C79,31 81,42 73,47 C67,51 60,52 54,49 Z
+M28,58 H72 V67 H28 Z
+M44,67 C42,79 34,87 25,92 H39 C46,86 48,78 50,72 C52,78 54,86 61,92 H75 C66,87 58,79 56,67 Z" fill="${c}"/>`,
+  peach: (c) => `<path d="M50,32 C80,22 98,50 86,74 C76,95 50,97 50,97 C50,97 24,95 14,74 C2,50 20,22 50,32 Z" fill="${c}"/><path d="M50,36 C40,52 42,78 50,94" fill="none" stroke="${WHITE}" stroke-width="2.5"/><path d="M50,32 C55,13 71,5 86,8 C80,25 65,33 50,32 Z" fill="${c}"/><path d="M50,32 C48,24 46,18 42,12" fill="none" stroke="${c}" stroke-width="3.5"/>`,
+  maple: (c) => `<path d="M50,2 L57,20 L67,14 L64,36 L80,26 L77,40 L97,42 L85,54 L91,63 L66,62 L68,75 L54,68 L53,98 L47,98 L46,68 L32,75 L34,62 L9,63 L15,54 L3,42 L23,40 L20,26 L36,36 L33,14 L43,20 Z" fill="${c}"/>`,
+  needle: (c) => `<rect x="48.6" y="0" width="2.8" height="18" fill="${c}"/><ellipse cx="50" cy="25" rx="31" ry="7" fill="${c}"/><ellipse cx="50" cy="20" rx="14" ry="4.5" fill="${c}"/><path d="M43,31 L37,96 H45 L50,42 L55,96 H63 L57,31 Z" fill="${c}"/><rect x="40" y="60" width="20" height="3" fill="${c}"/>`,
+  derrick: (c) => `<path d="M30,96 L46,6 H54 L70,96 H62 L51,18 H49 L38,96 Z" fill="${c}"/><path d="M41,74 L59,74 M44,54 L56,54 M46,36 L54,36 M39,84 L58,62 M42,62 L57,44 M44,44 L55,28" stroke="${c}" stroke-width="2.6"/><rect x="22" y="93" width="56" height="5" fill="${c}"/>`,
+  windmill: (c) => {
+    let blades = "";
+    for (let i = 0; i < 12; i++) blades += rot(`<path d="M50,26 L47,6 H53 Z" fill="${c}"/>`.replace(/50,26/, "50,26"), i * 30).replace('rotate(', 'rotate(').replace(' 50 50)', ' 50 26)');
+    return `${blades}<circle cx="50" cy="26" r="5" fill="${c}"/><path d="M42,96 L48,30 H52 L58,96 H53 L50,40 L47,96 Z" fill="${c}"/><path d="M44,70 H56 M45,52 H55" stroke="${c}" stroke-width="2.5"/><path d="M56,26 L84,22 L84,32 Z" fill="${c}"/>`;
+  },
+  corn: (c) => {
+    let k = "";
+    for (let r = 0; r < 8; r++) for (let col = -1; col <= 1; col++) k += `<circle cx="${50 + col * 7}" cy="${22 + r * 8}" r="2.4" fill="${WHITE}"/>`;
+    return `<ellipse cx="50" cy="50" rx="16" ry="40" fill="${c}"/>${k}<path d="M50,96 C30,84 20,60 26,36 C34,58 42,76 50,90 Z M50,96 C70,84 80,60 74,36 C66,58 58,76 50,90 Z" fill="${c}"/>`;
+  },
+  buckeye: (c) => `<circle cx="50" cy="54" r="42" fill="${c}"/><ellipse cx="42" cy="38" rx="20" ry="14" fill="${WHITE}" opacity=".85"/><ellipse cx="42" cy="38" rx="14" ry="9" fill="${c}" opacity=".35"/>`,
+  sunflower: (c) => {
+    let p = "";
+    for (let i = 0; i < 16; i++) p += rot(`<ellipse cx="50" cy="16" rx="7" ry="16" fill="${c}"/>`, i * 22.5);
+    let d = "";
+    for (let i = 0; i < 10; i++) d += `<circle cx="${50 + 9 * Math.cos(i * 0.63)}" cy="${50 + 9 * Math.sin(i * 0.63)}" r="1.8" fill="${WHITE}"/>`;
+    return `${p}<circle cx="50" cy="50" r="18" fill="${c}"/><circle cx="50" cy="50" r="15" fill="none" stroke="${WHITE}" stroke-width="1.6"/>${d}`;
+  },
+  northstar: (c) => `<path d="M50,0 L57,43 L100,50 L57,57 L50,100 L43,57 L0,50 L43,43 Z" fill="${c}"/><path d="M50,22 L54,46 L78,50 L54,54 L50,78 L46,54 L22,50 L46,46 Z" fill="${c}" transform="rotate(45 50 50)"/><circle cx="50" cy="50" r="4" fill="${WHITE}"/>`,
+  coloradoC: (c) => `<path d="M80,24 A40,40 0 1 0 80,76 L70,67 A27,27 0 1 1 70,33 Z" fill="${c}"/><circle cx="50" cy="50" r="17" fill="${c}"/>`,
+  dipper: (c) => `<path d="${[[8, 62], [24, 56], [38, 58], [50, 66], [52, 84], [74, 88], [78, 70]].map(([x, y]) => star(x, y, 8.5)).join("")}${star(84, 18, 15)}" fill="${c}"/>`,
+  arkansas: (c) => `<path d="M50,2 L98,50 L50,98 L2,50 Z M50,14 L86,50 L50,86 L14,50 Z" fill="${c}" fill-rule="evenodd"/><path d="${star(50, 34, 7)}${star(34, 58, 7)}${star(66, 58, 7)}${star(50, 64, 6)}" fill="${c}"/>`,
+  tophat: (c) => `<path d="M30,10 H70 L68,80 H32 Z" fill="${c}"/><rect x="31" y="64" width="38" height="7" fill="${WHITE}"/><ellipse cx="50" cy="84" rx="46" ry="9" fill="${c}"/>`,
+  bison: (c) => `<path d="M4,66 C2,52 8,40 18,36 C22,22 36,14 50,16 C64,14 80,20 90,34 C96,42 97,54 94,62 L92,92 H84 L82,70 C74,72 64,72 56,70 L54,92 H46 L44,70 C38,70 32,72 28,74 L26,92 H18 L18,76 C12,76 6,72 4,66 Z" fill="${c}"/><path d="M16,40 C12,34 10,30 14,26" fill="none" stroke="${c}" stroke-width="3.5" stroke-linecap="round"/><circle cx="14" cy="52" r="2.4" fill="${WHITE}"/>`,
+  rushmore: (c) => `<path d="M0,96 L14,62 C16,46 26,40 31,50 C33,34 46,30 50,44 C53,30 66,28 70,42 C74,32 86,34 87,50 L100,96 Z" fill="${c}"/><path d="M26,58 v6 M45,54 v7 M64,52 v7 M80,58 v6" stroke="${WHITE}" stroke-width="2.4" stroke-linecap="round"/>`,
+  palmetto: (c) => `<path d="M14,8 A20,20 0 1 0 34,40 A16,16 0 1 1 14,8 Z" fill="${c}"/><g transform="translate(30 10) scale(.7)">${phBox("tree-palm", c)}</g>`,
+  mitten: (c, s) => `<path d="${outline("Michigan", 2, 2, 96, 96).d}" fill="${c}"/>`,
+};
+
+// state → [kind, name]: "d" custom drawing, "p" phosphor icon.
+const SYM = {
+  Alaska: ["d", "dipper"], Arizona: ["p", "cactus"], Arkansas: ["d", "arkansas"], California: ["p", "bridge"],
+  Colorado: ["d", "coloradoC"], Delaware: ["p", "shield-star"], Florida: ["p", "tree-palm"], Georgia: ["d", "peach"],
+  Hawaii: ["p", "flower-lotus"], Idaho: ["p", "fish"], Illinois: ["d", "tophat"], Indiana: ["p", "flag-checkered"],
+  Iowa: ["d", "corn"], Kansas: ["d", "sunflower"], Kentucky: ["p", "horse"], Louisiana: ["d", "fleur"],
+  Maine: ["p", "lighthouse"], Michigan: ["d", "mitten"], Minnesota: ["d", "northstar"], Mississippi: ["p", "flower"],
+  Missouri: ["d", "gateway"], Montana: ["d", "bison"], Nebraska: ["d", "windmill"], Nevada: ["p", "sun-horizon"],
+  "New Hampshire": ["p", "snowflake"], "New Jersey": ["p", "lightbulb"], "New Mexico": ["d", "zia"],
+  "North Carolina": ["p", "bird"], "North Dakota": ["p", "grains"], Ohio: ["d", "buckeye"], Oklahoma: ["d", "derrick"],
+  Oregon: ["p", "tree-evergreen"], "Rhode Island": ["p", "anchor"], "South Carolina": ["d", "palmetto"],
+  "South Dakota": ["d", "rushmore"], Tennessee: ["d", "tristar"], Texas: ["d", "lonestar"], Utah: ["d", "rockarch"],
+  Vermont: ["d", "maple"], Washington: ["d", "needle"], "West Virginia": ["p", "mountains"], Wisconsin: ["p", "cow"],
+  Wyoming: ["p", "cowboy-hat"],
+};
+// Old Eastern states get the broadsheet treatment instead of a symbol.
+const GOTHIC = new Set(["New York", "Pennsylvania", "Massachusetts", "Virginia", "Maryland", "Connecticut", "Alabama"]);
+if (Object.keys(SYM).length + GOTHIC.size !== 50) throw new Error(`symbols ${Object.keys(SYM).length} + ${GOTHIC.size}`);
+
+function symbol(state, x, y, size, c) {
+  const [kind, name] = SYM[state];
+  return box(x, y, size, kind === "p" ? phBox(name, c) : DRAW[name](c));
+}
+
+// Inks that were close to black get a colour of their own.
+Object.assign(PAL, {
+  Illinois: ["#22305e", "#0066cc", "silver"],
+  Iowa: ["#3d2f12", "#d19a00", "gold"],
+  Ohio: ["#40161a", "#bb0000", "silver"],
+  Tennessee: ["#3a2316", "#f07800", "silver"],
+  Nevada: ["#2e2a3d", "#7b2cbf", "silver"],
+  "New Jersey": ["#1f3a3d", "#c79a2e", "gold"],
+});
+for (const [st, p] of Object.entries(PAL)) {
+  SITES[st].c1 = p[1];
+  SITES[st].ink = p[0];
+  SITES[st].metal = METAL[p[2]];
+}
+
 // ════════════ v7: premium pass on the Expres-style logos ════════════
 // Same structure as v6. Motifs are drawn and shaded rather than outlined,
 // ornaments carry a metallic gold, the name and banners get quiet gradients,
 // EXPRESS is set between hairlines, the slogan in an italic serif.
-const OUT7 = path.join(HERE, "svg7");
+const OUT7 = path.join(HERE, "svg9");
 fs.mkdirSync(OUT7, { recursive: true });
 const W7 = 600, H7 = 300;
 const tintC = (hex, t) => {
@@ -253,9 +420,9 @@ const sloganFont = reg("slogan7", "playfair-display", 500, "italic");
 // Per-logo gradient ids.
 function defs(id, s) {
   return `<defs>
-<linearGradient id="${id}ink" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#22325a"/><stop offset="1" stop-color="#0d1730"/></linearGradient>
+<linearGradient id="${id}ink" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${tintC(s.ink, 0.16)}"/><stop offset="1" stop-color="${shade(s.ink, 0.1)}"/></linearGradient>
 <linearGradient id="${id}acc" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${tintC(s.c1, 0.12)}"/><stop offset="1" stop-color="${shade(s.c1, 0.22)}"/></linearGradient>
-<linearGradient id="${id}gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e3c98f"/><stop offset=".5" stop-color="#b98d4e"/><stop offset="1" stop-color="#8c6630"/></linearGradient>
+<linearGradient id="${id}gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${s.metal[0]}"/><stop offset=".5" stop-color="${s.metal[1]}"/><stop offset="1" stop-color="${s.metal[2]}"/></linearGradient>
 </defs>`;
 }
 
@@ -353,6 +520,7 @@ M${cx - 30},${base - 38} L${cx - 21},${base - 30} L${cx - 26},${base - 31} L${cx
 };
 
 function logo7(s, cfg) {
+  if (GOTHIC.has(s.state)) return gothic(s, cfg);
   const [pkg, wt, style, cs, motif, exT, slogan] = cfg;
   const id = s.slug.replace(/[^a-z]/g, "");
   const k = reg(`${pkg}-7-${wt}-${style}`, pkg, wt, style) || reg(`${pkg}-7`, pkg, wt);
@@ -369,7 +537,7 @@ function logo7(s, cfg) {
     const t = textC(k, name, size, W7 / 2, 132);
     b = { x: (W7 - w) / 2, y: 132 - capH(k, size) / 2, w, h: capH(k, size), base: 132 + capH(k, size) / 2 };
     body += `<path fill="${ink}" d="${t.d}"/>`;
-    const ey = b.base + (motif === "waves" || motif === "river" ? 60 : 48);
+    const ey = b.base + 48;
     if (exT === "banner") {
       const ex = textC(sansBold, "EXPRESS", 26, W7 / 2, ey, 7);
       const bw = ex.w + 74, bx = (W7 - bw) / 2;
@@ -385,7 +553,7 @@ function logo7(s, cfg) {
 <path d="${diamond(W7 / 2 - half - 70, ey, 3)}${diamond(W7 / 2 + half + 70, ey, 3)}" fill="${gold}"/>`;
     }
     const sl = textC(sloganFont, slogan, 17, W7 / 2, ey + 42);
-    body += `<path fill="#3b4660" d="${sl.d}"/>`;
+    body += `<path fill="${tintC(s.ink, 0.28)}" d="${sl.d}"/>`;
   } else {
     const exSize = 28;
     const exW = exT === "tag" ? width(sansBold, "EXPRESS", exSize, 5) + 36 : width(sansBold, "EXPRESS", exSize, 9) + 30;
@@ -409,14 +577,43 @@ function logo7(s, cfg) {
       const ex = text(sansBold, "EXPRESS", exSize, ex0 + 26, ecy + capH(sansBold, exSize) / 2, 9);
       body += `<path d="M${ex0 + 12},${b.y - 6} h12 L${ex0 + 6},${b.base + 6} h-12 Z" fill="${acc}"/><path fill="${ink}" d="${ex.d}"/>`;
     }
-    const low = motif === "waves" || motif === "river" ? 18 : 0;
+    const low = 0;
     const sl = text(sloganFont, slogan, 17, x0 + 2, base + 48 + low);
-    body += `${low ? "" : `<rect x="${x0 + 2}" y="${base + 22}" width="44" height="1.4" fill="${gold}"/>`}<path fill="#3b4660" d="${sl.d}"/>`;
+    body += `${low ? "" : `<rect x="${x0 + 2}" y="${base + 22}" width="44" height="1.4" fill="${gold}"/>`}<path fill="${tintC(s.ink, 0.28)}" d="${sl.d}"/>`;
   }
 
-  const m = M7[motif](b, id, s);
-  body = motif === "swoosh" ? m + body : body + m;
+  // The state's symbol, small and in one colour, between metal hairlines.
+  const sz = 46;
+  if (!horizontal) {
+    const cx = W7 / 2, top = Math.max(8, b.y - 16 - sz);
+    body += symbol(s.state, cx - sz / 2, top, sz, acc);
+    const ry = top + sz / 2;
+    body += `<rect x="${cx - sz / 2 - 74}" y="${ry - 0.6}" width="62" height="1.2" fill="${gold}"/><rect x="${cx + sz / 2 + 12}" y="${ry - 0.6}" width="62" height="1.2" fill="${gold}"/>
+<path d="${diamond(cx - sz / 2 - 78, ry, 2.6)}${diamond(cx + sz / 2 + 78, ry, 2.6)}" fill="${gold}"/>`;
+  } else {
+    const top = Math.max(8, b.y - 14 - sz);
+    body += symbol(s.state, b.x, top, sz, acc);
+    body += `<rect x="${b.x + sz + 12}" y="${top + sz / 2 - 0.6}" width="96" height="1.2" fill="${gold}"/><path d="${diamond(b.x + sz + 112, top + sz / 2, 2.6)}" fill="${gold}"/>`;
+  }
   return defs(id, s) + body;
+}
+
+const BL = reg("blackletter9", "unifrakturmaguntia", 400);
+const EXI = reg("expressItalic9", "playfair-display", 800, "italic");
+function gothic(s, cfg) {
+  const id = s.slug.replace(/[^a-z]/g, "");
+  const slogan = cfg[6];
+  const name = `The ${s.state}`;
+  const size = fit(BL, name, 92, W7 - 70);
+  const a = textC(BL, name, size, W7 / 2, 100);
+  const e = textC(EXI, "Express", 54, W7 / 2, 184);
+  const sx = W7 / 2 - e.w / 2 - 22, sx2 = W7 / 2 + e.w / 2 + 22;
+  const sl = textC(sloganFont, slogan, 17, W7 / 2, 246);
+  return defs(id, s) + `<path fill="url(#${id}ink)" d="${a.d}"/>
+<path fill="url(#${id}acc)" d="${e.d}"/>
+<path d="${star(sx, 178, 7)}${star(sx - 20, 178, 5)}${star(sx2, 178, 7)}${star(sx2 + 20, 178, 5)}" fill="url(#${id}ink)"/>
+<rect x="${W7 / 2 - 150}" y="216" width="300" height="2" fill="url(#${id}gold)"/><rect x="${W7 / 2 - 150}" y="220.5" width="300" height="0.7" fill="url(#${id}gold)"/>
+<path fill="${tintC(s.ink, 0.28)}" d="${sl.d}"/>`;
 }
 
 const made7 = [];
@@ -434,7 +631,7 @@ const cards7 = made7
 <figcaption><b>${s.name}</b><span>${s.domain}</span></figcaption></figure>`)
   .join("\n");
 fs.writeFileSync(
-  path.join(HERE, "logouri-sua-v7.html"),
+  path.join(HERE, "logouri-sua-v9.html"),
   `<!doctype html><html lang="ro"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sigle SUA premium</title>
 <style>:root{--bg:#e6e3dc;--card:#fff;--ink:#111;--mute:#6b6b6b}
 body{margin:0;background:var(--bg);font-family:Arial,sans-serif;color:var(--ink)}
@@ -442,6 +639,6 @@ header{padding:28px 16px 8px;max-width:1240px;margin:0 auto}h1{margin:0 0 6px;fo
 main{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:10px;padding:16px;max-width:1240px;margin:0 auto}
 figure{margin:0;background:var(--card)}.logo{padding:10px 16px}.logo img{width:100%;height:auto;display:block}
 figcaption{padding:8px 14px 12px;display:flex;flex-direction:column;gap:2px;font-size:13px;border-top:1px solid #eee}figcaption span{color:var(--mute)}</style></head>
-<body><header><h1>50 de sigle, varianta premium</h1><p>Stilul rețelei Expres, cu elemente desenate, accente aurii și slogan cursiv.</p></header><main>${cards7}</main></body></html>`
+<body><header><h1>50 de sigle, varianta finală</h1><p>Paletă proprie, simbolul statului mic și într-o singură culoare, gotic la statele istorice.</p></header><main>${cards7}</main></body></html>`
 );
 console.log(`v7 made ${made7.length}`);
