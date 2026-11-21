@@ -38,6 +38,9 @@ export default function HomeLive({
   lottery?: LotteryDraw[] | null;
   airports?: AirportStatus[] | null;
   launches?: Launch[] | null;
+  quakes?: unknown;
+  fires?: unknown;
+  outline?: unknown;
 }) {
   const pal = PALETTE[site.slug] || { ink: "#14213d", acc: site.accent };
   const tz = TZ[site.state] || "America/New_York";

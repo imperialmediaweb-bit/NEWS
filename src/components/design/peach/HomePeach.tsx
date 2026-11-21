@@ -56,6 +56,9 @@ export default function HomePeach({
   lottery?: LotteryDraw[] | null;
   airports?: AirportStatus[] | null;
   launches?: Launch[] | null;
+  quakes?: unknown;
+  fires?: unknown;
+  outline?: unknown;
 }) {
   const p = peachOf(site);
   const tz = TZ[site.state] || "America/New_York";

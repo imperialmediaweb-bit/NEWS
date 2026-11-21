@@ -60,6 +60,9 @@ export default function HomeTabloid({
   lottery?: LotteryDraw[] | null;
   airports?: AirportStatus[] | null;
   launches?: Launch[] | null;
+  quakes?: unknown;
+  fires?: unknown;
+  outline?: unknown;
 }) {
   const t = tabOf(site);
   const tz = TZ[site.state] || "America/New_York";

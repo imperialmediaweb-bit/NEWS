@@ -1,4 +1,5 @@
 import counties from "@/config/counties/us-counties.json";
+import outlines from "@/config/state-outlines.json";
 
 /**
  * Real local data for the per-state designs. Every source is official and
@@ -54,6 +55,16 @@ export const WEATHER_CITIES: Record<string, Array<[string, number, number]>> = {
     ["Pensacola", 30.4213, -87.2169],
     ["Fort Myers", 26.6406, -81.8723],
     ["Key West", 24.5551, -81.78],
+  ],
+  California: [
+    ["Los Angeles", 34.0522, -118.2437],
+    ["San Francisco", 37.7749, -122.4194],
+    ["San Diego", 32.7157, -117.1611],
+    ["Sacramento", 38.5816, -121.4944],
+    ["Fresno", 36.7378, -119.7871],
+    ["San Jose", 37.3382, -121.8863],
+    ["Redding", 40.5865, -122.3917],
+    ["Palm Springs", 33.8303, -116.5453],
   ],
   Georgia: [
     ["Atlanta", 33.749, -84.388],
@@ -355,5 +366,53 @@ export async function getSpaceCoastLaunches(): Promise<Launch[] | null> {
 /** Airports shown in each state's airport module (FAA codes). */
 export const STATE_AIRPORTS: Record<string, Array<[string, string]>> = {
   Georgia: [["ATL", "Atlanta Hartsfield-Jackson"], ["SAV", "Savannah/Hilton Head"]],
+  California: [["LAX", "Los Angeles"], ["SFO", "San Francisco"], ["SAN", "San Diego"], ["SJC", "San Jose"], ["SMF", "Sacramento"]],
   Florida: [["MIA", "Miami"], ["MCO", "Orlando"], ["TPA", "Tampa"], ["FLL", "Fort Lauderdale"], ["JAX", "Jacksonville"]],
 };
+
+// ── earthquakes in a state's box, past 7 days, magnitude 2.5+ (USGS) ──
+
+export interface StateOutline { d: string; w: number; h: number; lon0: number; lat0: number; k: number; c: number }
+export function outlineOf(state: string): StateOutline | null {
+  return (outlines as Record<string, StateOutline>)[state] || null;
+}
+
+export interface Quake { mag: number; place: string; time: number; url: string; lon: number; lat: number }
+
+export async function getStateQuakes(state: string): Promise<Quake[] | null> {
+  const o = outlineOf(state);
+  if (!o) return null;
+  const minLat = o.lat0 - o.h / o.k;
+  const maxLon = o.lon0 + o.w / (o.k * o.c);
+  const since = new Date(Date.now() - 7 * 86400000).toISOString().slice(0, 10);
+  return cached(`usgs:${state}`, async () => {
+    const j = await getJson(`https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=${since}&minmagnitude=2.5&minlatitude=${minLat.toFixed(2)}&maxlatitude=${o.lat0.toFixed(2)}&minlongitude=${o.lon0.toFixed(2)}&maxlongitude=${maxLon.toFixed(2)}&orderby=time&limit=200`, 8000);
+    const abbr = /,\s*([A-Z]{2}|[A-Za-z ]+)$/;
+    return ((j.features || []) as Array<{ properties: Record<string, unknown>; geometry: { coordinates: number[] } }>)
+      .map((f) => ({ mag: Number(f.properties.mag), place: String(f.properties.place || ""), time: Number(f.properties.time), url: String(f.properties.url || ""), lon: f.geometry.coordinates[0], lat: f.geometry.coordinates[1] }))
+      // the box also holds neighbours and the sea; keep quakes USGS places in the state or just off its coast
+      .filter((q) => {
+        const tail = (q.place.match(abbr) || [])[1] || "";
+        return tail === state || tail === STATE_ABBR[state] || /offshore|coast/i.test(q.place) && q.place.includes(state);
+      });
+  });
+}
+
+const STATE_ABBR: Record<string, string> = { California: "CA", Alaska: "Alaska", Hawaii: "Hawaii", Oregon: "Oregon", Washington: "Washington", Nevada: "Nevada", Utah: "Utah", Idaho: "Idaho", Montana: "Montana", Wyoming: "Wyoming", Oklahoma: "Oklahoma", Texas: "Texas", "New Mexico": "New Mexico", Arizona: "Arizona" };
+
+// ── active wildfires in a state (NIFC, Wildland Fire Interagency Geospatial Services) ──
+export interface Fire { name: string; acres: number; contained: number | null; county: string; discovered: number }
+
+export async function getStateFires(abbr: string): Promise<Fire[] | null> {
+  return cached(`nifc:${abbr}`, async () => {
+    const where = encodeURIComponent(`POOState='US-${abbr}' AND IncidentTypeCategory='WF' AND IncidentSize>=10 AND (PercentContained IS NULL OR PercentContained<100)`);
+    const j = await getJson(`https://services3.arcgis.com/T4QMspbfLg3qTGWY/arcgis/rest/services/WFIGS_Incident_Locations_Current/FeatureServer/0/query?where=${where}&outFields=IncidentName,IncidentSize,PercentContained,POOCounty,FireDiscoveryDateTime&orderByFields=IncidentSize%20DESC&resultRecordCount=8&f=json`, 8000);
+    return ((j.features || []) as Array<{ attributes: Record<string, unknown> }>).map((f) => ({
+      name: String(f.attributes.IncidentName || "").toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase()),
+      acres: Math.round(Number(f.attributes.IncidentSize || 0)),
+      contained: f.attributes.PercentContained == null ? null : Number(f.attributes.PercentContained),
+      county: String(f.attributes.POOCounty || ""),
+      discovered: Number(f.attributes.FireDiscoveryDateTime || 0),
+    }));
+  });
+}

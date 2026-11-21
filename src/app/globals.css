@@ -286,3 +286,10 @@ body {
 .tb-hero .lv-cinema [data-slide-cta] { border-radius: 0; font-family: var(--tb-cond), sans-serif; font-style: italic; text-transform: uppercase; font-size: 18px; }
 .tb-hero .lv-cinema [data-slide-image] > div[aria-hidden] { background: linear-gradient(180deg, rgba(0,20,28,0) 25%, rgba(0,20,28,.55) 55%, rgba(0,20,28,.95)), linear-gradient(90deg, rgba(0,20,28,.55), transparent 60%) !important; }
 .tb-hero .lv-cinema [data-slide-content] { padding-left: clamp(18px, 2.4vw, 36px); padding-right: clamp(18px, 2.4vw, 36px); }
+/* Magazine (California): the Imperial slider in elegant serif */
+.mg-hero .lv-cinema [data-slide-title] { font-family: var(--mg-serif), Georgia, serif; font-weight: 600; font-size: clamp(26px, 2.8vw, 42px); line-height: 1.08; }
+.mg-hero .lv-cinema [data-slide-subtitle] { font-family: var(--mg-serif), Georgia, serif; }
+.mg-hero .lv-cinema [data-slide-eyebrow] { border-radius: 0; letter-spacing: .14em; }
+.mg-hero .lv-cinema [data-slide-cta] { border-radius: 0; background: transparent; border-bottom: 2px solid var(--lv-acc); padding: 6px 0; box-shadow: none; }
+.mg-hero .lv-cinema [data-slide-image] > div[aria-hidden] { background: linear-gradient(180deg, rgba(8,24,44,0) 35%, rgba(8,24,44,.55) 62%, rgba(8,24,44,.93)) !important; }
+.mg-hero .lv-cinema [data-slide-content] { padding-left: clamp(18px, 2.4vw, 32px); padding-right: clamp(18px, 2.4vw, 32px); }

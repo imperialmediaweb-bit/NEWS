@@ -8,6 +8,7 @@ import { getHomepageArticles } from "@/lib/homepage-data";
 import ArticleLive from "@/components/design/live/ArticleLive";
 import ArticlePeach from "@/components/design/peach/ArticlePeach";
 import ArticleTabloid from "@/components/design/tabloid/ArticleTabloid";
+import ArticleMagazine from "@/components/design/magazine/ArticleMagazine";
 import { getSiteByDomain, getActiveSite } from "@/config/sites";
 import pool from "@/lib/db";
 import { getSiteId } from "@/lib/site-id";
@@ -315,7 +316,7 @@ export default async function ArticlePage({
         }))
       : null;
 
-  const ArticleView = design.family === "peach" ? ArticlePeach : design.family === "tabloid" ? ArticleTabloid : ArticleLive;
+  const ArticleView = { peach: ArticlePeach, tabloid: ArticleTabloid, magazine: ArticleMagazine, live: ArticleLive }[design.family || "live"];
   return (
     <>
       <link rel="amphtml" href={ampUrl} />
