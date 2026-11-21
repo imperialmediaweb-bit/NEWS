@@ -70,6 +70,7 @@ export default function CategoryPeach({
   const sub = SUB[slug];
   const subList = sub ? take(stories.concat(latestState).filter((a) => sub[1].test(a.title)), 4) : [];
   const rest = take(stories, 12);
+  const sideLatest = take(latestState, 4);
   const stateLatest = take(latestState, 8);
   const about = (ABOUT[slug] || ((st: string) => `The latest ${label.toLowerCase()} from across ${st}.`))(site.state);
   const W = "mx-auto max-w-[1360px] px-4";
@@ -119,6 +120,17 @@ export default function CategoryPeach({
                     </span>
                   </a>
                 ))}
+                {sideLatest.length > 0 && (
+                  <div className="rounded-md bg-[var(--pc-ink)] p-5 text-white">
+                    <p className="mb-2 flex items-center gap-2 text-[13px] font-extrabold uppercase tracking-[.06em] text-[var(--pc-acc)]"><span className="pc-dot" aria-hidden /> Now in {site.state}</p>
+                    {sideLatest.map((a) => (
+                      <a key={a.slug} href={href(a)} className="flex gap-3 border-t border-white/15 py-2 first:border-0">
+                        <span className="w-14 shrink-0 pt-0.5 text-[12px] font-bold text-[#ffc4ad]">{hour(a, tz)}</span>
+                        <span className="text-[14.5px] font-semibold leading-snug hover:text-[#ffc4ad]">{a.title}</span>
+                      </a>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
           </section>

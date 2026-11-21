@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { Fragment, useEffect } from "react";
 
 /**
  * The page effects of the peach family, rebuilt from Imperial Design without
@@ -77,9 +77,9 @@ export function SplitWords({ text, className = "" }: { text: string; className?:
   return (
     <span className={`pc-split ${className}`}>
       {text.split(/\s+/).map((w, i) => (
-        <span key={i} className="pc-w" style={{ ["--i" as string]: i } as React.CSSProperties}>
-          {w}{" "}
-        </span>
+        <Fragment key={i}>
+          <span className="pc-w" style={{ ["--i" as string]: i } as React.CSSProperties}>{w}</span>{" "}
+        </Fragment>
       ))}
     </span>
   );

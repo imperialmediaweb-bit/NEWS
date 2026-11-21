@@ -194,7 +194,7 @@ export default function ArticlePeach({
           )}
           <div className="rounded-md border border-[var(--pc-cu)]/30 bg-white p-5">
             <PHead icon={Ico.pin}>Your county</PHead>
-            <CountySearch state={site.state} counties={counties} popular={[]} />
+            <CountySearch state={site.state} counties={counties} popular={["Fulton", "Gwinnett", "Cobb", "DeKalb", "Chatham", "Richmond"].filter((c) => counties.includes(c))} />
           </div>
           <AlertsBox name={site.name} state={site.state} />
         </aside>
