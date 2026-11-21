@@ -45,6 +45,16 @@ export const WEATHER_CITIES: Record<string, Array<[string, number, number]>> = {
     ["Corpus Christi", 27.8006, -97.3964],
     ["Brownsville", 25.9017, -97.4975],
   ],
+  Georgia: [
+    ["Atlanta", 33.749, -84.388],
+    ["Augusta", 33.4735, -82.0105],
+    ["Savannah", 32.0809, -81.0912],
+    ["Macon", 32.8407, -83.6324],
+    ["Columbus", 32.461, -84.9877],
+    ["Athens", 33.9519, -83.3576],
+    ["Valdosta", 30.8327, -83.2785],
+    ["Brunswick", 31.1499, -81.4915],
+  ],
 };
 
 export interface CityWeather {

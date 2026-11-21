@@ -11,11 +11,13 @@
  *
  * Only the look changes: the same addresses, articles and structured data.
  */
-export type DesignFamily = "live";
+export type DesignFamily = "live" | "peach";
 
 const DESIGNS: Record<string, DesignFamily> = {
   // 21.11.2026: pilot, built from the generated Texas mockup (live-news family).
   "texas-express": "live",
+  // 21.11.2026: Georgia, from its generated mockup (peach family).
+  "georgia-express": "peach",
 };
 
 export function designFor(slug: string): DesignFamily | null {
