@@ -108,6 +108,17 @@ export async function POST(req: NextRequest) {
     actions.push("facebook_post");
   }
 
+  // ─── Google News per state: every 30 min, five states at a time ───
+  // The searches the Romanian Expres network runs per county: each state's
+  // cities, politics, business, sports and life, resolved to the publisher
+  // (api/pipeline/gnews). Ten slots, so each state comes round every five
+  // hours. Off with GNEWS=0 on Railway.
+  if (process.env.GNEWS !== "0" && (await claimJob("gnews", 30 * 60)).claimed) {
+    const slot = Math.floor(Date.now() / (30 * 60 * 1000));
+    fireAndForgetGet(baseUrl, `pipeline/gnews?slot=${slot}`, secret);
+    actions.push("gnews");
+  }
+
   // ─── Opinion: every 12h ───
   if ((await claimJob("opinion", 12 * 60 * 60)).claimed) {
     fireAndForget(baseUrl, "pipeline/opinion", {}, secret);
