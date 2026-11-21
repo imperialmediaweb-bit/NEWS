@@ -4,6 +4,8 @@ import type { CityWeather, Storm, WeatherAlert, GasPrices, LotteryDraw } from "@
 import CountySearch from "./CountySearch";
 import AlertsBox from "./AlertsBox";
 import MobileMenu from "./MobileMenu";
+import HeroCinema from "./HeroCinema";
+import Reveal from "./Reveal";
 import { serif, sans, PALETTE, TZ, href, hour, ago, WxIcon, SectionTitle, NAV, LiveTopBar, LiveFooter } from "./shared";
 
 /**
@@ -68,6 +70,10 @@ export default function HomeLive({
   // As in the mockup, always Politics, Business and Sports. Stories filed
   // under those categories come first; until there are enough, stories whose
   // headline is about the subject fill the block.
+  const heroSlides = [lead, ...articles.heroSide].filter((a, i, arr) => a && arr.findIndex((b) => b.slug === a.slug) === i).slice(0, 5).map((a) => {
+    used.add(a.slug);
+    return { id: a.slug, image: a.img, title: a.title, subtitle: a.summary, eyebrow: a.category.replace(/-/g, " ").toUpperCase(), href: href(a) };
+  });
   const topStories = take(pool, 4);
   // Full-width section rows, from each section's own stories.
   const secPol = take(sections?.politics || [], 6);
@@ -87,6 +93,7 @@ export default function HomeLive({
   const safety = take(pool.filter((a) => TOPICS[3][1].test(a.title)), 4);
   const education = take(pool.filter((a) => TOPICS[4][1].test(a.title)), 4);
   const mostRead = take(articles.popular.concat(articles.trending), 5);
+  const moreNews = take(pool, 20);
   const breaking = live[0] || lead;
   const capital = weather[0];
   const popularCounties = ["Harris", "Dallas", "Tarrant", "Bexar", "Travis", "Collin", "Denton", "El Paso", "Hidalgo", "Lubbock"].filter((c) => counties.includes(c));
@@ -94,7 +101,7 @@ export default function HomeLive({
   const nav = NAV;
 
   return (
-    <div className={`${sans.className} min-h-screen bg-white text-[#1b2233]`} style={{ ["--lv-ink" as string]: pal.ink, ["--lv-acc" as string]: pal.acc }}>
+    <div className={`${sans.className} min-h-screen overflow-x-hidden bg-white text-[#1b2233]`} style={{ ["--lv-ink" as string]: pal.ink, ["--lv-acc" as string]: pal.acc }}>
       <LiveTopBar site={site} capital={capital} />
       {/* masthead */}
       <header className="border-b border-[#dde1ea]">
@@ -107,14 +114,14 @@ export default function HomeLive({
           </a>
           <a href="/search" aria-label="Search" className="flex h-11 w-11 items-center justify-center text-[var(--lv-ink)]"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" aria-hidden><circle cx="10.5" cy="10.5" r="7" /><path d="M16 16l6 6" strokeLinecap="round" /></svg></a>
         </div>
-        <div className="mx-auto hidden max-w-[1240px] px-4 pt-1 text-center md:block">
+        <div className="mx-auto hidden max-w-[1400px] px-4 pt-1 text-center md:block">
           <a href="/" aria-label={site.name}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={logo} alt={site.name} width={320} height={160} className="mx-auto h-[160px] w-auto" />
           </a>
         </div>
         <nav className="hidden border-t border-[#dde1ea] md:block">
-          <ul className="mx-auto flex max-w-[1240px] items-center justify-center gap-2 px-4 text-[18px] font-bold text-[var(--lv-ink)]">
+          <ul className="mx-auto flex max-w-[1400px] items-center justify-center gap-2 px-4 text-[18px] font-bold text-[var(--lv-ink)]">
             {nav.map(([l, h], i) => (
               <li key={l} className="flex items-center">
                 {i > 0 && <span className="mx-5 h-5 w-px bg-[#cfd4e0]" aria-hidden />}
@@ -128,7 +135,7 @@ export default function HomeLive({
 
       {/* breaking bar */}
       <a href={href(breaking)} className="block bg-[var(--lv-acc)] text-white">
-        <div className="mx-auto flex max-w-[1240px] items-center gap-3 px-4 py-2 md:gap-4 md:py-3">
+        <div className="mx-auto flex max-w-[1400px] items-center gap-3 px-4 py-2 md:gap-4 md:py-3">
           <span className="relative -my-2 -ml-4 flex shrink-0 items-center bg-[#8f0a24] py-2 pl-4 pr-6 text-[15px] md:-my-3 md:py-3 md:pr-7 md:text-[22px] font-extrabold uppercase tracking-wide [clip-path:polygon(0_0,calc(100%-14px)_0,100%_50%,calc(100%-14px)_100%,0_100%)]">
             {breaking.iso && Date.now() - new Date(breaking.iso).getTime() < 90 * 60000 ? "Breaking" : "Latest"}
           </span>
@@ -137,21 +144,15 @@ export default function HomeLive({
         </div>
       </a>
 
-      <main className="mx-auto max-w-[1240px] px-4">
+      {/* cinematic hero: the day's top stories (Imperial Design System slider) */}
+      <HeroCinema slides={heroSlides} />
+      <Reveal />
+
+      <main className="mx-auto max-w-[1400px] px-4">
         {/* lead + live column */}
-        <section className="mt-5 grid gap-5 lg:grid-cols-[1fr_340px]">
-          <a href={href(lead)} className="group relative block min-h-[420px] overflow-hidden bg-[#0d1730]">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={lead.img} alt="" className="absolute inset-0 h-full w-full object-cover opacity-90 transition-transform duration-700 group-hover:scale-[1.02]" />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/45 to-transparent" />
-            <div className="relative flex h-full max-w-[560px] flex-col justify-center p-7 text-white">
-              <span className="mb-3 w-fit bg-[var(--lv-acc)] px-2.5 py-1 text-[12px] font-bold uppercase tracking-wider">Top story</span>
-              <h1 className={`${serif.className} text-[34px] font-extrabold leading-[1.1] md:text-[42px]`}>{lead.title}</h1>
-              {lead.summary && <p className="mt-3 text-[16px] leading-relaxed text-white/90">{lead.summary}</p>}
-              <p className="mt-4 text-[13px] text-white/80">By {lead.author} · {ago(lead)}</p>
-            </div>
-          </a>
-          <aside className="border border-[#dde1ea] bg-[#f6f7fb] p-4">
+        {/* brief · local module · counties */}
+        <section className="lv-reveal mt-6 grid gap-5 md:grid-cols-3">
+          <aside className="border border-[#dde1ea] border-t-4 border-t-[var(--lv-acc)] bg-[#f6f7fb] p-4">
             <h2 className="flex items-center gap-2 text-[18px] font-extrabold uppercase text-[var(--lv-acc)]"><span className="h-2.5 w-2.5 rounded-full bg-[var(--lv-acc)]" /> Live updates</h2>
             <p className="mb-2 text-[13px] text-[#5a6275]">{site.state} stories as they publish</p>
             <ol className="relative border-l-2 border-[var(--lv-acc)]/30 pl-4">
@@ -165,10 +166,7 @@ export default function HomeLive({
             </ol>
             <a href="/local-news" className="mt-2 block text-right text-[12px] font-bold uppercase text-[var(--lv-ink)] hover:underline">All {site.state} news →</a>
           </aside>
-        </section>
 
-        {/* brief · local module · counties */}
-        <section className="mt-6 grid gap-5 md:grid-cols-3">
           <div className="border border-[#dde1ea] p-4">
             <SectionTitle>Today in brief</SectionTitle>
             <ol className="space-y-3">
@@ -212,18 +210,6 @@ export default function HomeLive({
               </div>
             </div>
           )}
-
-          <div className="border border-[#dde1ea] p-4">
-            <div className="mb-3 flex items-start gap-3">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={`/logos/outline/${site.slug}.svg`} alt="" className="h-10 w-10 shrink-0" />
-              <div>
-                <h2 className="text-[19px] font-extrabold uppercase tracking-wide text-[var(--lv-ink)]">Your county</h2>
-                <p className="text-[12px] text-[#5a6275]">News for all {counties.length} {site.state} counties</p>
-              </div>
-            </div>
-            <CountySearch state={site.state} counties={counties} popular={popularCounties} />
-          </div>
         </section>
 
         {/* weather strip */}
@@ -277,6 +263,19 @@ export default function HomeLive({
           </div>
         )}
 
+        {/* your county */}
+        <section className="lv-reveal mt-6 grid items-start gap-6 bg-gradient-to-r from-[#eef2fa] to-[#f7f8fc] p-5 md:grid-cols-[1fr_2fr]">
+          <div className="flex items-start gap-3">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={`/logos/outline/${site.slug}.svg`} alt="" className="h-14 w-14 shrink-0" />
+            <div>
+              <h2 className={`${serif.className} text-[28px] font-bold text-[var(--lv-ink)]`}>Your county</h2>
+              <p className="text-[14px] text-[#4a5266]">News for all {counties.length} {site.state} counties, in one place.</p>
+            </div>
+          </div>
+          <CountySearch state={site.state} counties={counties} popular={popularCounties} />
+        </section>
+
         {/* official weather alerts */}
         {alerts && alerts.length > 0 && (
           <section className="mt-3 border-l-4 border-[#d9480f] bg-[#fff4ec] p-4">
@@ -292,11 +291,11 @@ export default function HomeLive({
 
         {/* top stories */}
         {topStories.length >= 3 && (
-          <section className="mt-10">
+          <section className="lv-reveal mt-10">
             <SectionTitle>Top stories</SectionTitle>
             <div className="grid gap-x-5 gap-y-6 sm:grid-cols-2 lg:grid-cols-4">
               {topStories.map((a) => (
-                <a key={a.slug} href={href(a)} className="group block">
+                <a key={a.slug} href={href(a)} className="lv-lift lv-zoom group block overflow-hidden">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={a.img} alt="" className="aspect-[3/2] w-full object-cover" loading="lazy" />
                   <p className="mt-2 text-[11px] font-extrabold uppercase tracking-wider text-[var(--lv-acc)]">{a.category.replace(/-/g, " ")}</p>
@@ -309,8 +308,9 @@ export default function HomeLive({
 
         {/* politics row: lead left, headlines right */}
         {secPol.length >= 3 && (
-          <section className="mt-12">
-            <SectionTitle href="/politics">Politics</SectionTitle>
+          <section className="lv-reveal relative left-1/2 w-screen -translate-x-1/2 mt-12 bg-[#eef2fa] py-10">
+            <div className="mx-auto max-w-[1400px] px-4">
+            <div className="mb-4 flex items-center gap-3"><h2 className="text-[22px] font-extrabold uppercase tracking-wide text-[var(--lv-ink)]"><a href="/politics" className="hover:underline">Politics</a></h2><span className="h-[2px] flex-1 bg-[var(--lv-acc)]" /></div>
             <div className="grid gap-6 lg:grid-cols-[1.5fr_1fr]">
               <a href={href(secPol[0])} className="group relative block overflow-hidden">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -330,12 +330,14 @@ export default function HomeLive({
                 ))}
               </ul>
             </div>
+            </div>
           </section>
         )}
 
         {/* sports band */}
         {secSpo.length >= 3 && (
-          <section className="-mx-4 mt-12 bg-[var(--lv-ink)] px-4 py-8 text-white">
+          <section className="lv-reveal relative left-1/2 w-screen -translate-x-1/2 mt-12 bg-gradient-to-br from-[var(--lv-ink)] to-[#06102a] py-10 text-white">
+            <div className="mx-auto max-w-[1400px] px-4">
             <div className="mb-4 flex items-center gap-3">
               <h2 className="text-[22px] font-extrabold uppercase tracking-wide"><a href="/sports" className="hover:underline">{site.state} Sports</a></h2>
               <span className="h-[2px] flex-1 bg-[var(--lv-acc)]" />
@@ -348,20 +350,22 @@ export default function HomeLive({
                 {secSpo[0].summary && <p className="mt-1 line-clamp-3 text-[14px] text-white/75">{secSpo[0].summary}</p>}
               </a>
               {secSpo.slice(1, 5).map((a) => (
-                <a key={a.slug} href={href(a)} className="group block">
+                <a key={a.slug} href={href(a)} className="lv-lift lv-zoom group block overflow-hidden">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={a.img} alt="" className="aspect-[16/9] w-full object-cover opacity-95" loading="lazy" />
                   <h3 className={`${serif.className} mt-2 text-[17px] font-bold leading-snug group-hover:underline`}>{a.title}</h3>
                 </a>
               ))}
             </div>
+            </div>
           </section>
         )}
 
         {/* business row: three columns */}
         {secBiz.length >= 3 && (
-          <section className="mt-12">
-            <SectionTitle href="/business">Business &amp; Economy</SectionTitle>
+          <section className="lv-reveal relative left-1/2 w-screen -translate-x-1/2 mt-12 bg-[#eef7f1] py-10">
+            <div className="mx-auto max-w-[1400px] px-4">
+            <div className="mb-4 flex items-center gap-3"><h2 className="text-[22px] font-extrabold uppercase tracking-wide text-[#1f6b3a]"><a href="/business" className="hover:underline">Business &amp; Economy</a></h2><span className="h-[2px] flex-1 bg-[#1f6b3a]" /></div>
             <div className="grid gap-6 md:grid-cols-3">
               {secBiz.slice(0, 3).map((a) => (
                 <a key={a.slug} href={href(a)} className="group block border-t-4 border-[var(--lv-ink)] pt-3">
@@ -372,13 +376,15 @@ export default function HomeLive({
                 </a>
               ))}
             </div>
+            </div>
           </section>
         )}
 
         {/* life & culture mosaic */}
         {secLife.length >= 4 && (
-          <section className="mt-12">
-            <SectionTitle href="/life">Life &amp; Culture</SectionTitle>
+          <section className="lv-reveal relative left-1/2 w-screen -translate-x-1/2 mt-12 bg-gradient-to-b from-[#fbf3ea] to-[#fff8f1] py-10">
+            <div className="mx-auto max-w-[1400px] px-4">
+            <div className="mb-4 flex items-center gap-3"><h2 className="text-[22px] font-extrabold uppercase tracking-wide text-[#c2560c]"><a href="/life" className="hover:underline">Life &amp; Culture</a></h2><span className="h-[2px] flex-1 bg-[#e8892f]" /></div>
             <div className="grid gap-3 md:grid-cols-4 md:grid-rows-2">
               {secLife.slice(0, 5).map((a, i) => (
                 <a key={a.slug} href={href(a)} className={`group relative block overflow-hidden ${i === 0 ? "md:col-span-2 md:row-span-2" : ""}`}>
@@ -389,12 +395,13 @@ export default function HomeLive({
                 </a>
               ))}
             </div>
+            </div>
           </section>
         )}
 
         {/* lottery */}
         {lottery && lottery.length > 0 && (
-          <section className="mt-12 grid gap-5 md:grid-cols-2">
+          <section className="lv-reveal mt-12 grid gap-5 md:grid-cols-2">
             {lottery.map((d) => (
               <div key={d.game} className="border border-[#dde1ea] p-5">
                 <div className="flex items-baseline justify-between">
@@ -415,11 +422,11 @@ export default function HomeLive({
 
         {/* latest news grid */}
         {latestGrid.length >= 3 && (
-          <section className="mt-10">
+          <section className="lv-reveal mt-10">
             <SectionTitle href="/local-news">Latest news</SectionTitle>
             <div className="grid gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
               {latestGrid.map((a) => (
-                <a key={a.slug} href={href(a)} className="group block">
+                <a key={a.slug} href={href(a)} className="lv-lift lv-zoom group block overflow-hidden">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={a.img} alt="" className="aspect-[16/9] w-full object-cover" loading="lazy" />
                   <p className="mt-2 text-[12px] font-bold uppercase text-[var(--lv-acc)]">{ago(a)}</p>
@@ -440,7 +447,7 @@ export default function HomeLive({
                 <div key={c}>
                   <h3 className="mb-2 border-b-2 border-[var(--lv-ink)] pb-1 text-[15px] font-extrabold uppercase tracking-wide text-[var(--lv-ink)]">{c}</h3>
                   {list[0] && (
-                    <a href={href(list[0])} className="group block">
+                    <a href={href(list[0])} className="lv-lift lv-zoom group block overflow-hidden">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={list[0].img} alt="" className="aspect-[16/10] w-full object-cover" loading="lazy" />
                       <span className={`${serif.className} mt-2 block text-[17px] font-bold leading-snug group-hover:text-[var(--lv-acc)]`}>{list[0].title}</span>
@@ -459,7 +466,7 @@ export default function HomeLive({
 
         {/* safety · education · most read */}
         {(safety.length >= 2 || education.length >= 2 || mostRead.length >= 3) && (
-          <section className="mt-10 grid gap-8 lg:grid-cols-3">
+          <section className="lv-reveal mt-10 grid gap-8 lg:grid-cols-3">
             {safety.length >= 2 && (
               <div>
                 <SectionTitle>Crime &amp; Safety</SectionTitle>
@@ -505,7 +512,7 @@ export default function HomeLive({
 
         {/* opinion */}
         {opinion.length > 0 && (
-          <section className="mt-8">
+          <section className="lv-reveal mt-8">
             <SectionTitle href="/opinion">Opinion</SectionTitle>
             <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
               {opinion.map((a, i) => (
@@ -520,6 +527,26 @@ export default function HomeLive({
                 </a>
               ))}
             </div>
+          </section>
+        )}
+
+        {/* more news */}
+        {moreNews.length > 0 && (
+          <section className="lv-reveal mt-12">
+            <SectionTitle href="/local-news">More from {site.state}</SectionTitle>
+            <ul className="grid gap-x-8 md:grid-cols-2">
+              {moreNews.map((a) => (
+                <li key={a.slug} className="lv-zoom flex gap-4 overflow-hidden border-b border-[#e3e6ee] py-4">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={a.img} alt="" className="h-24 w-36 shrink-0 object-cover" loading="lazy" />
+                  <span>
+                    <span className="text-[11px] font-extrabold uppercase tracking-wider text-[var(--lv-acc)]">{a.category.replace(/-/g, " ")}</span>
+                    <a href={href(a)} className={`${serif.className} block text-[18px] font-bold leading-snug hover:text-[var(--lv-acc)]`}>{a.title}</a>
+                    <span className="mt-1 block text-[12px] text-[#6b7386]">{ago(a)}</span>
+                  </span>
+                </li>
+              ))}
+            </ul>
           </section>
         )}
 
