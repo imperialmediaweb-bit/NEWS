@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { sites } from "@/config/sites";
+import pool from "@/lib/db";
 import { parseFeed } from "@/lib/pipeline/rss-parser";
 import { duplicateReason, insertFeedItem, loadDedupContext } from "@/lib/pipeline/dedup";
 import { isRelevantToState } from "@/lib/pipeline/relevance";
@@ -34,6 +35,27 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   if (process.env.GNEWS === "0") return NextResponse.json({ skipped: "GNEWS=0" });
+
+  // What Google News brought in the last day and what became of it.
+  if (req.nextUrl.searchParams.get("report") === "1") {
+    const { rows: byStatus } = await pool.query(
+      `SELECT status, count(*)::int AS n FROM feed_items
+        WHERE source_feed LIKE 'gnews:%' AND created_at > NOW() - INTERVAL '24 hours'
+        GROUP BY status ORDER BY n DESC`
+    );
+    const { rows: reasons } = await pool.query(
+      `SELECT left(error_message, 90) AS reason, count(*)::int AS n FROM feed_items
+        WHERE source_feed LIKE 'gnews:%' AND created_at > NOW() - INTERVAL '24 hours' AND status = 'failed'
+        GROUP BY 1 ORDER BY n DESC LIMIT 8`
+    );
+    const { rows: published } = await pool.query(
+      `SELECT a.category, left(a.title, 90) AS title, s.state FROM articles a
+         JOIN feed_items f ON f.source_url = a.source_url JOIN sites s ON s.id = a.site_id
+        WHERE f.source_feed LIKE 'gnews:%' AND a.published_at > NOW() - INTERVAL '24 hours'
+        ORDER BY a.published_at DESC LIMIT 12`
+    ).catch(() => ({ rows: [] }));
+    return NextResponse.json({ byStatus, reasons, published });
+  }
 
   const all = Object.values(sites);
   const dry = req.nextUrl.searchParams.get("dry") === "1";
