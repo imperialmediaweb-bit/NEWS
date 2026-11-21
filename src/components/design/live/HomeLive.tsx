@@ -106,21 +106,19 @@ export default function HomeLive({
     ["Crime & Safety", /\b(police|sheriff|deput|arrest|charged|indicted|court|judge|crash|fire|shooting|killed|death|investigat|trooper|jail|prison|execution)\b/i, []],
     ["Education", /\b(school|isd|student|teacher|college|universit|campus|education|graduat)\b/i, []],
   ];
-  const blocks: Array<[string, string, HomeArticle[]]> = [];
-  for (const [label, re, tagged] of TOPICS) {
-    if (blocks.length >= 3) break;
-    const picked = take(tagged.concat(pool.filter((a) => re.test(a.title))), 4);
-    if (picked.length >= 2) blocks.push([label, "/local-news", picked]);
-  }
-  if (blocks.length < 3) {
-    const rest = take(pool, 4);
-    if (rest.length >= 2) blocks.push(["More from " + site.state, "/local-news", rest]);
-  }
+  // As in the mockup, always Politics, Business and Sports. Stories filed
+  // under those categories come first; until there are enough, stories whose
+  // headline is about the subject fill the block.
+  const blocks: Array<[string, string, HomeArticle[]]> = TOPICS.slice(0, 3).map(([label, re, tagged]) => [
+    label,
+    "/" + label.toLowerCase(),
+    take(tagged.concat(pool.filter((a) => re.test(a.title))), 4),
+  ]);
   const breaking = live[0] || lead;
   const capital = weather[0];
   const popularCounties = ["Harris", "Dallas", "Tarrant", "Bexar", "Travis", "Collin", "Denton", "El Paso", "Hidalgo", "Lubbock"].filter((c) => counties.includes(c));
   const logo = `/logos/${site.slug}.svg`;
-  const nav: Array<[string, string]> = [["Local", "/local-news"], ["Politics", "/politics"], ["Business", "/business"], ["Sports", "/sports"], ["Weather", "#weather"], ["Opinion", "/opinion"], ["Entertainment", "/entertainment"]];
+  const nav: Array<[string, string]> = [["Local", "/local-news"], ["Politics", "/politics"], ["Business", "/business"], ["Sports", "/sports"], ["Weather", "#weather"], ["Opinion", "/opinion"], ["Life", "/life"]];
 
   return (
     <div className={`${sans.className} min-h-screen bg-white text-[#1b2233]`} style={{ ["--lv-ink" as string]: pal.ink, ["--lv-acc" as string]: pal.acc }}>
@@ -286,7 +284,7 @@ export default function HomeLive({
 
         {/* three sections, three layouts */}
         <section className="mt-8 grid gap-6 lg:grid-cols-3">
-          {blocks.map(([label, link, list], i) => (
+          {blocks.map(([label, link, list], i) => list.length === 0 ? <div key={label} /> : (
             <div key={label} className={i === 1 ? "lg:border-x lg:border-[#e3e6ee] lg:px-6" : ""}>
               <SectionTitle href={link}>{label}</SectionTitle>
               {i === 1 ? (
