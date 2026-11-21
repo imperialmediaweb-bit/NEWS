@@ -15,6 +15,49 @@ import { Fragment, useEffect } from "react";
 export default function PeachFx() {
   useEffect(() => {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // Effects that hide content until it scrolls in apply only once this runs,
+    // so without JavaScript every paragraph and card is simply there.
+    if (!reduce) document.documentElement.classList.add("pcfx");
+
+    // article text: paragraphs, headings, quotes and pictures rise in; bold
+    // phrases get a marker sweep when they reach the screen
+    const parts = Array.from(document.querySelectorAll<HTMLElement>(".pc-article > *, .pc-article strong, .pc-article b"));
+    let io2: IntersectionObserver | null = null;
+    if (!reduce && "IntersectionObserver" in window) {
+      io2 = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting) {
+              e.target.classList.add("is-in");
+              io2?.unobserve(e.target);
+            }
+          }
+        },
+        { rootMargin: "0px 0px -8% 0px", threshold: 0.05 }
+      );
+      parts.forEach((el) => io2!.observe(el));
+    } else {
+      parts.forEach((el) => el.classList.add("is-in"));
+    }
+
+    // 3D tilt on story cards, desktop pointers only
+    const fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+    const onTilt = (ev: PointerEvent) => {
+      const card = (ev.target as HTMLElement | null)?.closest?.(".pc-card") as HTMLElement | null;
+      document.querySelectorAll<HTMLElement>(".pc-card.is-tilt").forEach((c) => {
+        if (c !== card) {
+          c.classList.remove("is-tilt");
+          c.style.transform = "";
+        }
+      });
+      if (!card) return;
+      const r = card.getBoundingClientRect();
+      const px = (ev.clientX - r.left) / r.width - 0.5;
+      const py = (ev.clientY - r.top) / r.height - 0.5;
+      card.classList.add("is-tilt");
+      card.style.transform = `perspective(900px) rotateY(${(px * 6).toFixed(2)}deg) rotateX(${(-py * 6).toFixed(2)}deg) translateY(-5px)`;
+    };
+    if (!reduce && fine) document.addEventListener("pointermove", onTilt, { passive: true });
 
     const els = Array.from(document.querySelectorAll<HTMLElement>(".pc-in"));
     let io: IntersectionObserver | null = null;
@@ -64,6 +107,8 @@ export default function PeachFx() {
 
     return () => {
       io?.disconnect();
+      io2?.disconnect();
+      document.removeEventListener("pointermove", onTilt);
       document.removeEventListener("pointermove", onMove);
       window.removeEventListener("scroll", onScroll);
       cancelAnimationFrame(raf);
