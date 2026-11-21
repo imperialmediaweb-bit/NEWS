@@ -6,7 +6,8 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import type { Metadata } from "next";
 import { designState } from "@/lib/design-nou";
-import { getStateWeather, getActiveStorms, countiesOf } from "@/lib/local-data";
+import { getStateWeather, getActiveStorms, countiesOf, getStateAlerts } from "@/lib/local-data";
+import { getCategoryArticles } from "@/lib/category-data";
 import HomeLive from "@/components/design/live/HomeLive";
 
 // Multi-tenant: 50 domains share this route, so the page must resolve the
@@ -58,8 +59,15 @@ export default async function Home({ searchParams }: Props) {
   }
 
   if (design.family === "live") {
-    const [weather, storms] = await Promise.all([getStateWeather(site.state), getActiveStorms()]);
-    return <HomeLive site={site} articles={articles} weather={weather} storms={storms} counties={countiesOf(site.state)} />;
+    const SECTIONS = ["politics", "sports", "business", "life"];
+    const [weather, storms, alerts, ...lists] = await Promise.all([
+      getStateWeather(site.state),
+      getActiveStorms(),
+      getStateAlerts(site.stateAbbr),
+      ...SECTIONS.map((c) => getCategoryArticles(site.slug, c, 1)),
+    ]);
+    const sections = Object.fromEntries(SECTIONS.map((c, i) => [c, lists[i].articles]));
+    return <HomeLive site={site} articles={articles} weather={weather} storms={storms} counties={countiesOf(site.state)} sections={sections} alerts={alerts} />;
   }
 
   return <HomeClient site={site} articles={articles} />;

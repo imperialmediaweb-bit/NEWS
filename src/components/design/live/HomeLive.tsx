@@ -1,6 +1,6 @@
 import type { SiteConfig } from "@/config/site-config";
 import type { HomeArticles, HomeArticle } from "@/lib/homepage-data";
-import type { CityWeather, Storm } from "@/lib/local-data";
+import type { CityWeather, Storm, WeatherAlert } from "@/lib/local-data";
 import CountySearch from "./CountySearch";
 import AlertsBox from "./AlertsBox";
 import MobileMenu from "./MobileMenu";
@@ -20,12 +20,16 @@ export default function HomeLive({
   weather,
   storms,
   counties,
+  sections,
+  alerts,
 }: {
   site: SiteConfig;
   articles: HomeArticles;
   weather: CityWeather[];
   storms: { storms: Storm[] } | null;
   counties: string[];
+  sections?: Record<string, HomeArticle[]>;
+  alerts?: WeatherAlert[] | null;
 }) {
   const pal = PALETTE[site.slug] || { ink: "#14213d", acc: site.accent };
   const tz = TZ[site.state] || "America/New_York";
@@ -60,11 +64,12 @@ export default function HomeLive({
   // As in the mockup, always Politics, Business and Sports. Stories filed
   // under those categories come first; until there are enough, stories whose
   // headline is about the subject fill the block.
-  const blocks: Array<[string, string, HomeArticle[]]> = TOPICS.slice(0, 3).map(([label, re, tagged]) => [
-    label,
-    "/" + label.toLowerCase(),
-    take(tagged.concat(pool.filter((a) => re.test(a.title))), 4),
-  ]);
+  const topStories = take(pool, 4);
+  // Full-width section rows, from each section's own stories.
+  const secPol = take(sections?.politics || [], 6);
+  const secSpo = take(sections?.sports || [], 5);
+  const secBiz = take(sections?.business || [], 3);
+  const secLife = take(sections?.life || [], 5);
   // Further down the page, all from the same recent pool, never repeating.
   const latestGrid = take(pool, 6);
   const CITY_BLOCKS = ["Houston", "Dallas", "Austin", "San Antonio", "Fort Worth", "El Paso"];
@@ -230,55 +235,133 @@ export default function HomeLive({
                   <span className="text-[13px] font-bold text-[var(--lv-ink)]">{w.city}</span>
                   <WxIcon short={w.short} isDay={w.isDay} />
                   <span className={`${serif.className} text-[26px] font-bold leading-none`}>{w.temp}°</span>
-                  <span className="text-[11px] text-[#6b7386]">{w.low ?? "–"}° / {w.high ?? "–"}°</span>
                   <span className="line-clamp-1 text-[11px] text-[#6b7386]">{w.short}</span>
+                  {w.nextName && (
+                    <span className="mt-1 flex w-full items-center justify-center gap-1.5 border-t border-[#e3e6ee] pt-1.5 text-[11px] text-[#4a5266]">
+                      <WxIcon short={w.nextShort || ""} isDay={!!w.nextIsDay} size={18} />
+                      <span><b className="text-[var(--lv-ink)]">{w.nextName.replace("This Afternoon", "Today")}</b> {w.nextTemp}°</span>
+                    </span>
+                  )}
                 </li>
               ))}
             </ul>
           </section>
         )}
 
-        {/* three sections, three layouts */}
-        <section className="mt-8 grid gap-6 lg:grid-cols-3">
-          {blocks.map(([label, link, list], i) => list.length === 0 ? <div key={label} /> : (
-            <div key={label} className={i === 1 ? "lg:border-x lg:border-[#e3e6ee] lg:px-6" : ""}>
-              <SectionTitle href={link}>{label}</SectionTitle>
-              {i === 1 ? (
-                <>
-                  <a href={href(list[0])} className="group block">
-                    <h3 className={`${serif.className} text-[24px] font-bold leading-tight group-hover:text-[var(--lv-acc)]`}>{list[0].title}</h3>
-                  </a>
-                  {list[0].summary && <p className="mt-1 line-clamp-3 text-[14px] text-[#4a5266]">{list[0].summary}</p>}
+        {/* official weather alerts */}
+        {alerts && alerts.length > 0 && (
+          <section className="mt-3 border-l-4 border-[#d9480f] bg-[#fff4ec] p-4">
+            <p className="text-[12px] font-extrabold uppercase tracking-wider text-[#b33d0c]">Weather alerts in effect · National Weather Service</p>
+            <ul className="mt-2 grid gap-2 md:grid-cols-2">
+              {alerts.map((a) => (
+                <li key={a.event} className="text-[14px]"><b className="text-[#7a2a08]">{a.event}</b> <span className="text-[#5a4a40]">— {a.area}</span></li>
+              ))}
+            </ul>
+            <a href={alerts[0].url} target="_blank" rel="noopener" className="mt-2 inline-block text-[12px] font-bold uppercase text-[#b33d0c] hover:underline">All alerts →</a>
+          </section>
+        )}
+
+        {/* top stories */}
+        {topStories.length >= 3 && (
+          <section className="mt-10">
+            <SectionTitle>Top stories</SectionTitle>
+            <div className="grid gap-x-5 gap-y-6 sm:grid-cols-2 lg:grid-cols-4">
+              {topStories.map((a) => (
+                <a key={a.slug} href={href(a)} className="group block">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={list[0].img} alt="" className="mt-3 aspect-[16/9] w-full object-cover" loading="lazy" />
-                </>
-              ) : (
-                <a href={href(list[0])} className="group block">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={list[0].img} alt="" className="aspect-[16/9] w-full object-cover" loading="lazy" />
-                  <h3 className={`${serif.className} mt-2 text-[23px] font-bold leading-tight group-hover:text-[var(--lv-acc)]`}>{list[0].title}</h3>
-                  {i === 0 && list[0].summary && <p className="mt-1 line-clamp-3 text-[14px] font-normal text-[#4a5266]">{list[0].summary}</p>}
+                  <img src={a.img} alt="" className="aspect-[3/2] w-full object-cover" loading="lazy" />
+                  <p className="mt-2 text-[11px] font-extrabold uppercase tracking-wider text-[var(--lv-acc)]">{a.category.replace(/-/g, " ")}</p>
+                  <h3 className={`${serif.className} text-[18px] font-bold leading-snug group-hover:text-[var(--lv-acc)]`}>{a.title}</h3>
                 </a>
-              )}
-              {i === 2 ? (
-                <div className="mt-3 bg-[#f6f7fb] p-3">
-                  <p className="mb-2 text-[12px] font-bold uppercase text-[var(--lv-ink)]">More {label.toLowerCase().startsWith("across") ? "" : label.toLowerCase() + " "}stories</p>
-                  <ul className="space-y-2">
-                    {list.slice(1).map((a) => (
-                      <li key={a.slug} className="flex gap-2 text-[14px] font-semibold"><span className="text-[var(--lv-acc)]">★</span><a href={href(a)} className="hover:text-[var(--lv-acc)]">{a.title}</a></li>
-                    ))}
-                  </ul>
-                </div>
-              ) : (
-                <ul className="mt-3 space-y-2 border-t border-[#e3e6ee] pt-3">
-                  {list.slice(1).map((a) => (
-                    <li key={a.slug} className="flex gap-2 text-[15px] font-semibold"><span className="mt-1.5 h-2 w-2 shrink-0 bg-[var(--lv-acc)]" /><a href={href(a)} className="hover:text-[var(--lv-acc)]">{a.title}</a></li>
-                  ))}
-                </ul>
-              )}
+              ))}
             </div>
-          ))}
-        </section>
+          </section>
+        )}
+
+        {/* politics row: lead left, headlines right */}
+        {secPol.length >= 3 && (
+          <section className="mt-12">
+            <SectionTitle href="/politics">Politics</SectionTitle>
+            <div className="grid gap-6 lg:grid-cols-[1.5fr_1fr]">
+              <a href={href(secPol[0])} className="group relative block overflow-hidden">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={secPol[0].img} alt="" className="aspect-[16/9] w-full object-cover transition-transform duration-700 group-hover:scale-[1.02]" loading="lazy" />
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 to-transparent p-5 pt-16 text-white">
+                  <h3 className={`${serif.className} text-[26px] font-bold leading-tight md:text-[30px]`}>{secPol[0].title}</h3>
+                  <p className="mt-1 text-[13px] text-white/80">{ago(secPol[0])}</p>
+                </div>
+              </a>
+              <ul className="divide-y divide-[#e3e6ee]">
+                {secPol.slice(1, 6).map((a) => (
+                  <li key={a.slug} className="flex gap-4 py-3">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={a.img} alt="" className="h-20 w-28 shrink-0 object-cover" loading="lazy" />
+                    <a href={href(a)} className={`${serif.className} text-[17px] font-bold leading-snug hover:text-[var(--lv-acc)]`}>{a.title}<span className="mt-1 block font-sans text-[12px] font-normal text-[#6b7386]">{ago(a)}</span></a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </section>
+        )}
+
+        {/* sports band */}
+        {secSpo.length >= 3 && (
+          <section className="-mx-4 mt-12 bg-[var(--lv-ink)] px-4 py-8 text-white">
+            <div className="mb-4 flex items-center gap-3">
+              <h2 className="text-[22px] font-extrabold uppercase tracking-wide"><a href="/sports" className="hover:underline">{site.state} Sports</a></h2>
+              <span className="h-[2px] flex-1 bg-[var(--lv-acc)]" />
+            </div>
+            <div className="grid gap-6 lg:grid-cols-[1.3fr_1fr_1fr]">
+              <a href={href(secSpo[0])} className="group block lg:row-span-2">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={secSpo[0].img} alt="" className="aspect-[4/3] w-full object-cover" loading="lazy" />
+                <h3 className={`${serif.className} mt-3 text-[26px] font-bold leading-tight group-hover:underline`}>{secSpo[0].title}</h3>
+                {secSpo[0].summary && <p className="mt-1 line-clamp-3 text-[14px] text-white/75">{secSpo[0].summary}</p>}
+              </a>
+              {secSpo.slice(1, 5).map((a) => (
+                <a key={a.slug} href={href(a)} className="group block">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={a.img} alt="" className="aspect-[16/9] w-full object-cover opacity-95" loading="lazy" />
+                  <h3 className={`${serif.className} mt-2 text-[17px] font-bold leading-snug group-hover:underline`}>{a.title}</h3>
+                </a>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* business row: three columns */}
+        {secBiz.length >= 3 && (
+          <section className="mt-12">
+            <SectionTitle href="/business">Business &amp; Economy</SectionTitle>
+            <div className="grid gap-6 md:grid-cols-3">
+              {secBiz.slice(0, 3).map((a) => (
+                <a key={a.slug} href={href(a)} className="group block border-t-4 border-[var(--lv-ink)] pt-3">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={a.img} alt="" className="aspect-[3/2] w-full object-cover" loading="lazy" />
+                  <h3 className={`${serif.className} mt-2 text-[20px] font-bold leading-snug group-hover:text-[var(--lv-acc)]`}>{a.title}</h3>
+                  {a.summary && <p className="mt-1 line-clamp-2 text-[14px] text-[#4a5266]">{a.summary}</p>}
+                </a>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* life & culture mosaic */}
+        {secLife.length >= 4 && (
+          <section className="mt-12">
+            <SectionTitle href="/life">Life &amp; Culture</SectionTitle>
+            <div className="grid gap-3 md:grid-cols-4 md:grid-rows-2">
+              {secLife.slice(0, 5).map((a, i) => (
+                <a key={a.slug} href={href(a)} className={`group relative block overflow-hidden ${i === 0 ? "md:col-span-2 md:row-span-2" : ""}`}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={a.img} alt="" className={`w-full object-cover transition-transform duration-700 group-hover:scale-[1.03] ${i === 0 ? "aspect-[4/3] md:h-full" : "aspect-[4/3]"}`} loading="lazy" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
+                  <h3 className={`${serif.className} absolute inset-x-0 bottom-0 p-3 font-bold leading-snug text-white ${i === 0 ? "text-[24px]" : "text-[15px]"}`}>{a.title}</h3>
+                </a>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* latest news grid */}
         {latestGrid.length >= 3 && (

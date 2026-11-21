@@ -55,18 +55,26 @@ export interface CityWeather {
   high: number | null;
   low: number | null;
   isDay: boolean;
+  /** The next period: tonight when it is day, tomorrow when it is night. */
+  nextName?: string;
+  nextShort?: string;
+  nextTemp?: number;
+  nextIsDay?: boolean;
 }
 
 /** National Weather Service forecast for one point. */
 async function nwsCity(city: string, lat: number, lon: number): Promise<CityWeather> {
   const pt = await getJson(`https://api.weather.gov/points/${lat.toFixed(4)},${lon.toFixed(4)}`);
   const fc = await getJson(pt.properties.forecast);
-  const periods = fc.properties.periods as Array<{ temperature: number; temperatureUnit: string; shortForecast: string; isDaytime: boolean }>;
+  const periods = fc.properties.periods as Array<{ name: string; temperature: number; temperatureUnit: string; shortForecast: string; isDaytime: boolean }>;
   const now = periods[0];
   const next = periods[1];
   const hi = now.isDaytime ? now.temperature : next?.temperature ?? null;
   const lo = now.isDaytime ? next?.temperature ?? null : now.temperature;
-  return { city, temp: now.temperature, unit: now.temperatureUnit, short: now.shortForecast, high: hi, low: lo, isDay: now.isDaytime };
+  return {
+    city, temp: now.temperature, unit: now.temperatureUnit, short: now.shortForecast, high: hi, low: lo, isDay: now.isDaytime,
+    nextName: next?.name, nextShort: next?.shortForecast, nextTemp: next?.temperature, nextIsDay: next?.isDaytime,
+  };
 }
 
 export async function getStateWeather(state: string): Promise<CityWeather[]> {
@@ -138,5 +146,35 @@ export async function getCityForecast(state: string): Promise<{ city: string; no
       days.push({ name: p.name.slice(0, 3), short: p.shortForecast, high: p.temperature, low: night && !night.isDaytime ? night.temperature : null });
     }
     return { city, now, days };
+  });
+}
+
+// ── active National Weather Service alerts for a state ──
+export interface WeatherAlert {
+  event: string;
+  headline: string;
+  severity: string;
+  area: string;
+  url: string;
+}
+
+const SEVERITY = ["Extreme", "Severe", "Moderate", "Minor", "Unknown"];
+
+export async function getStateAlerts(abbr: string): Promise<WeatherAlert[] | null> {
+  return cached(`nwsalerts:${abbr}`, async () => {
+    const j = await getJson(`https://api.weather.gov/alerts/active?area=${abbr}`);
+    const list = ((j.features || []) as Array<{ properties: Record<string, string> }>).map((f) => ({
+      event: f.properties.event,
+      headline: f.properties.headline || f.properties.event,
+      severity: f.properties.severity || "Unknown",
+      area: (f.properties.areaDesc || "").split(";").slice(0, 3).join(", "),
+      url: `https://alerts.weather.gov/search?area=${abbr}`,
+    }));
+    // One line per kind of alert, the most severe first.
+    const seen = new Set<string>();
+    return list
+      .sort((a, b) => SEVERITY.indexOf(a.severity) - SEVERITY.indexOf(b.severity))
+      .filter((a) => (seen.has(a.event) ? false : (seen.add(a.event), true)))
+      .slice(0, 4);
   });
 }
