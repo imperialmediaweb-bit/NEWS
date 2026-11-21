@@ -142,33 +142,33 @@ export default function HomeLive({
 
       {/* masthead */}
       <header className="border-b border-[#dde1ea]">
-        <div className="mx-auto max-w-[1240px] px-4 py-3 text-center">
+        <div className="mx-auto max-w-[1240px] px-4 py-0 text-center">
           <a href="/" aria-label={site.name}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={logo} alt={site.name} width={300} height={150} className="mx-auto h-[118px] w-auto" />
+            <img src={logo} alt={site.name} width={300} height={150} className="mx-auto -my-3 h-[176px] w-auto" />
           </a>
         </div>
         <nav className="border-t border-[#dde1ea]">
-          <ul className="mx-auto flex max-w-[1240px] items-center justify-center gap-1 overflow-x-auto px-4 text-[16px] font-bold text-[var(--lv-ink)]">
+          <ul className="mx-auto flex max-w-[1240px] items-center justify-center gap-2 overflow-x-auto px-4 text-[18px] font-bold text-[var(--lv-ink)]">
             {nav.map(([l, h], i) => (
               <li key={l} className="flex items-center">
-                {i > 0 && <span className="mx-3 h-4 w-px bg-[#cfd4e0]" aria-hidden />}
+                {i > 0 && <span className="mx-5 h-5 w-px bg-[#cfd4e0]" aria-hidden />}
                 <a href={h} className="block whitespace-nowrap py-3 hover:text-[var(--lv-acc)]">{l}</a>
               </li>
             ))}
-            <li className="ml-4"><a href="/search" aria-label="Search" className="block py-3 hover:text-[var(--lv-acc)]">⌕</a></li>
+            <li className="ml-6"><a href="/search" aria-label="Search" className="block py-3 hover:text-[var(--lv-acc)]"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" aria-hidden><circle cx="10.5" cy="10.5" r="7" /><path d="M16 16l6 6" strokeLinecap="round" /></svg></a></li>
           </ul>
         </nav>
       </header>
 
       {/* breaking bar */}
       <a href={href(breaking)} className="block bg-[var(--lv-acc)] text-white">
-        <div className="mx-auto flex max-w-[1240px] items-center gap-4 px-4 py-2.5">
-          <span className="relative -my-2.5 -ml-4 flex shrink-0 items-center bg-[#8f0a24] py-2.5 pl-4 pr-6 text-[17px] font-extrabold uppercase tracking-wide [clip-path:polygon(0_0,calc(100%-14px)_0,100%_50%,calc(100%-14px)_100%,0_100%)]">
+        <div className="mx-auto flex max-w-[1240px] items-center gap-4 px-4 py-3">
+          <span className="relative -my-3 -ml-4 flex shrink-0 items-center bg-[#8f0a24] py-3 pl-4 pr-7 text-[22px] font-extrabold uppercase tracking-wide [clip-path:polygon(0_0,calc(100%-14px)_0,100%_50%,calc(100%-14px)_100%,0_100%)]">
             {breaking.iso && Date.now() - new Date(breaking.iso).getTime() < 90 * 60000 ? "Breaking" : "Latest"}
           </span>
-          <span className={`${serif.className} truncate text-[17px] font-semibold`}>{breaking.title}</span>
-          <span className="ml-auto hidden shrink-0 items-center gap-1.5 text-[13px] font-bold uppercase sm:flex"><span className="h-2 w-2 animate-pulse rounded-full bg-white" /> Live</span>
+          <span className="truncate text-[20px] font-bold">{breaking.title}</span>
+          <span className="ml-auto hidden shrink-0 items-center gap-2 border-l border-white/40 pl-4 text-[18px] font-bold uppercase sm:flex"><span className="h-2.5 w-2.5 animate-pulse rounded-full bg-white" /> Live <span aria-hidden className="ml-2 text-[22px]">›</span></span>
         </div>
       </a>
 
