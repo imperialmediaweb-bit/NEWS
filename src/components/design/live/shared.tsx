@@ -11,7 +11,7 @@ export const sans = Libre_Franklin({ subsets: ["latin"], weight: ["400", "500", 
 export const PALETTE: Record<string, { ink: string; acc: string }> = {
   "texas-express": { ink: "#002868", acc: "#bf0a30" },
 };
-export const TZ: Record<string, string> = { Texas: "America/Chicago", Georgia: "America/New_York", Florida: "America/New_York", California: "America/Los_Angeles", "New York": "America/New_York", Hawaii: "Pacific/Honolulu", Arizona: "America/Phoenix" };
+export const TZ: Record<string, string> = { Texas: "America/Chicago", Georgia: "America/New_York", Florida: "America/New_York", California: "America/Los_Angeles", "New York": "America/New_York", Hawaii: "Pacific/Honolulu", Arizona: "America/Phoenix", Montana: "America/Denver" };
 
 export function href(a: HomeArticle) {
   const c = (a.category || "news").toLowerCase().replace(/\s+/g, "-");

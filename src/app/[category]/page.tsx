@@ -13,6 +13,7 @@ import CategoryMagazine from "@/components/design/magazine/CategoryMagazine";
 import CategoryBroadsheet from "@/components/design/broadsheet/CategoryBroadsheet";
 import CategoryCoastal from "@/components/design/coastal/CategoryCoastal";
 import CategoryDark from "@/components/design/dark/CategoryDark";
+import CategoryWestern from "@/components/design/western/CategoryWestern";
 import { TOPIC_RE } from "@/components/design/live/shared";
 import { getCategoryArticles } from "@/lib/category-data";
 
@@ -117,7 +118,7 @@ export default async function CategoryPage({
       pages = 1;
     }
     if (stories.length > 0) {
-      const CategoryView = { peach: CategoryPeach, tabloid: CategoryTabloid, magazine: CategoryMagazine, broadsheet: CategoryBroadsheet, coastal: CategoryCoastal, dark: CategoryDark, live: CategoryLive }[design.family];
+      const CategoryView = { peach: CategoryPeach, tabloid: CategoryTabloid, magazine: CategoryMagazine, broadsheet: CategoryBroadsheet, coastal: CategoryCoastal, dark: CategoryDark, western: CategoryWestern, live: CategoryLive }[design.family];
       live = (
         <CategoryView
           site={site}

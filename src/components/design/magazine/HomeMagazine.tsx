@@ -67,6 +67,7 @@ export default function HomeMagazine({
   volcanoes?: unknown;
   buoys?: unknown;
   uv?: unknown;
+  snow?: unknown;
 }) {
   const m = magOf(site);
   const tz = TZ[site.state] || "America/New_York";

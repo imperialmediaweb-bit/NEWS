@@ -68,6 +68,7 @@ export default function HomeTabloid({
   volcanoes?: unknown;
   buoys?: unknown;
   uv?: unknown;
+  snow?: unknown;
 }) {
   const t = tabOf(site);
   const tz = TZ[site.state] || "America/New_York";

@@ -64,6 +64,7 @@ export default function HomePeach({
   volcanoes?: unknown;
   buoys?: unknown;
   uv?: unknown;
+  snow?: unknown;
 }) {
   const p = peachOf(site);
   const tz = TZ[site.state] || "America/New_York";

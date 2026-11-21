@@ -358,3 +358,9 @@ a.group:hover [class*="leading-"]:not(.pc-zoom) { text-decoration: underline; te
 .pc-article a:hover { background-size: 100% 2px; text-decoration-color: transparent; }
 .pc-article img { border-radius: 6px; box-shadow: 0 18px 40px -28px rgba(0,0,0,.5); }
 @media (prefers-reduced-motion: reduce) { .pc-zoom::after, .x-zoom::after { display: none; } }
+/* Western (Montana): textured paper and the slider in slab type */
+.ws-paper { background-color: var(--ws-paper, #f4ecdc); background-image: radial-gradient(rgba(120,90,40,.06) 1px, transparent 1px), radial-gradient(rgba(120,90,40,.04) 1px, transparent 1px); background-size: 7px 7px, 13px 13px; background-position: 0 0, 3px 5px; }
+.ws-hero .lv-cinema [data-slide-title] { font-family: var(--ws-slab), Georgia, serif; font-weight: 700; font-size: clamp(26px, 2.6vw, 40px); line-height: 1.08; }
+.ws-hero .lv-cinema [data-slide-eyebrow] { border-radius: 0; background: var(--ws-acc); color: #1b1b1b; }
+.ws-hero .lv-cinema [data-slide-cta] { border-radius: 0; background: var(--ws-acc); color: #1b1b1b !important; }
+.ws-hero .lv-cinema [data-slide-content] { padding-left: 20px; padding-right: 20px; }

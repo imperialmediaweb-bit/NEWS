@@ -56,6 +56,16 @@ export const WEATHER_CITIES: Record<string, Array<[string, number, number]>> = {
     ["Fort Myers", 26.6406, -81.8723],
     ["Key West", 24.5551, -81.78],
   ],
+  Montana: [
+    ["Billings", 45.7833, -108.5007],
+    ["Missoula", 46.8721, -113.994],
+    ["Bozeman", 45.677, -111.0429],
+    ["Great Falls", 47.5053, -111.3008],
+    ["Helena", 46.5891, -112.0391],
+    ["Kalispell", 48.1958, -114.3129],
+    ["Butte", 46.0038, -112.5348],
+    ["West Yellowstone", 44.662, -111.1041],
+  ],
   Arizona: [
     ["Phoenix", 33.4484, -112.074],
     ["Tucson", 32.2226, -110.9747],
@@ -400,6 +410,7 @@ export async function getSpaceCoastLaunches(): Promise<Launch[] | null> {
 /** Airports shown in each state's airport module (FAA codes). */
 export const STATE_AIRPORTS: Record<string, Array<[string, string]>> = {
   Georgia: [["ATL", "Atlanta Hartsfield-Jackson"], ["SAV", "Savannah/Hilton Head"]],
+  Montana: [["BIL", "Billings"], ["BZN", "Bozeman"], ["MSO", "Missoula"], ["FCA", "Glacier Park"]],
   Arizona: [["PHX", "Phoenix Sky Harbor"], ["TUS", "Tucson"], ["FLG", "Flagstaff"]],
   Hawaii: [["HNL", "Honolulu"], ["OGG", "Kahului, Maui"], ["KOA", "Kona"], ["ITO", "Hilo"], ["LIH", "Lihue, Kauai"]],
   "New York": [["JFK", "Kennedy"], ["LGA", "LaGuardia"], ["BUF", "Buffalo"], ["ALB", "Albany"]],
@@ -544,4 +555,27 @@ export async function getUvHourly(city: string, st: string): Promise<UvHour[] | 
     const j = (await getJson(`https://data.epa.gov/efservice/getEnvirofactsUVHOURLY/CITY/${encodeURIComponent(city)}/STATE/${st}/JSON`, 8000)) as Array<{ DATE_TIME: string; UV_VALUE: number }>;
     return j.map((x) => ({ hour: x.DATE_TIME.split(" ").slice(1).join(" ").replace(/^0/, ""), uv: Number(x.UV_VALUE) }));
   });
+}
+
+// ── snow depth at mountain stations (NRCS SNOTEL) ──
+export interface SnowStation { name: string; depthIn: number | null; change3d: number | null; sweIn: number | null; date: string }
+
+export async function getSnow(stations: Array<[string, string]>): Promise<SnowStation[] | null> {
+  const begin = new Date(Date.now() - 4 * 86400000).toISOString().slice(0, 10);
+  const j = await cached(`snotel:${stations.map((s) => s[0]).join(",")}`, () =>
+    getJson(`https://wcc.sc.egov.usda.gov/awdbRestApi/services/v1/data?stationTriplets=${stations.map((s) => s[0]).join(",")}&elements=SNWD,WTEQ&duration=DAILY&beginDate=${begin}`, 9000)
+  );
+  if (!j) return null;
+  const out: SnowStation[] = [];
+  for (const [id, name] of stations) {
+    const st = (j as Array<{ stationTriplet: string; data: Array<{ stationElement: { elementCode: string }; values: Array<{ date: string; value: number }> }> }>).find((x) => x.stationTriplet === id);
+    if (!st) continue;
+    const series = (code: string) => (st.data.find((d) => d.stationElement.elementCode === code)?.values || []).filter((v) => v.value != null);
+    const sd = series("SNWD");
+    const swe = series("WTEQ");
+    const last = sd[sd.length - 1];
+    if (!last) continue;
+    out.push({ name, depthIn: last.value, change3d: sd.length > 1 ? last.value - sd[0].value : null, sweIn: swe.length ? swe[swe.length - 1].value : null, date: last.date });
+  }
+  return out.length ? out : null;
 }

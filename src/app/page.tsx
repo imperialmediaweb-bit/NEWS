@@ -6,7 +6,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import type { Metadata } from "next";
 import { designState } from "@/lib/design-nou";
-import { getStateWeather, getActiveStorms, countiesOf, getStateAlerts, getGasPrices, getLottery, getAirportStatus, getSpaceCoastLaunches, STATE_AIRPORTS, getStateQuakes, getStateFires, outlineOf, getSubwayStatus, getVolcanoStatus, getBuoys, getUvHourly } from "@/lib/local-data";
+import { getStateWeather, getActiveStorms, countiesOf, getStateAlerts, getGasPrices, getLottery, getAirportStatus, getSpaceCoastLaunches, STATE_AIRPORTS, getStateQuakes, getStateFires, outlineOf, getSubwayStatus, getVolcanoStatus, getBuoys, getUvHourly, getSnow } from "@/lib/local-data";
 import { getCategoryArticles } from "@/lib/category-data";
 import HomeLive from "@/components/design/live/HomeLive";
 import HomePeach from "@/components/design/peach/HomePeach";
@@ -15,6 +15,7 @@ import HomeMagazine from "@/components/design/magazine/HomeMagazine";
 import HomeBroadsheet from "@/components/design/broadsheet/HomeBroadsheet";
 import HomeCoastal from "@/components/design/coastal/HomeCoastal";
 import HomeDark from "@/components/design/dark/HomeDark";
+import HomeWestern from "@/components/design/western/HomeWestern";
 
 // Multi-tenant: 50 domains share this route, so the page must resolve the
 // site per-request from the Host header. Server-rendering the real articles
@@ -70,7 +71,7 @@ export default async function Home({ searchParams }: Props) {
     const QUAKE_STATES = ["California", "Alaska", "Oregon", "Washington", "Wyoming", "Nevada", "Utah", "Idaho", "Montana", "Hawaii"];
     const FIRE_STATES = ["California", "Oregon", "Washington", "Idaho", "Montana", "Nevada", "Arizona", "New Mexico", "Colorado", "Utah", "Wyoming"];
     const NO_LOTTERY = ["Alabama", "Alaska", "Hawaii", "Nevada", "Utah"];
-    const [weather, storms, alerts, gas, lottery, airports, launches, quakes, fires, subway, volcanoes, buoys, uv, ...lists] = await Promise.all([
+    const [weather, storms, alerts, gas, lottery, airports, launches, quakes, fires, subway, volcanoes, buoys, uv, snow, ...lists] = await Promise.all([
       getStateWeather(site.state),
       getActiveStorms(),
       getStateAlerts(site.stateAbbr),
@@ -85,11 +86,12 @@ export default async function Home({ searchParams }: Props) {
       site.state === "Hawaii" ? Promise.all([getVolcanoStatus("332010"), getVolcanoStatus("332020")]).then((v) => v.filter((x): x is NonNullable<typeof x> => !!x)) : Promise.resolve(null),
       site.state === "Hawaii" ? getBuoys([["51201", "Waimea Bay, O‘ahu"], ["51202", "Mokapu Point, O‘ahu"], ["51206", "Hilo, Big Island"], ["51208", "Hanalei, Kaua‘i"], ["51205", "Pauwela, Maui"]]) : Promise.resolve(null),
       site.state === "Arizona" ? getUvHourly("Phoenix", "AZ") : Promise.resolve(null),
+      site.state === "Montana" ? getSnow([["590:MT:SNTL", "Lone Mountain (Big Sky)"], ["480:MT:SNTL", "Fisher Creek (Beartooths)"], ["385:MT:SNTL", "Carrot Basin (West Yellowstone)"], ["696:MT:SNTL", "Placer Basin (Crazy Mtns)"], ["436:MT:SNTL", "Darkhorse Lake (Bitterroot)"]]) : Promise.resolve(null),
       ...SECTIONS.map((c) => getCategoryArticles(site.slug, c, 1)),
     ]);
     const sections = Object.fromEntries(SECTIONS.map((c, i) => [c, (lists[i] as Awaited<ReturnType<typeof getCategoryArticles>>).articles]));
-    const Home = { peach: HomePeach, tabloid: HomeTabloid, magazine: HomeMagazine, broadsheet: HomeBroadsheet, coastal: HomeCoastal, dark: HomeDark, live: HomeLive }[design.family];
-    return <Home site={site} articles={articles} weather={weather} storms={storms} counties={countiesOf(site.state)} sections={sections} alerts={alerts} gas={gas} lottery={lottery} airports={airports} launches={launches} quakes={quakes} fires={fires} outline={outlineOf(site.state)} subway={subway} volcanoes={volcanoes} buoys={buoys} uv={uv} />;
+    const Home = { peach: HomePeach, tabloid: HomeTabloid, magazine: HomeMagazine, broadsheet: HomeBroadsheet, coastal: HomeCoastal, dark: HomeDark, western: HomeWestern, live: HomeLive }[design.family];
+    return <Home site={site} articles={articles} weather={weather} storms={storms} counties={countiesOf(site.state)} sections={sections} alerts={alerts} gas={gas} lottery={lottery} airports={airports} launches={launches} quakes={quakes} fires={fires} outline={outlineOf(site.state)} subway={subway} volcanoes={volcanoes} buoys={buoys} uv={uv} snow={snow} />;
   }
 
   return <HomeClient site={site} articles={articles} />;

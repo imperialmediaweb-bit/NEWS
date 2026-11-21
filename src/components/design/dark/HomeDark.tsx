@@ -68,6 +68,7 @@ export default function HomeDark({
   volcanoes?: unknown;
   buoys?: unknown;
   uv?: UvHour[] | null;
+  snow?: unknown;
 }) {
   const d = dkOf(site);
   const tz = TZ[site.state] || "America/New_York";
