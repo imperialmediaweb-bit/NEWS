@@ -91,11 +91,25 @@ export default function HomeLive({
     return out;
   };
   const live = take(articles.latestPosts.concat(articles.heroSide), 6);
-  const brief = take(articles.trending.concat(articles.popular, articles.localNews), 5);
-  const politics = take(articles.politics, 3);
-  const business = take(articles.business, 4);
-  const sports = take(articles.sports, 4);
+  const pool = articles.pool || articles.latestPosts;
+  const brief = take(articles.trending.concat(articles.popular, articles.localNews, pool), 5);
   const opinion = take(articles.opinion, 4);
+  // Three section blocks: the state's real sections when they have stories,
+  // otherwise the next one that does, so the page never shows an empty block.
+  const candidates: Array<[string, string, HomeArticle[]]> = [
+    ["Politics", "/politics", articles.politics],
+    ["Business", "/business", articles.business],
+    ["Sports", "/sports", articles.sports],
+    ["Local", "/local-news", articles.localNews],
+    ["Entertainment", "/entertainment", articles.entertainment],
+    ["Across " + site.state, "/local-news", pool],
+  ];
+  const blocks: Array<[string, string, HomeArticle[]]> = [];
+  for (const [label, link, list] of candidates) {
+    if (blocks.length >= 3) break;
+    const picked = take(list, 4);
+    if (picked.length >= 2) blocks.push([label, link, picked]);
+  }
   const breaking = live[0] || lead;
   const capital = weather[0];
   const popularCounties = ["Harris", "Dallas", "Tarrant", "Bexar", "Travis", "Collin", "Denton", "El Paso", "Hidalgo", "Lubbock"].filter((c) => counties.includes(c));
@@ -250,56 +264,44 @@ export default function HomeLive({
 
         {/* three sections, three layouts */}
         <section className="mt-8 grid gap-6 lg:grid-cols-3">
-          {politics.length > 0 && (
-            <div>
-              <SectionTitle href="/politics">Politics</SectionTitle>
-              <a href={href(politics[0])} className="group block">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={politics[0].img} alt="" className="aspect-[16/9] w-full object-cover" loading="lazy" />
-                <h3 className={`${serif.className} mt-2 text-[23px] font-bold leading-tight group-hover:text-[var(--lv-acc)]`}>{politics[0].title}</h3>
-              </a>
-              {politics[0].summary && <p className="mt-1 text-[14px] text-[#4a5266]">{politics[0].summary}</p>}
-              <ul className="mt-3 space-y-2 border-t border-[#e3e6ee] pt-3">
-                {politics.slice(1).map((a) => (
-                  <li key={a.slug} className="flex gap-2 text-[15px] font-semibold"><span className="mt-1.5 h-2 w-2 shrink-0 bg-[var(--lv-acc)]" /><a href={href(a)} className="hover:text-[var(--lv-acc)]">{a.title}</a></li>
-                ))}
-              </ul>
-            </div>
-          )}
-          {business.length > 0 && (
-            <div className="lg:border-x lg:border-[#e3e6ee] lg:px-6">
-              <SectionTitle href="/business">Business</SectionTitle>
-              <a href={href(business[0])} className="group block">
-                <h3 className={`${serif.className} text-[24px] font-bold leading-tight group-hover:text-[var(--lv-acc)]`}>{business[0].title}</h3>
-              </a>
-              {business[0].summary && <p className="mt-1 text-[14px] text-[#4a5266]">{business[0].summary}</p>}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={business[0].img} alt="" className="mt-3 aspect-[16/9] w-full object-cover" loading="lazy" />
-              <ul className="mt-3 space-y-2">
-                {business.slice(1).map((a) => (
-                  <li key={a.slug} className="flex gap-2 text-[14px] font-semibold"><span className="mt-1.5 h-2 w-2 shrink-0 bg-[var(--lv-acc)]" /><a href={href(a)} className="hover:text-[var(--lv-acc)]">{a.title}</a></li>
-                ))}
-              </ul>
-            </div>
-          )}
-          {sports.length > 0 && (
-            <div>
-              <SectionTitle href="/sports">Sports</SectionTitle>
-              <a href={href(sports[0])} className="group block">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={sports[0].img} alt="" className="aspect-[16/9] w-full object-cover" loading="lazy" />
-                <h3 className={`${serif.className} mt-2 text-[23px] font-bold leading-tight group-hover:text-[var(--lv-acc)]`}>{sports[0].title}</h3>
-              </a>
-              <div className="mt-3 bg-[#f6f7fb] p-3">
-                <p className="mb-2 text-[12px] font-bold uppercase text-[var(--lv-ink)]">More {site.state} sports</p>
-                <ul className="space-y-2">
-                  {sports.slice(1).map((a) => (
-                    <li key={a.slug} className="flex gap-2 text-[14px] font-semibold"><span className="text-[var(--lv-acc)]">★</span><a href={href(a)} className="hover:text-[var(--lv-acc)]">{a.title}</a></li>
+          {blocks.map(([label, link, list], i) => (
+            <div key={label} className={i === 1 ? "lg:border-x lg:border-[#e3e6ee] lg:px-6" : ""}>
+              <SectionTitle href={link}>{label}</SectionTitle>
+              {i === 1 ? (
+                <>
+                  <a href={href(list[0])} className="group block">
+                    <h3 className={`${serif.className} text-[24px] font-bold leading-tight group-hover:text-[var(--lv-acc)]`}>{list[0].title}</h3>
+                  </a>
+                  {list[0].summary && <p className="mt-1 line-clamp-3 text-[14px] text-[#4a5266]">{list[0].summary}</p>}
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={list[0].img} alt="" className="mt-3 aspect-[16/9] w-full object-cover" loading="lazy" />
+                </>
+              ) : (
+                <a href={href(list[0])} className="group block">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={list[0].img} alt="" className="aspect-[16/9] w-full object-cover" loading="lazy" />
+                  <h3 className={`${serif.className} mt-2 text-[23px] font-bold leading-tight group-hover:text-[var(--lv-acc)]`}>{list[0].title}</h3>
+                  {i === 0 && list[0].summary && <p className="mt-1 line-clamp-3 text-[14px] font-normal text-[#4a5266]">{list[0].summary}</p>}
+                </a>
+              )}
+              {i === 2 ? (
+                <div className="mt-3 bg-[#f6f7fb] p-3">
+                  <p className="mb-2 text-[12px] font-bold uppercase text-[var(--lv-ink)]">More {label.toLowerCase().startsWith("across") ? "" : label.toLowerCase() + " "}stories</p>
+                  <ul className="space-y-2">
+                    {list.slice(1).map((a) => (
+                      <li key={a.slug} className="flex gap-2 text-[14px] font-semibold"><span className="text-[var(--lv-acc)]">★</span><a href={href(a)} className="hover:text-[var(--lv-acc)]">{a.title}</a></li>
+                    ))}
+                  </ul>
+                </div>
+              ) : (
+                <ul className="mt-3 space-y-2 border-t border-[#e3e6ee] pt-3">
+                  {list.slice(1).map((a) => (
+                    <li key={a.slug} className="flex gap-2 text-[15px] font-semibold"><span className="mt-1.5 h-2 w-2 shrink-0 bg-[var(--lv-acc)]" /><a href={href(a)} className="hover:text-[var(--lv-acc)]">{a.title}</a></li>
                   ))}
                 </ul>
-              </div>
+              )}
             </div>
-          )}
+          ))}
         </section>
 
         {/* opinion */}

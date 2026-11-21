@@ -55,6 +55,8 @@ export interface HomeArticles {
   sidebarLatest: HomeArticle[];
   featuredStory: HomeArticle | null;
   featuredStory2: HomeArticle | null;
+  /** The latest 60, for designs that fill thin sections from recent news. */
+  pool?: HomeArticle[];
 }
 
 const toArticle = (row: ArticleRow): HomeArticle => ({
@@ -129,6 +131,7 @@ export async function getHomepageArticles(config: SiteConfig): Promise<HomeArtic
       sidebarLatest: all.slice(0, 5),
       featuredStory: all[0] || null,
       featuredStory2: all[1] || null,
+      pool: all.slice(0, 60),
     };
   } catch (e) {
     console.error("getHomepageArticles failed:", e instanceof Error ? e.message : e);
