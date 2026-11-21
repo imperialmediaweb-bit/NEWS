@@ -16,7 +16,7 @@ export default function HeroCinema({ slides }: { slides: Array<{ id: string; ima
       showDots
       renderImage={({ src, alt, className, priority, onLoad }) => (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={src} alt={alt} className={className} loading={priority ? "eager" : "lazy"} decoding="async" draggable={false} onLoad={onLoad} />
+        <img src={src} alt={alt} className={className} loading={priority ? "eager" : "lazy"} decoding={priority ? "sync" : "async"} draggable={false} onLoad={onLoad} {...(priority ? { fetchpriority: "high" } : {})} />
       )}
     />
   );

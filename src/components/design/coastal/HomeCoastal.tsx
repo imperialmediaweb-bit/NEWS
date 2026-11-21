@@ -5,7 +5,7 @@ import CountySearch from "../live/CountySearch";
 import AlertsBox from "../live/AlertsBox";
 import MobileMenu from "../live/MobileMenu";
 import HeroCinema from "../live/HeroCinema";
-import { TZ, href, hour, ago, WxIcon, TOPIC_RE } from "../live/shared";
+import { TZ, href, hour, ago, WxIcon, TOPIC_RE, srcSetOf } from "../live/shared";
 import PeachFx, { SplitWords } from "../peach/PeachFx";
 import AdSlot from "../AdSlot";
 import Extras from "../extras/Extras";
@@ -28,10 +28,10 @@ const SCHOOL = /\b(school|student|teacher|college|universit|campus|education|gra
 
 const LEVEL: Record<string, string> = { NORMAL: "#2e7d4f", ADVISORY: "#d4a017", WATCH: "#e67e22", WARNING: "#c0392b" };
 
-const Img = ({ a, className = "" }: { a: HomeArticle; className?: string }) =>
+const Img = ({ a, className = "", sizes = "(max-width: 640px) 92vw, 420px" }: { a: HomeArticle; className?: string; sizes?: string }) =>
   a.img ? (
     // eslint-disable-next-line @next/next/no-img-element
-    <img src={a.img} alt="" className={`h-full w-full object-cover ${className}`} loading="lazy" />
+    <img src={a.img} srcSet={srcSetOf(a.img)} sizes={sizes} alt="" className={`h-full w-full object-cover ${className}`} loading="lazy" decoding="async" />
   ) : (
     <div className="h-full w-full bg-gradient-to-br from-[#bfe3ee] to-[#f6d6e0]" />
   );

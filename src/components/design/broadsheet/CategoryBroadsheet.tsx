@@ -1,7 +1,7 @@
 import type { SiteConfig } from "@/config/site-config";
 import type { HomeArticle } from "@/lib/homepage-data";
 import type { CityWeather } from "@/lib/local-data";
-import { TZ, href, hour, ago } from "../live/shared";
+import { TZ, href, hour, ago, srcSetOf } from "../live/shared";
 import MobileMenu from "../live/MobileMenu";
 import CountySearch from "../live/CountySearch";
 import AlertsBox from "../live/AlertsBox";
@@ -74,10 +74,10 @@ export default function CategoryBroadsheet({
   const rest = take(stories, 12);
   const stateLatest = take(latestState, 8);
   const W = "mx-auto max-w-[1340px] px-4";
-  const Img = ({ a }: { a: HomeArticle }) =>
+  const Img = ({ a, sizes = "(max-width: 640px) 92vw, 420px" }: { a: HomeArticle; sizes?: string }) =>
     a.img ? (
       // eslint-disable-next-line @next/next/no-img-element
-      <img src={a.img} alt="" className="h-full w-full object-cover" loading="lazy" />
+      <img src={a.img} srcSet={srcSetOf(a.img)} sizes={sizes} alt="" className="h-full w-full object-cover" loading="lazy" decoding="async" />
     ) : (
       <div className="h-full w-full bg-[#e9e4d8]" />
     );
@@ -100,7 +100,7 @@ export default function CategoryBroadsheet({
         {lead && (
           <section className="mt-6 grid gap-8 lg:grid-cols-[1.5fr_1fr_1fr] lg:divide-x lg:divide-[var(--bs-gold)]">
             <a href={href(lead)} className="group block">
-              <span className="pc-clip pc-in pc-zoom block aspect-[16/10] overflow-hidden"><Img a={lead} /></span>
+              <span className="pc-clip pc-in pc-zoom block aspect-[16/10] overflow-hidden"><Img a={lead} sizes="100vw" /></span>
               <span className={`${caslon.className} mt-3 block text-[32px] font-bold leading-[1.08] group-hover:text-[var(--bs-acc)]`}>{lead.title}</span>
               {lead.summary && <span className={`${caslon.className} mt-2 block text-[17px] italic text-[#333]`}>{lead.summary}</span>}
               <span className="mt-2 block text-[13px]"><b>{lead.author ? `By ${lead.author}` : site.name}</b> · {ago(lead)}</span>

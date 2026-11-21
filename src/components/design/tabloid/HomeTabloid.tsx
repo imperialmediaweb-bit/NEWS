@@ -5,7 +5,7 @@ import CountySearch from "../live/CountySearch";
 import AlertsBox from "../live/AlertsBox";
 import MobileMenu from "../live/MobileMenu";
 import HeroCinema from "../live/HeroCinema";
-import { TZ, href, hour, ago, WxIcon, TOPIC_RE } from "../live/shared";
+import { TZ, href, hour, ago, WxIcon, TOPIC_RE, srcSetOf } from "../live/shared";
 import PeachFx from "../peach/PeachFx";
 import AdSlot from "../AdSlot";
 import Extras from "../extras/Extras";
@@ -27,10 +27,10 @@ const SPORTS_FL = /\b(game|coach|football|basketball|baseball|soccer|playoff|sea
 const SAFETY = /\b(police|sheriff|deput|arrest|charged|indicted|court|judge|crash|fire|shooting|killed|death|investigat|trooper|jail|prison|fdle)\b/i;
 const SCHOOL = /\b(school|student|teacher|college|universit|campus|education|graduat|school board)\b/i;
 
-const Img = ({ a, className = "" }: { a: HomeArticle; className?: string }) =>
+const Img = ({ a, className = "", sizes = "(max-width: 640px) 92vw, 420px" }: { a: HomeArticle; className?: string; sizes?: string }) =>
   a.img ? (
     // eslint-disable-next-line @next/next/no-img-element
-    <img src={a.img} alt="" className={`h-full w-full object-cover ${className}`} loading="lazy" />
+    <img src={a.img} srcSet={srcSetOf(a.img)} sizes={sizes} alt="" className={`h-full w-full object-cover ${className}`} loading="lazy" decoding="async" />
   ) : (
     <div className="h-full w-full bg-gradient-to-br from-[var(--tb-ink)] to-[var(--tb-acc)]" />
   );
@@ -343,7 +343,7 @@ export default function HomeTabloid({
             <THead light>The big stories</THead>
             <div className="grid gap-6 lg:grid-cols-[1.3fr_1fr]">
               <a href={href(wall[0])} className="group relative block min-h-[380px] overflow-hidden">
-                <span className="pc-zoom absolute inset-0"><Img a={wall[0]} /></span>
+                <span className="pc-zoom absolute inset-0"><Img a={wall[0]} sizes="100vw" /></span>
                 <span className="absolute inset-0 bg-[linear-gradient(180deg,transparent_30%,rgba(0,0,0,.9))]" />
                 <span className="absolute inset-x-0 bottom-0 p-5">
                   <Slant>{wall[0].category.replace(/-/g, " ")}</Slant>

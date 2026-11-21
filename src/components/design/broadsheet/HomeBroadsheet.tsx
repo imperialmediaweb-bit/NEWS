@@ -5,7 +5,7 @@ import CountySearch from "../live/CountySearch";
 import AlertsBox from "../live/AlertsBox";
 import MobileMenu from "../live/MobileMenu";
 import HeroCinema from "../live/HeroCinema";
-import { TZ, href, hour, ago, WxIcon, TOPIC_RE } from "../live/shared";
+import { TZ, href, hour, ago, WxIcon, TOPIC_RE, srcSetOf } from "../live/shared";
 import PeachFx, { SplitWords } from "../peach/PeachFx";
 import AdSlot from "../AdSlot";
 import Extras from "../extras/Extras";
@@ -40,10 +40,10 @@ const Bullet = ({ r, size = 26 }: { r: string; size?: number }) => (
   <span className="inline-flex shrink-0 items-center justify-center rounded-full font-bold" style={{ width: size, height: size, fontSize: r.length > 1 ? size * 0.36 : size * 0.58, background: LINE[r]?.[0] || "#333", color: LINE[r]?.[1] || "#fff", fontFamily: "Helvetica, Arial, sans-serif" }}>{r}</span>
 );
 
-const Img = ({ a, className = "" }: { a: HomeArticle; className?: string }) =>
+const Img = ({ a, className = "", sizes = "(max-width: 640px) 92vw, 420px" }: { a: HomeArticle; className?: string; sizes?: string }) =>
   a.img ? (
     // eslint-disable-next-line @next/next/no-img-element
-    <img src={a.img} alt="" className={`h-full w-full object-cover ${className}`} loading="lazy" />
+    <img src={a.img} srcSet={srcSetOf(a.img)} sizes={sizes} alt="" className={`h-full w-full object-cover ${className}`} loading="lazy" decoding="async" />
   ) : (
     <div className="h-full w-full bg-[#e9e4d8]" />
   );
@@ -290,7 +290,7 @@ export default function HomeBroadsheet({
             <BHead link="/local-news" more="All local news">The Metro report</BHead>
             <div className="grid gap-8 lg:grid-cols-[1.4fr_1fr]">
               <a href={href(metro[0])} className="group block">
-                <span className="pc-clip pc-in pc-zoom block aspect-[16/9] overflow-hidden"><Img a={metro[0]} /></span>
+                <span className="pc-clip pc-in pc-zoom block aspect-[16/9] overflow-hidden"><Img a={metro[0]} sizes="100vw" /></span>
                 <span className={`${H} mt-3 block text-[30px] group-hover:text-[var(--bs-acc)]`}>{metro[0].title}</span>
                 {metro[0].summary && <span className={`${deck} mt-2 block text-[17px]`}>{metro[0].summary}</span>}
               </a>

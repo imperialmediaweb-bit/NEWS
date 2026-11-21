@@ -1,7 +1,7 @@
 import type { SiteConfig } from "@/config/site-config";
 import type { HomeArticle } from "@/lib/homepage-data";
 import type { CityWeather } from "@/lib/local-data";
-import { TZ, href, hour, ago } from "../live/shared";
+import { TZ, href, hour, ago, srcSetOf } from "../live/shared";
 import MobileMenu from "../live/MobileMenu";
 import CountySearch from "../live/CountySearch";
 import AlertsBox from "../live/AlertsBox";
@@ -77,10 +77,10 @@ export default function CategoryPeach({
   const stateLatest = take(latestState, 8);
   const about = (ABOUT[slug] || ((st: string) => `The latest ${label.toLowerCase()} from across ${st}.`))(site.state);
   const W = "mx-auto max-w-[1360px] px-4";
-  const Img = ({ a }: { a: HomeArticle }) =>
+  const Img = ({ a, sizes = "(max-width: 640px) 92vw, 420px" }: { a: HomeArticle; sizes?: string }) =>
     a.img ? (
       // eslint-disable-next-line @next/next/no-img-element
-      <img src={a.img} alt="" className="h-full w-full object-cover" loading="lazy" />
+      <img src={a.img} srcSet={srcSetOf(a.img)} sizes={sizes} alt="" className="h-full w-full object-cover" loading="lazy" decoding="async" />
     ) : (
       <div className="h-full w-full bg-gradient-to-br from-[var(--pc-acc)]/40 to-[var(--pc-cu)]/50" />
     );
@@ -107,7 +107,7 @@ export default function CategoryPeach({
         {lead && (
           <section className="mt-8 grid gap-6 lg:grid-cols-[1.6fr_1fr]">
             <a href={href(lead)} className="pc-card group block">
-              <span className="pc-zoom block aspect-[16/9] overflow-hidden rounded-md"><Img a={lead} /></span>
+              <span className="pc-zoom block aspect-[16/9] overflow-hidden rounded-md"><Img a={lead} sizes="100vw" /></span>
               <span className={`${display.className} mt-4 block text-[30px] font-extrabold leading-tight text-[var(--pc-ink)] group-hover:text-[var(--pc-acc)] md:text-[38px]`}>{lead.title}</span>
               {lead.summary && <span className="mt-2 block line-clamp-3 text-[16px] text-[#5a4a42]">{lead.summary}</span>}
               <span className="mt-2 block text-[13px] text-[#8a7a72]">{lead.author ? `By ${lead.author} · ` : ""}{ago(lead)}</span>

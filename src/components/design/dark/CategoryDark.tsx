@@ -1,7 +1,7 @@
 import type { SiteConfig } from "@/config/site-config";
 import type { HomeArticle } from "@/lib/homepage-data";
 import type { CityWeather } from "@/lib/local-data";
-import { TZ, href, hour, ago } from "../live/shared";
+import { TZ, href, hour, ago, srcSetOf } from "../live/shared";
 import MobileMenu from "../live/MobileMenu";
 import CountySearch from "../live/CountySearch";
 import AlertsBox from "../live/AlertsBox";
@@ -65,10 +65,10 @@ export default function CategoryDark({ site, slug, label, stories, latestState, 
   const stateLatest = take(latestState, 8);
   const W = "mx-auto max-w-[1340px] px-4";
   const light = { ["--lv-ink" as string]: d.deep, ["--lv-acc" as string]: d.acc } as React.CSSProperties;
-  const Img = ({ a }: { a: HomeArticle }) =>
+  const Img = ({ a, sizes = "(max-width: 640px) 92vw, 420px" }: { a: HomeArticle; sizes?: string }) =>
     a.img ? (
       // eslint-disable-next-line @next/next/no-img-element
-      <img src={a.img} alt="" className="h-full w-full object-cover" loading="lazy" />
+      <img src={a.img} srcSet={srcSetOf(a.img)} sizes={sizes} alt="" className="h-full w-full object-cover" loading="lazy" decoding="async" />
     ) : (
       <div className="h-full w-full bg-gradient-to-br from-[var(--dk-deep)] to-[#2a2220]" />
     );
@@ -90,7 +90,7 @@ export default function CategoryDark({ site, slug, label, stories, latestState, 
       <main className={W}>
         {lead && (
           <a href={href(lead)} className="group relative block min-h-[420px] overflow-hidden border border-[var(--dk-cu)]/40">
-            <span className="pc-zoom absolute inset-0"><Img a={lead} /></span>
+            <span className="pc-zoom absolute inset-0"><Img a={lead} sizes="100vw" /></span>
             <span className="absolute inset-0 bg-[linear-gradient(90deg,rgba(18,15,14,.95),rgba(18,15,14,.4)_60%,transparent)]" />
             <span className="relative flex min-h-[420px] max-w-[640px] flex-col justify-center p-8">
               <DLabel>Top story</DLabel>

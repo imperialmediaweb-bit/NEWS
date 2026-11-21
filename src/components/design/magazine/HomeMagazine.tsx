@@ -5,7 +5,7 @@ import CountySearch from "../live/CountySearch";
 import AlertsBox from "../live/AlertsBox";
 import MobileMenu from "../live/MobileMenu";
 import HeroCinema from "../live/HeroCinema";
-import { TZ, href, hour, ago, WxIcon, TOPIC_RE } from "../live/shared";
+import { TZ, href, hour, ago, WxIcon, TOPIC_RE, srcSetOf } from "../live/shared";
 import PeachFx, { SplitWords } from "../peach/PeachFx";
 import AdSlot from "../AdSlot";
 import Extras from "../extras/Extras";
@@ -27,10 +27,10 @@ const SPORTS_CA = /\b(game|coach|football|basketball|baseball|soccer|playoff|sea
 const SAFETY = /\b(police|sheriff|deput|arrest|charged|indicted|court|judge|crash|fire|shooting|killed|death|investigat|chp|jail|prison)\b/i;
 const SCHOOL = /\b(school|student|teacher|college|universit|campus|education|graduat|uc |csu|lausd)\b/i;
 
-const Img = ({ a, className = "" }: { a: HomeArticle; className?: string }) =>
+const Img = ({ a, className = "", sizes = "(max-width: 640px) 92vw, 420px" }: { a: HomeArticle; className?: string; sizes?: string }) =>
   a.img ? (
     // eslint-disable-next-line @next/next/no-img-element
-    <img src={a.img} alt="" className={`h-full w-full object-cover ${className}`} loading="lazy" />
+    <img src={a.img} srcSet={srcSetOf(a.img)} sizes={sizes} alt="" className={`h-full w-full object-cover ${className}`} loading="lazy" decoding="async" />
   ) : (
     <div className="h-full w-full bg-gradient-to-br from-[var(--mg-ink)] to-[var(--mg-acc)]" />
   );
@@ -302,7 +302,7 @@ export default function HomeMagazine({
       {/* full-bleed feature, magazine style */}
       {feature && (
         <a href={href(feature)} className="pc-parallax group relative mt-14 block min-h-[520px] overflow-hidden bg-[var(--mg-ink)] md:min-h-[640px]">
-          <span className="absolute inset-0"><Img a={feature} /></span>
+          <span className="absolute inset-0"><Img a={feature} sizes="100vw" /></span>
           <span className="absolute inset-0 bg-[linear-gradient(90deg,rgba(8,24,44,.88),rgba(8,24,44,.35)_60%,transparent)]" />
           <span className={`${W} relative flex min-h-[inherit] flex-col justify-center py-16 text-white`}>
             <span className="text-[13px] font-bold uppercase tracking-[.2em] text-[var(--mg-gold)]">The big story</span>

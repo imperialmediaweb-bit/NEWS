@@ -1,7 +1,7 @@
 import type { SiteConfig } from "@/config/site-config";
 import type { HomeArticle } from "@/lib/homepage-data";
 import type { CityWeather } from "@/lib/local-data";
-import { TZ, href, hour, ago } from "../live/shared";
+import { TZ, href, hour, ago, srcSetOf } from "../live/shared";
 import MobileMenu from "../live/MobileMenu";
 import CountySearch from "../live/CountySearch";
 import AlertsBox from "../live/AlertsBox";
@@ -77,10 +77,10 @@ export default function CategoryTabloid({
   const stateLatest = take(latestState, 8);
   const about = (ABOUT[slug] || (() => `The latest ${label.toLowerCase()} from across Florida.`))(site.state);
   const W = "mx-auto max-w-[1360px] px-4";
-  const Img = ({ a }: { a: HomeArticle }) =>
+  const Img = ({ a, sizes = "(max-width: 640px) 92vw, 420px" }: { a: HomeArticle; sizes?: string }) =>
     a.img ? (
       // eslint-disable-next-line @next/next/no-img-element
-      <img src={a.img} alt="" className="h-full w-full object-cover" loading="lazy" />
+      <img src={a.img} srcSet={srcSetOf(a.img)} sizes={sizes} alt="" className="h-full w-full object-cover" loading="lazy" decoding="async" />
     ) : (
       <div className="h-full w-full bg-gradient-to-br from-[var(--tb-ink)] to-[var(--tb-acc)]" />
     );
@@ -104,7 +104,7 @@ export default function CategoryTabloid({
         {lead && (
           <section className="mt-8 grid gap-6 lg:grid-cols-[1.6fr_1fr]">
             <a href={href(lead)} className="group relative block min-h-[380px] overflow-hidden bg-[#111] md:min-h-[480px]">
-              <span className="pc-zoom absolute inset-0"><Img a={lead} /></span>
+              <span className="pc-zoom absolute inset-0"><Img a={lead} sizes="100vw" /></span>
               <span className="absolute inset-x-0 bottom-0 p-4 md:p-6">
                 <span className={`${cond.className} inline bg-[var(--tb-acc)] box-decoration-clone px-2 text-[32px] font-black uppercase italic leading-[1.15] text-white md:text-[46px]`}>{lead.title}</span>
                 <span className="mt-3 block text-[13px] text-white drop-shadow">{lead.author ? `By ${lead.author} · ` : ""}{ago(lead)}</span>

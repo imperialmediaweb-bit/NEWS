@@ -1,7 +1,7 @@
 import type { SiteConfig } from "@/config/site-config";
 import type { HomeArticle } from "@/lib/homepage-data";
 import type { CityWeather } from "@/lib/local-data";
-import { TZ, href, hour, ago } from "../live/shared";
+import { TZ, href, hour, ago, srcSetOf } from "../live/shared";
 import MobileMenu from "../live/MobileMenu";
 import CountySearch from "../live/CountySearch";
 import AlertsBox from "../live/AlertsBox";
@@ -76,10 +76,10 @@ export default function CategoryMagazine({
   const rest = take(stories, 12);
   const stateLatest = take(latestState, 8);
   const W = "mx-auto max-w-[1320px] px-4";
-  const Img = ({ a }: { a: HomeArticle }) =>
+  const Img = ({ a, sizes = "(max-width: 640px) 92vw, 420px" }: { a: HomeArticle; sizes?: string }) =>
     a.img ? (
       // eslint-disable-next-line @next/next/no-img-element
-      <img src={a.img} alt="" className="h-full w-full object-cover" loading="lazy" />
+      <img src={a.img} srcSet={srcSetOf(a.img)} sizes={sizes} alt="" className="h-full w-full object-cover" loading="lazy" decoding="async" />
     ) : (
       <div className="h-full w-full bg-gradient-to-br from-[var(--mg-ink)] to-[var(--mg-acc)]" />
     );
@@ -101,7 +101,7 @@ export default function CategoryMagazine({
       <main className={W}>
         {lead && (
           <a href={href(lead)} className="group grid items-center gap-8 lg:grid-cols-[1.4fr_1fr]">
-            <span className="pc-clip pc-in pc-zoom block aspect-[3/2] overflow-hidden"><Img a={lead} /></span>
+            <span className="pc-clip pc-in pc-zoom block aspect-[3/2] overflow-hidden"><Img a={lead} sizes="100vw" /></span>
             <span>
               <Label>Top story</Label>
               <span className={`${serifM.className} block text-[34px] font-semibold leading-[1.08] group-hover:text-[var(--mg-acc)] md:text-[46px]`}>{lead.title}</span>

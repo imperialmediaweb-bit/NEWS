@@ -174,3 +174,20 @@ export function LiveCompactHeader({ site, active, MobileMenu }: { site: SiteConf
     </header>
   );
 }
+
+/**
+ * The free photo libraries resize on request; offering 400/800/1200-wide
+ * versions lets a phone download a thumbnail instead of the full photo.
+ * Other addresses are returned as they are.
+ */
+export function sized(url: string, w: number): string {
+  if (!url) return url;
+  if (/images\.pexels\.com/.test(url)) return url.replace(/([?&])(w|h|dpr)=\d+/g, "$1").replace(/[?&]+$/, "").replace(/\?&+/, "?") + (url.includes("?") ? "&" : "?") + `w=${w}`;
+  if (/images\.unsplash\.com/.test(url)) return url.replace(/([?&])w=\d+/g, "$1").replace(/[?&]+$/, "") + (url.includes("?") ? "&" : "?") + `w=${w}`;
+  if (/pixabay\.com\/get\//.test(url) && w <= 640) return url.replace(/_1280(\.\w+)$/, "_640$1");
+  return url;
+}
+export function srcSetOf(url: string): string | undefined {
+  if (!/images\.pexels\.com|images\.unsplash\.com/.test(url || "")) return undefined;
+  return [400, 800, 1200].map((w) => `${sized(url, w)} ${w}w`).join(", ");
+}

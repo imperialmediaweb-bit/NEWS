@@ -327,7 +327,9 @@ export function CinematicParallaxSlider({
               style={{
                 position: 'absolute',
                 inset: 0,
-                visibility: 'hidden',
+                // the first slide is visible from the server's HTML, so the
+                // lead photo paints before the script runs (largest paint)
+                visibility: i === initialIndex ? 'visible' : 'hidden',
                 willChange: 'transform',
               }}
             >
@@ -335,7 +337,7 @@ export function CinematicParallaxSlider({
                 data-slide-image
                 style={{ position: 'absolute', inset: 0, willChange: 'transform' }}
               >
-                {isMounted
+                {isMounted || i === initialIndex
                   ? renderImage({
                       src: slide.image,
                       alt: slide.alt,
@@ -344,7 +346,7 @@ export function CinematicParallaxSlider({
                       className: 'imperial-slide-img',
                     })
                   : null}
-                {!loaded[slide.id] ? <div data-imperial-skeleton aria-hidden /> : null}
+                {!loaded[slide.id] && i !== initialIndex ? <div data-imperial-skeleton aria-hidden /> : null}
                 <div
                   aria-hidden
                   style={{

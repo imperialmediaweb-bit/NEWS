@@ -4,7 +4,7 @@ import type { CityWeather, Storm, WeatherAlert, GasPrices, LotteryDraw, AirportS
 import CountySearch from "../live/CountySearch";
 import AlertsBox from "../live/AlertsBox";
 import MobileMenu from "../live/MobileMenu";
-import { TZ, href, hour, ago, WxIcon, TOPIC_RE } from "../live/shared";
+import { TZ, href, hour, ago, WxIcon, TOPIC_RE, srcSetOf } from "../live/shared";
 import HeroCinema from "../live/HeroCinema";
 import PeachFx from "./PeachFx";
 import Extras from "../extras/Extras";
@@ -24,10 +24,10 @@ const SPORTS_GA = /\b(game|coach|football|basketball|baseball|soccer|playoff|sea
 const SAFETY = /\b(police|sheriff|deput|arrest|charged|indicted|court|judge|crash|fire|shooting|killed|death|investigat|trooper|jail|prison|gbi)\b/i;
 const SCHOOL = /\b(school|student|teacher|college|universit|campus|education|graduat|board of education)\b/i;
 
-const Img = ({ a, className = "", eager = false }: { a: HomeArticle; className?: string; eager?: boolean }) =>
+const Img = ({ a, className = "", eager = false, sizes = "(max-width: 640px) 92vw, 420px" }: { a: HomeArticle; className?: string; eager?: boolean; sizes?: string }) =>
   a.img ? (
     // eslint-disable-next-line @next/next/no-img-element
-    <img src={a.img} alt="" className={`h-full w-full object-cover ${className}`} loading={eager ? "eager" : "lazy"} />
+    <img src={a.img} srcSet={srcSetOf(a.img)} sizes={sizes} alt="" className={`h-full w-full object-cover ${className}`} loading={eager ? "eager" : "lazy"} decoding="async" />
   ) : (
     <div className="h-full w-full bg-gradient-to-br from-[var(--pc-acc)]/40 to-[var(--pc-cu)]/50" />
   );
@@ -370,7 +370,7 @@ export default function HomePeach({
             <div className="pc-stagger pc-in grid gap-4 md:grid-cols-4 md:grid-rows-2">
               {report.map((a, i) => (
                 <a key={a.slug} href={href(a)} className={`pc-card group relative block overflow-hidden rounded-md bg-[var(--pc-ink)] ${i === 0 ? "min-h-[320px] md:col-span-2 md:row-span-2 md:min-h-[480px]" : "min-h-[220px]"}`}>
-                  <span className="pc-zoom absolute inset-0"><Img a={a} /></span>
+                  <span className="pc-zoom absolute inset-0"><Img a={a} sizes="(max-width: 640px) 92vw, 50vw" /></span>
                   <span className="absolute inset-0 bg-[linear-gradient(180deg,transparent_35%,rgba(30,12,8,.92))]" />
                   <span className="absolute inset-x-0 bottom-0 p-4 md:p-5">
                     <span className="text-[11.5px] font-bold uppercase tracking-[.08em] text-[#ffc4ad]">{a.category.replace(/-/g, " ")}</span>

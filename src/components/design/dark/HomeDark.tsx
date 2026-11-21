@@ -5,7 +5,7 @@ import CountySearch from "../live/CountySearch";
 import AlertsBox from "../live/AlertsBox";
 import MobileMenu from "../live/MobileMenu";
 import HeroCinema from "../live/HeroCinema";
-import { TZ, href, hour, ago, WxIcon, TOPIC_RE } from "../live/shared";
+import { TZ, href, hour, ago, WxIcon, TOPIC_RE, srcSetOf } from "../live/shared";
 import PeachFx, { SplitWords } from "../peach/PeachFx";
 import AdSlot from "../AdSlot";
 import Extras from "../extras/Extras";
@@ -28,10 +28,10 @@ const SCHOOL = /\b(school|student|teacher|college|universit|campus|education|gra
 const uvColor = (u: number) => (u >= 11 ? "#8e44ad" : u >= 8 ? "#c0392b" : u >= 6 ? "#e67e22" : u >= 3 ? "#f1c40f" : "#27ae60");
 const uvWord = (u: number) => (u >= 11 ? "Extreme" : u >= 8 ? "Very high" : u >= 6 ? "High" : u >= 3 ? "Moderate" : "Low");
 
-const Img = ({ a, className = "" }: { a: HomeArticle; className?: string }) =>
+const Img = ({ a, className = "", sizes = "(max-width: 640px) 92vw, 420px" }: { a: HomeArticle; className?: string; sizes?: string }) =>
   a.img ? (
     // eslint-disable-next-line @next/next/no-img-element
-    <img src={a.img} alt="" className={`h-full w-full object-cover ${className}`} loading="lazy" />
+    <img src={a.img} srcSet={srcSetOf(a.img)} sizes={sizes} alt="" className={`h-full w-full object-cover ${className}`} loading="lazy" decoding="async" />
   ) : (
     <div className="h-full w-full bg-gradient-to-br from-[var(--dk-deep)] to-[#2a2220]" />
   );
@@ -294,7 +294,7 @@ export default function HomeDark({
 
       {feature && (
         <a href={href(feature)} className="pc-parallax group relative mt-14 block min-h-[520px] overflow-hidden md:min-h-[620px]">
-          <span className="absolute inset-0"><Img a={feature} /></span>
+          <span className="absolute inset-0"><Img a={feature} sizes="100vw" /></span>
           <span className="absolute inset-0 bg-[linear-gradient(0deg,rgba(18,15,14,1),rgba(18,15,14,.5)_45%,rgba(18,15,14,.15))]" />
           <span className={`${W} relative flex min-h-[inherit] flex-col justify-end pb-14`}>
             <DLabel>The big story</DLabel>
