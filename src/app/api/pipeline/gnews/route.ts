@@ -68,9 +68,15 @@ export async function GET(req: NextRequest) {
         if ((await duplicateReason({ ...raw, title }, ctx)) === "title") { r.known++; continue; }
         const url = await resolveGoogleNews(raw.link);
         if (!url) { r.unresolved++; continue; }
-        if (skippableHost(url)) { r.skippedHost++; continue; }
+        if (skippableHost(url)) {
+          r.skippedHost++;
+          if (dry && r.examples.length < 8) r.examples.push(`skipped host: ${url.slice(0, 90)}`);
+          continue;
+        }
         const item = { ...raw, guid: "", link: url, title, source: publisher };
-        if (await duplicateReason(item, ctx)) { r.known++; continue; }
+        // No second dedup call: duplicateReason records each title it checks,
+        // so checking again would match the item against itself. A story
+        // already queued under the same URL is refused by the insert.
         if (!isRelevantToState(item.title, item.description || "", site.state, site.city).relevant) { r.offState++; continue; }
         taken++;
         if (dry) {
