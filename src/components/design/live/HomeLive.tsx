@@ -1,5 +1,5 @@
 import { Source_Serif_4, Libre_Franklin } from "next/font/google";
-import type { SiteConfig } from "@/config/sites";
+import type { SiteConfig } from "@/config/site-config";
 import type { HomeArticles, HomeArticle } from "@/lib/homepage-data";
 import type { CityWeather, Storm } from "@/lib/local-data";
 import CountySearch from "./CountySearch";
