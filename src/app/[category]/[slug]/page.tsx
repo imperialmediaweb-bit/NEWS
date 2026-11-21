@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import { headers } from "next/headers";
 import { notFound, redirect } from "next/navigation";
 import { designState } from "@/lib/design-nou";
-import { getCityForecast } from "@/lib/local-data";
+import { getCityForecast, countiesOf } from "@/lib/local-data";
 import { getHomepageArticles } from "@/lib/homepage-data";
 import ArticleLive from "@/components/design/live/ArticleLive";
 import { getSiteByDomain, getActiveSite } from "@/config/sites";
@@ -307,7 +307,7 @@ export default async function ArticlePage({
   const liveData =
     design.family === "live"
       ? await Promise.all([getHomepageArticles(site), getCityForecast(site.state)]).then(([home, forecast]) => ({
-          latest: home?.latestPosts || [],
+          latest: home?.pool || home?.latestPosts || [],
           mostRead: home?.popular || [],
           forecast,
         }))
@@ -334,6 +334,7 @@ export default async function ArticlePage({
           latest={liveData?.latest || []}
           mostRead={liveData?.mostRead || []}
           forecast={liveData?.forecast || null}
+          counties={countiesOf(site.state)}
         />
       ) : (
       <ArticlePageClient

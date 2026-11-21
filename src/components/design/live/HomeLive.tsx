@@ -64,6 +64,19 @@ export default function HomeLive({
     "/" + label.toLowerCase(),
     take(tagged.concat(pool.filter((a) => re.test(a.title))), 4),
   ]);
+  // Further down the page, all from the same recent pool, never repeating.
+  const latestGrid = take(pool, 6);
+  const CITY_BLOCKS = ["Houston", "Dallas", "Austin", "San Antonio", "Fort Worth", "El Paso"];
+  const cities: Array<[string, HomeArticle[]]> = [];
+  for (const c of CITY_BLOCKS) {
+    if (cities.length >= 4) break;
+    const re = new RegExp(`\\b${c}\\b`, "i");
+    const list = take(pool.filter((a) => re.test(a.title) || re.test(a.summary)), 3);
+    if (list.length >= 2) cities.push([c, list]);
+  }
+  const safety = take(pool.filter((a) => TOPICS[3][1].test(a.title)), 4);
+  const education = take(pool.filter((a) => TOPICS[4][1].test(a.title)), 4);
+  const mostRead = take(articles.popular.concat(articles.trending), 5);
   const breaking = live[0] || lead;
   const capital = weather[0];
   const popularCounties = ["Harris", "Dallas", "Tarrant", "Bexar", "Travis", "Collin", "Denton", "El Paso", "Hidalgo", "Lubbock"].filter((c) => counties.includes(c));
@@ -256,6 +269,96 @@ export default function HomeLive({
             </div>
           ))}
         </section>
+
+        {/* latest news grid */}
+        {latestGrid.length >= 3 && (
+          <section className="mt-10">
+            <SectionTitle href="/local-news">Latest news</SectionTitle>
+            <div className="grid gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
+              {latestGrid.map((a) => (
+                <a key={a.slug} href={href(a)} className="group block">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={a.img} alt="" className="aspect-[16/9] w-full object-cover" loading="lazy" />
+                  <p className="mt-2 text-[12px] font-bold uppercase text-[var(--lv-acc)]">{ago(a)}</p>
+                  <h3 className={`${serif.className} text-[20px] font-bold leading-snug group-hover:text-[var(--lv-acc)]`}>{a.title}</h3>
+                  {a.summary && <p className="mt-1 line-clamp-2 text-[14px] text-[#4a5266]">{a.summary}</p>}
+                </a>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* across the state, city by city */}
+        {cities.length >= 2 && (
+          <section className="mt-10 bg-[#f6f7fb] px-5 py-6">
+            <SectionTitle>Across {site.state}</SectionTitle>
+            <div className={`grid gap-6 sm:grid-cols-2 ${cities.length >= 4 ? "lg:grid-cols-4" : "lg:grid-cols-3"}`}>
+              {cities.map(([c, list]) => (
+                <div key={c}>
+                  <h3 className="mb-2 border-b-2 border-[var(--lv-ink)] pb-1 text-[15px] font-extrabold uppercase tracking-wide text-[var(--lv-ink)]">{c}</h3>
+                  {list[0] && (
+                    <a href={href(list[0])} className="group block">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={list[0].img} alt="" className="aspect-[16/10] w-full object-cover" loading="lazy" />
+                      <span className={`${serif.className} mt-2 block text-[17px] font-bold leading-snug group-hover:text-[var(--lv-acc)]`}>{list[0].title}</span>
+                    </a>
+                  )}
+                  <ul className="mt-2 space-y-1.5">
+                    {list.slice(1).map((a) => (
+                      <li key={a.slug} className="border-t border-[#e3e6ee] pt-1.5 text-[14px] font-semibold"><a href={href(a)} className="hover:text-[var(--lv-acc)]">{a.title}</a></li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* safety · education · most read */}
+        {(safety.length >= 2 || education.length >= 2 || mostRead.length >= 3) && (
+          <section className="mt-10 grid gap-8 lg:grid-cols-3">
+            {safety.length >= 2 && (
+              <div>
+                <SectionTitle>Crime &amp; Safety</SectionTitle>
+                <ul className="space-y-3">
+                  {safety.map((a, i) => (
+                    <li key={a.slug} className={i === 0 ? "" : "border-t border-[#e3e6ee] pt-3"}>
+                      <a href={href(a)} className={`${serif.className} block ${i === 0 ? "text-[20px]" : "text-[16px]"} font-bold leading-snug hover:text-[var(--lv-acc)]`}>{a.title}</a>
+                      <span className="text-[12px] text-[#6b7386]">{ago(a)}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {education.length >= 2 && (
+              <div>
+                <SectionTitle>Education</SectionTitle>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={education[0].img} alt="" className="aspect-[16/9] w-full object-cover" loading="lazy" />
+                <ul className="mt-2 space-y-3">
+                  {education.map((a, i) => (
+                    <li key={a.slug} className={i === 0 ? "" : "border-t border-[#e3e6ee] pt-3"}>
+                      <a href={href(a)} className={`${serif.className} block ${i === 0 ? "text-[20px]" : "text-[16px]"} font-bold leading-snug hover:text-[var(--lv-acc)]`}>{a.title}</a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {mostRead.length >= 3 && (
+              <div className="border border-[#dde1ea] p-4">
+                <SectionTitle>Most read</SectionTitle>
+                <ol>
+                  {mostRead.map((a, i) => (
+                    <li key={a.slug} className="flex gap-4 border-b border-[#e3e6ee] py-3 last:border-0">
+                      <span className={`${serif.className} w-6 text-[30px] font-bold leading-none text-[var(--lv-acc)]`}>{i + 1}</span>
+                      <a href={href(a)} className={`${serif.className} text-[16px] font-bold leading-snug hover:text-[var(--lv-acc)]`}>{a.title}</a>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            )}
+          </section>
+        )}
 
         {/* opinion */}
         {opinion.length > 0 && (

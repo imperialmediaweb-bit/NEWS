@@ -3,6 +3,8 @@ import type { HomeArticle } from "@/lib/homepage-data";
 import type { CityWeather, DayForecast } from "@/lib/local-data";
 import { serif, sans, TZ, href, hour, WxIcon, NAV, liveVars, LiveTopBar, LiveFooter } from "./shared";
 import ShareBar from "./ShareBar";
+import AlertsBox from "./AlertsBox";
+import CountySearch from "./CountySearch";
 
 /**
  * "Live news" family, article page — built from the generated Texas article
@@ -47,6 +49,7 @@ export default function ArticleLive({
   latest,
   mostRead,
   forecast,
+  counties,
 }: {
   site: SiteConfig;
   article: LiveArticle;
@@ -55,6 +58,7 @@ export default function ArticleLive({
   latest: HomeArticle[];
   mostRead: HomeArticle[];
   forecast: { city: string; now: CityWeather; days: DayForecast[] } | null;
+  counties: string[];
 }) {
   const tz = TZ[site.state] || "America/New_York";
   const categoryLabel = categorySlug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
@@ -63,14 +67,25 @@ export default function ArticleLive({
   const when = published
     ? `${published.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: tz })} at ${published.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: tz, timeZoneName: "short" })}`
     : "";
-  const html = article.content.includes("<p") ? article.content : article.content.split(/\n\s*\n/).filter((p) => p.trim()).map((p) => `<p>${p.trim()}</p>`).join("\n");
+  const raw = article.content.includes("<p") ? article.content : article.content.split(/\n\s*\n/).filter((p) => p.trim()).map((p) => `<p>${p.trim()}</p>`).join("\n");
+  // Many stories open with their own headline as a heading; it is already
+  // the page's h1, so the repeat is dropped.
+  const norm = (x: string) => x.replace(/<[^>]+>/g, "").replace(/&[a-z#0-9]+;/gi, " ").replace(/[^a-z0-9]+/gi, " ").trim().toLowerCase();
+  const html = raw.replace(/^\s*<h[1-3][^>]*>([\s\S]*?)<\/h[1-3]>/i, (m, inner) => (norm(inner) === norm(article.title) ? "" : m));
   const words = article.content.replace(/<[^>]+>/g, " ").trim().split(/\s+/).length;
   const minutes = Math.max(1, Math.round(words / 220));
   const url = `https://${site.domain}/${categorySlug}/${article.slug}`;
   const breaking = latest.find((a) => a.slug !== article.slug);
   const sideLatest = latest.filter((a) => a.slug !== article.slug).slice(0, 4);
-  const top = mostRead.filter((a) => a.slug !== article.slug).slice(0, 5);
-  const more = related.slice(0, 3);
+  const shownLatest = new Set(sideLatest.map((a) => a.slug));
+  const top = mostRead.filter((a) => a.slug !== article.slug && !shownLatest.has(a.slug)).slice(0, 5);
+  const shownTop = new Set(top.map((a) => a.slug));
+  // Six stories at the end: the related ones first, then the latest from the state.
+  const moreSlugs = new Set<string>([article.slug]);
+  const more: LiveRelated[] = [];
+  for (const a of related) if (!moreSlugs.has(a.slug) && more.length < 6) { moreSlugs.add(a.slug); more.push(a); }
+  for (const a of latest) if (!moreSlugs.has(a.slug) && !shownLatest.has(a.slug) && !shownTop.has(a.slug) && more.length < 6) { moreSlugs.add(a.slug); more.push({ img: a.img, title: a.title, summary: a.summary, category: a.category, date: a.date, slug: a.slug }); }
+  const headlines = latest.filter((a) => !moreSlugs.has(a.slug) && !shownLatest.has(a.slug) && !shownTop.has(a.slug)).slice(0, 8);
   const logo = `/logos/${site.slug}.svg`;
 
   return (
@@ -205,13 +220,23 @@ export default function ArticleLive({
               </ul>
             </section>
           )}
+
+          <div className="lg:sticky lg:top-4 space-y-6">
+            <AlertsBox name={site.name} state={site.state} />
+            {counties.length > 0 && (
+              <section className="border border-[#dde1ea] p-4">
+                <h2 className="mb-3 text-[17px] font-extrabold uppercase text-[var(--lv-ink)]">Your county</h2>
+                <CountySearch state={site.state} counties={counties} popular={counties.length > 10 ? counties.filter((c) => ["Harris", "Dallas", "Tarrant", "Bexar", "Travis", "Collin"].includes(c)) : counties.slice(0, 6)} />
+              </section>
+            )}
+          </div>
         </aside>
       </main>
 
       {more.length > 0 && (
         <section className="mx-auto mt-10 max-w-[1240px] px-4">
           <h2 className={`${serif.className} flex items-center gap-2 text-[26px] font-bold text-[#141b2d]`}><span className="h-6 w-2 -skew-x-12 bg-[var(--lv-acc)]" /> More from {site.state}</h2>
-          <div className="mt-4 grid gap-6 md:grid-cols-3">
+          <div className="mt-4 grid gap-x-6 gap-y-8 md:grid-cols-3">
             {more.map((a) => (
               <a key={a.slug} href={`/${(a.category || "news").toLowerCase().replace(/\s+/g, "-")}/${a.slug}`} className="group block">
                 {a.img && (
@@ -224,6 +249,22 @@ export default function ArticleLive({
                 <p className="mt-1 text-[12px] text-[#6b7386]">{a.date}</p>
               </a>
             ))}
+          </div>
+        </section>
+      )}
+
+      {headlines.length > 0 && (
+        <section className="mx-auto mt-10 max-w-[1240px] px-4">
+          <div className="border-y-2 border-[var(--lv-ink)] py-4">
+            <h2 className="text-[15px] font-extrabold uppercase tracking-wider text-[var(--lv-ink)]">Latest {site.state} headlines</h2>
+            <ul className="mt-3 grid gap-x-8 md:grid-cols-2">
+              {headlines.map((a) => (
+                <li key={a.slug} className="flex gap-3 border-b border-[#e3e6ee] py-2.5">
+                  <span className="w-16 shrink-0 text-[12px] font-bold text-[var(--lv-acc)]">{hour(a, tz)}</span>
+                  <a href={href(a)} className={`${serif.className} text-[16px] font-bold leading-snug hover:text-[var(--lv-acc)]`}>{a.title}</a>
+                </li>
+              ))}
+            </ul>
           </div>
         </section>
       )}
