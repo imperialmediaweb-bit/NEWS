@@ -3,6 +3,7 @@ import type { HomeArticles, HomeArticle } from "@/lib/homepage-data";
 import type { CityWeather, Storm } from "@/lib/local-data";
 import CountySearch from "./CountySearch";
 import AlertsBox from "./AlertsBox";
+import MobileMenu from "./MobileMenu";
 import { serif, sans, PALETTE, TZ, href, hour, ago, WxIcon, SectionTitle, NAV, LiveTopBar, LiveFooter } from "./shared";
 
 /**
@@ -88,14 +89,23 @@ export default function HomeLive({
       <LiveTopBar site={site} capital={capital} />
       {/* masthead */}
       <header className="border-b border-[#dde1ea]">
-        <div className="mx-auto max-w-[1240px] px-4 py-0 text-center">
+        {/* phone: menu · logo · search */}
+        <div className="flex items-center justify-between px-2 py-1 md:hidden">
+          <MobileMenu nav={NAV} />
           <a href="/" aria-label={site.name}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={logo} alt={site.name} width={300} height={150} className="mx-auto -my-3 h-[176px] w-auto" />
+            <img src={logo} alt={site.name} width={200} height={100} className="h-[88px] w-auto" />
+          </a>
+          <a href="/search" aria-label="Search" className="flex h-11 w-11 items-center justify-center text-[var(--lv-ink)]"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" aria-hidden><circle cx="10.5" cy="10.5" r="7" /><path d="M16 16l6 6" strokeLinecap="round" /></svg></a>
+        </div>
+        <div className="mx-auto hidden max-w-[1240px] px-4 pt-1 text-center md:block">
+          <a href="/" aria-label={site.name}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={logo} alt={site.name} width={320} height={160} className="mx-auto h-[160px] w-auto" />
           </a>
         </div>
-        <nav className="border-t border-[#dde1ea]">
-          <ul className="mx-auto flex max-w-[1240px] items-center justify-start gap-2 overflow-x-auto px-4 text-[16px] md:justify-center md:text-[18px] font-bold text-[var(--lv-ink)]">
+        <nav className="hidden border-t border-[#dde1ea] md:block">
+          <ul className="mx-auto flex max-w-[1240px] items-center justify-center gap-2 px-4 text-[18px] font-bold text-[var(--lv-ink)]">
             {nav.map(([l, h], i) => (
               <li key={l} className="flex items-center">
                 {i > 0 && <span className="mx-5 h-5 w-px bg-[#cfd4e0]" aria-hidden />}
@@ -109,11 +119,11 @@ export default function HomeLive({
 
       {/* breaking bar */}
       <a href={href(breaking)} className="block bg-[var(--lv-acc)] text-white">
-        <div className="mx-auto flex max-w-[1240px] items-center gap-4 px-4 py-3">
-          <span className="relative -my-3 -ml-4 flex shrink-0 items-center bg-[#8f0a24] py-3 pl-4 pr-7 text-[22px] font-extrabold uppercase tracking-wide [clip-path:polygon(0_0,calc(100%-14px)_0,100%_50%,calc(100%-14px)_100%,0_100%)]">
+        <div className="mx-auto flex max-w-[1240px] items-center gap-3 px-4 py-2 md:gap-4 md:py-3">
+          <span className="relative -my-2 -ml-4 flex shrink-0 items-center bg-[#8f0a24] py-2 pl-4 pr-6 text-[15px] md:-my-3 md:py-3 md:pr-7 md:text-[22px] font-extrabold uppercase tracking-wide [clip-path:polygon(0_0,calc(100%-14px)_0,100%_50%,calc(100%-14px)_100%,0_100%)]">
             {breaking.iso && Date.now() - new Date(breaking.iso).getTime() < 90 * 60000 ? "Breaking" : "Latest"}
           </span>
-          <span className="truncate text-[20px] font-bold">{breaking.title}</span>
+          <span className="truncate text-[15px] font-bold md:text-[20px]">{breaking.title}</span>
           <span className="ml-auto hidden shrink-0 items-center gap-2 border-l border-white/40 pl-4 text-[18px] font-bold uppercase sm:flex"><span className="h-2.5 w-2.5 animate-pulse rounded-full bg-white" /> Live <span aria-hidden className="ml-2 text-[22px]">›</span></span>
         </div>
       </a>

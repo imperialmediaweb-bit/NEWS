@@ -161,3 +161,4 @@ body {
 .lv-article ol { list-style: decimal; }
 .lv-article li { margin: 0.3em 0; }
 .lv-article img { max-width: 100%; height: auto; margin: 1.2em 0; }
+@media (max-width: 767px) { .lv-article { font-size: 18px; line-height: 1.62; } .lv-article blockquote { font-size: 21px; } }

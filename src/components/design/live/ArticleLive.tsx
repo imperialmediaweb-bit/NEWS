@@ -3,6 +3,7 @@ import type { HomeArticle } from "@/lib/homepage-data";
 import type { CityWeather, DayForecast } from "@/lib/local-data";
 import { serif, sans, TZ, href, hour, WxIcon, NAV, liveVars, LiveTopBar, LiveFooter } from "./shared";
 import ShareBar from "./ShareBar";
+import MobileMenu from "./MobileMenu";
 import AlertsBox from "./AlertsBox";
 import CountySearch from "./CountySearch";
 
@@ -94,10 +95,19 @@ export default function ArticleLive({
 
       {/* compact masthead: logo left, menu right */}
       <header className="border-b border-[#dde1ea]">
-        <div className="mx-auto flex max-w-[1240px] items-center gap-6 px-4">
+        {/* phone: menu · logo · search */}
+        <div className="flex items-center justify-between px-2 py-1 md:hidden">
+          <MobileMenu nav={NAV} />
+          <a href="/" aria-label={site.name}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={logo} alt={site.name} width={200} height={100} className="h-[80px] w-auto" />
+          </a>
+          <a href="/search" aria-label="Search" className="flex h-11 w-11 items-center justify-center text-[var(--lv-ink)]"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" aria-hidden><circle cx="10.5" cy="10.5" r="7" /><path d="M16 16l6 6" strokeLinecap="round" /></svg></a>
+        </div>
+        <div className="mx-auto hidden max-w-[1240px] items-center gap-6 px-4 md:flex">
           <a href="/" aria-label={site.name} className="shrink-0">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={logo} alt={site.name} width={260} height={130} className="-my-3 h-[124px] w-auto" />
+            <img src={logo} alt={site.name} width={260} height={130} className="h-[116px] w-auto" />
           </a>
           <span className="hidden h-16 w-px bg-[#cfd4e0] md:block" aria-hidden />
           <nav className="flex-1 overflow-x-auto">
@@ -117,10 +127,10 @@ export default function ArticleLive({
       {breaking && (
         <a href={href(breaking)} className="block bg-[#f1f2f6]">
           <div className="mx-auto flex max-w-[1240px] items-center gap-4 px-4">
-            <span className="flex shrink-0 items-center bg-[var(--lv-acc)] py-2.5 pl-4 pr-7 text-[18px] font-extrabold uppercase tracking-wide text-white [clip-path:polygon(0_0,calc(100%-14px)_0,100%_50%,calc(100%-14px)_100%,0_100%)]">
+            <span className="flex shrink-0 items-center bg-[var(--lv-acc)] py-2 pl-3 pr-6 text-[14px] md:py-2.5 md:pl-4 md:pr-7 md:text-[18px] font-extrabold uppercase tracking-wide text-white [clip-path:polygon(0_0,calc(100%-14px)_0,100%_50%,calc(100%-14px)_100%,0_100%)]">
               {breaking.iso && Date.now() - new Date(breaking.iso).getTime() < 90 * 60000 ? "Breaking" : "Latest"}
             </span>
-            <span className="truncate text-[17px] font-bold text-[#141b2d]">{breaking.title}</span>
+            <span className="truncate text-[14px] font-bold text-[#141b2d] md:text-[17px]">{breaking.title}</span>
             <span className="ml-auto hidden shrink-0 text-[13px] text-[#5a6275] sm:block">{hour(breaking, tz)}</span>
             <span className="hidden text-[22px] text-[#141b2d] sm:block" aria-hidden>›</span>
           </div>
@@ -134,8 +144,8 @@ export default function ArticleLive({
             <a href={`/${categorySlug}`} className="hover:text-[var(--lv-acc)]">{categoryLabel}</a>
           </nav>
           <p className="mt-4 text-[13px] font-extrabold uppercase tracking-wider text-[var(--lv-acc)]">{site.state} · {categoryLabel}</p>
-          <h1 className={`${serif.className} mt-2 text-[34px] font-extrabold leading-[1.12] text-[#141b2d] md:text-[44px]`}>{article.title}</h1>
-          {article.summary && <p className="mt-3 text-[19px] leading-relaxed text-[#3a4255]">{article.summary}</p>}
+          <h1 className={`${serif.className} mt-2 text-[30px] font-extrabold leading-[1.12] text-[#141b2d] md:text-[44px]`}>{article.title}</h1>
+          {article.summary && <p className="mt-3 text-[17px] leading-relaxed text-[#3a4255] md:text-[19px]">{article.summary}</p>}
 
           <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-[13px] text-[#4a5266]">
             <span className="flex items-center gap-3">
