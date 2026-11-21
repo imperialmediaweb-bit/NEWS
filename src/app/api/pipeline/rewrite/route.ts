@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import pool from "@/lib/db";
 import { isPublishingHours } from "@/config/feeds";
-import { rewriteFromSource } from "@/lib/pipeline/rewriter";
+import { sectionFor, rewriteFromSource } from "@/lib/pipeline/rewriter";
 import { fetchSourceText } from "@/lib/pipeline/source-fetch";
 import { findImage } from "@/lib/pipeline/images";
 import { publishArticle } from "@/lib/pipeline/publisher";
@@ -226,14 +226,28 @@ export async function POST(req: NextRequest) {
         item.category
       );
 
+      // A story with no connection to the state does not belong on its site;
+      // the feeds are local outlets, but they carry wire and world stories too.
+      if (rewrite.aboutState === false) {
+        failed++;
+        const reason = `Not about ${siteEntry.state}: "${rewrite.title.slice(0, 120)}"`;
+        rejections.push({ state: item.state, reason });
+        await pool.query("UPDATE feed_items SET status = 'failed', error_message = $2 WHERE id = $1", [item.id, reason]);
+        continue;
+      }
+
+      // Every feed is configured as local-news; the story's own subject
+      // decides where it is filed.
+      const category = sectionFor(rewrite, item.category);
+
       // Find an image (with category fallback for precision)
-      const image = await findImage(rewrite.suggestedImageQuery, item.category);
+      const image = await findImage(rewrite.suggestedImageQuery, category);
 
       // Publish to the single matching state site
       const published = await publishArticle({
         feedItemId: item.id,
         rewrite,
-        category: item.category,
+        category,
         sourceUrl: item.source_url,
         imageUrl: image?.url || null,
         state: item.state,

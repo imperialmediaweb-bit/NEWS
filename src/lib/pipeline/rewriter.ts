@@ -5,7 +5,14 @@ export interface RewriteResult {
   summary: string;
   content: string;
   suggestedImageQuery: string;
+  /** The site section the story belongs in, when the model was asked. */
+  section?: string;
+  /** False when the story has no real connection to the site's state. */
+  aboutState?: boolean;
 }
+
+/** Sections a story can be filed under; they match the site menu. */
+export const SECTIONS = ["politics", "business", "sports", "life", "local-news"] as const;
 
 type LLMProvider = "gemini" | "openai" | "anthropic" | "xai";
 
@@ -264,12 +271,18 @@ Source URL: ${sourceUrl}
 SOURCE ARTICLE:
 ${sourceText}
 
+FILING:
+- "section" is where the story belongs on the site, exactly one of: "politics" (government, elections, legislation, officials, courts on public policy), "business" (companies, jobs, the economy, energy, real estate, prices), "sports" (any sport at any level), "life" (food, arts, culture, events, holidays, travel, health and family features), "local-news" (crime, public safety, accidents, weather, schools, community news and anything else).
+- "aboutState" is true only when the story is about ${state}: its places, people, institutions or events, or something that directly affects people in ${state}. A story about another country or another state with no ${state} connection is false.
+
 Return ONLY valid JSON, no markdown fences:
 {
   "title": "a plain, accurate headline",
   "summary": "1-2 sentences under 160 characters",
   "content": "the article body as HTML",
-  "suggestedImageQuery": "2-4 words describing a generic scene, never a specific person"
+  "suggestedImageQuery": "2-4 words describing a generic scene, never a specific person",
+  "section": "one of politics | business | sports | life | local-news",
+  "aboutState": true
 }`;
 
   return restoreSourceSpellings(await callWithFallback(prompt), sourceText);
@@ -579,7 +592,15 @@ function parseRewriteResponse(text: string): RewriteResult {
     summary: json.summary || "",
     content: json.content || "",
     suggestedImageQuery: json.suggested_image_query || json.suggestedImageQuery || "",
+    section: typeof json.section === "string" ? json.section.trim().toLowerCase() : undefined,
+    aboutState: typeof json.aboutState === "boolean" ? json.aboutState : undefined,
   };
+}
+
+/** The section to file a story under: the model's choice when valid, else the feed's. */
+export function sectionFor(rewrite: RewriteResult, fallback: string): string {
+  const s = (rewrite.section || "").replace(/\s+/g, "-");
+  return (SECTIONS as readonly string[]).includes(s) ? s : fallback;
 }
 
 /**
