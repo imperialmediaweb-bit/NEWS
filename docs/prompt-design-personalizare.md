@@ -134,3 +134,15 @@ Regulile de mai jos vin din cererile din 21.11.2026: „fă customizată pentru 
 | West Virginia | New River Gorge, râuri | NPS*, USGS |
 | Wisconsin | Lake Michigan, seceta | NOAA, Drought Monitor |
 | Wyoming | Cutremurele din Yellowstone, zăpada | USGS, SNOTEL |
+
+## 8. După design: SEO pe cuvintele căutate în fiecare stat și oraș
+Ordinea cerută de user: întâi designul la toate statele, apoi SEO-ul.
+1. Pentru fiecare stat, aflu cuvintele cele mai căutate pe știri locale:
+   - „{oraș} news”, „{county} news”, „{oraș} weather”, „{stat} politics” și altele de felul ăsta;
+   - sursă: unealta de keywords conectată, cu costul spus înainte.
+2. Le pun în:
+   - titlul paginilor, descrieri și H1;
+   - numele secțiunilor și ale subsecțiunilor;
+   - paginile de județ și de oraș, cu un text scurt și adevărat pentru fiecare;
+   - linkurile interne dintre ele.
+3. Nicio umplutură cu cuvinte cheie și niciun text inventat. Doar etichete și descrieri corecte ale paginilor reale.
