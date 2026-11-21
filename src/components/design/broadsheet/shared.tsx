@@ -10,8 +10,8 @@ import { TZ, WxIcon } from "../live/shared";
  * orange accent, gold double rules, Libre Caslon headlines with italic decks,
  * Public Sans for the small print. Dense columns, datelines, "Read more".
  */
-export const caslon = Libre_Caslon_Text({ subsets: ["latin"], weight: ["400", "700"], style: ["normal", "italic"], display: "swap", variable: "--bs-serif" });
-export const pub = Public_Sans({ subsets: ["latin"], weight: ["400", "500", "600", "700"], display: "swap" });
+export const caslon = Libre_Caslon_Text({ subsets: ["latin"], weight: ["400", "700"], style: ["normal", "italic"], display: "swap", variable: "--bs-serif", preload: false });
+export const pub = Public_Sans({ subsets: ["latin"], weight: ["400", "500", "600", "700"], display: "swap", preload: false });
 
 export const BS: Record<string, { ink: string; acc: string; gold: string; slogan: string; capital: string; dateline: string }> = {
   "new-york-express": { ink: "#0a0a0a", acc: "#f05a28", gold: "#c8a24a", slogan: "From the city to upstate.", capital: "New York City", dateline: "NEW YORK" },

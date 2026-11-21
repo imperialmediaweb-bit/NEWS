@@ -10,8 +10,8 @@ import { TZ, WxIcon } from "../live/shared";
  * labels, teal / coral / gold. Barlow Condensed for headlines, Barlow for
  * text. The effects reuse the pc-* classes driven by PeachFx.
  */
-export const cond = Barlow_Condensed({ subsets: ["latin"], weight: ["600", "700", "800", "900"], style: ["normal", "italic"], display: "swap", variable: "--tb-cond" });
-export const text = Barlow({ subsets: ["latin"], weight: ["400", "500", "600", "700"], style: ["normal", "italic"], display: "swap" });
+export const cond = Barlow_Condensed({ subsets: ["latin"], weight: ["600", "700", "800", "900"], style: ["normal", "italic"], display: "swap", variable: "--tb-cond", preload: false });
+export const text = Barlow({ subsets: ["latin"], weight: ["400", "500", "600", "700"], style: ["normal", "italic"], display: "swap", preload: false });
 
 export const TAB: Record<string, { ink: string; acc: string; gold: string; slogan: string; capital: string }> = {
   "florida-express": { ink: "#005f73", acc: "#e5603f", gold: "#e9b44c", slogan: "From the Keys to the Panhandle.", capital: "Miami" },

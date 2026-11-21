@@ -10,8 +10,8 @@ import { TZ, WxIcon } from "../live/shared";
  * rules; Fraunces headlines, Work Sans for everything else. Different from
  * the Texas "live" family in type, colour, masthead and section layouts.
  */
-export const display = Fraunces({ subsets: ["latin"], weight: ["600", "700", "800", "900"], display: "swap", variable: "--pc-display" });
-export const body = Work_Sans({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"], display: "swap" });
+export const display = Fraunces({ subsets: ["latin"], weight: ["600", "700", "800", "900"], display: "swap", variable: "--pc-display", preload: false });
+export const body = Work_Sans({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"], display: "swap", preload: false });
 
 export const PEACH: Record<string, { ink: string; acc: string; copper: string; paper: string; slogan: string; capital: string }> = {
   "georgia-express": { ink: "#3a1c14", acc: "#e07a5f", copper: "#b87333", paper: "#fbf6f1", slogan: "From Atlanta to the coast.", capital: "Atlanta" },

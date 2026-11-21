@@ -10,8 +10,8 @@ import { TZ, WxIcon } from "../live/shared";
  * cinematic photos, Spectral headlines and spaced Montserrat capitals —
  * luxury editorial at night.
  */
-export const spectral = Spectral({ subsets: ["latin"], weight: ["400", "500", "600", "700"], style: ["normal", "italic"], display: "swap", variable: "--dk-serif" });
-export const mont = Montserrat({ subsets: ["latin"], weight: ["400", "500", "600", "700"], display: "swap" });
+export const spectral = Spectral({ subsets: ["latin"], weight: ["400", "500", "600", "700"], style: ["normal", "italic"], display: "swap", variable: "--dk-serif", preload: false });
+export const mont = Montserrat({ subsets: ["latin"], weight: ["400", "500", "600", "700"], display: "swap", preload: false });
 
 export const DK: Record<string, { bg: string; panel: string; acc: string; cu: string; deep: string; slogan: string; capital: string; sky: string }> = {
   "arizona-express": { bg: "#120f0e", panel: "#1c1715", acc: "#13959a", cu: "#c0703f", deep: "#5a1f0e", slogan: "News under the desert sun.", capital: "Phoenix", sky: "linear-gradient(180deg,#1b0f0c 0%,#5a1f0e 45%,#c0703f 78%,#e7a25f 100%)" },

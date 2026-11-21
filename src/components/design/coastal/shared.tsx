@@ -10,8 +10,8 @@ import { TZ, WxIcon } from "../live/shared";
  * hairlines, light Crimson Pro headlines, Nunito Sans with spaced capitals for
  * labels. Calm and open.
  */
-export const crimson = Crimson_Pro({ subsets: ["latin"], weight: ["400", "500", "600", "700"], style: ["normal", "italic"], display: "swap", variable: "--co-serif" });
-export const nunito = Nunito_Sans({ subsets: ["latin"], weight: ["400", "600", "700", "800"], display: "swap" });
+export const crimson = Crimson_Pro({ subsets: ["latin"], weight: ["400", "500", "600", "700"], style: ["normal", "italic"], display: "swap", variable: "--co-serif", preload: false });
+export const nunito = Nunito_Sans({ subsets: ["latin"], weight: ["400", "600", "700", "800"], display: "swap", preload: false });
 
 export const CO: Record<string, { ink: string; acc: string; gold: string; sea: string; slogan: string; capital: string }> = {
   "hawaii-express": { ink: "#003c5a", acc: "#d6336c", gold: "#c9a55a", sea: "#e6f3f7", slogan: "Island news, every day.", capital: "Honolulu" },

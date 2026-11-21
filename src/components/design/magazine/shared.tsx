@@ -10,8 +10,8 @@ import { TZ, WxIcon } from "../live/shared";
  * photography, generous white space, elegant Newsreader headlines with
  * italic section titles, Source Sans for text. Navy, orange and gold.
  */
-export const serifM = Newsreader({ subsets: ["latin"], weight: ["500", "600", "700"], style: ["normal", "italic"], display: "swap", variable: "--mg-serif" });
-export const sansM = Source_Sans_3({ subsets: ["latin"], weight: ["400", "500", "600", "700"], display: "swap" });
+export const serifM = Newsreader({ subsets: ["latin"], weight: ["500", "600", "700"], style: ["normal", "italic"], display: "swap", variable: "--mg-serif", preload: false });
+export const sansM = Source_Sans_3({ subsets: ["latin"], weight: ["400", "500", "600", "700"], display: "swap", preload: false });
 
 export const MAG: Record<string, { ink: string; acc: string; gold: string; slogan: string; capital: string }> = {
   "california-express": { ink: "#0d3b66", acc: "#e8833a", gold: "#c9a227", slogan: "From the coast to the Sierra.", capital: "Los Angeles" },

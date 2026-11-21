@@ -5,8 +5,8 @@ import type { CityWeather } from "@/lib/local-data";
 import PreviewLinks from "./PreviewLinks";
 
 /** Shared pieces of the "live" family: fonts, palette, icons, top bar, footer. */
-export const serif = Source_Serif_4({ subsets: ["latin"], weight: ["600", "700", "800"], display: "swap" });
-export const sans = Libre_Franklin({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"], display: "swap" });
+export const serif = Source_Serif_4({ subsets: ["latin"], weight: ["600", "700", "800"], display: "swap", preload: false });
+export const sans = Libre_Franklin({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"], display: "swap", preload: false });
 
 export const PALETTE: Record<string, { ink: string; acc: string }> = {
   "texas-express": { ink: "#002868", acc: "#bf0a30" },
