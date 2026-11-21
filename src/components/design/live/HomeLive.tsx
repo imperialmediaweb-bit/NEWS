@@ -149,7 +149,7 @@ export default function HomeLive({
           </a>
         </div>
         <nav className="border-t border-[#dde1ea]">
-          <ul className="mx-auto flex max-w-[1240px] items-center justify-center gap-2 overflow-x-auto px-4 text-[18px] font-bold text-[var(--lv-ink)]">
+          <ul className="mx-auto flex max-w-[1240px] items-center justify-start gap-2 overflow-x-auto px-4 text-[16px] md:justify-center md:text-[18px] font-bold text-[var(--lv-ink)]">
             {nav.map(([l, h], i) => (
               <li key={l} className="flex items-center">
                 {i > 0 && <span className="mx-5 h-5 w-px bg-[#cfd4e0]" aria-hidden />}
