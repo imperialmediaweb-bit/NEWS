@@ -1,6 +1,6 @@
 import type { SiteConfig } from "@/config/site-config";
 import type { HomeArticles, HomeArticle } from "@/lib/homepage-data";
-import type { CityWeather, Storm, WeatherAlert, GasPrices, LotteryDraw } from "@/lib/local-data";
+import type { CityWeather, Storm, WeatherAlert, GasPrices, LotteryDraw, AirportStatus, Launch } from "@/lib/local-data";
 import CountySearch from "../live/CountySearch";
 import AlertsBox from "../live/AlertsBox";
 import MobileMenu from "../live/MobileMenu";
@@ -43,6 +43,7 @@ export default function HomePeach({
   alerts,
   gas,
   lottery,
+  airports,
 }: {
   site: SiteConfig;
   articles: HomeArticles;
@@ -53,6 +54,8 @@ export default function HomePeach({
   alerts?: WeatherAlert[] | null;
   gas?: GasPrices | null;
   lottery?: LotteryDraw[] | null;
+  airports?: AirportStatus[] | null;
+  launches?: Launch[] | null;
 }) {
   const p = peachOf(site);
   const tz = TZ[site.state] || "America/New_York";
@@ -232,21 +235,55 @@ export default function HomePeach({
                 <p className="mt-3 text-[11px] text-[#8a7a72]">Forecasts from the National Weather Service.</p>
               </div>
             )}
-            {gas && gas.grades[0] && (
-              <div className={`${card} p-5`}>
-                <PHead icon={Ico.pump}>Gas prices</PHead>
-                <p className="text-[12px] font-bold uppercase tracking-wide text-[#7a6a62]">{gas.area} average · regular</p>
-                <div className="mt-1 flex items-baseline gap-3">
-                  <span className={`${display.className} text-[52px] font-extrabold leading-none text-[var(--pc-ink)]`}>${gas.grades[0].price.toFixed(2)}</span>
-                  <span className="text-[15px] text-[#6d5d55]">/gal</span>
-                </div>
-                <p className={`mt-1 text-[14px] font-bold ${gas.grades[0].change > 0 ? "text-[#b3261e]" : "text-[#2e7d4f]"}`}>{gas.grades[0].change > 0 ? "▲" : "▼"} {Math.abs(gas.grades[0].change * 100).toFixed(1)}¢ from last week</p>
-                <div className="mt-4 grid grid-cols-2 gap-3">
-                  {gas.grades.slice(1).map((g) => (
-                    <div key={g.grade} className="rounded-sm bg-[var(--pc-paper)] p-3"><p className="text-[12px] font-semibold text-[#7a6a62]">{g.grade}</p><p className="text-[20px] font-extrabold text-[var(--pc-ink)]">${g.price.toFixed(2)}</p></div>
-                  ))}
-                </div>
-                <p className="mt-3 text-[11px] text-[#8a7a72]">U.S. Energy Information Administration · week of {gas.week}{gas.isRegion ? " · regional figure" : ""}</p>
+            {((airports && airports.length > 0) || (gas && gas.grades[0])) && (
+              <div className="space-y-4">
+                {/* the state's signature module: live FAA status at its airports */}
+                {airports && airports.length > 0 && (
+                  <div className="pc-spot rounded-md bg-[var(--pc-ink)] p-5 text-white">
+                    <PHead icon={Ico.plane} light>Flights right now</PHead>
+                    <ul className="space-y-3">
+                      {airports.map((ap) => (
+                        <li key={ap.code} className="rounded-sm bg-white/[.06] p-3">
+                          <div className="flex items-center gap-3">
+                            <span className={`${display.className} text-[26px] font-black leading-none text-[var(--pc-acc)]`}>{ap.code}</span>
+                            <span className="flex-1 text-[14px] font-semibold">{ap.name}</span>
+                            {ap.delays.length === 0 ? (
+                              <span className="rounded-full bg-[#2e7d4f] px-2.5 py-0.5 text-[12px] font-bold">On time</span>
+                            ) : (
+                              <span className="rounded-full bg-[#b3261e] px-2.5 py-0.5 text-[12px] font-bold">Delays</span>
+                            )}
+                          </div>
+                          {ap.delays.map((d, i) => (
+                            <p key={i} className="mt-1.5 text-[13px] text-white/85"><b>{d.kind}</b>{d.reason ? ` · ${d.reason}` : ""}{d.detail ? ` · ${d.detail}` : ""}</p>
+                          ))}
+                          {ap.delays.length === 0 && <p className="mt-1.5 text-[13px] text-white/70">No FAA delays or ground stops reported.</p>}
+                        </li>
+                      ))}
+                    </ul>
+                    <p className="mt-3 text-[11px] text-white/55">Federal Aviation Administration, National Airspace System status. Check your flight with your airline.</p>
+                  </div>
+                )}
+                {gas && gas.grades[0] && (
+                  gas.isRegion ? (
+                    <div className={`${card} flex items-center gap-4 p-4`}>
+                      <span className="text-[var(--pc-acc)]">{Ico.pump}</span>
+                      <div className="flex-1">
+                        <p className="text-[12px] font-bold uppercase tracking-wide text-[#7a6a62]">Gas · {gas.area} average</p>
+                        <p className="text-[13px] text-[#8a7a72]">EIA, week of {gas.week}</p>
+                      </div>
+                      <span className={`${display.className} text-[28px] font-extrabold text-[var(--pc-ink)]`}>${gas.grades[0].price.toFixed(2)}</span>
+                      <span className={`text-[13px] font-bold ${gas.grades[0].change > 0 ? "text-[#b3261e]" : "text-[#2e7d4f]"}`}>{gas.grades[0].change > 0 ? "▲" : "▼"}{Math.abs(gas.grades[0].change * 100).toFixed(0)}¢</span>
+                    </div>
+                  ) : (
+                    <div className={`${card} p-5`}>
+                      <PHead icon={Ico.pump}>Gas prices</PHead>
+                      <p className="text-[12px] font-bold uppercase tracking-wide text-[#7a6a62]">{gas.area} average · regular</p>
+                      <span className={`${display.className} text-[52px] font-extrabold leading-none text-[var(--pc-ink)]`}>${gas.grades[0].price.toFixed(2)}</span>
+                      <p className={`mt-1 text-[14px] font-bold ${gas.grades[0].change > 0 ? "text-[#b3261e]" : "text-[#2e7d4f]"}`}>{gas.grades[0].change > 0 ? "▲" : "▼"} {Math.abs(gas.grades[0].change * 100).toFixed(1)}¢ from last week</p>
+                      <p className="mt-3 text-[11px] text-[#8a7a72]">U.S. Energy Information Administration · week of {gas.week}</p>
+                    </div>
+                  )
+                )}
               </div>
             )}
           </section>

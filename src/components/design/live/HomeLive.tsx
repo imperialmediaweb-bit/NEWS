@@ -1,6 +1,6 @@
 import type { SiteConfig } from "@/config/site-config";
 import type { HomeArticles, HomeArticle } from "@/lib/homepage-data";
-import type { CityWeather, Storm, WeatherAlert, GasPrices, LotteryDraw } from "@/lib/local-data";
+import type { CityWeather, Storm, WeatherAlert, GasPrices, LotteryDraw, AirportStatus, Launch } from "@/lib/local-data";
 import CountySearch from "./CountySearch";
 import AlertsBox from "./AlertsBox";
 import MobileMenu from "./MobileMenu";
@@ -36,6 +36,8 @@ export default function HomeLive({
   alerts?: WeatherAlert[] | null;
   gas?: GasPrices | null;
   lottery?: LotteryDraw[] | null;
+  airports?: AirportStatus[] | null;
+  launches?: Launch[] | null;
 }) {
   const pal = PALETTE[site.slug] || { ink: "#14213d", acc: site.accent };
   const tz = TZ[site.state] || "America/New_York";

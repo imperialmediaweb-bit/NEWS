@@ -6,7 +6,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import type { Metadata } from "next";
 import { designState } from "@/lib/design-nou";
-import { getStateWeather, getActiveStorms, countiesOf, getStateAlerts, getGasPrices, getLottery } from "@/lib/local-data";
+import { getStateWeather, getActiveStorms, countiesOf, getStateAlerts, getGasPrices, getLottery, getAirportStatus, getSpaceCoastLaunches, STATE_AIRPORTS } from "@/lib/local-data";
 import { getCategoryArticles } from "@/lib/category-data";
 import HomeLive from "@/components/design/live/HomeLive";
 import HomePeach from "@/components/design/peach/HomePeach";
@@ -61,17 +61,20 @@ export default async function Home({ searchParams }: Props) {
 
   if (design.family) {
     const SECTIONS = ["politics", "sports", "business", "life"];
-    const [weather, storms, alerts, gas, lottery, ...lists] = await Promise.all([
+    const ports = STATE_AIRPORTS[site.state];
+    const [weather, storms, alerts, gas, lottery, airports, launches, ...lists] = await Promise.all([
       getStateWeather(site.state),
       getActiveStorms(),
       getStateAlerts(site.stateAbbr),
       getGasPrices(site.state),
       getLottery(),
+      ports ? getAirportStatus(ports) : Promise.resolve(null),
+      site.state === "Florida" ? getSpaceCoastLaunches() : Promise.resolve(null),
       ...SECTIONS.map((c) => getCategoryArticles(site.slug, c, 1)),
     ]);
-    const sections = Object.fromEntries(SECTIONS.map((c, i) => [c, lists[i].articles]));
+    const sections = Object.fromEntries(SECTIONS.map((c, i) => [c, (lists[i] as Awaited<ReturnType<typeof getCategoryArticles>>).articles]));
     const Home = design.family === "peach" ? HomePeach : HomeLive;
-    return <Home site={site} articles={articles} weather={weather} storms={storms} counties={countiesOf(site.state)} sections={sections} alerts={alerts} gas={gas} lottery={lottery} />;
+    return <Home site={site} articles={articles} weather={weather} storms={storms} counties={countiesOf(site.state)} sections={sections} alerts={alerts} gas={gas} lottery={lottery} airports={airports} launches={launches} />;
   }
 
   return <HomeClient site={site} articles={articles} />;

@@ -262,3 +262,88 @@ export async function getLottery(): Promise<LotteryDraw[] | null> {
     return out;
   });
 }
+
+// ── FAA: delays and ground stops at an airport (National Airspace System status) ──
+export interface AirportStatus {
+  code: string;
+  name: string;
+  /** Empty when the FAA lists nothing for the airport: flights on schedule. */
+  delays: Array<{ kind: string; reason: string; detail: string }>;
+  updated: string;
+}
+
+/** FAA reasons are codes ("TM Initiatives:MIT:WX", "ZDV / WX:Wind"); say them in words. */
+function faaReason(r: string) {
+  const wx = r.match(/WX:?\s*([A-Za-z ]+)?/i);
+  if (wx) return wx[1] ? `weather (${wx[1].trim().toLowerCase()})` : "weather";
+  if (/VOL/i.test(r)) return "heavy traffic";
+  if (/RWY|runway/i.test(r)) return r.toLowerCase().includes("construction") ? "runway construction" : "runway work";
+  if (/EQ|equipment/i.test(r)) return "equipment";
+  return r.replace(/[_:]/g, " ").toLowerCase();
+}
+
+export async function getAirportStatus(airports: Array<[string, string]>): Promise<AirportStatus[] | null> {
+  const xml = await cached("faa-nas", async () => {
+    const r = await fetch("https://nasstatus.faa.gov/api/airport-status-information", { headers: { "User-Agent": UA }, signal: AbortSignal.timeout(6000), cache: "no-store" });
+    if (!r.ok) throw new Error(`faa ${r.status}`);
+    return r.text();
+  });
+  if (!xml) return null;
+  const tag = (s: string, t: string) => (s.match(new RegExp(`<${t}>([\\s\\S]*?)</${t}>`)) || [])[1]?.trim() || "";
+  const updated = tag(xml, "Update_Time");
+  return airports.map(([code, name]) => {
+    const delays: AirportStatus["delays"] = [];
+    for (const m of Array.from(xml.matchAll(/<Ground_Delay>([\s\S]*?)<\/Ground_Delay>/g))) {
+      if (tag(m[1], "ARPT") === code) delays.push({ kind: "Ground delay", reason: tag(m[1], "Reason"), detail: `average ${tag(m[1], "Avg")}, up to ${tag(m[1], "Max")}` });
+    }
+    for (const m of Array.from(xml.matchAll(/<Program>([\s\S]*?)<\/Program>/g))) {
+      if (tag(m[1], "ARPT") === code) delays.push({ kind: "Ground stop", reason: tag(m[1], "Reason"), detail: tag(m[1], "End_Time") ? `until ${tag(m[1], "End_Time")}` : "" });
+    }
+    for (const m of Array.from(xml.matchAll(/<Delay>([\s\S]*?)<\/Delay>/g))) {
+      if (tag(m[1], "ARPT") !== code) continue;
+      for (const ad of Array.from(m[1].matchAll(/<Arrival_Departure Type="([^"]+)">([\s\S]*?)<\/Arrival_Departure>/g))) {
+        delays.push({ kind: `${ad[1]} delays`, reason: tag(m[1], "Reason"), detail: `${tag(ad[2], "Min")} to ${tag(ad[2], "Max")}${tag(ad[2], "Trend") ? `, ${tag(ad[2], "Trend").toLowerCase()}` : ""}` });
+      }
+    }
+    for (const m of Array.from(xml.matchAll(/<Airport>([\s\S]*?)<\/Airport>/g))) {
+      if (tag(m[1], "ARPT") === code) delays.push({ kind: "Closure", reason: tag(m[1], "Reason"), detail: tag(m[1], "Reopen") ? `reopens ${tag(m[1], "Reopen")}` : "" });
+    }
+    return { code, name, delays: delays.map((d) => ({ ...d, reason: faaReason(d.reason) })), updated };
+  });
+}
+
+// ── upcoming rocket launches from Florida's Space Coast (The Space Devs, Launch Library 2) ──
+export interface Launch {
+  name: string;
+  provider: string;
+  pad: string;
+  net: string;
+  status: string;
+  confirmed: boolean;
+  image: string;
+}
+
+export async function getSpaceCoastLaunches(): Promise<Launch[] | null> {
+  // Free tier allows 15 calls an hour; the 30-minute cache keeps each server under it.
+  return cached("ll2-fl", async () => {
+    const j = await getJson("https://ll.thespacedevs.com/2.2.0/launch/upcoming/?limit=6&location__ids=12,27&mode=list", 8000);
+    return ((j.results || []) as Array<Record<string, unknown>>).map((x) => {
+      const st = (x.status || {}) as Record<string, string>;
+      return {
+        name: String(x.name || ""),
+        provider: String(x.lsp_name || ""),
+        pad: `${x.pad || ""}, ${String(x.location || "").replace(/, USA$/, "")}`,
+        net: String(x.net || ""),
+        status: st.name || "",
+        confirmed: st.abbrev === "Go",
+        image: String(x.image || ""),
+      };
+    });
+  });
+}
+
+/** Airports shown in each state's airport module (FAA codes). */
+export const STATE_AIRPORTS: Record<string, Array<[string, string]>> = {
+  Georgia: [["ATL", "Atlanta Hartsfield-Jackson"], ["SAV", "Savannah/Hilton Head"]],
+  Florida: [["MIA", "Miami"], ["MCO", "Orlando"], ["TPA", "Tampa"], ["FLL", "Fort Lauderdale"], ["JAX", "Jacksonville"]],
+};
