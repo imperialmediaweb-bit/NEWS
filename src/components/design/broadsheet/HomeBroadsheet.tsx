@@ -74,6 +74,8 @@ export default function HomeBroadsheet({
   quakes?: unknown;
   fires?: unknown;
   outline?: unknown;
+  volcanoes?: unknown;
+  buoys?: unknown;
 }) {
   const b = bsOf(site);
   const tz = TZ[site.state] || "America/New_York";

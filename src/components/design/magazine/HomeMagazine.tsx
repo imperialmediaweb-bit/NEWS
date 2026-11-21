@@ -63,6 +63,8 @@ export default function HomeMagazine({
   fires?: Fire[] | null;
   outline?: StateOutline | null;
   subway?: unknown;
+  volcanoes?: unknown;
+  buoys?: unknown;
 }) {
   const m = magOf(site);
   const tz = TZ[site.state] || "America/New_York";

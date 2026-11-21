@@ -299,3 +299,8 @@ body {
 .bs-hero .lv-cinema [data-slide-eyebrow] { border-radius: 0; }
 .bs-hero .lv-cinema [data-slide-cta] { border-radius: 0; }
 .bs-hero .lv-cinema [data-slide-content] { padding-left: 20px; padding-right: 20px; }
+/* Coastal (Hawaii): the Imperial slider, light serif and soft corners */
+.co-hero .lv-cinema [data-slide-title] { font-family: var(--co-serif), Georgia, serif; font-weight: 600; font-size: clamp(26px, 2.8vw, 42px); line-height: 1.1; }
+.co-hero .lv-cinema [data-slide-subtitle] { font-family: var(--co-serif), Georgia, serif; font-style: italic; }
+.co-hero .lv-cinema [data-slide-image] > div[aria-hidden] { background: linear-gradient(180deg, rgba(0,40,60,0) 35%, rgba(0,40,60,.55) 62%, rgba(0,40,60,.92)) !important; }
+.co-hero .lv-cinema [data-slide-content] { padding-left: clamp(18px, 2.4vw, 32px); padding-right: clamp(18px, 2.4vw, 32px); }

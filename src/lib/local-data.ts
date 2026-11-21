@@ -56,6 +56,16 @@ export const WEATHER_CITIES: Record<string, Array<[string, number, number]>> = {
     ["Fort Myers", 26.6406, -81.8723],
     ["Key West", 24.5551, -81.78],
   ],
+  Hawaii: [
+    ["Honolulu", 21.3069, -157.8583],
+    ["Hilo", 19.7241, -155.0868],
+    ["Kahului", 20.8893, -156.4729],
+    ["Lihue", 21.9811, -159.3711],
+    ["Kailua-Kona", 19.6399, -155.9969],
+    ["Lahaina", 20.8783, -156.6825],
+    ["Kaneohe", 21.4181, -157.8036],
+    ["Volcano", 19.4296, -155.2343],
+  ],
   "New York": [
     ["New York City", 40.7128, -74.006],
     ["Buffalo", 42.8864, -78.8784],
@@ -380,6 +390,7 @@ export async function getSpaceCoastLaunches(): Promise<Launch[] | null> {
 /** Airports shown in each state's airport module (FAA codes). */
 export const STATE_AIRPORTS: Record<string, Array<[string, string]>> = {
   Georgia: [["ATL", "Atlanta Hartsfield-Jackson"], ["SAV", "Savannah/Hilton Head"]],
+  Hawaii: [["HNL", "Honolulu"], ["OGG", "Kahului, Maui"], ["KOA", "Kona"], ["ITO", "Hilo"], ["LIH", "Lihue, Kauai"]],
   "New York": [["JFK", "Kennedy"], ["LGA", "LaGuardia"], ["BUF", "Buffalo"], ["ALB", "Albany"]],
   California: [["LAX", "Los Angeles"], ["SFO", "San Francisco"], ["SAN", "San Diego"], ["SJC", "San Jose"], ["SMF", "Sacramento"]],
   Florida: [["MIA", "Miami"], ["MCO", "Orlando"], ["TPA", "Tampa"], ["FLL", "Fort Lauderdale"], ["JAX", "Jacksonville"]],
@@ -462,4 +473,52 @@ export async function getSubwayStatus(): Promise<SubwayLine[] | null> {
     }
     return SUBWAY_ROUTES.map((r) => by.get(r) || { route: r, status: "Good service", text: "" });
   });
+}
+
+// ── volcano status from the USGS Hazard Notification System ──
+export interface VolcanoStatus { name: string; level: string; color: string; summary: string; date: string; url: string }
+
+export async function getVolcanoStatus(vnum: string): Promise<VolcanoStatus | null> {
+  return cached(`hans:${vnum}`, async () => {
+    const [v, n] = await Promise.all([
+      getJson(`https://volcanoes.usgs.gov/hans-public/api/volcano/getVolcano/${vnum}`, 8000),
+      getJson(`https://volcanoes.usgs.gov/hans-public/api/volcano/newestForVolcano/${vnum}`, 8000),
+    ]);
+    const text = String(n.noticeHtml || "").replace(/<[^>]+>/g, " ").replace(/&#?\w+;/g, (e: string) => ({ "&amp;": "&", "&#39;": "'", "&quot;": '"', "&nbsp;": " " } as Record<string, string>)[e] || " ").replace(/\s+/g, " ");
+    const summary = (text.match(/Summary:\s*(.*?)(?:\s(?:Overview|Summit Observations|Rift Zone Observations|Hazards?|Background):|$)/) || [])[1] || "";
+    return {
+      name: String(v.volcano_name || ""),
+      level: String(n.noticeHighestAlertLevel || "NORMAL"),
+      color: String(n.noticeHighestColorCode || "GREEN"),
+      // up to about 420 characters, ending on a full sentence
+      summary: summary.length > 420 ? summary.slice(0, 420).replace(/[^.]*$/, "").trim() || summary.slice(0, 420) : summary,
+      date: String(n.sentUtc || ""),
+      url: String(v.volcano_url || ""),
+    };
+  });
+}
+
+// ── ocean conditions from NOAA National Data Buoy Center buoys ──
+export interface Buoy { name: string; waveFt: number | null; periodS: number | null; waterF: number | null; time: string }
+
+export async function getBuoys(list: Array<[string, string]>): Promise<Buoy[] | null> {
+  const res = await Promise.all(
+    list.map(([id, name]) =>
+      cached(`ndbc:${id}`, async () => {
+        const r = await fetch(`https://www.ndbc.noaa.gov/data/realtime2/${id}.txt`, { headers: { "User-Agent": UA }, signal: AbortSignal.timeout(6000), cache: "no-store" });
+        if (!r.ok) throw new Error(`ndbc ${r.status}`);
+        const rows = (await r.text()).split("\n").filter((l) => l && !l.startsWith("#"));
+        // the newest row that reports waves
+        const row = rows.map((l) => l.trim().split(/\s+/)).find((c) => c[8] !== "MM") || rows[0]?.trim().split(/\s+/);
+        if (!row) throw new Error("ndbc empty");
+        const num = (v: string) => (v === "MM" || v === undefined ? null : parseFloat(v));
+        const wv = num(row[8]);
+        const wt = num(row[14]);
+        return { name, waveFt: wv == null ? null : Math.round(wv * 3.281 * 10) / 10, periodS: num(row[9]), waterF: wt == null ? null : Math.round(wt * 9 / 5 + 32), time: `${row[0]}-${row[1]}-${row[2]}T${row[3]}:${row[4]}:00Z` };
+      })
+    )
+  );
+  // a buoy that stopped reporting days ago is left out
+  const ok = res.filter((x): x is Buoy => !!x && Date.now() - new Date(x.time).getTime() < 3 * 86400000);
+  return ok.length ? ok : null;
 }
