@@ -80,7 +80,8 @@ export default function ArticleLive({
   const breaking = latest.find((a) => a.slug !== article.slug);
   const sideLatest = latest.filter((a) => a.slug !== article.slug).slice(0, 4);
   const shownLatest = new Set(sideLatest.map((a) => a.slug));
-  const top = mostRead.filter((a) => a.slug !== article.slug && !shownLatest.has(a.slug)).slice(0, 5);
+  const seenTop = new Set<string>();
+  const top = mostRead.filter((a) => a.slug !== article.slug && !shownLatest.has(a.slug) && !seenTop.has(a.slug) && !!seenTop.add(a.slug)).slice(0, 5);
   const shownTop = new Set(top.map((a) => a.slug));
   // Six stories at the end: the related ones first, then the latest from the state.
   const moreSlugs = new Set<string>([article.slug]);
