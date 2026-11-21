@@ -45,7 +45,7 @@ export function CityTabs({ tabs, className = "" }: { tabs: Array<{ city: string;
           <button key={t.city} role="tab" aria-selected={k === i} onClick={() => setI(k)} className={`x-tab shrink-0 whitespace-nowrap rounded-full border px-4 py-1.5 text-[14px] font-semibold transition ${k === i ? "is-on" : ""}`}>{t.city}</button>
         ))}
       </div>
-      <div key={cur.city} className="x-fade grid gap-5 sm:grid-cols-2 lg:grid-cols-4" role="tabpanel">
+      <div key={cur.city} className="x-fade grid gap-5 sm:grid-cols-2 lg:[grid-template-columns:repeat(var(--n),minmax(0,1fr))]" style={{ ["--n" as string]: cur.items.length } as React.CSSProperties} role="tabpanel">
         {cur.items.map((a) => (
           <a key={a.href} href={a.href} className="x-tilt group block">
             <span className="x-zoom block aspect-[4/3] overflow-hidden rounded-md">

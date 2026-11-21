@@ -27,7 +27,11 @@ export default function Extras({ site, pool, used, weather, gas, counties, theme
   theme: ExtrasTheme;
 }) {
   const tz = TZ[site.state] || "America/New_York";
-  const seen = new Set<string>(used);
+  // These sections are views of the whole week (pictures, days, cities), so
+  // they may show a story that also appears higher up; within each section a
+  // story appears once. `used` only keeps the lead out of the gallery.
+  const seen = new Set<string>();
+  void used;
   const take = (list: HomeArticle[], n: number, needImg = false) => {
     const out: HomeArticle[] = [];
     for (const a of list) {
@@ -57,6 +61,7 @@ export default function Extras({ site, pool, used, weather, gas, counties, theme
     if (tabs.length >= 6) break;
   }
   const gallery = take(pool, 10, true);
+  seen.clear();
   // the week, day by day
   const days: Array<[string, HomeArticle[]]> = [];
   for (let k = 0; k < 5; k++) {
@@ -70,6 +75,12 @@ export default function Extras({ site, pool, used, weather, gas, counties, theme
     return { label, slug, a };
   }).filter((t) => t.a);
 
+  // every row of the mosaic is full: 6 → 3+3, 5 → 2+3, 4 → 2+2, 3 → 3
+  const n = tiles.length;
+  const spans = tiles.map((_, i) => {
+    const wide = n === 4 || (n === 5 && i < 2);
+    return `${wide ? "lg:col-span-3 aspect-[16/8]" : "lg:col-span-2 aspect-[16/10]"} ${n % 2 && i === n - 1 ? "col-span-2 lg:col-span-2" : ""}`;
+  });
   const vars = { ["--x-ink" as string]: theme.ink, ["--x-acc" as string]: theme.acc, ["--x-bg" as string]: theme.bg, ["--x-line" as string]: theme.line, color: theme.text } as React.CSSProperties;
   const H = `${theme.head} text-[30px] md:text-[40px] font-bold leading-tight`;
   const W = "mx-auto max-w-[1340px] px-4";
@@ -170,9 +181,9 @@ export default function Extras({ site, pool, used, weather, gas, counties, theme
         <section className={`${W} pc-in pc-up mt-14`}>
           <p className="text-[12px] font-bold uppercase tracking-[.22em] text-[var(--x-acc)]">Explore</p>
           <h2 className={`${H} mb-6`}>Every section of {site.name}</h2>
-          <div className="pc-in pc-stagger grid grid-cols-2 gap-4 lg:grid-cols-3">
-            {tiles.map(({ label, slug, a }) => (
-              <a key={slug} href={`/${slug}`} className="x-tilt x-glow group relative block aspect-[16/10] overflow-hidden rounded-lg">
+          <div className="pc-in pc-stagger grid grid-cols-2 gap-4 lg:grid-cols-6">
+            {tiles.map(({ label, slug, a }, i) => (
+              <a key={slug} href={`/${slug}`} className={`x-tilt x-glow group relative block overflow-hidden rounded-lg ${spans[i]}`}>
                 <span className="x-zoom absolute inset-0">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={a!.img} alt="" className="h-full w-full object-cover" loading="lazy" />
