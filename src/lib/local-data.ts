@@ -45,6 +45,16 @@ export const WEATHER_CITIES: Record<string, Array<[string, number, number]>> = {
     ["Corpus Christi", 27.8006, -97.3964],
     ["Brownsville", 25.9017, -97.4975],
   ],
+  Florida: [
+    ["Miami", 25.7617, -80.1918],
+    ["Orlando", 28.5383, -81.3792],
+    ["Tampa", 27.9506, -82.4572],
+    ["Jacksonville", 30.3322, -81.6557],
+    ["Tallahassee", 30.4383, -84.2807],
+    ["Pensacola", 30.4213, -87.2169],
+    ["Fort Myers", 26.6406, -81.8723],
+    ["Key West", 24.5551, -81.78],
+  ],
   Georgia: [
     ["Atlanta", 33.749, -84.388],
     ["Augusta", 33.4735, -82.0105],

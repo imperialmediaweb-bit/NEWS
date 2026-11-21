@@ -8,6 +8,7 @@ import { getHomepageArticles } from "@/lib/homepage-data";
 import { getStateWeather, countiesOf } from "@/lib/local-data";
 import CategoryLive from "@/components/design/live/CategoryLive";
 import CategoryPeach from "@/components/design/peach/CategoryPeach";
+import CategoryTabloid from "@/components/design/tabloid/CategoryTabloid";
 import { TOPIC_RE } from "@/components/design/live/shared";
 import { getCategoryArticles } from "@/lib/category-data";
 
@@ -112,7 +113,7 @@ export default async function CategoryPage({
       pages = 1;
     }
     if (stories.length > 0) {
-      const CategoryView = design.family === "peach" ? CategoryPeach : CategoryLive;
+      const CategoryView = design.family === "peach" ? CategoryPeach : design.family === "tabloid" ? CategoryTabloid : CategoryLive;
       live = (
         <CategoryView
           site={site}

@@ -10,6 +10,7 @@ import { getStateWeather, getActiveStorms, countiesOf, getStateAlerts, getGasPri
 import { getCategoryArticles } from "@/lib/category-data";
 import HomeLive from "@/components/design/live/HomeLive";
 import HomePeach from "@/components/design/peach/HomePeach";
+import HomeTabloid from "@/components/design/tabloid/HomeTabloid";
 
 // Multi-tenant: 50 domains share this route, so the page must resolve the
 // site per-request from the Host header. Server-rendering the real articles
@@ -73,7 +74,7 @@ export default async function Home({ searchParams }: Props) {
       ...SECTIONS.map((c) => getCategoryArticles(site.slug, c, 1)),
     ]);
     const sections = Object.fromEntries(SECTIONS.map((c, i) => [c, (lists[i] as Awaited<ReturnType<typeof getCategoryArticles>>).articles]));
-    const Home = design.family === "peach" ? HomePeach : HomeLive;
+    const Home = design.family === "peach" ? HomePeach : design.family === "tabloid" ? HomeTabloid : HomeLive;
     return <Home site={site} articles={articles} weather={weather} storms={storms} counties={countiesOf(site.state)} sections={sections} alerts={alerts} gas={gas} lottery={lottery} airports={airports} launches={launches} />;
   }
 
