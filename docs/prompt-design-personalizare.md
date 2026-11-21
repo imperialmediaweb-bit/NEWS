@@ -59,3 +59,78 @@ Regulile de mai jos vin din cererile din 21.11.2026: „fă customizată pentru 
   - spațiile din titluri;
   - nimic rămas din alt stat (exemple de județe, echipe, orașe).
 - Fac commit și push, apoi trimit linkurile `?design=nou`. Statul se pornește live doar la „pornește {STAT}”.
+
+## 6. De ținut cont la fiecare stat (aprobat 21.11.2026)
+1. **Module reale noi, unde se potrivesc:**
+   - mareele (NOAA CO-OPS) la statele de pe coastă;
+   - cutremurele (USGS) în California, Alaska, Oregon, Washington și Wyoming;
+   - incendiile active (NIFC) în Vest;
+   - zăpada (NRCS SNOTEL) la statele cu munți și schi.
+2. **Trafic:** închideri și accidente de pe 511, doar unde statul are feed gratuit.
+3. **Calitatea aerului (AirNow):** cheia API e gratuită, o cer userului când ajung în Vest.
+4. **Reclame:** aceleași 3 poziții în fiecare design, ca reclamele să se pună o singură dată pentru toate:
+   - după slider;
+   - între secțiuni;
+   - în coloana din dreapta.
+5. **Viteză:** Lighthouse înainte de pornire, cu ținta 90+ pe telefon.
+6. **Newsletter real:** cu cheia Resend existentă, în locul casetei doar de alerte.
+7. **Hartă la articol:** o hartă mică OpenStreetMap a locului din știre, cu creditul OSM.
+8. **Poze legale:**
+   - Surse: Wikimedia Commons (doar licențe libere, cu autor și licență sub poză), apoi Pixabay, Pexels și Unsplash.
+   - Niciodată AP, Reuters sau Getty.
+
+## 7. Modulul-semnătură al fiecărui stat (unic, date oficiale gratuite)
+\* cheie gratuită, se cere userului.
+
+| Stat | Modul | Sursă |
+|---|---|---|
+| Alabama | Countdown Iron Bowl, steagurile de pe plajele Gulf Shores | dată fixă, NWS |
+| Alaska | Aurora diseară, ore de lumină | NOAA SWPC |
+| Arizona | UV și căldură extremă, monsonul | EPA UV, NWS |
+| Arkansas | Nivelul râurilor | USGS |
+| California | Cutremure, incendii, aer | USGS, CAL FIRE, AirNow* |
+| Colorado | Zăpada, schi | SNOTEL |
+| Connecticut | Mareele din Long Island Sound | NOAA |
+| Delaware | Plaja: maree, temperatura apei | NOAA |
+| Florida | Lansări de rachete de la Cape Canaveral, uragane | Launch Library 2, NHC |
+| Georgia | Întârzieri pe aeroportul din Atlanta | FAA NAS Status |
+| Hawaii | Vulcanul Kilauea, surf | USGS HVO, geamanduri NOAA NDBC |
+| Idaho | Fumul de la incendii, râuri | NIFC, USGS |
+| Illinois | Întârzieri la O'Hare, Lake Michigan | FAA, NOAA |
+| Indiana | Countdown Indy 500, râuri | dată fixă, USGS |
+| Iowa | Seceta pe județe | U.S. Drought Monitor |
+| Kansas | Tornade raportate azi | NOAA SPC |
+| Kentucky | Countdown Kentucky Derby, râul Ohio | dată fixă, USGS |
+| Louisiana | Nivelul Mississippi la New Orleans, uragane | NWS, NHC |
+| Maine | Mareele, ore de lumină | NOAA |
+| Maryland | Golful Chesapeake | NOAA |
+| Massachusetts | Alertele de metrou MBTA | MBTA |
+| Michigan | Marile Lacuri: nivel, temperatură, gheață | NOAA GLERL |
+| Minnesota | Gheața pe lacuri, aurora | NOAA |
+| Mississippi | Râul Mississippi, uragane | USGS, NHC |
+| Missouri | Râurile la St. Louis, tornade | USGS, SPC |
+| Montana | Alertele din Glacier și Yellowstone | NPS* |
+| Nebraska | Seceta, countdown College World Series | Drought Monitor |
+| Nevada | Nivelul lacului Mead, întârzieri la Las Vegas | USBR, FAA |
+| New Hampshire | Vremea pe Mount Washington | NWS |
+| New Jersey | Coasta, întârzieri la Newark | NOAA, FAA |
+| New Mexico | Countdown Balloon Fiesta, UV, incendii | dată fixă, EPA, NIFC |
+| New York | Alertele MTA, întârzieri la JFK și LaGuardia | MTA, FAA |
+| North Carolina | Outer Banks, uragane | NOAA, NHC |
+| North Dakota | Aurora, seceta | NOAA, Drought Monitor |
+| Ohio | Lake Erie | NOAA GLERL |
+| Oklahoma | Tornade, Mesonet | SPC, OK Mesonet |
+| Oregon | Cutremure, incendii, aer | USGS, NIFC |
+| Pennsylvania | Râuri, întârzieri la Philadelphia | USGS, FAA |
+| Rhode Island | Golful Narragansett | NOAA |
+| South Carolina | Mareele la Charleston, uragane | NOAA, NHC |
+| South Dakota | Alertele de la Mount Rushmore și Badlands | NPS* |
+| Tennessee | Smoky Mountains, întârzieri la Nashville | NPS*, FAA |
+| Texas | Uragane, benzina | NHC, EIA |
+| Utah | Zăpada, nivelul Great Salt Lake | SNOTEL, USGS |
+| Vermont | Zăpada și schiul | SNOTEL |
+| Virginia | Chesapeake, întârzieri la Dulles și Reagan | NOAA, FAA |
+| Washington | Feriboturile, vulcanul Rainier, cutremure | WSDOT*, USGS |
+| West Virginia | New River Gorge, râuri | NPS*, USGS |
+| Wisconsin | Lake Michigan, seceta | NOAA, Drought Monitor |
+| Wyoming | Cutremurele din Yellowstone, zăpada | USGS, SNOTEL |
