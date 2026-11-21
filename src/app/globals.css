@@ -293,3 +293,9 @@ body {
 .mg-hero .lv-cinema [data-slide-cta] { border-radius: 0; background: transparent; border-bottom: 2px solid var(--lv-acc); padding: 6px 0; box-shadow: none; }
 .mg-hero .lv-cinema [data-slide-image] > div[aria-hidden] { background: linear-gradient(180deg, rgba(8,24,44,0) 35%, rgba(8,24,44,.55) 62%, rgba(8,24,44,.93)) !important; }
 .mg-hero .lv-cinema [data-slide-content] { padding-left: clamp(18px, 2.4vw, 32px); padding-right: clamp(18px, 2.4vw, 32px); }
+/* Broadsheet (New York): the Imperial slider in Caslon */
+.bs-hero .lv-cinema [data-slide-title] { font-family: var(--bs-serif), Georgia, serif; font-weight: 700; font-size: clamp(24px, 2.4vw, 36px); line-height: 1.1; }
+.bs-hero .lv-cinema [data-slide-subtitle] { font-family: var(--bs-serif), Georgia, serif; font-style: italic; }
+.bs-hero .lv-cinema [data-slide-eyebrow] { border-radius: 0; }
+.bs-hero .lv-cinema [data-slide-cta] { border-radius: 0; }
+.bs-hero .lv-cinema [data-slide-content] { padding-left: 20px; padding-right: 20px; }

@@ -6,12 +6,13 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import type { Metadata } from "next";
 import { designState } from "@/lib/design-nou";
-import { getStateWeather, getActiveStorms, countiesOf, getStateAlerts, getGasPrices, getLottery, getAirportStatus, getSpaceCoastLaunches, STATE_AIRPORTS, getStateQuakes, getStateFires, outlineOf } from "@/lib/local-data";
+import { getStateWeather, getActiveStorms, countiesOf, getStateAlerts, getGasPrices, getLottery, getAirportStatus, getSpaceCoastLaunches, STATE_AIRPORTS, getStateQuakes, getStateFires, outlineOf, getSubwayStatus } from "@/lib/local-data";
 import { getCategoryArticles } from "@/lib/category-data";
 import HomeLive from "@/components/design/live/HomeLive";
 import HomePeach from "@/components/design/peach/HomePeach";
 import HomeTabloid from "@/components/design/tabloid/HomeTabloid";
 import HomeMagazine from "@/components/design/magazine/HomeMagazine";
+import HomeBroadsheet from "@/components/design/broadsheet/HomeBroadsheet";
 
 // Multi-tenant: 50 domains share this route, so the page must resolve the
 // site per-request from the Host header. Server-rendering the real articles
@@ -66,7 +67,7 @@ export default async function Home({ searchParams }: Props) {
     const ports = STATE_AIRPORTS[site.state];
     const QUAKE_STATES = ["California", "Alaska", "Oregon", "Washington", "Wyoming", "Nevada", "Utah", "Idaho", "Montana", "Hawaii"];
     const FIRE_STATES = ["California", "Oregon", "Washington", "Idaho", "Montana", "Nevada", "Arizona", "New Mexico", "Colorado", "Utah", "Wyoming"];
-    const [weather, storms, alerts, gas, lottery, airports, launches, quakes, fires, ...lists] = await Promise.all([
+    const [weather, storms, alerts, gas, lottery, airports, launches, quakes, fires, subway, ...lists] = await Promise.all([
       getStateWeather(site.state),
       getActiveStorms(),
       getStateAlerts(site.stateAbbr),
@@ -76,11 +77,12 @@ export default async function Home({ searchParams }: Props) {
       site.state === "Florida" ? getSpaceCoastLaunches() : Promise.resolve(null),
       QUAKE_STATES.includes(site.state) ? getStateQuakes(site.state) : Promise.resolve(null),
       FIRE_STATES.includes(site.state) ? getStateFires(site.stateAbbr) : Promise.resolve(null),
+      site.state === "New York" ? getSubwayStatus() : Promise.resolve(null),
       ...SECTIONS.map((c) => getCategoryArticles(site.slug, c, 1)),
     ]);
     const sections = Object.fromEntries(SECTIONS.map((c, i) => [c, (lists[i] as Awaited<ReturnType<typeof getCategoryArticles>>).articles]));
-    const Home = { peach: HomePeach, tabloid: HomeTabloid, magazine: HomeMagazine, live: HomeLive }[design.family];
-    return <Home site={site} articles={articles} weather={weather} storms={storms} counties={countiesOf(site.state)} sections={sections} alerts={alerts} gas={gas} lottery={lottery} airports={airports} launches={launches} quakes={quakes} fires={fires} outline={outlineOf(site.state)} />;
+    const Home = { peach: HomePeach, tabloid: HomeTabloid, magazine: HomeMagazine, broadsheet: HomeBroadsheet, live: HomeLive }[design.family];
+    return <Home site={site} articles={articles} weather={weather} storms={storms} counties={countiesOf(site.state)} sections={sections} alerts={alerts} gas={gas} lottery={lottery} airports={airports} launches={launches} quakes={quakes} fires={fires} outline={outlineOf(site.state)} subway={subway} />;
   }
 
   return <HomeClient site={site} articles={articles} />;

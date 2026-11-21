@@ -56,6 +56,16 @@ export const WEATHER_CITIES: Record<string, Array<[string, number, number]>> = {
     ["Fort Myers", 26.6406, -81.8723],
     ["Key West", 24.5551, -81.78],
   ],
+  "New York": [
+    ["New York City", 40.7128, -74.006],
+    ["Buffalo", 42.8864, -78.8784],
+    ["Rochester", 43.1566, -77.6088],
+    ["Syracuse", 43.0481, -76.1474],
+    ["Albany", 42.6526, -73.7562],
+    ["Binghamton", 42.0987, -75.918],
+    ["Long Island", 40.7891, -73.135],
+    ["Plattsburgh", 44.6995, -73.4529],
+  ],
   California: [
     ["Los Angeles", 34.0522, -118.2437],
     ["San Francisco", 37.7749, -122.4194],
@@ -370,6 +380,7 @@ export async function getSpaceCoastLaunches(): Promise<Launch[] | null> {
 /** Airports shown in each state's airport module (FAA codes). */
 export const STATE_AIRPORTS: Record<string, Array<[string, string]>> = {
   Georgia: [["ATL", "Atlanta Hartsfield-Jackson"], ["SAV", "Savannah/Hilton Head"]],
+  "New York": [["JFK", "Kennedy"], ["LGA", "LaGuardia"], ["BUF", "Buffalo"], ["ALB", "Albany"]],
   California: [["LAX", "Los Angeles"], ["SFO", "San Francisco"], ["SAN", "San Diego"], ["SJC", "San Jose"], ["SMF", "Sacramento"]],
   Florida: [["MIA", "Miami"], ["MCO", "Orlando"], ["TPA", "Tampa"], ["FLL", "Fort Lauderdale"], ["JAX", "Jacksonville"]],
 };
@@ -418,5 +429,37 @@ export async function getStateFires(abbr: string): Promise<Fire[] | null> {
       county: String(f.attributes.POOCounty || ""),
       discovered: Number(f.attributes.FireDiscoveryDateTime || 0),
     }));
+  });
+}
+
+// ── New York City subway service status (MTA GTFS-realtime alerts, public JSON) ──
+export interface SubwayLine { route: string; status: string; text: string }
+
+export const SUBWAY_ROUTES = ["1", "2", "3", "4", "5", "6", "7", "A", "C", "E", "B", "D", "F", "M", "G", "J", "Z", "L", "N", "Q", "R", "W", "S", "SIR"];
+
+export async function getSubwayStatus(): Promise<SubwayLine[] | null> {
+  return cached("mta-subway", async () => {
+    const j = await getJson("https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/camsys%2Fsubway-alerts.json", 8000);
+    const now = Date.now() / 1000;
+    const by = new Map<string, SubwayLine>();
+    // the worse the status, the earlier it wins for a line
+    const rank = (s: string) => (/suspend/i.test(s) ? 0 : /delay/i.test(s) ? 1 : /reroute|express|local|skip|reduced|slow/i.test(s) ? 2 : 3);
+    for (const e of (j.entity || []) as Array<{ alert?: Record<string, unknown> }>) {
+      const a = e.alert;
+      if (!a) continue;
+      const periods = (a.active_period || []) as Array<{ start?: number; end?: number }>;
+      if (periods.length && !periods.some((p) => (p.start || 0) <= now && (!p.end || p.end >= now))) continue;
+      const meta = (a["transit_realtime.mercury_alert"] || {}) as Record<string, string>;
+      const status = String(meta.alert_type || "Service change");
+      const tr = (((a.header_text || {}) as { translation?: Array<{ text: string; language: string }> }).translation || []).find((t) => t.language === "en");
+      const text = (tr?.text || "").replace(/\s+/g, " ").trim();
+      for (const ie of (a.informed_entity || []) as Array<{ route_id?: string }>) {
+        const r = ie.route_id === "SI" ? "SIR" : ie.route_id === "GS" || ie.route_id === "FS" || ie.route_id === "H" ? "S" : ie.route_id;
+        if (!r || !SUBWAY_ROUTES.includes(r)) continue;
+        const cur = by.get(r);
+        if (!cur || rank(status) < rank(cur.status)) by.set(r, { route: r, status, text });
+      }
+    }
+    return SUBWAY_ROUTES.map((r) => by.get(r) || { route: r, status: "Good service", text: "" });
   });
 }

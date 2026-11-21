@@ -11,7 +11,7 @@
  *
  * Only the look changes: the same addresses, articles and structured data.
  */
-export type DesignFamily = "live" | "peach" | "tabloid" | "magazine";
+export type DesignFamily = "live" | "peach" | "tabloid" | "magazine" | "broadsheet";
 
 const DESIGNS: Record<string, DesignFamily> = {
   // 21.11.2026: pilot, built from the generated Texas mockup (live-news family).
@@ -22,6 +22,8 @@ const DESIGNS: Record<string, DesignFamily> = {
   "florida-express": "tabloid",
   // 21.11.2026: California, from its generated mockup (magazine family).
   "california-express": "magazine",
+  // 21.11.2026: New York, from its generated mockup (broadsheet family).
+  "new-york-express": "broadsheet",
 };
 
 export function designFor(slug: string): DesignFamily | null {

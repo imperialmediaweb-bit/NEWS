@@ -41,6 +41,7 @@ export default function HomeLive({
   quakes?: unknown;
   fires?: unknown;
   outline?: unknown;
+  subway?: unknown;
 }) {
   const pal = PALETTE[site.slug] || { ink: "#14213d", acc: site.accent };
   const tz = TZ[site.state] || "America/New_York";
