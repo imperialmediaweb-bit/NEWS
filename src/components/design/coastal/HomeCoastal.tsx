@@ -68,6 +68,7 @@ export default function HomeCoastal({
   buoys?: Buoy[] | null;
   uv?: unknown;
   snow?: unknown;
+  drought?: unknown;
 }) {
   const c = coOf(site);
   const tz = TZ[site.state] || "America/New_York";

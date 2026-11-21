@@ -56,6 +56,16 @@ export const WEATHER_CITIES: Record<string, Array<[string, number, number]>> = {
     ["Fort Myers", 26.6406, -81.8723],
     ["Key West", 24.5551, -81.78],
   ],
+  Iowa: [
+    ["Des Moines", 41.5868, -93.625],
+    ["Cedar Rapids", 41.9779, -91.6656],
+    ["Davenport", 41.5236, -90.5776],
+    ["Sioux City", 42.4999, -96.4003],
+    ["Waterloo", 42.4928, -92.3426],
+    ["Ames", 42.0308, -93.6319],
+    ["Iowa City", 41.6611, -91.5302],
+    ["Council Bluffs", 41.2619, -95.8608],
+  ],
   Montana: [
     ["Billings", 45.7833, -108.5007],
     ["Missoula", 46.8721, -113.994],
@@ -410,6 +420,7 @@ export async function getSpaceCoastLaunches(): Promise<Launch[] | null> {
 /** Airports shown in each state's airport module (FAA codes). */
 export const STATE_AIRPORTS: Record<string, Array<[string, string]>> = {
   Georgia: [["ATL", "Atlanta Hartsfield-Jackson"], ["SAV", "Savannah/Hilton Head"]],
+  Iowa: [["DSM", "Des Moines"], ["CID", "Cedar Rapids"], ["SUX", "Sioux City"]],
   Montana: [["BIL", "Billings"], ["BZN", "Bozeman"], ["MSO", "Missoula"], ["FCA", "Glacier Park"]],
   Arizona: [["PHX", "Phoenix Sky Harbor"], ["TUS", "Tucson"], ["FLG", "Flagstaff"]],
   Hawaii: [["HNL", "Honolulu"], ["OGG", "Kahului, Maui"], ["KOA", "Kona"], ["ITO", "Hilo"], ["LIH", "Lihue, Kauai"]],
@@ -578,4 +589,21 @@ export async function getSnow(stations: Array<[string, string]>): Promise<SnowSt
     out.push({ name, depthIn: last.value, change3d: sd.length > 1 ? last.value - sd[0].value : null, sweIn: swe.length ? swe[swe.length - 1].value : null, date: last.date });
   }
   return out.length ? out : null;
+}
+
+// ── drought across a state, by intensity (U.S. Drought Monitor) ──
+export interface Drought { date: string; none: number; d0: number; d1: number; d2: number; d3: number; d4: number; prev?: { d1: number } }
+
+export async function getDrought(fips: string): Promise<Drought | null> {
+  const fmt = (d: Date) => `${d.getUTCMonth() + 1}/${d.getUTCDate()}/${d.getUTCFullYear()}`;
+  return cached(`usdm:${fips}`, async () => {
+    const r = await fetch(`https://usdmdataservices.unl.edu/api/StateStatistics/GetDroughtSeverityStatisticsByAreaPercent?aoi=${fips}&startdate=${fmt(new Date(Date.now() - 35 * 86400000))}&enddate=${fmt(new Date())}&statisticsType=1`, { headers: { "User-Agent": UA, Accept: "application/json" }, signal: AbortSignal.timeout(8000), cache: "no-store" });
+    if (!r.ok) throw new Error(`usdm ${r.status}`);
+    const j = (await r.json()) as Array<Record<string, string | number>>;
+    if (!j.length) throw new Error("usdm empty");
+    const n = (v: unknown) => Number(v) || 0;
+    const [a, , , , b] = j;
+    // the numbers are cumulative (D1 includes D2-D4), as the Monitor reports them
+    return { date: String(a.mapDate).slice(0, 10), none: n(a.none), d0: n(a.d0), d1: n(a.d1), d2: n(a.d2), d3: n(a.d3), d4: n(a.d4), prev: b ? { d1: n(b.d1) } : undefined };
+  });
 }

@@ -69,6 +69,7 @@ export default function HomeDark({
   buoys?: unknown;
   uv?: UvHour[] | null;
   snow?: unknown;
+  drought?: unknown;
 }) {
   const d = dkOf(site);
   const tz = TZ[site.state] || "America/New_York";

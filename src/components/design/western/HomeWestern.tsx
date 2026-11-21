@@ -69,6 +69,7 @@ export default function HomeWestern({
   buoys?: unknown;
   uv?: unknown;
   snow?: SnowStation[] | null;
+  drought?: unknown;
 }) {
   const w = wsOf(site);
   const tz = TZ[site.state] || "America/Denver";

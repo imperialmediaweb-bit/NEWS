@@ -364,3 +364,8 @@ a.group:hover [class*="leading-"]:not(.pc-zoom) { text-decoration: underline; te
 .ws-hero .lv-cinema [data-slide-eyebrow] { border-radius: 0; background: var(--ws-acc); color: #1b1b1b; }
 .ws-hero .lv-cinema [data-slide-cta] { border-radius: 0; background: var(--ws-acc); color: #1b1b1b !important; }
 .ws-hero .lv-cinema [data-slide-content] { padding-left: 20px; padding-right: 20px; }
+/* Gazette (Iowa): the slider in Merriweather */
+.gz-hero .lv-cinema [data-slide-title] { font-family: var(--gz-serif), Georgia, serif; font-weight: 900; font-size: clamp(24px, 2.6vw, 38px); line-height: 1.15; }
+.gz-hero .lv-cinema [data-slide-eyebrow] { border-radius: 2px; background: #a06f00; }
+.gz-hero .lv-cinema [data-slide-cta] { border-radius: 4px; background: #a06f00; }
+.gz-hero .lv-cinema [data-slide-content] { padding-left: clamp(18px, 2.4vw, 32px); padding-right: clamp(18px, 2.4vw, 32px); }
