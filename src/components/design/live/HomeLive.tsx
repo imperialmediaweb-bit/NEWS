@@ -308,7 +308,7 @@ export default function HomeLive({
 
         {/* politics row: lead left, headlines right */}
         {secPol.length >= 3 && (
-          <section className="lv-reveal relative left-1/2 w-screen -translate-x-1/2 mt-12 bg-[#eef2fa] py-10">
+          <section className="lv-reveal ml-[calc(50%-50vw)] w-screen mt-12 bg-[#eef2fa] py-10">
             <div className="mx-auto max-w-[1400px] px-4">
             <div className="mb-4 flex items-center gap-3"><h2 className="text-[22px] font-extrabold uppercase tracking-wide text-[var(--lv-ink)]"><a href="/politics" className="hover:underline">Politics</a></h2><span className="h-[2px] flex-1 bg-[var(--lv-acc)]" /></div>
             <div className="grid gap-6 lg:grid-cols-[1.5fr_1fr]">
@@ -336,7 +336,7 @@ export default function HomeLive({
 
         {/* sports band */}
         {secSpo.length >= 3 && (
-          <section className="lv-reveal relative left-1/2 w-screen -translate-x-1/2 mt-12 bg-gradient-to-br from-[var(--lv-ink)] to-[#06102a] py-10 text-white">
+          <section className="lv-reveal ml-[calc(50%-50vw)] w-screen mt-12 bg-gradient-to-br from-[var(--lv-ink)] to-[#06102a] py-10 text-white">
             <div className="mx-auto max-w-[1400px] px-4">
             <div className="mb-4 flex items-center gap-3">
               <h2 className="text-[22px] font-extrabold uppercase tracking-wide"><a href="/sports" className="hover:underline">{site.state} Sports</a></h2>
@@ -363,7 +363,7 @@ export default function HomeLive({
 
         {/* business row: three columns */}
         {secBiz.length >= 3 && (
-          <section className="lv-reveal relative left-1/2 w-screen -translate-x-1/2 mt-12 bg-[#eef7f1] py-10">
+          <section className="lv-reveal ml-[calc(50%-50vw)] w-screen mt-12 bg-[#eef7f1] py-10">
             <div className="mx-auto max-w-[1400px] px-4">
             <div className="mb-4 flex items-center gap-3"><h2 className="text-[22px] font-extrabold uppercase tracking-wide text-[#1f6b3a]"><a href="/business" className="hover:underline">Business &amp; Economy</a></h2><span className="h-[2px] flex-1 bg-[#1f6b3a]" /></div>
             <div className="grid gap-6 md:grid-cols-3">
@@ -382,7 +382,7 @@ export default function HomeLive({
 
         {/* life & culture mosaic */}
         {secLife.length >= 4 && (
-          <section className="lv-reveal relative left-1/2 w-screen -translate-x-1/2 mt-12 bg-gradient-to-b from-[#fbf3ea] to-[#fff8f1] py-10">
+          <section className="lv-reveal ml-[calc(50%-50vw)] w-screen mt-12 bg-gradient-to-b from-[#fbf3ea] to-[#fff8f1] py-10">
             <div className="mx-auto max-w-[1400px] px-4">
             <div className="mb-4 flex items-center gap-3"><h2 className="text-[22px] font-extrabold uppercase tracking-wide text-[#c2560c]"><a href="/life" className="hover:underline">Life &amp; Culture</a></h2><span className="h-[2px] flex-1 bg-[#e8892f]" /></div>
             <div className="grid gap-3 md:grid-cols-4 md:grid-rows-2">
