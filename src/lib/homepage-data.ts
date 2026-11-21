@@ -33,6 +33,8 @@ export interface HomeArticle {
   date: string;
   author: string;
   slug: string;
+  /** Publication time, ISO; the live designs show the hour. */
+  iso?: string;
 }
 
 export interface HomeArticles {
@@ -63,6 +65,7 @@ const toArticle = (row: ArticleRow): HomeArticle => ({
   date: new Date(row.published_at).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }),
   author: row.author || "Staff Reporter",
   slug: row.slug,
+  iso: new Date(row.published_at).toISOString(),
 });
 
 const BUCKETS: Record<string, string[]> = {

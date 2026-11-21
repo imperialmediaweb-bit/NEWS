@@ -4,6 +4,10 @@ import { getHomepageArticles } from "@/lib/homepage-data";
 import HomeClient from "@/components/HomeClient";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import type { Metadata } from "next";
+import { designState } from "@/lib/design-nou";
+import { getStateWeather, getActiveStorms, countiesOf } from "@/lib/local-data";
+import HomeLive from "@/components/design/live/HomeLive";
 
 // Multi-tenant: 50 domains share this route, so the page must resolve the
 // site per-request from the Host header. Server-rendering the real articles
@@ -21,9 +25,18 @@ function getSiteFromHeaders() {
   }
 }
 
-export default async function Home() {
+type Props = { searchParams: { design?: string | string[] } };
+
+// The preview of a new design (?design=nou) must never be indexed.
+export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
+  const site = getSiteFromHeaders();
+  return designState(site.slug, searchParams.design).preview ? { robots: { index: false, follow: false } } : {};
+}
+
+export default async function Home({ searchParams }: Props) {
   const site = getSiteFromHeaders();
   const articles = await getHomepageArticles(site);
+  const design = designState(site.slug, searchParams.design);
 
   // Honest empty state — never show fabricated placeholder news.
   if (!articles || !articles.heroMain) {
@@ -42,6 +55,11 @@ export default async function Home() {
         <Footer site={site} about={footerAbout} />
       </div>
     );
+  }
+
+  if (design.family === "live") {
+    const [weather, storms] = await Promise.all([getStateWeather(site.state), getActiveStorms()]);
+    return <HomeLive site={site} articles={articles} weather={weather} storms={storms} counties={countiesOf(site.state)} />;
   }
 
   return <HomeClient site={site} articles={articles} />;
