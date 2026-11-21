@@ -1,6 +1,7 @@
 "use client";
 
 import { CinematicParallaxSlider } from "@/components/design/imperial/CinematicParallaxSlider";
+import { srcSetOf } from "./shared";
 
 /** The Imperial Design System cinematic slider, with the top stories of the day. */
 export default function HeroCinema({ slides }: { slides: Array<{ id: string; image: string; title: string; subtitle?: string; eyebrow?: string; href: string }> }) {
@@ -16,7 +17,7 @@ export default function HeroCinema({ slides }: { slides: Array<{ id: string; ima
       showDots
       renderImage={({ src, alt, className, priority, onLoad }) => (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={src} alt={alt} className={className} loading={priority ? "eager" : "lazy"} decoding={priority ? "sync" : "async"} draggable={false} onLoad={onLoad} {...(priority ? { fetchpriority: "high" } : {})} />
+        <img src={src} srcSet={srcSetOf(src)} sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 60vw" alt={alt} className={className} loading={priority ? "eager" : "lazy"} decoding={priority ? "sync" : "async"} draggable={false} onLoad={onLoad} {...(priority ? { fetchpriority: "high" } : {})} />
       )}
     />
   );
