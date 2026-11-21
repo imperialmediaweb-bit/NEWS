@@ -82,7 +82,7 @@ export default async function Home({ searchParams }: Props) {
       FIRE_STATES.includes(site.state) ? getStateFires(site.stateAbbr) : Promise.resolve(null),
       site.state === "New York" ? getSubwayStatus() : Promise.resolve(null),
       site.state === "Hawaii" ? Promise.all([getVolcanoStatus("332010"), getVolcanoStatus("332020")]).then((v) => v.filter((x): x is NonNullable<typeof x> => !!x)) : Promise.resolve(null),
-      site.state === "Hawaii" ? getBuoys([["51201", "Waimea Bay, Oʻahu"], ["51202", "Mokapu Point, Oʻahu"], ["51206", "Hilo, Big Island"], ["51208", "Hanalei, Kauaʻi"], ["51205", "Pauwela, Maui"]]) : Promise.resolve(null),
+      site.state === "Hawaii" ? getBuoys([["51201", "Waimea Bay, O‘ahu"], ["51202", "Mokapu Point, O‘ahu"], ["51206", "Hilo, Big Island"], ["51208", "Hanalei, Kaua‘i"], ["51205", "Pauwela, Maui"]]) : Promise.resolve(null),
       ...SECTIONS.map((c) => getCategoryArticles(site.slug, c, 1)),
     ]);
     const sections = Object.fromEntries(SECTIONS.map((c, i) => [c, (lists[i] as Awaited<ReturnType<typeof getCategoryArticles>>).articles]));

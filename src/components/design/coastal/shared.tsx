@@ -140,3 +140,10 @@ export function CoFooter({ site }: { site: SiteConfig }) {
 
 /** Small hibiscus capitals above a block. */
 export const Label = ({ children }: { children: React.ReactNode }) => <p className="mb-2 text-[12.5px] font-extrabold uppercase tracking-[.16em] text-[var(--co-acc)]">{children}</p>;
+
+/**
+ * The Hawaiian ʻokina (U+02BB) is missing from these fonts and falls back with
+ * gaps around it ("Pā ʻ ia"); the turned comma (U+2018) is the usual web
+ * stand-in and sits tight.
+ */
+export const ok = (s: string) => (s || "").replace(/\u02BB/g, "\u2018");

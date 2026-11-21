@@ -8,7 +8,7 @@ import HeroCinema from "../live/HeroCinema";
 import { TZ, href, hour, ago, WxIcon, TOPIC_RE } from "../live/shared";
 import PeachFx, { SplitWords } from "../peach/PeachFx";
 import AdSlot from "../AdSlot";
-import { crimson, nunito, coOf, coVars, CHead, CoTopBar, CoHeader, CoFooter } from "./shared";
+import { crimson, nunito, coOf, coVars, CHead, CoTopBar, CoHeader, CoFooter , ok } from "./shared";
 
 /**
  * Hawaii homepage — "coastal" family, from the generated Hawaii mockup
@@ -84,7 +84,7 @@ export default function HomeCoastal({
     return out;
   };
   const pool = articles.pool || articles.latestPosts;
-  const heroSlides = [lead, ...take(articles.heroSide.concat(articles.trending), 4)].map((a) => ({ id: a.slug, image: a.img, title: a.title, subtitle: a.summary, eyebrow: a.category.replace(/-/g, " ").toUpperCase(), href: href(a) }));
+  const heroSlides = take(articles.heroSide.concat(articles.trending), 5).map((a) => ({ id: a.slug, image: a.img, title: ok(a.title), subtitle: ok(a.summary), eyebrow: a.category.replace(/-/g, " ").toUpperCase(), href: href(a) }));
   const brief = take(articles.latestPosts.concat(pool), 5);
   const sec = (key: string, re: RegExp, n: number) => take((sections?.[key] || []).concat(pool.filter((a) => re.test(a.title))), n);
   const pol = sec("politics", TOPIC_RE.politics, 3);
@@ -117,7 +117,7 @@ export default function HomeCoastal({
       <div className={`${W} mt-4`}>
         <a href={href(breaking)} className="group flex items-center gap-4 rounded-lg bg-[#fbeaf0]">
           <span className="shrink-0 rounded-l-lg bg-[var(--co-acc)] py-2 pl-4 pr-7 text-[13px] font-extrabold uppercase tracking-[.1em] text-white [clip-path:polygon(0_0,calc(100%-12px)_0,100%_50%,calc(100%-12px)_100%,0_100%)] md:text-[14px]">Latest</span>
-          <span className={`${crimson.className} flex-1 py-2 text-[17px] font-semibold leading-snug text-[var(--co-ink)] group-hover:text-[var(--co-acc)] md:text-[21px]`}>{breaking.title}</span>
+          <span className={`${crimson.className} flex-1 py-2 text-[17px] font-semibold leading-snug text-[var(--co-ink)] group-hover:text-[var(--co-acc)] md:text-[21px]`}>{ok(breaking.title)}</span>
           <span className="hidden pr-4 text-[13px] font-bold text-[var(--co-acc)] sm:block">{ago(breaking)} ›</span>
         </a>
       </div>
@@ -129,8 +129,8 @@ export default function HomeCoastal({
             <div className="co-hero overflow-hidden rounded-xl"><HeroCinema slides={heroSlides} /></div>
             <a href={href(lead)} className="group mt-4 block">
               <p className="text-[13px] font-extrabold uppercase tracking-[.16em] text-[var(--co-acc)]">{lead.category.replace(/-/g, " ")}</p>
-              <h1 className={`${H} mt-1 text-[34px] md:text-[44px] group-hover:text-[var(--co-acc)]`}><SplitWords text={lead.title} /></h1>
-              {lead.summary && <p className={`${crimson.className} mt-2 text-[20px] italic text-[#4a5a66]`}>{lead.summary}</p>}
+              <h1 className={`${H} mt-1 text-[34px] md:text-[44px] group-hover:text-[var(--co-acc)]`}><SplitWords text={ok(lead.title)} /></h1>
+              {lead.summary && <p className={`${crimson.className} mt-2 text-[20px] italic text-[#4a5a66]`}>{ok(lead.summary)}</p>}
               <p className="mt-2 text-[13px] text-[#6b7b86]">{lead.author ? `By ${lead.author} | ` : ""}{ago(lead)}</p>
             </a>
           </div>
@@ -143,7 +143,7 @@ export default function HomeCoastal({
                     <a href={href(a)} className="group flex gap-3 py-3">
                       <span className="pc-zoom h-[64px] w-[96px] shrink-0 overflow-hidden rounded-md"><Img a={a} /></span>
                       <span>
-                        <span className={`${crimson.className} block text-[17.5px] font-semibold leading-snug text-[var(--co-ink)] group-hover:text-[var(--co-acc)]`}>{a.title}</span>
+                        <span className={`${crimson.className} block text-[17.5px] font-semibold leading-snug text-[var(--co-ink)] group-hover:text-[var(--co-acc)]`}>{ok(a.title)}</span>
                         <span className="text-[11.5px] font-bold uppercase text-[var(--co-acc)]">{a.category.replace(/-/g, " ")}</span> <span className="text-[12px] italic text-[#7a8a94]">| {ago(a)}</span>
                       </span>
                     </a>
@@ -167,13 +167,13 @@ export default function HomeCoastal({
                   <p className="flex items-center gap-2 text-[15px] font-extrabold text-[var(--co-ink)]">
                     <span className="h-2.5 w-2.5 rounded-full" style={{ background: LEVEL[v.level] || "#888" }} />{v.name}: <span style={{ color: LEVEL[v.level] || "#555" }}>{v.level.charAt(0) + v.level.slice(1).toLowerCase()}</span>
                   </p>
-                  {v.summary && <p className="mt-1 line-clamp-4 text-[13.5px] leading-snug text-[#4a5a66]">{v.summary}</p>}
+                  {v.summary && <p className="mt-1 line-clamp-4 text-[13.5px] leading-snug text-[#4a5a66]">{ok(v.summary)}</p>}
                 </a>
               ))}
               {quakes && (
                 <p className="text-[14px]"><b className="text-[var(--co-ink)]">Earthquakes: {qDay.length} in the past 24 hours</b>{qBig && <span className="block text-[13px] italic text-[#5b6b76]">Largest this week: M{qBig.mag.toFixed(1)} {qBig.place}</span>}</p>
               )}
-              <a href="https://www.usgs.gov/observatories/hvo" target="_blank" rel="noopener" className="mt-2 inline-block text-[13px] font-bold text-[var(--co-acc)]">USGS Hawaiʻi dashboard ›</a>
+              <a href="https://www.usgs.gov/observatories/hvo" target="_blank" rel="noopener" className="mt-2 inline-block text-[13px] font-bold text-[var(--co-acc)]">USGS Hawai‘i dashboard ›</a>
             </div>
           )}
           <div className={`${card} p-5`}>
@@ -202,7 +202,7 @@ export default function HomeCoastal({
                 <CHead>Gas prices</CHead>
                 <p className={`${crimson.className} text-[46px] font-semibold leading-none text-[var(--co-ink)]`}>${gas.grades[0].price.toFixed(2)}<span className="text-[20px]">/gal</span></p>
                 <p className={`text-[13px] font-bold ${gas.grades[0].change > 0 ? "text-[#c0392b]" : "text-[#2e7d4f]"}`}>{gas.grades[0].change > 0 ? "▲" : "▼"} {Math.abs(gas.grades[0].change * 100).toFixed(1)}¢ from last week</p>
-                <p className="mt-1 text-[12px] italic text-[#6b7b86]">{gas.isRegion ? `${gas.area} average — EIA does not publish a Hawaiʻi-only weekly price` : "Statewide average"} · week of {gas.week}</p>
+                <p className="mt-1 text-[12px] italic text-[#6b7b86]">{gas.isRegion ? `${gas.area} average — EIA does not publish a Hawai‘i-only weekly price` : "Statewide average"} · week of {gas.week}</p>
               </>
             )}
             {airports && airports.length > 0 && (
@@ -226,7 +226,7 @@ export default function HomeCoastal({
           <div className={`${W} relative`}>
             <p className="text-[13px] font-extrabold uppercase tracking-[.2em] text-[#ffd6e3]">Ocean &amp; surf</p>
             <h2 className={`${crimson.className} mt-1 text-[38px] font-semibold leading-tight md:text-[48px]`}>What the ocean is doing now</h2>
-            <div className="pc-in pc-stagger mt-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
+            <div className="pc-in pc-stagger mt-6 grid grid-cols-2 gap-4 lg:[grid-template-columns:repeat(var(--n),minmax(0,1fr))]" style={{ ["--n" as string]: buoys.length } as React.CSSProperties}>
               {buoys.map((bu) => (
                 <div key={bu.name} className="rounded-xl bg-white/12 p-4 backdrop-blur-sm">
                   <p className="text-[14px] font-bold">{bu.name}</p>
@@ -261,12 +261,12 @@ export default function HomeCoastal({
                       <>
                         <a href={href(a)} className="group block">
                           <span className="pc-clip pc-in pc-zoom block aspect-[16/10] overflow-hidden rounded-lg"><Img a={a} /></span>
-                          <span className={`${H} mt-3 block text-[24px] group-hover:text-[var(--co-acc)]`}>{a.title}</span>
-                          {a.summary && <span className={`${crimson.className} mt-1 block line-clamp-3 text-[16px] italic text-[#4a5a66]`}>{a.summary}</span>}
+                          <span className={`${H} mt-3 block text-[24px] group-hover:text-[var(--co-acc)]`}>{ok(a.title)}</span>
+                          {a.summary && <span className={`${crimson.className} mt-1 block line-clamp-3 text-[16px] italic text-[#4a5a66]`}>{ok(a.summary)}</span>}
                           <span className="mt-1 block text-[12px] text-[#7a8a94]">{a.author ? `By ${a.author} | ` : ""}{ago(a)}</span>
                         </a>
                         <ul className="mt-3 space-y-2 border-t border-[#e4edf1] pt-3">
-                          {rest.map((r) => <li key={r.slug} className="flex gap-2"><span className="mt-2 h-1.5 w-1.5 shrink-0 bg-[var(--co-acc)]" /><a href={href(r)} className="text-[14.5px] font-semibold leading-snug hover:text-[var(--co-acc)]">{r.title}</a></li>)}
+                          {rest.map((r) => <li key={r.slug} className="flex gap-2"><span className="mt-2 h-1.5 w-1.5 shrink-0 bg-[var(--co-acc)]" /><a href={href(r)} className="text-[14.5px] font-semibold leading-snug hover:text-[var(--co-acc)]">{ok(r.title)}</a></li>)}
                         </ul>
                       </>
                     );
@@ -286,7 +286,7 @@ export default function HomeCoastal({
               {life.map((a) => (
                 <a key={a.slug} href={href(a)} className="pc-card group block rounded-xl bg-white p-2">
                   <span className="pc-zoom block aspect-[4/3] overflow-hidden rounded-lg"><Img a={a} /></span>
-                  <span className={`${crimson.className} mt-2 block px-1 pb-1 text-[19px] font-semibold leading-snug text-[var(--co-ink)] group-hover:text-[var(--co-acc)]`}>{a.title}</span>
+                  <span className={`${crimson.className} mt-2 block px-1 pb-1 text-[19px] font-semibold leading-snug text-[var(--co-ink)] group-hover:text-[var(--co-acc)]`}>{ok(a.title)}</span>
                 </a>
               ))}
             </div>
@@ -302,7 +302,7 @@ export default function HomeCoastal({
                   <span className={`${crimson.className} flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[#e6f3f7] text-[24px] font-semibold text-[var(--co-ink)]`}>{(a.author || site.name).trim().charAt(0)}</span>
                   <span>
                     <span className="block text-[11.5px] font-extrabold uppercase tracking-[.12em] text-[var(--co-acc)]">Column</span>
-                    <span className={`${crimson.className} block text-[18px] font-semibold leading-snug text-[var(--co-ink)] group-hover:text-[var(--co-acc)]`}>{a.title}</span>
+                    <span className={`${crimson.className} block text-[18px] font-semibold leading-snug text-[var(--co-ink)] group-hover:text-[var(--co-acc)]`}>{ok(a.title)}</span>
                     {a.author && <span className="text-[12px] italic text-[#7a8a94]">By {a.author}</span>}
                   </span>
                 </a>
@@ -316,13 +316,13 @@ export default function HomeCoastal({
             {safety.length > 0 && (
               <div className={`${card} p-5`}>
                 <CHead>Public safety</CHead>
-                {safety.map((a) => <a key={a.slug} href={href(a)} className={`${crimson.className} block border-b border-[#e4edf1] py-2 text-[17px] font-semibold leading-snug hover:text-[var(--co-acc)]`}>{a.title}</a>)}
+                {safety.map((a) => <a key={a.slug} href={href(a)} className={`${crimson.className} block border-b border-[#e4edf1] py-2 text-[17px] font-semibold leading-snug hover:text-[var(--co-acc)]`}>{ok(a.title)}</a>)}
               </div>
             )}
             {schools.length > 0 && (
               <div className={`${card} p-5`}>
                 <CHead>Education</CHead>
-                {schools.map((a) => <a key={a.slug} href={href(a)} className={`${crimson.className} block border-b border-[#e4edf1] py-2 text-[17px] font-semibold leading-snug hover:text-[var(--co-acc)]`}>{a.title}</a>)}
+                {schools.map((a) => <a key={a.slug} href={href(a)} className={`${crimson.className} block border-b border-[#e4edf1] py-2 text-[17px] font-semibold leading-snug hover:text-[var(--co-acc)]`}>{ok(a.title)}</a>)}
               </div>
             )}
             {mostRead.length > 0 && (
@@ -331,7 +331,7 @@ export default function HomeCoastal({
                 {mostRead.map((a, i) => (
                   <a key={a.slug} href={href(a)} className="flex gap-3 border-t border-white/15 py-2.5 first:border-0">
                     <span className={`${crimson.className} w-6 text-[28px] font-semibold leading-none text-[#ff9ebd]`}>{i + 1}</span>
-                    <span className="text-[14.5px] font-semibold leading-snug hover:text-[#ffd6e3]">{a.title}</span>
+                    <span className="text-[14.5px] font-semibold leading-snug hover:text-[#ffd6e3]">{ok(a.title)}</span>
                   </a>
                 ))}
               </div>
@@ -347,7 +347,7 @@ export default function HomeCoastal({
                 <a key={a.slug} href={href(a)} className="pc-card group block">
                   <span className="pc-zoom block aspect-[3/2] overflow-hidden rounded-lg"><Img a={a} /></span>
                   <span className="mt-2 block text-[11.5px] font-extrabold uppercase tracking-[.12em] text-[var(--co-acc)]">{a.category.replace(/-/g, " ")}</span>
-                  <span className={`${crimson.className} block text-[21px] font-semibold leading-snug text-[var(--co-ink)] group-hover:text-[var(--co-acc)]`}>{a.title}</span>
+                  <span className={`${crimson.className} block text-[21px] font-semibold leading-snug text-[var(--co-ink)] group-hover:text-[var(--co-acc)]`}>{ok(a.title)}</span>
                   <span className="text-[12px] italic text-[#7a8a94]">{ago(a)}</span>
                 </a>
               ))}
@@ -357,12 +357,12 @@ export default function HomeCoastal({
 
         {more.length > 0 && (
           <section className="pc-in pc-up mt-12">
-            <CHead>More from Hawaiʻi</CHead>
+            <CHead>More from Hawai‘i</CHead>
             <ul className="grid gap-x-10 md:grid-cols-2">
               {more.map((a) => (
                 <li key={a.slug} className="flex gap-4 border-b border-[#e4edf1] py-2.5">
                   <span className="w-16 shrink-0 pt-0.5 text-[12px] font-bold text-[var(--co-acc)]">{hour(a, tz)}</span>
-                  <a href={href(a)} className={`${crimson.className} text-[17px] font-semibold leading-snug text-[var(--co-ink)] hover:text-[var(--co-acc)]`}>{a.title}</a>
+                  <a href={href(a)} className={`${crimson.className} text-[17px] font-semibold leading-snug text-[var(--co-ink)] hover:text-[var(--co-acc)]`}>{ok(a.title)}</a>
                 </li>
               ))}
             </ul>

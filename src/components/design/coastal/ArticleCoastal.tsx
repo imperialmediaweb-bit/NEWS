@@ -10,7 +10,7 @@ import AlertsBox from "../live/AlertsBox";
 import CountySearch from "../live/CountySearch";
 import PeachFx, { SplitWords } from "../peach/PeachFx";
 import AdSlot from "../AdSlot";
-import { crimson, nunito, coVars, CHead, Label, CoTopBar, CoHeader, CoFooter } from "./shared";
+import { crimson, nunito, coVars, CHead, Label, CoTopBar, CoHeader, CoFooter , ok } from "./shared";
 
 /**
  * Hawaii article page — "coastal" family: a split opening (the photo on one
@@ -87,11 +87,11 @@ export default function ArticleCoastal({
           )}
           <header className="flex flex-col justify-center p-6 md:p-10">
             <a href={`/${categorySlug}`}><Label>{categoryLabel}</Label></a>
-            <h1 className={`${crimson.className} text-[34px] font-semibold leading-[1.08] text-[var(--co-ink)] md:text-[50px]`}><SplitWords text={article.title} /></h1>
-            {article.summary && <p className={`${crimson.className} mt-4 text-[19px] italic leading-relaxed text-[#4a5a66] md:text-[22px]`}>{article.summary}</p>}
+            <h1 className={`${crimson.className} text-[34px] font-semibold leading-[1.08] text-[var(--co-ink)] md:text-[50px]`}><SplitWords text={ok(article.title)} /></h1>
+            {article.summary && <p className={`${crimson.className} mt-4 text-[19px] italic leading-relaxed text-[#4a5a66] md:text-[22px]`}>{ok(article.summary)}</p>}
             <p className="mt-5 text-[15px] text-[#4a5a66]">By <b className="text-[var(--co-ink)]">{authorName}</b>{authorTitle ? `, ${authorTitle}` : ""}</p>
             <p className="mt-1 text-[12px] font-bold uppercase tracking-[.14em] text-[#7a8a94]">{when} · {minutes} min read</p>
-            <div className="mt-5"><ShareBar url={url} title={article.title} /></div>
+            <div className="mt-5"><ShareBar url={url} title={ok(article.title)} /></div>
           </header>
         </div>
         {article.featured_image && isStock(article.featured_image) && <p className="mt-2 text-[12px] italic text-[#8a99a3]">Illustrative photo from a free stock library; it does not show the people or places in this story.</p>}
@@ -101,7 +101,7 @@ export default function ArticleCoastal({
         <div className={`${crimson.className} pc-article pc-dropcap`} dangerouslySetInnerHTML={{ __html: html }} />
         <div className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-[var(--co-gold)] pt-5">
           <p className={`${crimson.className} text-[18px] italic text-[#555]`}>Share this story</p>
-          <ShareBar url={url} title={article.title} />
+          <ShareBar url={url} title={ok(article.title)} />
         </div>
         <div className="mt-8 bg-[#fbf4ea] p-6 text-center">
           <p className={`${crimson.className} text-[24px] font-semibold italic text-[var(--co-ink)]`}>Know more about this story?</p>
@@ -120,7 +120,7 @@ export default function ArticleCoastal({
             {side.map((a) => (
               <a key={a.slug} href={href(a)} className="flex gap-4 border-b border-[#eee] py-2.5">
                 <span className="w-16 shrink-0 pt-0.5 text-[13px] text-[#999]">{hour(a, tz)}</span>
-                <span className={`${crimson.className} text-[17px] font-semibold leading-snug hover:text-[var(--co-acc)]`}>{a.title}</span>
+                <span className={`${crimson.className} text-[17px] font-semibold leading-snug hover:text-[var(--co-acc)]`}>{ok(a.title)}</span>
               </a>
             ))}
           </div>
@@ -131,7 +131,7 @@ export default function ArticleCoastal({
             {top.map((a, i) => (
               <a key={a.slug} href={href(a)} className="flex gap-4 border-b border-[#e6ddcc] py-2.5 last:border-0">
                 <span className={`${crimson.className} w-6 text-[28px] font-semibold italic leading-none text-[var(--co-acc)]`}>{i + 1}</span>
-                <span className="text-[15.5px] font-semibold leading-snug hover:text-[var(--co-acc)]">{a.title}</span>
+                <span className="text-[15.5px] font-semibold leading-snug hover:text-[var(--co-acc)]">{ok(a.title)}</span>
               </a>
             ))}
           </div>
@@ -163,8 +163,8 @@ export default function ArticleCoastal({
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   {a.img && <img src={a.img} alt="" className="h-full w-full object-cover" loading="lazy" />}
                 </span>
-                <span className={`${crimson.className} mt-3 block text-[22px] font-semibold leading-snug group-hover:text-[var(--co-acc)]`}>{a.title}</span>
-                {a.summary && <span className="mt-1 block line-clamp-2 text-[15px] text-[#666]">{a.summary}</span>}
+                <span className={`${crimson.className} mt-3 block text-[22px] font-semibold leading-snug group-hover:text-[var(--co-acc)]`}>{ok(a.title)}</span>
+                {a.summary && <span className="mt-1 block line-clamp-2 text-[15px] text-[#666]">{ok(a.summary)}</span>}
               </a>
             ))}
           </div>

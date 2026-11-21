@@ -7,22 +7,22 @@ import CountySearch from "../live/CountySearch";
 import AlertsBox from "../live/AlertsBox";
 import PeachFx, { SplitWords } from "../peach/PeachFx";
 import AdSlot from "../AdSlot";
-import { crimson, nunito, coVars, CHead, Label, CoTopBar, CoHeader, CoFooter } from "./shared";
+import { crimson, nunito, coVars, CHead, Label, CoTopBar, CoHeader, CoFooter , ok } from "./shared";
 
 /**
  * Hawaii section page — "coastal" family: a quiet centred title in
  * italic serif with a one-line description, the top story as a cover (photo
- * left, headline right), an editorial grid, a Hawaiʻi sub-section
+ * left, headline right), an editorial grid, a Hawai‘i sub-section
  * (the Capitol for politics, tourism and housing for business...), the county
  * finder, headlines and pagination. Real stories only.
  */
 const ABOUT: Record<string, string> = {
-  politics: "The State Capitol, the governor, the counties and the races shaping Hawaiʻi.",
+  politics: "The State Capitol, the governor, the counties and the races shaping Hawai‘i.",
   business: "Tourism, agriculture, the military economy, housing and the companies of the islands.",
   sports: "The Rainbow Warriors and Rainbow Wahine, surfing, paddling and high school sports across the islands.",
-  opinion: "Columns and editorials on the questions facing Hawaiʻi.",
+  opinion: "Columns and editorials on the questions facing Hawai‘i.",
   life: "Food, culture, the ocean, the land and everyday island life.",
-  "local-news": "News from Oʻahu, Maui, the Big Island, Kauaʻi and every island community.",
+  "local-news": "News from O‘ahu, Maui, the Big Island, Kaua‘i and every island community.",
 };
 const SUB: Record<string, [string, RegExp]> = {
   politics: ["At the Capitol", /(legislat|senat|house|capitol|governor|green|lawmaker|bill)/i],
@@ -94,7 +94,7 @@ export default function CategoryCoastal({
       <section className="mx-auto max-w-[860px] px-4 py-10 text-center md:py-14">
         <p className="text-[13px] uppercase tracking-[.2em] text-[#999]"><a href="/" className="hover:text-[var(--co-acc)]">Home</a> · Section</p>
         <h1 className={`${crimson.className} mt-2 text-[56px] font-semibold italic leading-none text-[var(--co-ink)] md:text-[84px]`}><SplitWords text={label} /></h1>
-        <p className={`${crimson.className} mt-4 text-[19px] text-[#555]`}>{ABOUT[slug] || `The latest ${label.toLowerCase()} from across Hawaiʻi.`}</p>
+        <p className={`${crimson.className} mt-4 text-[19px] text-[#555]`}>{ABOUT[slug] || `The latest ${label.toLowerCase()} from across Hawai‘i.`}</p>
         <span className="mx-auto mt-6 block h-px w-24 bg-[var(--co-gold)]" />
       </section>
 
@@ -104,8 +104,8 @@ export default function CategoryCoastal({
             <span className="pc-clip pc-in pc-zoom block aspect-[3/2] overflow-hidden"><Img a={lead} /></span>
             <span>
               <Label>Top story</Label>
-              <span className={`${crimson.className} block text-[34px] font-semibold leading-[1.08] group-hover:text-[var(--co-acc)] md:text-[46px]`}>{lead.title}</span>
-              {lead.summary && <span className="mt-4 block text-[17px] leading-relaxed text-[#555]">{lead.summary}</span>}
+              <span className={`${crimson.className} block text-[34px] font-semibold leading-[1.08] group-hover:text-[var(--co-acc)] md:text-[46px]`}>{ok(lead.title)}</span>
+              {lead.summary && <span className="mt-4 block text-[17px] leading-relaxed text-[#555]">{ok(lead.summary)}</span>}
               <span className="mt-3 block text-[14px] text-[#888]">{lead.author ? `By ${lead.author} · ` : ""}{ago(lead)}</span>
             </span>
           </a>
@@ -118,8 +118,8 @@ export default function CategoryCoastal({
             {grid.map((a) => (
               <a key={a.slug} href={href(a)} className="pc-card group block">
                 <span className="pc-zoom block aspect-[3/2] overflow-hidden"><Img a={a} /></span>
-                <span className={`${crimson.className} mt-3 block text-[22px] font-semibold leading-snug group-hover:text-[var(--co-acc)]`}>{a.title}</span>
-                {a.summary && <span className="mt-1 block line-clamp-2 text-[15px] text-[#666]">{a.summary}</span>}
+                <span className={`${crimson.className} mt-3 block text-[22px] font-semibold leading-snug group-hover:text-[var(--co-acc)]`}>{ok(a.title)}</span>
+                {a.summary && <span className="mt-1 block line-clamp-2 text-[15px] text-[#666]">{ok(a.summary)}</span>}
                 <span className="mt-1 block text-[12px] text-[#999]">{ago(a)}</span>
               </a>
             ))}
@@ -134,7 +134,7 @@ export default function CategoryCoastal({
                 {subList.map((a) => (
                   <a key={a.slug} href={href(a)} className="group block">
                     <span className="pc-zoom block aspect-[4/3] overflow-hidden"><Img a={a} /></span>
-                    <span className={`${crimson.className} mt-2 block text-[18px] font-semibold leading-snug group-hover:text-[var(--co-acc)]`}>{a.title}</span>
+                    <span className={`${crimson.className} mt-2 block text-[18px] font-semibold leading-snug group-hover:text-[var(--co-acc)]`}>{ok(a.title)}</span>
                   </a>
                 ))}
               </div>
@@ -159,7 +159,7 @@ export default function CategoryCoastal({
                 {rest.map((a) => (
                   <a key={a.slug} href={href(a)} className="flex gap-4 border-b border-[#eee] py-3">
                     <span className="w-16 shrink-0 pt-0.5 text-[13px] text-[#999]">{hour(a, tz)}</span>
-                    <span className={`${crimson.className} text-[17px] font-semibold leading-snug hover:text-[var(--co-acc)]`}>{a.title}</span>
+                    <span className={`${crimson.className} text-[17px] font-semibold leading-snug hover:text-[var(--co-acc)]`}>{ok(a.title)}</span>
                   </a>
                 ))}
               </div>
@@ -170,7 +170,7 @@ export default function CategoryCoastal({
                 {stateLatest.map((a) => (
                   <a key={a.slug} href={href(a)} className="flex gap-4 border-b border-[#eee] py-3">
                     <span className="w-16 shrink-0 pt-0.5 text-[13px] text-[var(--co-acc)]">{hour(a, tz)}</span>
-                    <span className="text-[15.5px] font-semibold leading-snug hover:text-[var(--co-acc)]">{a.title}</span>
+                    <span className="text-[15.5px] font-semibold leading-snug hover:text-[var(--co-acc)]">{ok(a.title)}</span>
                   </a>
                 ))}
               </div>
