@@ -105,7 +105,12 @@ export async function POST(req: NextRequest) {
   // less than the rest. Running every tick visits each slot two or three
   // times, and the route's own one-per-hour quota is what stops a page
   // posting twice. The cost is a query over ~4 pages.
-  if ((await claimJob("facebook_post", 110)).claimed) {
+  // Off unless FB_AUTOPOST=1 on Railway. From 25 October it posted ~9 a day
+  // per page as photo + link in the first comment from an account also used
+  // in another country; Meta invalidated the session the first day, blocked
+  // it as spam on the 28th and restricted the pages, and it then kept trying
+  // ~100 times a day for a week. Switched off on 22 November.
+  if (process.env.FB_AUTOPOST === "1" && (await claimJob("facebook_post", 110)).claimed) {
     fireAndForgetGet(baseUrl, "cron/facebook-post", secret);
     actions.push("facebook_post");
   }
