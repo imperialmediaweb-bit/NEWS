@@ -227,7 +227,7 @@ export async function setupReleaseInbox(zoneId: string, domain: string, endpoint
     worker = body.success ? "deployed" : body.errors?.map((e) => `${e.code}: ${e.message}`).join("; ");
     if (body.success) deployed.add(account);
   }
-  const enable = await cf<unknown>(`/zones/${zoneId}/email/routing/dns`, { method: "POST", body: "{}" });
+  const enable = await enableEmailRouting(zoneId, domain);
   const address = `releases@${domain}`;
   const existing = await cf<{ matchers: { value?: string }[] }[]>(`/zones/${zoneId}/email/routing/rules`);
   const has = existing.ok && existing.result.some((r) => r.matchers?.some((m) => m.value === address));
@@ -243,4 +243,45 @@ export async function setupReleaseInbox(zoneId: string, domain: string, endpoint
         }),
       });
   return { worker, enable, rule };
+}
+
+/**
+ * Turn Email Routing on for a zone. The API switch first; if the token may not
+ * use it, the DNS it would write: Cloudflare's three MX records and its SPF,
+ * replacing the old mail host's MX (the domains' old Hostinger mail is unused).
+ */
+export async function enableEmailRouting(zoneId: string, domain: string) {
+  const api = await cf<unknown>(`/zones/${zoneId}/email/routing/enable`, { method: "POST", body: "{}" });
+  if (api.ok) return { via: "api" };
+  type Rec = { id: string; type: string; name: string; content: string; priority?: number };
+  const mx = await cf<Rec[]>(`/zones/${zoneId}/dns_records?type=MX&per_page=50`);
+  if (!mx.ok) return { via: "dns", error: mx.error, apiError: api.error };
+  const removed: string[] = [];
+  for (const r of mx.result) {
+    if (r.name === domain && !/mx\.cloudflare\.net$/i.test(r.content)) {
+      const d = await cf<unknown>(`/zones/${zoneId}/dns_records/${r.id}`, { method: "DELETE" });
+      if (d.ok) removed.push(r.content);
+    }
+  }
+  const have = new Set(mx.result.filter((r) => r.name === domain).map((r) => r.content.toLowerCase()));
+  const added: string[] = [];
+  for (const [host, prio] of [["route1.mx.cloudflare.net", 13], ["route2.mx.cloudflare.net", 86], ["route3.mx.cloudflare.net", 24]] as const) {
+    if (have.has(host)) continue;
+    const c = await cf<unknown>(`/zones/${zoneId}/dns_records`, { method: "POST", body: JSON.stringify({ type: "MX", name: domain, content: host, priority: prio, ttl: 1 }) });
+    if (c.ok) added.push(host);
+  }
+  const txt = await cf<Rec[]>(`/zones/${zoneId}/dns_records?type=TXT&name=${domain}&per_page=50`);
+  const spf = txt.ok ? txt.result.find((r) => r.content.replace(/"/g, "").startsWith("v=spf1")) : undefined;
+  const want = "v=spf1 include:_spf.mx.cloudflare.net ~all";
+  let spfDone = "kept";
+  if (!spf) {
+    const c = await cf<unknown>(`/zones/${zoneId}/dns_records`, { method: "POST", body: JSON.stringify({ type: "TXT", name: domain, content: want, ttl: 1 }) });
+    spfDone = c.ok ? "added" : "failed";
+  } else if (!spf.content.includes("_spf.mx.cloudflare.net")) {
+    const merged = spf.content.replace(/"/g, "").replace(/\s*[~-]all\s*$/, "").replace(/include:[^\s]*hostinger[^\s]*/gi, "").trim() + " include:_spf.mx.cloudflare.net ~all";
+    const u = await cf<unknown>(`/zones/${zoneId}/dns_records/${spf.id}`, { method: "PATCH", body: JSON.stringify({ content: merged.replace(/\s+/g, " ") }) });
+    spfDone = u.ok ? "updated" : "failed";
+  }
+  const status = await cf<{ enabled?: boolean; status?: string }>(`/zones/${zoneId}/email/routing`);
+  return { via: "dns", apiError: api.error, removed, added, spf: spfDone, routing: status.ok ? status.result : status.error };
 }
