@@ -13,6 +13,8 @@ import AdSlot from "../AdSlot";
 import { popularOf, sportsReOf } from "@/config/state-data";
 import { citiesOf } from "@/lib/local-data";
 import Extras from "../extras/Extras";
+import SignatureStrip from "../extras/SignatureStrip";
+import type { Signature } from "@/lib/local-data";
 import StateMap from "../StateMap";
 import { zilla, alfa, lora, wsOf, wsVars, WHead, WKick, Ridge, WsTopBar, WsHeader, WsFooter } from "./shared";
 
@@ -53,6 +55,7 @@ export default function HomeWestern({
   fires,
   outline,
   snow,
+  signature,
 }: {
   site: SiteConfig;
   articles: HomeArticles;
@@ -74,6 +77,7 @@ export default function HomeWestern({
   uv?: unknown;
   snow?: SnowStation[] | null;
   drought?: unknown;
+  signature?: Signature | null;
 }) {
   const w = wsOf(site);
   const tz = TZ[site.state] || "America/Denver";
@@ -353,6 +357,8 @@ export default function HomeWestern({
           </section>
         )}
       </main>
+
+      {signature && <SignatureStrip sig={signature} ink={w.ink} acc={w.acc} head={zilla.className} />}
 
       <Extras site={site} pool={pool} used={used} weather={weather} gas={gas} counties={counties} theme={{ ink: w.ink, acc: w.acc, bg: w.paper, line: "#d9c9a8", text: "#2a2a2a", head: zilla.className }} order={["cities", "weekColumns", "galleryList"]} />
 

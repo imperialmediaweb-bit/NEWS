@@ -13,6 +13,8 @@ import AdSlot from "../AdSlot";
 import { popularOf, sportsReOf } from "@/config/state-data";
 import { citiesOf } from "@/lib/local-data";
 import Extras from "../extras/Extras";
+import SignatureStrip from "../extras/SignatureStrip";
+import type { Signature } from "@/lib/local-data";
 import StateMap from "../StateMap";
 import { spectral, mont, dkOf, dkVars, DHead, DLabel, DkTopBar, DkHeader, DkFooter } from "./shared";
 
@@ -53,6 +55,7 @@ export default function HomeDark({
   fires,
   outline,
   uv,
+  signature,
 }: {
   site: SiteConfig;
   articles: HomeArticles;
@@ -74,6 +77,7 @@ export default function HomeDark({
   uv?: UvHour[] | null;
   snow?: unknown;
   drought?: unknown;
+  signature?: Signature | null;
 }) {
   const d = dkOf(site);
   const tz = TZ[site.state] || "America/New_York";
@@ -388,7 +392,9 @@ export default function HomeDark({
           </section>
         )}
 
-        <Extras site={site} pool={pool} used={used} weather={weather} gas={gas} counties={counties} theme={{ ink: d.deep, acc: d.acc, bg: d.bg, line: d.cu, text: "#e9ddd3", head: spectral.className, dark: true }} order={["numbersBand", "galleryWall", "cities"]} />
+        {signature && <SignatureStrip sig={signature} ink={d.deep} acc={d.acc} head={spectral.className} />}
+
+      <Extras site={site} pool={pool} used={used} weather={weather} gas={gas} counties={counties} theme={{ ink: d.deep, acc: d.acc, bg: d.bg, line: d.cu, text: "#e9ddd3", head: spectral.className, dark: true }} order={["numbersBand", "galleryWall", "cities"]} />
 
         {latest.length >= 3 && (
           <section className="pc-in pc-up mt-12">

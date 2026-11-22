@@ -381,3 +381,5 @@ a.group:hover [class*="leading-"]:not(.pc-zoom) { text-decoration: underline; te
 .is-magnet { transition: translate .08s linear; }
 .x-ticker { font-family: inherit; }
 @media (prefers-reduced-motion: reduce) { .x-numbers, .ws-band::before, .pc-footer { animation: none; } }
+.x-sig { margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw); background: radial-gradient(ellipse at 85% 0%, color-mix(in srgb, var(--x-acc) 40%, transparent), transparent 55%), linear-gradient(135deg, var(--x-ink), color-mix(in srgb, var(--x-ink) 65%, #000)); background-size: 200% 200%; animation: x-aurora 18s ease-in-out infinite alternate; }
+@media (prefers-reduced-motion: reduce) { .x-sig { animation: none; } }

@@ -13,6 +13,8 @@ import AdSlot from "../AdSlot";
 import { popularOf, sportsReOf } from "@/config/state-data";
 import { citiesOf } from "@/lib/local-data";
 import Extras from "../extras/Extras";
+import SignatureStrip from "../extras/SignatureStrip";
+import type { Signature } from "@/lib/local-data";
 import QuakeMap, { quakeColor } from "./QuakeMap";
 import StateMap from "../StateMap";
 import { serifM, sansM, magOf, magVars, MHead, Label, MagTopBar, MagHeader, MagFooter } from "./shared";
@@ -53,6 +55,7 @@ export default function HomeMagazine({
   quakes,
   fires,
   outline,
+  signature,
 }: {
   site: SiteConfig;
   articles: HomeArticles;
@@ -74,6 +77,7 @@ export default function HomeMagazine({
   uv?: unknown;
   snow?: unknown;
   drought?: unknown;
+  signature?: Signature | null;
 }) {
   const m = magOf(site);
   const tz = TZ[site.state] || "America/New_York";
@@ -418,7 +422,9 @@ export default function HomeMagazine({
           </section>
         )}
 
-        <Extras site={site} pool={pool} used={used} weather={weather} gas={gas} counties={counties} theme={{ ink: m.ink, acc: m.acc, bg: "#ffffff", line: "#e6ddcc", text: "#222222", head: serifM.className }} order={["galleryWall", "weekTimeline", "exploreMosaic"]} />
+        {signature && <SignatureStrip sig={signature} ink={m.ink} acc={m.acc} head={serifM.className} />}
+
+      <Extras site={site} pool={pool} used={used} weather={weather} gas={gas} counties={counties} theme={{ ink: m.ink, acc: m.acc, bg: "#ffffff", line: "#e6ddcc", text: "#222222", head: serifM.className }} order={["galleryWall", "weekTimeline", "exploreMosaic"]} />
 
         {latest.length >= 3 && (
           <section className="pc-in pc-up mt-14">

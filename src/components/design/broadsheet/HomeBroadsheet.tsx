@@ -12,6 +12,8 @@ import PeachFx, { SplitWords } from "../peach/PeachFx";
 import AdSlot from "../AdSlot";
 import { popularOf, sportsReOf } from "@/config/state-data";
 import Extras from "../extras/Extras";
+import SignatureStrip from "../extras/SignatureStrip";
+import type { Signature } from "@/lib/local-data";
 import { caslon, pub, bsOf, bsVars, BHead, Kick, Double, BsTopBar, BsHeader, BsFooter } from "./shared";
 
 /**
@@ -63,6 +65,7 @@ export default function HomeBroadsheet({
   airports,
   subway,
   storms,
+  signature,
 }: {
   site: SiteConfig;
   articles: HomeArticles;
@@ -84,6 +87,7 @@ export default function HomeBroadsheet({
   uv?: unknown;
   snow?: unknown;
   drought?: unknown;
+  signature?: Signature | null;
 }) {
   const b = bsOf(site);
   const tz = TZ[site.state] || "America/New_York";
@@ -415,7 +419,9 @@ export default function HomeBroadsheet({
           </section>
         )}
 
-        <Extras site={site} pool={pool} used={used} weather={weather} gas={gas} counties={counties} theme={{ ink: "#1a1a1a", acc: b.acc, bg: "#fdfcf9", line: b.gold, text: "#1a1a1a", head: caslon.className }} order={["weekColumns", "cities", "numbersTickets"]} />
+        {signature && <SignatureStrip sig={signature} ink={"#1a1a1a"} acc={b.acc} head={caslon.className} />}
+
+      <Extras site={site} pool={pool} used={used} weather={weather} gas={gas} counties={counties} theme={{ ink: "#1a1a1a", acc: b.acc, bg: "#fdfcf9", line: b.gold, text: "#1a1a1a", head: caslon.className }} order={["weekColumns", "cities", "numbersTickets"]} />
 
         {latest.length >= 3 && (
           <section className="pc-in pc-up mt-12">

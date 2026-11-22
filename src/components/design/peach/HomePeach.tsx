@@ -10,6 +10,8 @@ import { TZ, href, hour, ago, WxIcon, TOPIC_RE, srcSetOf } from "../live/shared"
 import HeroCinema from "../live/HeroCinema";
 import PeachFx from "./PeachFx";
 import Extras from "../extras/Extras";
+import SignatureStrip from "../extras/SignatureStrip";
+import type { Signature } from "@/lib/local-data";
 import { popularOf, sportsReOf } from "@/config/state-data";
 import { display, body, peachOf, peachVars, PHead, Ico, PeachTopBar, PeachHeader, PeachFooter } from "./shared";
 
@@ -48,6 +50,7 @@ export default function HomePeach({
   gas,
   lottery,
   airports,
+  signature,
 }: {
   site: SiteConfig;
   articles: HomeArticles;
@@ -69,6 +72,7 @@ export default function HomePeach({
   uv?: unknown;
   snow?: unknown;
   drought?: unknown;
+  signature?: Signature | null;
 }) {
   const p = peachOf(site);
   const tz = TZ[site.state] || "America/New_York";
@@ -478,7 +482,9 @@ export default function HomePeach({
         )}
 
         {/* latest grid */}
-        <Extras site={site} pool={pool} used={used} weather={weather} gas={gas} counties={counties} theme={{ ink: p.ink, acc: p.acc, bg: p.paper, line: p.copper, text: "#2b1d17", head: display.className }} order={["weekTimeline", "cities", "exploreStrip"]} />
+        {signature && <SignatureStrip sig={signature} ink={p.ink} acc={p.acc} head={display.className} />}
+
+      <Extras site={site} pool={pool} used={used} weather={weather} gas={gas} counties={counties} theme={{ ink: p.ink, acc: p.acc, bg: p.paper, line: p.copper, text: "#2b1d17", head: display.className }} order={["weekTimeline", "cities", "exploreStrip"]} />
 
         {latest.length >= 3 && (
           <section className="pc-in pc-up mt-12">

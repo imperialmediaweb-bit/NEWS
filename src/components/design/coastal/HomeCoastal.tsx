@@ -12,6 +12,8 @@ import PeachFx, { SplitWords } from "../peach/PeachFx";
 import AdSlot from "../AdSlot";
 import { popularOf, sportsReOf } from "@/config/state-data";
 import Extras from "../extras/Extras";
+import SignatureStrip from "../extras/SignatureStrip";
+import type { Signature } from "@/lib/local-data";
 import { crimson, nunito, coOf, coVars, CHead, CoTopBar, CoHeader, CoFooter , ok } from "./shared";
 
 /**
@@ -51,6 +53,7 @@ export default function HomeCoastal({
   quakes,
   volcanoes,
   buoys,
+  signature,
 }: {
   site: SiteConfig;
   articles: HomeArticles;
@@ -72,6 +75,7 @@ export default function HomeCoastal({
   uv?: unknown;
   snow?: unknown;
   drought?: unknown;
+  signature?: Signature | null;
 }) {
   const c = coOf(site);
   const tz = TZ[site.state] || "America/New_York";
@@ -349,7 +353,9 @@ export default function HomeCoastal({
           </section>
         )}
 
-        <Extras site={site} pool={pool} used={used} weather={weather} gas={gas} counties={counties} theme={{ ink: c.ink, acc: c.acc, bg: "#ffffff", line: c.gold, text: "#24323c", head: crimson.className }} order={["galleryDrag", "numbersBand", "exploreStrip"]} />
+        {signature && <SignatureStrip sig={signature} ink={c.ink} acc={c.acc} head={crimson.className} />}
+
+      <Extras site={site} pool={pool} used={used} weather={weather} gas={gas} counties={counties} theme={{ ink: c.ink, acc: c.acc, bg: "#ffffff", line: c.gold, text: "#24323c", head: crimson.className }} order={["galleryDrag", "numbersBand", "exploreStrip"]} />
 
         {latest.length >= 3 && (
           <section className="pc-in pc-up mt-12">

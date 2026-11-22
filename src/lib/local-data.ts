@@ -616,3 +616,97 @@ export function citiesOf(state: string): Array<[string, number, number]> {
 export function airportsOf(state: string): Array<[string, string]> | undefined {
   return STATE_AIRPORTS[state] || STATE_FACTS[state]?.airports;
 }
+
+// ── a state's signature figures: snow, storm reports, Lake Mead ──
+export interface Signature { kicker: string; title: string; items: Array<{ label: string; value: string; sub?: string }>; note?: string; source: string; link?: string }
+
+/** The five highest active SNOTEL stations of a state, with their snow. */
+export async function getStateSnow(abbr: string): Promise<SnowStation[] | null> {
+  const list = await cached(`snotel-st:${abbr}`, async () => {
+    const j = (await getJson(`https://wcc.sc.egov.usda.gov/awdbRestApi/services/v1/stations?stationTriplets=*:${abbr}:SNTL&activeOnly=true`, 9000)) as Array<{ stationTriplet: string; name: string; elevation?: number }>;
+    return j.sort((a, b) => (b.elevation || 0) - (a.elevation || 0)).slice(0, 5).map((x) => [x.stationTriplet, x.name] as [string, string]);
+  });
+  return list && list.length ? getSnow(list) : null;
+}
+
+/** Tornado, wind and hail reports in a state, today and yesterday (NOAA Storm Prediction Center). */
+export async function getStormReports(abbr: string): Promise<{ tornado: number; wind: number; hail: number; latest?: string } | null> {
+  return cached(`spc:${abbr}`, async () => {
+    const counts = { tornado: 0, wind: 0, hail: 0 } as { tornado: number; wind: number; hail: number; latest?: string };
+    for (const day of ["today", "yesterday"]) {
+      const r = await fetch(`https://www.spc.noaa.gov/climo/reports/${day}_filtered.csv`, { headers: { "User-Agent": UA }, signal: AbortSignal.timeout(8000), cache: "no-store" });
+      if (!r.ok) continue;
+      let kind: "tornado" | "wind" | "hail" = "tornado";
+      for (const line of (await r.text()).split("\n")) {
+        if (line.startsWith("Time,F_Scale")) kind = "tornado";
+        else if (line.startsWith("Time,Speed")) kind = "wind";
+        else if (line.startsWith("Time,Size")) kind = "hail";
+        else {
+          const c = line.split(",");
+          if (c[4] === abbr) {
+            counts[kind]++;
+            if (!counts.latest) counts.latest = `${c[2]}, ${c[3]} County`;
+          }
+        }
+      }
+    }
+    return counts;
+  });
+}
+
+/** Lake Mead's elevation from Reclamation's daily Lower Colorado table. */
+export async function getLakeMead(): Promise<{ elev: number; change: number; day: number } | null> {
+  return cached("lake-mead", async () => {
+    const r = await fetch("https://www.usbr.gov/lc/region/g4000/hourly/levels.html", { headers: { "User-Agent": UA }, signal: AbortSignal.timeout(8000), cache: "no-store" });
+    if (!r.ok) throw new Error(`usbr ${r.status}`);
+    const rows = (await r.text()).replace(/<[^>]+>/g, "").split("\n").map((l) => l.trim().split(/\s+/)).filter((c) => /^\d{1,2}$/.test(c[0]) && /^\d{3,4}\.\d{2}$/.test(c[3] || ""));
+    if (!rows.length) throw new Error("usbr: no rows");
+    const first = parseFloat(rows[0][3]);
+    const last = rows[rows.length - 1];
+    return { elev: parseFloat(last[3]), change: Math.round((parseFloat(last[3]) - first) * 100) / 100, day: Number(last[0]) };
+  });
+}
+
+const SNOW_STATES: Record<string, string> = { Colorado: "CO", Utah: "UT", Idaho: "ID", Wyoming: "WY", Oregon: "OR", Washington: "WA", "New Mexico": "NM", Alaska: "AK" };
+const STORM_STATES = ["Kansas", "Oklahoma", "Nebraska", "Missouri", "Arkansas", "Mississippi", "Alabama", "Tennessee", "Kentucky", "Illinois", "Indiana", "South Dakota", "North Dakota", "Minnesota", "Wisconsin"];
+
+/** The figures that make a state's homepage its own, when they exist. */
+export async function getSignature(state: string, abbr: string): Promise<Signature | null> {
+  if (state === "Nevada") {
+    const m = await getLakeMead();
+    if (!m) return null;
+    return {
+      kicker: "Water", title: "Lake Mead today",
+      items: [
+        { label: "Elevation", value: `${m.elev.toFixed(2)} ft`, sub: "above sea level" },
+        { label: "This month", value: `${m.change >= 0 ? "+" : ""}${m.change.toFixed(2)} ft`, sub: m.change >= 0 ? "rising" : "falling" },
+        { label: "Tier 1 shortage line", value: `${Math.abs(m.elev - 1075).toFixed(1)} ft ${m.elev >= 1075 ? "above" : "below"}`, sub: "the line is 1,075 ft" },
+      ],
+      source: "U.S. Bureau of Reclamation, Lower Colorado daily operations", link: "https://www.usbr.gov/lc/region/g4000/hourly/levels.html",
+    };
+  }
+  if (SNOW_STATES[state]) {
+    const s = await getStateSnow(SNOW_STATES[state]);
+    if (!s) return null;
+    return {
+      kicker: "High country", title: "Snow on the mountains",
+      items: s.map((x) => ({ label: x.name, value: x.depthIn != null ? `${x.depthIn}″` : "–", sub: x.change3d ? `${x.change3d > 0 ? "+" : ""}${x.change3d}″ in 3 days` : x.sweIn != null ? `${x.sweIn}″ of water` : "snow depth" })),
+      source: "NRCS SNOTEL, the state's highest mountain stations", link: "https://www.nrcs.usda.gov/resources/data-and-reports/snow-and-water-interactive-map",
+    };
+  }
+  if (STORM_STATES.includes(state)) {
+    const r = await getStormReports(abbr);
+    if (!r) return null;
+    return {
+      kicker: "Storm watch", title: "Severe weather reports, last 48 hours",
+      items: [
+        { label: "Tornadoes", value: String(r.tornado), sub: "reported" },
+        { label: "Damaging wind", value: String(r.wind), sub: "reports" },
+        { label: "Large hail", value: String(r.hail), sub: "reports" },
+      ],
+      note: r.latest ? `Latest report: ${r.latest}` : `No severe weather reported in ${state} today or yesterday.`,
+      source: "NOAA Storm Prediction Center, preliminary local storm reports", link: "https://www.spc.noaa.gov/climo/reports/today.html",
+    };
+  }
+  return null;
+}

@@ -9,6 +9,8 @@ import MobileMenu from "./MobileMenu";
 import HeroCinema from "./HeroCinema";
 import Reveal from "./Reveal";
 import Extras from "../extras/Extras";
+import SignatureStrip from "../extras/SignatureStrip";
+import type { Signature } from "@/lib/local-data";
 import { mockupOf, logoLeftOf } from "@/config/design-cfg";
 import { popularOf, sportsReOf } from "@/config/state-data";
 import { citiesOf } from "@/lib/local-data";
@@ -35,6 +37,7 @@ export default function HomeLive({
   alerts,
   gas,
   lottery,
+  signature,
 }: {
   site: SiteConfig;
   articles: HomeArticles;
@@ -56,6 +59,7 @@ export default function HomeLive({
   uv?: unknown;
   snow?: unknown;
   drought?: unknown;
+  signature?: Signature | null;
 }) {
   const mk = mockupOf(site.slug);
   const pal = PALETTE[site.slug] || { ink: mk?.ink || "#14213d", acc: mk?.acc || site.accent };
@@ -526,7 +530,9 @@ export default function HomeLive({
         )}
 
         {/* latest news grid */}
-        <Extras site={site} pool={pool} used={used} weather={weather} gas={gas} counties={counties} theme={{ ink: pal.ink, acc: pal.acc, bg: "#ffffff", line: "#dde1ea", text: "#1b2233", head: serif.className }} order={["numbersBand", "galleryDrag", "cities", "exploreMosaic"]} />
+        {signature && <SignatureStrip sig={signature} ink={pal.ink} acc={pal.acc} head={serif.className} />}
+
+      <Extras site={site} pool={pool} used={used} weather={weather} gas={gas} counties={counties} theme={{ ink: pal.ink, acc: pal.acc, bg: "#ffffff", line: "#dde1ea", text: "#1b2233", head: serif.className }} order={["numbersBand", "galleryDrag", "cities", "exploreMosaic"]} />
 
         {latestGrid.length >= 3 && (
           <section className="lv-reveal mt-10">

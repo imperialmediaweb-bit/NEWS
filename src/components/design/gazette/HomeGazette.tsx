@@ -13,6 +13,8 @@ import AdSlot from "../AdSlot";
 import { popularOf, sportsReOf } from "@/config/state-data";
 import { citiesOf } from "@/lib/local-data";
 import Extras from "../extras/Extras";
+import SignatureStrip from "../extras/SignatureStrip";
+import type { Signature } from "@/lib/local-data";
 import StateMap from "../StateMap";
 import { artOf } from "@/config/state-art";
 import { merri, mulish, gzOf, gzVars, GHead, GzTopBar, GzHeader, GzFooter } from "./shared";
@@ -54,6 +56,7 @@ export default function HomeGazette({
   airports,
   outline,
   drought,
+  signature,
 }: {
   site: SiteConfig;
   articles: HomeArticles;
@@ -75,6 +78,7 @@ export default function HomeGazette({
   uv?: unknown;
   snow?: unknown;
   drought?: Drought | null;
+  signature?: Signature | null;
 }) {
   const g = gzOf(site);
   const tz = TZ[site.state] || "America/Chicago";
@@ -338,6 +342,8 @@ export default function HomeGazette({
           </section>
         )}
       </main>
+
+      {signature && <SignatureStrip sig={signature} ink={g.ink} acc={g.acc} head={merri.className} />}
 
       <Extras site={site} pool={pool} used={used} weather={weather} gas={gas} counties={counties} theme={{ ink: g.ink, acc: g.acc, bg: g.paper, line: "#e3d3ad", text: "#2b2414", head: merri.className }} order={["numbersTickets", "weekTimeline", "exploreStrip"]} />
 
