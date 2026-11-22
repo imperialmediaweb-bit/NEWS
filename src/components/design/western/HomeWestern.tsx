@@ -127,25 +127,35 @@ export default function HomeWestern({
       </div>
 
       <main className={W}>
-        {/* lead · slider · brief */}
-        <section className="mt-5 grid gap-6 lg:grid-cols-[1fr_1.35fr_330px] lg:divide-x lg:divide-[#d9c9a8]">
-          <a href={href(lead)} className="group block">
-            <span className={`${alfa.className} inline-block bg-[var(--ws-acc)] px-2 py-0.5 text-[13px] uppercase text-[#1b1b1b]`}>{lead.category.replace(/-/g, " ")}</span>
-            <h1 className={`${H} mt-2 text-[36px] md:text-[46px] group-hover:text-[var(--ws-ink)]`}><SplitWords text={lead.title} /></h1>
-            {lead.summary && <p className="mt-3 text-[17px] leading-relaxed text-[#3a3a3a]">{lead.summary}</p>}
-            <p className="mt-3 text-[13px]"><b>{lead.author ? `By ${lead.author}` : site.name}</b> <span className="text-[#7a6a50]">| {ago(lead)}</span></p>
+        {/* the opening, set like a western poster: the lead headline across the
+            page in big slab capitals between amber rules, then the slider in a
+            heavy wooden frame beside a navy board with the day's brief */}
+        <section className="mt-6 text-center">
+          <div className="flex items-center justify-center gap-4">
+            <span className="h-[3px] w-16 bg-[var(--ws-acc)] sm:w-32" />
+            <span className={`${alfa.className} text-[13px] uppercase tracking-[.24em] text-[var(--ws-acc)]`}>{lead.category.replace(/-/g, " ")} · {ago(lead)}</span>
+            <span className="h-[3px] w-16 bg-[var(--ws-acc)] sm:w-32" />
+          </div>
+          <a href={href(lead)} className="group mx-auto mt-3 block max-w-[1180px]">
+            <h1 className={`${zilla.className} text-[38px] font-bold uppercase leading-[1.02] tracking-tight text-[var(--ws-ink)] md:text-[64px] group-hover:text-[#a6461f]`}><SplitWords text={lead.title} /></h1>
+            {lead.summary && <p className="mx-auto mt-4 max-w-[820px] text-[18px] italic leading-relaxed text-[#3a3a3a]">{lead.summary}</p>}
+            <p className="mt-3 text-[13px]"><b>{lead.author ? `By ${lead.author}` : site.name}</b></p>
           </a>
-          <div className="ws-hero overflow-hidden lg:pl-6"><HeroCinema slides={heroSlides} /></div>
+          <div className="mx-auto mt-5 flex max-w-[600px] items-center gap-3" aria-hidden><span className="h-px flex-1 bg-[var(--ws-ink)]/40" /><span className="text-[var(--ws-acc)]">★ ★ ★</span><span className="h-px flex-1 bg-[var(--ws-ink)]/40" /></div>
+        </section>
+        <section className="mt-6 grid gap-0 lg:grid-cols-[1.7fr_1fr]">
+          <div className="ws-hero border-[10px] border-[var(--ws-ink)] shadow-[inset_0_0_0_2px_var(--ws-acc)] outline outline-2 outline-offset-[-14px] outline-[var(--ws-acc)]"><HeroCinema slides={heroSlides} /></div>
           {brief.length > 0 && (
-            <aside className="lg:pl-6">
-              <WKick>Today in brief</WKick>
-              <ol>
+            <aside className="relative overflow-hidden bg-[var(--ws-ink)] p-6 text-[#f4ecdc]">
+              <Ridge className="pointer-events-none absolute inset-x-0 bottom-0 h-24 w-full opacity-25" stroke="#f4ecdc" />
+              <p className={`${alfa.className} text-[24px] uppercase text-[var(--ws-acc)]`}>Today in brief</p>
+              <ol className="relative mt-3">
                 {brief.map((a, i) => (
-                  <li key={a.slug} className="flex gap-3 border-b border-[#e3d6ba] py-2.5">
-                    <span className={`${alfa.className} flex h-7 w-7 shrink-0 items-center justify-center bg-[var(--ws-acc)] text-[14px] text-[#1b1b1b]`}>{i + 1}</span>
+                  <li key={a.slug} className="flex gap-3 border-b border-white/15 py-2.5 last:border-0">
+                    <span className={`${alfa.className} w-7 shrink-0 text-[26px] leading-none text-[var(--ws-acc)]`}>{i + 1}</span>
                     <span>
                       <a href={href(a)} className={`${zilla.className} block text-[17px] font-semibold leading-snug hover:text-[var(--ws-acc)]`}>{a.title}</a>
-                      <span className="text-[12px] italic text-[#7a6a50]">{ago(a)}</span>
+                      <span className="text-[12px] italic text-white/55">{ago(a)}</span>
                     </span>
                   </li>
                 ))}
@@ -156,8 +166,8 @@ export default function HomeWestern({
 
         <AdSlot position="top" className="mt-8" />
 
-        {/* wildfires map · county */}
-        <section className="pc-in pc-stagger mt-8 grid gap-6 lg:grid-cols-[1.4fr_1fr]">
+        {/* wildfires map · county, on a navy band across the page */}
+        <section className="ws-band pc-in pc-stagger mt-10 grid gap-6 py-8 lg:grid-cols-[1.4fr_1fr]">
           {outline && fires && (
             <div className={card}>
               <WHead sub="Active fires (NIFC)">{site.state} wildfires</WHead>
@@ -323,7 +333,7 @@ export default function HomeWestern({
         )}
       </main>
 
-      <Extras site={site} pool={pool} used={used} weather={weather} gas={gas} counties={counties} theme={{ ink: w.ink, acc: w.acc, bg: w.paper, line: "#d9c9a8", text: "#2a2a2a", head: zilla.className }} />
+      <Extras site={site} pool={pool} used={used} weather={weather} gas={gas} counties={counties} theme={{ ink: w.ink, acc: w.acc, bg: w.paper, line: "#d9c9a8", text: "#2a2a2a", head: zilla.className }} order={["cities", "weekColumns", "galleryList"]} />
 
       <div className={W}>
         {life.length >= 2 && (

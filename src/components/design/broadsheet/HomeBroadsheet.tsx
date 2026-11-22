@@ -392,7 +392,7 @@ export default function HomeBroadsheet({
           </section>
         )}
 
-        <Extras site={site} pool={pool} used={used} weather={weather} gas={gas} counties={counties} theme={{ ink: "#1a1a1a", acc: b.acc, bg: "#fdfcf9", line: b.gold, text: "#1a1a1a", head: caslon.className }} />
+        <Extras site={site} pool={pool} used={used} weather={weather} gas={gas} counties={counties} theme={{ ink: "#1a1a1a", acc: b.acc, bg: "#fdfcf9", line: b.gold, text: "#1a1a1a", head: caslon.className }} order={["weekColumns", "cities", "numbersTickets"]} />
 
         {latest.length >= 3 && (
           <section className="pc-in pc-up mt-12">

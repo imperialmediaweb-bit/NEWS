@@ -393,7 +393,7 @@ export default function HomeMagazine({
           </section>
         )}
 
-        <Extras site={site} pool={pool} used={used} weather={weather} gas={gas} counties={counties} theme={{ ink: m.ink, acc: m.acc, bg: "#ffffff", line: "#e6ddcc", text: "#222222", head: serifM.className }} />
+        <Extras site={site} pool={pool} used={used} weather={weather} gas={gas} counties={counties} theme={{ ink: m.ink, acc: m.acc, bg: "#ffffff", line: "#e6ddcc", text: "#222222", head: serifM.className }} order={["galleryWall", "weekTimeline", "exploreMosaic"]} />
 
         {latest.length >= 3 && (
           <section className="pc-in pc-up mt-14">

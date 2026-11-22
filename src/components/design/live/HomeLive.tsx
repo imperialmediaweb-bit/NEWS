@@ -435,7 +435,7 @@ export default function HomeLive({
         )}
 
         {/* latest news grid */}
-        <Extras site={site} pool={pool} used={used} weather={weather} gas={gas} counties={counties} theme={{ ink: pal.ink, acc: pal.acc, bg: "#ffffff", line: "#dde1ea", text: "#1b2233", head: serif.className }} />
+        <Extras site={site} pool={pool} used={used} weather={weather} gas={gas} counties={counties} theme={{ ink: pal.ink, acc: pal.acc, bg: "#ffffff", line: "#dde1ea", text: "#1b2233", head: serif.className }} order={["numbersBand", "galleryDrag", "cities", "exploreMosaic"]} />
 
         {latestGrid.length >= 3 && (
           <section className="lv-reveal mt-10">

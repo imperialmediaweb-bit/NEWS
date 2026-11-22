@@ -343,7 +343,7 @@ export default function HomeCoastal({
           </section>
         )}
 
-        <Extras site={site} pool={pool} used={used} weather={weather} gas={gas} counties={counties} theme={{ ink: c.ink, acc: c.acc, bg: "#ffffff", line: c.gold, text: "#24323c", head: crimson.className }} />
+        <Extras site={site} pool={pool} used={used} weather={weather} gas={gas} counties={counties} theme={{ ink: c.ink, acc: c.acc, bg: "#ffffff", line: c.gold, text: "#24323c", head: crimson.className }} order={["galleryDrag", "numbersBand", "exploreStrip"]} />
 
         {latest.length >= 3 && (
           <section className="pc-in pc-up mt-12">

@@ -327,7 +327,7 @@ export default function HomeGazette({
         )}
       </main>
 
-      <Extras site={site} pool={pool} used={used} weather={weather} gas={gas} counties={counties} theme={{ ink: g.ink, acc: g.acc, bg: g.paper, line: "#e3d3ad", text: "#2b2414", head: merri.className }} />
+      <Extras site={site} pool={pool} used={used} weather={weather} gas={gas} counties={counties} theme={{ ink: g.ink, acc: g.acc, bg: g.paper, line: "#e3d3ad", text: "#2b2414", head: merri.className }} order={["numbersTickets", "weekTimeline", "exploreStrip"]} />
 
       <div className={W}>
         {life.length >= 2 && (

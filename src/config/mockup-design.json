@@ -1,0 +1,452 @@
+{
+ "alabama-express": {
+  "family": "broadsheet",
+  "ink": "#2b0a12",
+  "acc": "#a6192e",
+  "detail": "gold",
+  "slogan": "Alabama news, close to home.",
+  "capital": "Birmingham",
+  "module": "a hurricane tracker for the Atlantic and Gulf (National Hurricane Center)"
+ },
+ "alaska-express": {
+  "family": "western",
+  "ink": "#0b2545",
+  "acc": "#e0a100",
+  "detail": "silver",
+  "slogan": "News from the Last Frontier.",
+  "capital": "Anchorage",
+  "module": "a map of recent earthquakes in the state (USGS)"
+ },
+ "arizona-express": {
+  "family": "dark",
+  "ink": "#5a1f0e",
+  "acc": "#13959a",
+  "detail": "copper",
+  "slogan": "News under the desert sun.",
+  "capital": "Phoenix",
+  "module": "a map of active wildfires (NIFC)"
+ },
+ "arkansas-express": {
+  "family": "gazette",
+  "ink": "#1f3b2c",
+  "acc": "#b22234",
+  "detail": "gold",
+  "slogan": "The Natural State, every day.",
+  "capital": "Little Rock",
+  "module": "tornado and severe weather alerts (National Weather Service)"
+ },
+ "california-express": {
+  "family": "magazine",
+  "ink": "#0d3b66",
+  "acc": "#e8833a",
+  "detail": "gold",
+  "slogan": "From the coast to the Sierra.",
+  "capital": "Los Angeles",
+  "module": "a map of recent earthquakes in the state (USGS)"
+ },
+ "colorado-express": {
+  "family": "magazine",
+  "ink": "#12355b",
+  "acc": "#c8102e",
+  "detail": "gold",
+  "slogan": "News from the high country.",
+  "capital": "Denver",
+  "module": "a map of active wildfires (NIFC)"
+ },
+ "connecticut-express": {
+  "family": "broadsheet",
+  "ink": "#1b2a41",
+  "acc": "#5f8a63",
+  "detail": "gold",
+  "slogan": "Connecticut, town by town.",
+  "capital": "Hartford",
+  "module": "official weather alerts for the state (National Weather Service)"
+ },
+ "delaware-express": {
+  "family": "coastal",
+  "ink": "#23395b",
+  "acc": "#b48a4a",
+  "detail": "gold",
+  "slogan": "The First State, first.",
+  "capital": "Wilmington",
+  "module": "official weather alerts for the state (National Weather Service)"
+ },
+ "florida-express": {
+  "family": "tabloid",
+  "ink": "#005f73",
+  "acc": "#e5603f",
+  "detail": "gold",
+  "slogan": "From the Keys to the Panhandle.",
+  "capital": "Miami",
+  "module": "a hurricane tracker for the Atlantic and Gulf (National Hurricane Center)"
+ },
+ "georgia-express": {
+  "family": "live",
+  "ink": "#3a1c14",
+  "acc": "#e07a5f",
+  "detail": "copper",
+  "slogan": "From Atlanta to the coast.",
+  "capital": "Atlanta",
+  "module": "a hurricane tracker for the Atlantic and Gulf (National Hurricane Center)"
+ },
+ "hawaii-express": {
+  "family": "coastal",
+  "ink": "#003c5a",
+  "acc": "#d6336c",
+  "detail": "gold",
+  "slogan": "Island news, every day.",
+  "capital": "Honolulu",
+  "module": "a volcano and earthquake watch for the islands (USGS)"
+ },
+ "idaho-express": {
+  "family": "western",
+  "ink": "#2d3a1f",
+  "acc": "#c58b2a",
+  "detail": "copper",
+  "slogan": "Idaho, plain and true.",
+  "capital": "Boise",
+  "module": "a map of active wildfires (NIFC)"
+ },
+ "illinois-express": {
+  "family": "tabloid",
+  "ink": "#22305e",
+  "acc": "#0066cc",
+  "detail": "silver",
+  "slogan": "From Chicago to Cairo.",
+  "capital": "Chicago",
+  "module": "official weather alerts for the state (National Weather Service)"
+ },
+ "indiana-express": {
+  "family": "gazette",
+  "ink": "#0b1f3a",
+  "acc": "#d9a300",
+  "detail": "silver",
+  "slogan": "Indiana news, straight up.",
+  "capital": "Indianapolis",
+  "module": "official weather alerts for the state (National Weather Service)"
+ },
+ "iowa-express": {
+  "family": "gazette",
+  "ink": "#3d2f12",
+  "acc": "#d19a00",
+  "detail": "gold",
+  "slogan": "Iowa, every county.",
+  "capital": "Des Moines",
+  "module": "tornado and severe weather alerts (National Weather Service)"
+ },
+ "kansas-express": {
+  "family": "gazette",
+  "ink": "#1d3557",
+  "acc": "#e9b10c",
+  "detail": "gold",
+  "slogan": "News from the heartland.",
+  "capital": "Wichita",
+  "module": "tornado and severe weather alerts (National Weather Service)"
+ },
+ "kentucky-express": {
+  "family": "dark",
+  "ink": "#0b2a6f",
+  "acc": "#2e8b57",
+  "detail": "gold",
+  "slogan": "The Bluegrass, every day.",
+  "capital": "Louisville",
+  "module": "flood watches along the rivers (National Weather Service)"
+ },
+ "louisiana-express": {
+  "family": "dark",
+  "ink": "#3c1361",
+  "acc": "#c9a227",
+  "detail": "gold",
+  "slogan": "From the bayou to Bourbon Street.",
+  "capital": "New Orleans",
+  "module": "a hurricane tracker for the Atlantic and Gulf (National Hurricane Center)"
+ },
+ "maine-express": {
+  "family": "coastal",
+  "ink": "#0f2b3d",
+  "acc": "#2e7d32",
+  "detail": "silver",
+  "slogan": "News from Down East.",
+  "capital": "Portland",
+  "module": "winter storm and road conditions (National Weather Service)"
+ },
+ "maryland-express": {
+  "family": "broadsheet",
+  "ink": "#111111",
+  "acc": "#d23b2d",
+  "detail": "gold",
+  "slogan": "From the bay to the mountains.",
+  "capital": "Baltimore",
+  "module": "official weather alerts for the state (National Weather Service)"
+ },
+ "massachusetts-express": {
+  "family": "broadsheet",
+  "ink": "#14213d",
+  "acc": "#8b1e2d",
+  "detail": "gold",
+  "slogan": "The Commonwealth, every day.",
+  "capital": "Boston",
+  "module": "official weather alerts for the state (National Weather Service)"
+ },
+ "michigan-express": {
+  "family": "live",
+  "ink": "#00274c",
+  "acc": "#e0a800",
+  "detail": "silver",
+  "slogan": "Michigan, both peninsulas.",
+  "capital": "Detroit",
+  "module": "winter storm and road conditions (National Weather Service)"
+ },
+ "minnesota-express": {
+  "family": "live",
+  "ink": "#0e3b43",
+  "acc": "#3a86c0",
+  "detail": "silver",
+  "slogan": "Land of 10,000 stories.",
+  "capital": "Minneapolis",
+  "module": "winter storm and road conditions (National Weather Service)"
+ },
+ "mississippi-express": {
+  "family": "gazette",
+  "ink": "#2c2c54",
+  "acc": "#a5636f",
+  "detail": "gold",
+  "slogan": "From the river to the Gulf.",
+  "capital": "Jackson",
+  "module": "a hurricane tracker for the Atlantic and Gulf (National Hurricane Center)"
+ },
+ "missouri-express": {
+  "family": "live",
+  "ink": "#3d0c11",
+  "acc": "#1f6f8b",
+  "detail": "copper",
+  "slogan": "From St. Louis to Kansas City.",
+  "capital": "Kansas City",
+  "module": "tornado and severe weather alerts (National Weather Service)"
+ },
+ "montana-express": {
+  "family": "western",
+  "ink": "#1b3a4b",
+  "acc": "#d18a04",
+  "detail": "gold",
+  "slogan": "Big Sky news.",
+  "capital": "Billings",
+  "module": "a map of active wildfires (NIFC)"
+ },
+ "nebraska-express": {
+  "family": "gazette",
+  "ink": "#4a0d0d",
+  "acc": "#c99a3b",
+  "detail": "gold",
+  "slogan": "Nebraska, plain spoken.",
+  "capital": "Omaha",
+  "module": "tornado and severe weather alerts (National Weather Service)"
+ },
+ "nevada-express": {
+  "family": "tabloid",
+  "ink": "#2e2a3d",
+  "acc": "#7b2cbf",
+  "detail": "silver",
+  "slogan": "Nevada, beyond the Strip.",
+  "capital": "Las Vegas",
+  "module": "a map of recent earthquakes in the state (USGS)"
+ },
+ "new-hampshire-express": {
+  "family": "coastal",
+  "ink": "#233d2b",
+  "acc": "#8c1c13",
+  "detail": "silver",
+  "slogan": "Live free. Read on.",
+  "capital": "Manchester",
+  "module": "winter storm and road conditions (National Weather Service)"
+ },
+ "new-jersey-express": {
+  "family": "tabloid",
+  "ink": "#1f3a3d",
+  "acc": "#c79a2e",
+  "detail": "gold",
+  "slogan": "Jersey news, no filter.",
+  "capital": "Newark",
+  "module": "official weather alerts for the state (National Weather Service)"
+ },
+ "new-mexico-express": {
+  "family": "dark",
+  "ink": "#7a0019",
+  "acc": "#e6a800",
+  "detail": "gold",
+  "slogan": "News from the Land of Enchantment.",
+  "capital": "Albuquerque",
+  "module": "a map of active wildfires (NIFC)"
+ },
+ "new-york-express": {
+  "family": "broadsheet",
+  "ink": "#0a0a0a",
+  "acc": "#f05a28",
+  "detail": "gold",
+  "slogan": "From the city to upstate.",
+  "capital": "New York City",
+  "module": "winter storm and road conditions (National Weather Service)"
+ },
+ "north-carolina-express": {
+  "family": "live",
+  "ink": "#13294b",
+  "acc": "#3f8fc8",
+  "detail": "silver",
+  "slogan": "From the mountains to the Outer Banks.",
+  "capital": "Charlotte",
+  "module": "a hurricane tracker for the Atlantic and Gulf (National Hurricane Center)"
+ },
+ "north-dakota-express": {
+  "family": "gazette",
+  "ink": "#2a3d24",
+  "acc": "#c9971f",
+  "detail": "gold",
+  "slogan": "Out on the northern plains.",
+  "capital": "Fargo",
+  "module": "winter storm and road conditions (National Weather Service)"
+ },
+ "ohio-express": {
+  "family": "tabloid",
+  "ink": "#40161a",
+  "acc": "#bb0000",
+  "detail": "silver",
+  "slogan": "Ohio, all 88 counties.",
+  "capital": "Columbus",
+  "module": "official weather alerts for the state (National Weather Service)"
+ },
+ "oklahoma-express": {
+  "family": "western",
+  "ink": "#1d4e6b",
+  "acc": "#c75b12",
+  "detail": "copper",
+  "slogan": "Oklahoma news, straight talk.",
+  "capital": "Oklahoma City",
+  "module": "tornado and severe weather alerts (National Weather Service)"
+ },
+ "oregon-express": {
+  "family": "magazine",
+  "ink": "#154734",
+  "acc": "#c9a000",
+  "detail": "gold",
+  "slogan": "From the coast to the Cascades.",
+  "capital": "Portland",
+  "module": "a map of active wildfires (NIFC)"
+ },
+ "pennsylvania-express": {
+  "family": "broadsheet",
+  "ink": "#1f2a44",
+  "acc": "#a8551a",
+  "detail": "gold",
+  "slogan": "From Philly to Pittsburgh.",
+  "capital": "Philadelphia",
+  "module": "official weather alerts for the state (National Weather Service)"
+ },
+ "rhode-island-express": {
+  "family": "coastal",
+  "ink": "#0c2340",
+  "acc": "#0097a0",
+  "detail": "gold",
+  "slogan": "Small state. Big stories.",
+  "capital": "Providence",
+  "module": "official weather alerts for the state (National Weather Service)"
+ },
+ "south-carolina-express": {
+  "family": "coastal",
+  "ink": "#0b2340",
+  "acc": "#6c9a4f",
+  "detail": "silver",
+  "slogan": "From the Upstate to the Lowcountry.",
+  "capital": "Charleston",
+  "module": "a hurricane tracker for the Atlantic and Gulf (National Hurricane Center)"
+ },
+ "south-dakota-express": {
+  "family": "gazette",
+  "ink": "#3b2a1a",
+  "acc": "#2f6690",
+  "detail": "gold",
+  "slogan": "From the Black Hills to the prairie.",
+  "capital": "Sioux Falls",
+  "module": "winter storm and road conditions (National Weather Service)"
+ },
+ "tennessee-express": {
+  "family": "dark",
+  "ink": "#3a2316",
+  "acc": "#f07800",
+  "detail": "silver",
+  "slogan": "From Memphis to the Smokies.",
+  "capital": "Nashville",
+  "module": "flood watches along the rivers (National Weather Service)"
+ },
+ "texas-express": {
+  "family": "live",
+  "ink": "#002868",
+  "acc": "#bf0a30",
+  "detail": "silver",
+  "slogan": "Texas news, told straight.",
+  "capital": "Austin",
+  "module": "a hurricane tracker for the Atlantic and Gulf (National Hurricane Center)"
+ },
+ "utah-express": {
+  "family": "magazine",
+  "ink": "#4a1c0c",
+  "acc": "#d9480f",
+  "detail": "copper",
+  "slogan": "From red rock to Salt Lake.",
+  "capital": "Salt Lake City",
+  "module": "a map of recent earthquakes in the state (USGS)"
+ },
+ "vermont-express": {
+  "family": "magazine",
+  "ink": "#0b3d20",
+  "acc": "#b23a1e",
+  "detail": "gold",
+  "slogan": "Green Mountain news.",
+  "capital": "Burlington",
+  "module": "winter storm and road conditions (National Weather Service)"
+ },
+ "virginia-express": {
+  "family": "broadsheet",
+  "ink": "#1b1f3b",
+  "acc": "#8c1d40",
+  "detail": "gold",
+  "slogan": "From the Blue Ridge to the bay.",
+  "capital": "Richmond",
+  "module": "official weather alerts for the state (National Weather Service)"
+ },
+ "washington-express": {
+  "family": "magazine",
+  "ink": "#0f3d2e",
+  "acc": "#3c9a5f",
+  "detail": "silver",
+  "slogan": "From Puget Sound to the Palouse.",
+  "capital": "Seattle",
+  "module": "a map of recent earthquakes in the state (USGS)"
+ },
+ "west-virginia-express": {
+  "family": "gazette",
+  "ink": "#1e2a3a",
+  "acc": "#d99d00",
+  "detail": "gold",
+  "slogan": "Mountain State news.",
+  "capital": "Charleston",
+  "module": "flood watches along the rivers (National Weather Service)"
+ },
+ "wisconsin-express": {
+  "family": "gazette",
+  "ink": "#3e2723",
+  "acc": "#c5050c",
+  "detail": "gold",
+  "slogan": "Wisconsin, every corner.",
+  "capital": "Milwaukee",
+  "module": "winter storm and road conditions (National Weather Service)"
+ },
+ "wyoming-express": {
+  "family": "western",
+  "ink": "#3d2b1f",
+  "acc": "#b71c1c",
+  "detail": "copper",
+  "slogan": "Wyoming, wide open.",
+  "capital": "Cheyenne",
+  "module": "a map of active wildfires (NIFC)"
+ }
+}

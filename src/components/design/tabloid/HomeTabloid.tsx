@@ -447,7 +447,7 @@ export default function HomeTabloid({
           </section>
         )}
 
-        <Extras site={site} pool={pool} used={used} weather={weather} gas={gas} counties={counties} theme={{ ink: t.ink, acc: t.acc, bg: "#ffffff", line: "#e2e2e2", text: "#141414", head: `${cond.className} italic uppercase` }} />
+        <Extras site={site} pool={pool} used={used} weather={weather} gas={gas} counties={counties} theme={{ ink: t.ink, acc: t.acc, bg: "#ffffff", line: "#e2e2e2", text: "#141414", head: `${cond.className} italic uppercase` }} order={["numbersTickets", "galleryList", "weekColumns"]} />
 
         {latest.length >= 3 && (
           <section className="pc-in pc-up mt-12">

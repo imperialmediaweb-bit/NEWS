@@ -474,7 +474,7 @@ export default function HomePeach({
         )}
 
         {/* latest grid */}
-        <Extras site={site} pool={pool} used={used} weather={weather} gas={gas} counties={counties} theme={{ ink: p.ink, acc: p.acc, bg: p.paper, line: p.copper, text: "#2b1d17", head: display.className }} />
+        <Extras site={site} pool={pool} used={used} weather={weather} gas={gas} counties={counties} theme={{ ink: p.ink, acc: p.acc, bg: p.paper, line: p.copper, text: "#2b1d17", head: display.className }} order={["weekTimeline", "cities", "exploreStrip"]} />
 
         {latest.length >= 3 && (
           <section className="pc-in pc-up mt-12">

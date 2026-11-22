@@ -1,6 +1,7 @@
 import type { SiteConfig } from "@/config/site-config";
 import type { HomeArticle } from "@/lib/homepage-data";
 import type { CityWeather, GasPrices } from "@/lib/local-data";
+import { Fragment } from "react";
 import { TZ, href, ago, sized, srcSetOf } from "../live/shared";
 import { CountUp, CityTabs, DragScroll, TiltFx } from "./ExtrasFx";
 
@@ -17,7 +18,9 @@ export interface ExtrasTheme { ink: string; acc: string; bg: string; line: strin
 
 const norm = (t: string) => t.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
 
-export default function Extras({ site, pool, used, weather, gas, counties, theme }: {
+export type ExtraBlock = "numbersBand" | "numbersTickets" | "cities" | "galleryDrag" | "galleryWall" | "galleryList" | "weekTimeline" | "weekColumns" | "exploreMosaic" | "exploreStrip";
+
+export default function Extras({ site, pool, used, weather, gas, counties, theme, order = ["numbersBand", "cities", "galleryDrag", "weekTimeline", "exploreMosaic"] }: {
   site: SiteConfig;
   pool: HomeArticle[];
   used: Set<string>;
@@ -25,6 +28,8 @@ export default function Extras({ site, pool, used, weather, gas, counties, theme
   gas?: GasPrices | null;
   counties: string[];
   theme: ExtrasTheme;
+  /** which sections, in which look and order: each family picks its own */
+  order?: ExtraBlock[];
 }) {
   const tz = TZ[site.state] || "America/New_York";
   // These sections are views of the whole week (pictures, days, cities), so
@@ -92,10 +97,9 @@ export default function Extras({ site, pool, used, weather, gas, counties, theme
   if (cool && hot && cool.city !== hot.city) stats.push([cool.temp, `°F in ${cool.city}, the coolest`, ""]);
   if (gas?.grades[0]) stats.push([gas.grades[0].price, `a gallon of regular${gas.isRegion ? `, ${gas.area}` : ""}`, "$"]);
 
-  return (
-    <div className={theme.dark ? "x-dark" : ""} style={vars}>
-      <TiltFx />
 
+  const numbersBand = (
+    <>
       {/* by the numbers */}
       {stats.length >= 3 && (
         <section className="x-numbers pc-in pc-up relative mt-14 overflow-hidden py-12">
@@ -113,6 +117,10 @@ export default function Extras({ site, pool, used, weather, gas, counties, theme
         </section>
       )}
 
+    </>
+  );
+  const cities = (
+    <>
       {/* around the state, by city */}
       {tabs.length >= 2 && (
         <section className={`${W} pc-in pc-up mt-14`}>
@@ -122,6 +130,10 @@ export default function Extras({ site, pool, used, weather, gas, counties, theme
         </section>
       )}
 
+    </>
+  );
+  const galleryDrag = (
+    <>
       {/* in pictures: draggable gallery */}
       {gallery.length >= 4 && (
         <section className="x-gallery pc-in pc-up mt-14 py-12">
@@ -147,6 +159,10 @@ export default function Extras({ site, pool, used, weather, gas, counties, theme
         </section>
       )}
 
+    </>
+  );
+  const weekTimeline = (
+    <>
       {/* the week as a timeline */}
       {days.length >= 2 && (
         <section className={`${W} pc-in pc-up mt-14`}>
@@ -176,6 +192,10 @@ export default function Extras({ site, pool, used, weather, gas, counties, theme
         </section>
       )}
 
+    </>
+  );
+  const exploreMosaic = (
+    <>
       {/* explore the sections */}
       {tiles.length >= 3 && (
         <section className={`${W} pc-in pc-up mt-14`}>
@@ -198,6 +218,96 @@ export default function Extras({ site, pool, used, weather, gas, counties, theme
           </div>
         </section>
       )}
+    </>
+  );
+  // ── alternative looks, so each family shows these sections its own way ──
+  const numbersTickets = stats.length >= 3 ? (
+    <section className={`${W} pc-in pc-up mt-14`}>
+      <p className="text-[12px] font-bold uppercase tracking-[.22em] text-[var(--x-acc)]">By the numbers</p>
+      <div className="pc-in pc-stagger mt-4 grid grid-cols-2 gap-4 md:grid-cols-3 lg:[grid-template-columns:repeat(var(--n),minmax(0,1fr))]" style={{ ["--n" as string]: stats.length } as React.CSSProperties}>
+        {stats.map(([v, l, pre]) => (
+          <div key={l} className="x-ticket relative border-2 border-dashed border-[var(--x-line)] p-4 text-center">
+            <p className={`${theme.head} text-[40px] font-bold leading-none text-[var(--x-acc)]`}><CountUp to={v} decimals={pre === "$" ? 2 : 0} prefix={pre} /></p>
+            <p className="mt-2 text-[13px] opacity-80">{l}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  ) : null;
+  const galleryWall = gallery.length >= 4 ? (
+    <section className={`${W} pc-in pc-up mt-14`}>
+      <p className="text-[12px] font-bold uppercase tracking-[.22em] text-[var(--x-acc)]">In pictures</p>
+      <h2 className={`${H} mb-6`}>The week in photographs</h2>
+      <div className="columns-2 gap-4 lg:columns-3">
+        {gallery.slice(0, 9).map((a, i) => (
+          <a key={a.slug} href={href(a)} className="x-tilt group relative mb-4 block break-inside-avoid overflow-hidden rounded-md">
+            <span className={`x-zoom block overflow-hidden ${["aspect-[4/5]", "aspect-[4/3]", "aspect-square"][i % 3]}`}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={a.img} srcSet={srcSetOf(a.img)} sizes="(max-width: 1024px) 50vw, 33vw" alt="" className="h-full w-full object-cover" loading="lazy" decoding="async" />
+            </span>
+            <span className="absolute inset-0 bg-[linear-gradient(180deg,transparent_50%,rgba(0,0,0,.85))] opacity-90" />
+            <span className={`${theme.head} absolute inset-x-0 bottom-0 p-4 text-[18px] font-bold leading-tight text-white`}>{a.title}</span>
+          </a>
+        ))}
+      </div>
+    </section>
+  ) : null;
+  const galleryList = gallery.length >= 4 ? (
+    <section className={`${W} pc-in pc-up mt-14`}>
+      <p className="text-[12px] font-bold uppercase tracking-[.22em] text-[var(--x-acc)]">Worth your time</p>
+      <h2 className={`${H} mb-6`}>Stories to read today</h2>
+      <ol className="pc-in pc-stagger grid gap-x-10 gap-y-6 md:grid-cols-2">
+        {gallery.slice(0, 6).map((a, i) => (
+          <li key={a.slug}>
+            <a href={href(a)} className="x-tilt group flex items-center gap-5">
+              <span className={`${theme.head} w-12 shrink-0 text-[56px] font-bold leading-none text-[var(--x-acc)]`}>{i + 1}</span>
+              <span className="x-zoom h-[96px] w-[140px] shrink-0 overflow-hidden rounded">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={sized(a.img, 400)} alt="" className="h-full w-full object-cover" loading="lazy" decoding="async" />
+              </span>
+              <span className={`x-title ${theme.head} text-[19px] font-bold leading-snug`}>{a.title}</span>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </section>
+  ) : null;
+  const weekColumns = days.length >= 3 ? (
+    <section className={`${W} pc-in pc-up mt-14`}>
+      <p className="text-[12px] font-bold uppercase tracking-[.22em] text-[var(--x-acc)]">The week</p>
+      <h2 className={`${H} mb-6`}>Five days in {site.state}</h2>
+      <div className="pc-in pc-stagger grid gap-5 sm:grid-cols-2 lg:[grid-template-columns:repeat(var(--n),minmax(0,1fr))]" style={{ ["--n" as string]: days.length } as React.CSSProperties}>
+        {days.map(([label, list]) => (
+          <div key={label} className="border-t-4 border-[var(--x-acc)] pt-3">
+            <p className={`${theme.head} text-[18px] font-bold`}>{label}</p>
+            {list.map((a) => <a key={a.slug} href={href(a)} className="x-title mt-2 block border-b border-[var(--x-line)] pb-2 text-[14.5px] font-semibold leading-snug">{a.title}</a>)}
+          </div>
+        ))}
+      </div>
+    </section>
+  ) : null;
+  const exploreStrip = tiles.length >= 3 ? (
+    <section className={`${W} pc-in pc-up mt-14`}>
+      <p className="text-[12px] font-bold uppercase tracking-[.22em] text-[var(--x-acc)]">Explore {site.name}</p>
+      <div className="pc-in pc-stagger mt-4 flex flex-wrap gap-4">
+        {tiles.map(({ label, slug, a }) => (
+          <a key={slug} href={`/${slug}`} className="x-tilt group flex items-center gap-3 rounded-full border border-[var(--x-line)] py-1.5 pl-1.5 pr-5">
+            <span className="x-zoom h-12 w-12 overflow-hidden rounded-full">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={sized(a!.img, 400)} alt="" className="h-full w-full object-cover" loading="lazy" decoding="async" />
+            </span>
+            <span className={`x-title ${theme.head} text-[18px] font-bold`}>{label} →</span>
+          </a>
+        ))}
+      </div>
+    </section>
+  ) : null;
+  const blocks: Record<ExtraBlock, React.ReactNode> = { numbersBand, numbersTickets, cities, galleryDrag, galleryWall, galleryList, weekTimeline, weekColumns, exploreMosaic, exploreStrip };
+
+  return (
+    <div className={theme.dark ? "x-dark" : ""} style={vars}>
+      <TiltFx />
+      {order.map((k) => <Fragment key={k}>{blocks[k]}</Fragment>)}
     </div>
   );
 }

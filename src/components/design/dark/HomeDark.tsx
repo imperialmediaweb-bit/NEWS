@@ -381,7 +381,7 @@ export default function HomeDark({
           </section>
         )}
 
-        <Extras site={site} pool={pool} used={used} weather={weather} gas={gas} counties={counties} theme={{ ink: d.deep, acc: d.acc, bg: d.bg, line: d.cu, text: "#e9ddd3", head: spectral.className, dark: true }} />
+        <Extras site={site} pool={pool} used={used} weather={weather} gas={gas} counties={counties} theme={{ ink: d.deep, acc: d.acc, bg: d.bg, line: d.cu, text: "#e9ddd3", head: spectral.className, dark: true }} order={["numbersBand", "galleryWall", "cities"]} />
 
         {latest.length >= 3 && (
           <section className="pc-in pc-up mt-12">

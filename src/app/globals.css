@@ -369,3 +369,8 @@ a.group:hover [class*="leading-"]:not(.pc-zoom) { text-decoration: underline; te
 .gz-hero .lv-cinema [data-slide-eyebrow] { border-radius: 2px; background: #a06f00; }
 .gz-hero .lv-cinema [data-slide-cta] { border-radius: 4px; background: #a06f00; }
 .gz-hero .lv-cinema [data-slide-content] { padding-left: clamp(18px, 2.4vw, 32px); padding-right: clamp(18px, 2.4vw, 32px); }
+.ws-band { position: relative; }
+.ws-band::before { content: ""; position: absolute; z-index: -1; top: 0; bottom: 0; left: calc(50% - 50vw); right: calc(50% - 50vw); background: linear-gradient(180deg, var(--ws-ink), color-mix(in srgb, var(--ws-ink) 80%, #000)); }
+.ws-band { isolation: isolate; }
+.x-ticket::before, .x-ticket::after { content: ""; position: absolute; top: 50%; width: 18px; height: 18px; margin-top: -9px; border-radius: 50%; background: var(--x-bg); border: 2px dashed var(--x-line); }
+.x-ticket::before { left: -11px; } .x-ticket::after { right: -11px; }
