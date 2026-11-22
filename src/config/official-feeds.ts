@@ -19,6 +19,7 @@ export const OFFICIAL_FEEDS: Record<string, StateFeed[]> = {
     { url: "https://dojmt.gov/feed/", publisher: "Montana Department of Justice", medianChars: 0 },
     { url: "https://www.ci.missoula.mt.us/RSSFeed.aspx?ModID=1", publisher: "City of Missoula", medianChars: 0 },
   ],
+  Hawaii: [{ url: "https://governor.hawaii.gov/category/newsroom/feed/", publisher: "Office of the Hawaii Governor", medianChars: 0 }],
   Alabama: [{ url: "https://www.alabamaag.gov/feed/", publisher: "Alabama Attorney General", medianChars: 0 }],
   "New Mexico": [{ url: "https://www.dps.nm.gov/feed/", publisher: "New Mexico Department of Public Safety", medianChars: 0 }],
   Ohio: [
@@ -33,6 +34,15 @@ export const OFFICIAL_FEEDS: Record<string, StateFeed[]> = {
  */
 export const OFFICIAL_PAGES: Record<string, { url: string; publisher: string }[]> = {
   Ohio: [{ url: "https://ohioattorneygeneral.gov/Media/News-Releases", publisher: "Ohio Attorney General" }],
+  Colorado: [
+    { url: "https://www.colorado.gov/governor/news", publisher: "Office of the Colorado Governor" },
+    { url: "https://www.codot.gov/news", publisher: "Colorado Department of Transportation" },
+  ],
+  Florida: [
+    { url: "https://www.flgov.com/eog/news/press", publisher: "Office of the Florida Governor" },
+    { url: "https://www.myfloridalegal.com/newsrelease", publisher: "Florida Attorney General" },
+  ],
+  Massachusetts: [{ url: "https://www.boston.gov/news", publisher: "City of Boston" }],
   Illinois: [{ url: "https://www.illinoisattorneygeneral.gov/", publisher: "Illinois Attorney General" }],
   Minnesota: [{ url: "https://dot.mn.gov/news", publisher: "Minnesota Department of Transportation" }],
   Missouri: [{ url: "https://governor.mo.gov/press-releases", publisher: "Office of the Missouri Governor" }],
