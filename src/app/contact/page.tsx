@@ -5,7 +5,7 @@ import { generateContent } from "@/data/generate-content";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Link from "next/link";
-import { MapPin, Clock } from "lucide-react";
+import { MapPin, Clock, Mail } from "lucide-react";
 import ContactForm from "@/components/ContactForm";
 
 function getSiteFromHeaders() {
@@ -74,6 +74,16 @@ export default function ContactPage() {
                     <h3 className="font-bold text-sm" style={{ fontFamily: "'Oswald', sans-serif", textTransform: "uppercase" }}>Location</h3>
                     <p className="text-gray-600 text-sm">{site.city}, {site.state}</p>
                     <p className="text-gray-400 text-xs mt-1">A MediaChief Publication</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center shrink-0">
+                    <Mail className="w-5 h-5 text-[var(--accent)]" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-sm" style={{ fontFamily: "'Oswald', sans-serif", textTransform: "uppercase" }}>Email</h3>
+                    <p className="text-gray-600 text-sm"><a href={`mailto:contact@${site.domain}`} className="underline">contact@{site.domain}</a></p>
+                    <p className="text-gray-400 text-xs mt-1">News tips, corrections and general questions</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">

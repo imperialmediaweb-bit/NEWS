@@ -150,3 +150,35 @@ export async function openZoneToAnswerBots(zoneId: string, apply: boolean) {
   });
   return { before, after };
 }
+
+/**
+ * Forward contact@{domain} to the newsroom inbox with Cloudflare Email Routing.
+ * Turns routing on for the zone (Cloudflare adds its MX records), registers the
+ * destination once per account (Cloudflare emails a verification link to it),
+ * then adds the forwarding rule. Each step reports its own result.
+ */
+export async function forwardContactAddress(zoneId: string, domain: string, to: string) {
+  const zone = await cf<{ account: { id: string } }>(`/zones/${zoneId}`);
+  if (!zone.ok) return { zone };
+  const account = zone.result.account.id;
+  const dest = await cf<unknown>(`/accounts/${account}/email/routing/addresses`, {
+    method: "POST",
+    body: JSON.stringify({ email: to }),
+  });
+  const enable = await cf<unknown>(`/zones/${zoneId}/email/routing/dns`, { method: "POST", body: "{}" });
+  const from = `contact@${domain}`;
+  const existing = await cf<{ matchers: { value?: string }[] }[]>(`/zones/${zoneId}/email/routing/rules`);
+  const has = existing.ok && existing.result.some((r) => r.matchers?.some((m) => m.value === from));
+  const rule = has
+    ? "exists"
+    : await cf<unknown>(`/zones/${zoneId}/email/routing/rules`, {
+        method: "POST",
+        body: JSON.stringify({
+          name: `${from} to newsroom`,
+          enabled: true,
+          matchers: [{ type: "literal", field: "to", value: from }],
+          actions: [{ type: "forward", value: [to] }],
+        }),
+      });
+  return { dest, enable, rule };
+}

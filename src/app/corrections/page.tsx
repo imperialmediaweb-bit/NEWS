@@ -110,7 +110,7 @@ export default function CorrectionsPage() {
               <li>If possible, a source for the correct information.</li>
             </ul>
             <p>
-              Visit our <Link href="/contact" className="text-[var(--accent)] underline">Contact Page</Link> with subject <strong>&quot;Correction Request — [Article Title]&quot;</strong>
+              Email <a href={`mailto:contact@${site.domain}`} className="text-[var(--accent)] underline">contact@{site.domain}</a> or visit our <Link href="/contact" className="text-[var(--accent)] underline">Contact Page</Link> with subject <strong>&quot;Correction Request — [Article Title]&quot;</strong>
             </p>
 
             <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
