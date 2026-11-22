@@ -86,7 +86,7 @@ function declaredFeeds(html, domain) {
  * worth using. Matches MIN_SOURCE_CHARS in the rewrite route: below this the
  * model is filling in rather than reporting.
  */
-const MIN_TEXT = 500;
+const MIN_TEXT = Number(process.env.MIN_TEXT || 500);
 
 /**
  * Above this, the item is not an article.
