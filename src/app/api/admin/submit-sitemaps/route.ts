@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { sites } from "@/config/sites";
 import pool from "@/lib/db";
 import { getGoogleAccessToken } from "@/lib/google-auth";
-import { generateIndexNowKey } from "@/lib/indexnow";
+import { submitToIndexNow } from "@/lib/indexnow";
 
 /**
  * Submit all 50 site sitemaps to search engines.
@@ -85,15 +85,10 @@ async function submitSitemaps() {
     let gscSitemapStatus = "SKIPPED";
     let gscNewsStatus = "SKIPPED";
 
-    // 1. IndexNow — submit sitemap URL to Bing/Yandex
+    // 1. IndexNow — submit sitemap URL to Bing/Yandex (per-domain key, then legacy)
     try {
-      const indexnowRes = await fetch(
-        `https://api.indexnow.org/indexnow?url=${encodeURIComponent(`https://${domain}/sitemap.xml`)}&key=${generateIndexNowKey(domain)}&keyLocation=${encodeURIComponent(`https://${domain}/indexnow.txt`)}`,
-        { method: "GET" }
-      );
-      if (!indexnowRes.ok && indexnowRes.status !== 202) {
-        indexnowStatus = `FAILED (${indexnowRes.status})`;
-      }
+      const ok = await submitToIndexNow(domain, [`https://${domain}/sitemap.xml`, `https://${domain}/news-sitemap.xml`]);
+      if (!ok) indexnowStatus = "FAILED";
     } catch (err) {
       indexnowStatus = `ERROR: ${String(err).slice(0, 80)}`;
     }

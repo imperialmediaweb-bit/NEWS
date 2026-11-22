@@ -1,5 +1,8 @@
 import crypto from "crypto";
 
+/** The shared key the network used before per-domain keys; Bing still binds some hosts to it. */
+export const LEGACY_INDEXNOW_KEY = "b7d8e9f2a1c4d6e8f0a2b4c6d8e0f2a4";
+
 /**
  * Generate a deterministic IndexNow key from a domain name.
  * The key is a 32-character hex string derived from a SHA-256 hash.
@@ -21,25 +24,23 @@ export async function submitToIndexNow(
 ): Promise<boolean> {
   if (urls.length === 0) return false;
 
-  const key = generateIndexNowKey(domain);
-  const host = domain;
-
-  const payload = {
-    host,
-    key,
-    keyLocation: `https://${domain}/indexnow.txt`,
-    urlList: urls,
-  };
-
+  // Bing remembers the first key a host used: some sites are bound to the
+  // per-domain key, others to the legacy shared one. Try the first, then the other.
   try {
-    const res = await fetch("https://api.indexnow.org/IndexNow", {
-      method: "POST",
-      headers: { "Content-Type": "application/json; charset=utf-8" },
-      body: JSON.stringify(payload),
-    });
-
-    // IndexNow returns 200 or 202 on success
-    return res.status === 200 || res.status === 202;
+    for (const [key, keyLocation] of [
+      [generateIndexNowKey(domain), `https://${domain}/indexnow.txt`],
+      [LEGACY_INDEXNOW_KEY, `https://${domain}/${LEGACY_INDEXNOW_KEY}.txt`],
+    ]) {
+      const res = await fetch("https://api.indexnow.org/IndexNow", {
+        method: "POST",
+        headers: { "Content-Type": "application/json; charset=utf-8" },
+        body: JSON.stringify({ host: domain, key, keyLocation, urlList: urls }),
+      });
+      // IndexNow returns 200 or 202 on success
+      if (res.status === 200 || res.status === 202) return true;
+      if (res.status !== 403) return false;
+    }
+    return false;
   } catch {
     console.error("[IndexNow] Failed to submit URLs to IndexNow");
     return false;
