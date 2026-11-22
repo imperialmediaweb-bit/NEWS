@@ -19,6 +19,7 @@ export const OFFICIAL_FEEDS: Record<string, StateFeed[]> = {
     { url: "https://dojmt.gov/feed/", publisher: "Montana Department of Justice", medianChars: 0 },
     { url: "https://www.ci.missoula.mt.us/RSSFeed.aspx?ModID=1", publisher: "City of Missoula", medianChars: 0 },
   ],
+  Alaska: [{ url: "https://www.adn.com/arc/outboundfeeds/rss/?outputType=xml", publisher: "Anchorage Daily News", medianChars: 0 }],
   Idaho: [{ url: "https://isp.idaho.gov/feed/", publisher: "Idaho State Police", medianChars: 0 }],
   Kansas: [{ url: "https://kansashighwaypatrol.gov/feed/", publisher: "Kansas Highway Patrol", medianChars: 0 }],
   Hawaii: [{ url: "https://governor.hawaii.gov/category/newsroom/feed/", publisher: "Office of the Hawaii Governor", medianChars: 0 }],
@@ -36,6 +37,7 @@ export const OFFICIAL_FEEDS: Record<string, StateFeed[]> = {
  */
 export const OFFICIAL_PAGES: Record<string, { url: string; publisher: string }[]> = {
   Ohio: [{ url: "https://ohioattorneygeneral.gov/Media/News-Releases", publisher: "Ohio Attorney General" }],
+  Wyoming: [{ url: "https://www.cheyennecity.org/News", publisher: "City of Cheyenne" }],
   Arkansas: [{ url: "https://governor.arkansas.gov/news/", publisher: "Office of the Arkansas Governor" }],
   California: [
     { url: "https://www.gov.ca.gov/newsroom/", publisher: "Office of the California Governor" },
