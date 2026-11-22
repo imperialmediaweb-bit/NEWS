@@ -80,12 +80,15 @@ async function getBingSites(): Promise<Map<string, string>> {
   return map;
 }
 
+let bingThrottled = false;
+
 /** Submit sitemap.xml and news-sitemap.xml to Bing Webmaster Tools for one site. */
 async function submitToBing(domain: string, bingSites: Map<string, string>): Promise<string> {
   const key = process.env.BING_WEBMASTER_KEY;
   if (!key) return "SKIPPED";
   const siteUrl = bingSites.get(domain);
   if (!siteUrl) return "NOT IN BING";
+  if (bingThrottled) return "THROTTLED (next run)";
   try {
     for (const feed of ["sitemap.xml", "news-sitemap.xml"]) {
       const res = await fetch(`${BING_API}/SubmitFeed?apikey=${key}`, {
@@ -93,7 +96,12 @@ async function submitToBing(domain: string, bingSites: Map<string, string>): Pro
         headers: { "Content-Type": "application/json; charset=utf-8" },
         body: JSON.stringify({ siteUrl, feedUrl: `${siteUrl.replace(/\/$/, "")}/${feed}` }),
       });
-      if (!res.ok) return `FAILED (${res.status}): ${(await res.text()).slice(0, 100)}`;
+      if (!res.ok) {
+        const body = (await res.text()).slice(0, 100);
+        // Bing caps submissions per account per day: stop asking for the rest of this run
+        if (/Throttle/i.test(body)) bingThrottled = true;
+        return `FAILED (${res.status}): ${body}`;
+      }
     }
     return "OK";
   } catch (err) {
@@ -120,8 +128,12 @@ async function submitSitemaps() {
   }
 
   const bingSites = await getBingSites();
+  bingThrottled = false;
 
-  for (const site of Object.values(sites)) {
+  // start at a different state each day, so Bing's daily cap does not always land on the same ones
+  const all = Object.values(sites);
+  const shift = Math.floor(Date.now() / 86400000) % all.length;
+  for (const site of all.slice(shift).concat(all.slice(0, shift))) {
     const domain = site.domain;
     let indexnowStatus = "OK";
     let websubStatus = "OK";
