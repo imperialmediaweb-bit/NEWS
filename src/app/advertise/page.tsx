@@ -68,10 +68,10 @@ export default function AdvertisePage() {
                 <div className="text-3xl font-black text-[var(--accent)]" style={{ fontFamily: "'Oswald', sans-serif" }}>Local</div>
                 <div className="text-sm text-gray-600 mt-1">Targeted Audiences</div>
               </div>
-              <div className="bg-gray-50 rounded-lg p-5 text-center">
-                <div className="text-3xl font-black text-[var(--accent)]" style={{ fontFamily: "'Oswald', sans-serif" }}>24/7</div>
-                <div className="text-sm text-gray-600 mt-1">News Coverage</div>
-              </div>
+              <a href="/obituaries/submit" className="block bg-gray-50 rounded-lg p-5 text-center hover:bg-gray-100">
+                <div className="text-3xl font-black text-[var(--accent)]" style={{ fontFamily: "'Oswald', sans-serif" }}>$25</div>
+                <div className="text-sm text-gray-600 mt-1">Obituary with photo — place online ›</div>
+              </a>
             </div>
 
             <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>

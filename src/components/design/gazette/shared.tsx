@@ -117,7 +117,7 @@ export function GzFooter({ site }: { site: SiteConfig }) {
   const cols: Array<[string, Array<[string, string]>]> = [
     ["Sections", [["Local", "/local-news"], ["Politics", "/politics"], ["Business", "/business"], ["Sports", "/sports"], ["Weather", "/#weather"], ["Opinion", "/opinion"], ["Life", "/life"]]],
     [site.name, [["About us", "/about"], ["Our journalists", "/about"], ["Careers", "/careers"], ["Corrections", "/corrections"], ["Send a tip", "/submit"]]],
-    ["Contact", [["Contact the newsroom", "/contact"], ["Advertise", "/advertise"], ["Privacy", "/privacy"], ["Terms", "/terms"]]],
+    ["Contact", [["Contact the newsroom", "/contact"], ["Advertise", "/advertise"], ["Place an obituary", "/obituaries/submit"], ["Privacy", "/privacy"], ["Terms", "/terms"]]],
   ];
   return (
     <>

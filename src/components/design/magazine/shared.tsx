@@ -124,7 +124,7 @@ export function MagFooter({ site }: { site: SiteConfig }) {
   const cols: Array<[string, Array<[string, string]>]> = [
     ["Sections", [["Local", "/local-news"], ["Politics", "/politics"], ["Business", "/business"], ["Sports", "/sports"], ["Weather", "/#weather"], ["Opinion", "/opinion"], ["Life", "/life"]]],
     ["About", [["About us", "/about"], ["Editorial policy", "/editorial-policy"], ["Ethics and standards", "/ethics"], ["Corrections", "/corrections"], ["Careers", "/careers"]]],
-    ["Contact", [["Contact the newsroom", "/submit"], ["Send a tip", "/submit"], ["Advertise", "/advertise"], ["Privacy", "/privacy"], ["Terms", "/terms"]]],
+    ["Contact", [["Contact the newsroom", "/submit"], ["Send a tip", "/submit"], ["Advertise", "/advertise"], ["Place an obituary", "/obituaries/submit"], ["Privacy", "/privacy"], ["Terms", "/terms"]]],
   ];
   return (
     <>

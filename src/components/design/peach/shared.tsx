@@ -167,7 +167,7 @@ export function PeachFooter({ site }: { site: SiteConfig }) {
     ["News", [["Local", "/local-news"], ["Politics", "/politics"], ["Business", "/business"], ["Sports", "/sports"], ["Weather", "/#weather"]]],
     ["Opinion & Life", [["Opinion", "/opinion"], ["Life", "/life"], ["Search", "/search"]]],
     ["About", [["About us", "/about"], ["Editorial policy", "/editorial-policy"], ["Ethics", "/ethics"], ["Corrections", "/corrections"], ["Careers", "/careers"]]],
-    ["Contact", [["Contact the newsroom", "/contact"], ["Advertise", "/advertise"], ["Privacy", "/privacy"], ["Terms", "/terms"]]],
+    ["Contact", [["Contact the newsroom", "/contact"], ["Advertise", "/advertise"], ["Place an obituary", "/obituaries/submit"], ["Privacy", "/privacy"], ["Terms", "/terms"]]],
   ];
   return (
     <>

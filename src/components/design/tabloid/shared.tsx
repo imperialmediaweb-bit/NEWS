@@ -122,7 +122,7 @@ export function TabHeader({ site, MobileMenu, active }: { site: SiteConfig; Mobi
 export function TabFooter({ site }: { site: SiteConfig }) {
   const cols: Array<[string, Array<[string, string]>]> = [
     ["News", [["Local", "/local-news"], ["Politics", "/politics"], ["Business", "/business"], ["Sports", "/sports"], ["Weather", "/#weather"], ["Opinion", "/opinion"], ["Life", "/life"]]],
-    ["More from us", [["Send us a tip", "/submit"], ["Corrections", "/corrections"], ["About us", "/about"], ["Careers", "/careers"], ["Advertise", "/advertise"]]],
+    ["More from us", [["Send us a tip", "/submit"], ["Corrections", "/corrections"], ["About us", "/about"], ["Careers", "/careers"], ["Advertise", "/advertise"], ["Place an obituary", "/obituaries/submit"]]],
     ["Policies", [["Editorial policy", "/editorial-policy"], ["Ethics", "/ethics"], ["Privacy", "/privacy"], ["Terms", "/terms"]]],
   ];
   return (
