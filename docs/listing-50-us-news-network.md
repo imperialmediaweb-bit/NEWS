@@ -111,6 +111,13 @@ All the time so far went into building the platform, not into growing the audien
 - **Free support after the sale**: setup on the buyer's accounts, a live walkthrough, and email support for questions about running the network
 - **Complete user guide** included: how the news pipeline works, the admin, reviewing reader submissions and paid placements, the newsletter, sources, SEO reports, costs and how to switch features on and off — written for a non-technical owner
 
+## Support and maintenance after the sale
+The developer who built both platforms stays available:
+- **Free support** after the handover: setup on the buyer's accounts, questions about running the network, fixes for anything that does not work as described
+- **Monthly maintenance (optional)**: keeping sources and feeds working, AI provider and API updates, security and dependency updates, monitoring the pipeline, indexing and Search Console reports, monthly performance report
+- **Growth development (optional)**: AdSense / Raptive setup, new revenue features, more official sources per state, new sites or countries, custom work on request
+- Retainer pricing agreed with the buyer; quick response by email and chat
+
 ## Included in the sale
 - 49 news domains + media-chief.com (transfer at Namecheap), Cloudflare setup
 - Full source code of both platforms (GitHub) and the databases with the full content archive
