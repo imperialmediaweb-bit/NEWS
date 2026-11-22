@@ -44,6 +44,7 @@ export async function GET(req: NextRequest) {
   }
 
   const perSite = Math.min(10, Math.max(1, parseInt(req.nextUrl.searchParams.get("perSite") || "3", 10) || 3));
+  const ageDays = Math.max(0, parseInt(req.nextUrl.searchParams.get("ageDays") || "0", 10) || 0);
   const onlySlug = req.nextUrl.searchParams.get("site");
 
   let token: string;
@@ -77,20 +78,35 @@ export async function GET(req: NextRequest) {
       props.find((p) => p.siteUrl.startsWith("sc-domain:"))?.siteUrl || props[0]?.siteUrl;
     if (!property) continue;
 
-    const { rows } = await pool.query(
-      `SELECT a.category, a.slug
-         FROM articles a
-         JOIN sites s ON a.site_id = s.id
-        WHERE s.slug = $1
-        ORDER BY a.published_at DESC
-        LIMIT $2`,
-      [site.slug, perSite]
-    );
+    // ageDays=N: a random sample of articles at least N days old, which shows
+    // what Google kept; the default (newest first) mostly shows crawl lag
+    const { rows } = ageDays > 0
+      ? await pool.query(
+          `SELECT a.category, a.slug
+             FROM articles a
+             JOIN sites s ON a.site_id = s.id
+            WHERE s.slug = $1 AND a.published_at < now() - ($3 || ' days')::interval
+              AND a.published_at > now() - interval '120 days'
+            ORDER BY random()
+            LIMIT $2`,
+          [site.slug, perSite, String(ageDays)]
+        )
+      : await pool.query(
+          `SELECT a.category, a.slug
+             FROM articles a
+             JOIN sites s ON a.site_id = s.id
+            WHERE s.slug = $1
+            ORDER BY a.published_at DESC
+            LIMIT $2`,
+          [site.slug, perSite]
+        );
 
     const urls = rows.map(
       (r: { category: string | null; slug: string }) =>
         `https://${site.domain}/${r.category || "local-news"}/${r.slug}`
     );
+    // with ageDays, the homepage too: if even that is out, the site has a bigger problem
+    if (ageDays > 0) urls.unshift(`https://${site.domain}/`);
 
     const checked: Record<string, unknown>[] = [];
     for (const url of urls) {
