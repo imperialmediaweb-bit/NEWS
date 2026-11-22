@@ -11,7 +11,7 @@ export default function CountySearch({ state, counties, popular }: { state: stri
     if (!t) return all ? counties : popular;
     return counties.filter((c) => c.toLowerCase().includes(t)).slice(0, 10);
   }, [q, counties, popular, all]);
-  const href = (c: string) => `/search?q=${encodeURIComponent(`${c} County`)}`;
+  const href = (c: string) => `/county/${`${c} ${state === "Louisiana" ? "Parish" : "County"}`.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}`;
 
   return (
     <div>

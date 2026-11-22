@@ -18,6 +18,8 @@ interface TagPageClientProps {
   total: number;
   page: number;
   totalPages: number;
+  /** Path of page 1; defaults to /tag/{tag}. */
+  basePath?: string;
 }
 
 /**
@@ -33,13 +35,15 @@ export default function TagPageClient({
   total,
   page,
   totalPages,
+  basePath,
 }: TagPageClientProps) {
   const content = generateContent(site);
 
   const makeSlug = (a: ListArticle) =>
     a.slug || a.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
-  const pageHref = (n: number) => (n <= 1 ? `/tag/${tag}` : `/tag/${tag}?page=${n}`);
+  const base = basePath || `/tag/${tag}`;
+  const pageHref = (n: number) => (n <= 1 ? base : `${base}?page=${n}`);
 
   return (
     <div className="min-h-screen bg-[#f5f5f5]">

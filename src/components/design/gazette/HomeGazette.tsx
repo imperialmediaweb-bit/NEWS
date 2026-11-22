@@ -332,7 +332,7 @@ export default function HomeGazette({
             <div className="pc-in pc-stagger grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {counties6.map(([c, list]) => (
                 <div key={c} className="pc-card rounded bg-white p-4">
-                  <a href={`/search?q=${encodeURIComponent(`${c} County`)}`} className={`${merri.className} text-[18px] font-black text-[var(--gz-ink)] hover:text-[#a06f00]`}>{c} County ›</a>
+                  <a href={`/county/${c.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-${site.state === "Louisiana" ? "parish" : "county"}`} className={`${merri.className} text-[18px] font-black text-[var(--gz-ink)] hover:text-[#a06f00]`}>{c} County ›</a>
                   <ul className="mt-2 space-y-2">
                     {list.map((a) => <li key={a.slug}><a href={href(a)} className="text-[14.5px] font-semibold leading-snug hover:text-[#a06f00]">{a.title}</a> <span className="text-[12px] text-[#8a7a58]">{ago(a)}</span></li>)}
                   </ul>
