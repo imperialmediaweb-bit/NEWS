@@ -116,7 +116,7 @@ export function GzHeader({ site, MobileMenu, active }: { site: SiteConfig; Mobil
 export function GzFooter({ site }: { site: SiteConfig }) {
   const cols: Array<[string, Array<[string, string]>]> = [
     ["Sections", [["Local", "/local-news"], ["Politics", "/politics"], ["Business", "/business"], ["Sports", "/sports"], ["Weather", "/#weather"], ["Opinion", "/opinion"], ["Life", "/life"]]],
-    [site.name, [["About us", "/about"], ["Our journalists", "/about"], ["Careers", "/careers"], ["Corrections", "/corrections"], ["Send a tip", "/contact"]]],
+    [site.name, [["About us", "/about"], ["Our journalists", "/about"], ["Careers", "/careers"], ["Corrections", "/corrections"], ["Send a tip", "/submit"]]],
     ["Contact", [["Contact the newsroom", "/contact"], ["Advertise", "/advertise"], ["Privacy", "/privacy"], ["Terms", "/terms"]]],
   ];
   return (

@@ -105,7 +105,7 @@ export default function ArticleBroadsheet({
           <div className={`${caslon.className} pc-article mx-auto max-w-[700px]`} dangerouslySetInnerHTML={{ __html: html }} />
           <Double className="mx-auto mt-10 max-w-[700px]" />
           <div className="mx-auto mt-4 flex max-w-[700px] flex-wrap items-center justify-between gap-4">
-            <p className={`${caslon.className} text-[18px] italic`}>Have a tip about this story? <a href="/contact" className="font-bold not-italic text-[var(--bs-acc)]">Tell our newsroom ›</a></p>
+            <p className={`${caslon.className} text-[18px] italic`}>Have a tip about this story? <a href="/submit" className="font-bold not-italic text-[var(--bs-acc)]">Tell our newsroom ›</a></p>
             <ShareBar url={url} title={article.title} />
           </div>
         </article>

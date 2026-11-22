@@ -121,7 +121,7 @@ export function DkFooter({ site }: { site: SiteConfig }) {
   const cols: Array<[string, Array<[string, string]>]> = [
     ["Sections", [["Local", "/local-news"], ["Politics", "/politics"], ["Business", "/business"], ["Sports", "/sports"], ["Weather", "/#weather"], ["Opinion", "/opinion"], ["Life", "/life"]]],
     ["About", [["About us", "/about"], ["Ethics & standards", "/ethics"], ["Corrections", "/corrections"], ["Careers", "/careers"], ["Advertise", "/advertise"]]],
-    ["Contact", [["Contact the newsroom", "/contact"], ["Send us a tip", "/contact"], ["Privacy", "/privacy"], ["Terms", "/terms"]]],
+    ["Contact", [["Contact the newsroom", "/submit"], ["Send us a tip", "/submit"], ["Privacy", "/privacy"], ["Terms", "/terms"]]],
   ];
   return (
     <>

@@ -523,7 +523,7 @@ export default function HomePeach({
           <div className="bg-[linear-gradient(135deg,var(--pc-ink),#5a2c1f)] p-7 text-white">
             <h2 className={`${display.className} text-[28px] font-extrabold`}>Send us a tip</h2>
             <p className="mt-2 max-w-[420px] text-[15px] text-white/85">Have a news tip, photo or document our newsroom should see? We read every message.</p>
-            <a href="/contact" className="mt-4 inline-block rounded-sm bg-[var(--pc-acc)] px-5 py-2.5 text-[14px] font-bold text-white hover:brightness-110">Share a tip →</a>
+            <a href="/submit" className="mt-4 inline-block rounded-sm bg-[var(--pc-acc)] px-5 py-2.5 text-[14px] font-bold text-white hover:brightness-110">Share a tip →</a>
           </div>
           <div className="bg-[linear-gradient(135deg,#f4c9b6,#f9e3d6)] p-7 text-[var(--pc-ink)]">
             <AlertsBox name={site.name} state={site.state} />

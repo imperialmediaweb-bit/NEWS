@@ -440,7 +440,7 @@ export default function HomeWestern({
           <div className="flex flex-wrap items-center gap-5 bg-[var(--ws-ink)] p-6 text-[#f4ecdc]">
             <p className={`${alfa.className} text-[30px] uppercase leading-none`}>Send us a tip</p>
             <p className="flex-1 text-[14.5px] italic text-white/80">Have a news tip, photo or video from your community? We want to hear from you.</p>
-            <a href="/contact" className={`${alfa.className} bg-[var(--ws-acc)] px-4 py-2 text-[15px] uppercase text-[#1b1b1b]`}>Send a tip →</a>
+            <a href="/submit" className={`${alfa.className} bg-[var(--ws-acc)] px-4 py-2 text-[15px] uppercase text-[#1b1b1b]`}>Send a tip →</a>
           </div>
           <div className={card}><AlertsBox name={site.name} state={site.state} /></div>
         </section>

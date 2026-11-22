@@ -457,7 +457,7 @@ export default function HomeBroadsheet({
           <div className="bg-[#f7f1e6] p-6">
             <p className={`${caslon.className} text-[30px] italic`}>Send us a tip</p>
             <p className="mt-1 text-[15px] text-[#444]">Have a news tip, document or story idea about {site.state}? Our newsroom wants to hear from you.</p>
-            <a href="/contact" className="mt-3 inline-block border-2 border-[var(--bs-acc)] px-4 py-2 text-[15px] font-semibold text-[var(--bs-acc)] hover:bg-[var(--bs-acc)] hover:text-white">Send a tip securely ›</a>
+            <a href="/submit" className="mt-3 inline-block border-2 border-[var(--bs-acc)] px-4 py-2 text-[15px] font-semibold text-[var(--bs-acc)] hover:bg-[var(--bs-acc)] hover:text-white">Send a tip securely ›</a>
           </div>
           <div className="md:pl-6"><AlertsBox name={site.name} state={site.state} /></div>
         </section>

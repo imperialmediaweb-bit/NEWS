@@ -100,7 +100,7 @@ export default function ArticleDark({ site, article, categorySlug, related, late
         <article id="dk-story" className="min-w-0">
           <div className={`${spectral.className} pc-article pc-dropcap mx-auto max-w-[720px]`} dangerouslySetInnerHTML={{ __html: html }} />
           <div className="mx-auto mt-10 flex max-w-[720px] flex-wrap items-center justify-between gap-4 border-t border-[var(--dk-cu)]/40 pt-5">
-            <p className={`${spectral.className} text-[18px] italic text-white/70`}>Know more? <a href="/contact" className="not-italic text-[var(--dk-acc)]">Send our newsroom a tip →</a></p>
+            <p className={`${spectral.className} text-[18px] italic text-white/70`}>Know more? <a href="/submit" className="not-italic text-[var(--dk-acc)]">Send our newsroom a tip →</a></p>
             <ShareBar url={url} title={article.title} />
           </div>
         </article>

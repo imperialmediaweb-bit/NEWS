@@ -117,7 +117,7 @@ export function BsFooter({ site }: { site: SiteConfig }) {
   const cols: Array<[string, Array<[string, string]>]> = [
     ["Sections", [["Local", "/local-news"], ["Politics", "/politics"], ["Business", "/business"], ["Sports", "/sports"], ["Weather", "/#weather"], ["Opinion", "/opinion"], ["Life", "/life"]]],
     ["About", [["About us", "/about"], ["Editorial standards", "/editorial-policy"], ["Ethics", "/ethics"], ["Corrections", "/corrections"], ["Careers", "/careers"]]],
-    ["Contact", [["News tips", "/contact"], ["General inquiries", "/contact"], ["Advertising", "/advertise"], ["Privacy", "/privacy"], ["Terms", "/terms"]]],
+    ["Contact", [["News tips", "/submit"], ["General inquiries", "/submit"], ["Advertising", "/advertise"], ["Privacy", "/privacy"], ["Terms", "/terms"]]],
   ];
   return (
     <>

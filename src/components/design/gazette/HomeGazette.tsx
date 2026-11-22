@@ -442,7 +442,7 @@ export default function HomeGazette({
               <p className={`${merri.className} text-[24px] font-bold italic`}>Send us a tip</p>
               <p className="text-[14px] text-[#4a3f28]">Have a news tip, photo or story idea from your community? We want to hear from you.</p>
             </div>
-            <a href="/contact" className="rounded border-2 border-[var(--gz-acc)] px-4 py-2 text-[14px] font-bold text-[#a06f00] hover:bg-[var(--gz-acc)] hover:text-white">Send a tip ›</a>
+            <a href="/submit" className="rounded border-2 border-[var(--gz-acc)] px-4 py-2 text-[14px] font-bold text-[#a06f00] hover:bg-[var(--gz-acc)] hover:text-white">Send a tip ›</a>
           </div>
           <div className="md:pl-6"><AlertsBox name={site.name} state={site.state} /></div>
         </section>

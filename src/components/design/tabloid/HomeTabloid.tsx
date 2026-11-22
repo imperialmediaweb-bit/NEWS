@@ -499,7 +499,7 @@ export default function HomeTabloid({
               <p className={`${cond.className} text-[36px] font-black uppercase italic leading-none`}>Send us a tip</p>
               <p className="mt-1 text-[14px] text-white/80">A news tip, photo or video from across {site.state}? Our newsroom wants to hear from you.</p>
             </div>
-            <a href="/contact" className={`${cond.className} bg-[var(--tb-acc)] px-5 py-2 text-[20px] font-extrabold uppercase italic`}>Send a tip »</a>
+            <a href="/submit" className={`${cond.className} bg-[var(--tb-acc)] px-5 py-2 text-[20px] font-extrabold uppercase italic`}>Send a tip »</a>
           </div>
           <div className="border-2 border-[var(--tb-ink)]">
             <AlertsBox name={site.name} state={site.state} />

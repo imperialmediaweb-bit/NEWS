@@ -110,7 +110,7 @@ export default function ArticleGazette({
           <div className="mx-auto mt-8 max-w-[740px] border-t-2 border-[#111] pt-4"><ShareBar url={url} title={article.title} /></div>
           <div className="mx-auto mt-8 flex max-w-[740px] flex-wrap items-center gap-4 bg-[var(--gz-ink)] p-5 text-white">
             <p className={`${merri.className} flex-1 text-[28px] font-black leading-none`}>Got a tip on this story?</p>
-            <a href="/contact" className={`${merri.className} bg-[var(--gz-acc)] px-5 py-2 text-[19px] font-extrabold`}>Tell us »</a>
+            <a href="/submit" className={`${merri.className} bg-[var(--gz-acc)] px-5 py-2 text-[19px] font-extrabold`}>Tell us »</a>
           </div>
         </article>
 

@@ -430,7 +430,7 @@ export default function HomeDark({
           <div>
             <p className={`${mont.className} text-[17px] font-semibold uppercase tracking-[.16em]`}>Send us a tip</p>
             <p className="mt-2 text-[14.5px] text-white/70">Have a news tip, photo or story idea for {site.name}? We want to hear from you.</p>
-            <a href="/contact" className="mt-3 inline-block border border-[var(--dk-cu)] bg-[var(--dk-deep)] px-4 py-2 text-[14px] font-semibold">Send a tip →</a>
+            <a href="/submit" className="mt-3 inline-block border border-[var(--dk-cu)] bg-[var(--dk-deep)] px-4 py-2 text-[14px] font-semibold">Send a tip →</a>
           </div>
           <div className="md:pl-6"><div className="bg-[#f6efe9] text-[#2a1d17]" style={light}><AlertsBox name={site.name} state={site.state} /></div></div>
         </section>

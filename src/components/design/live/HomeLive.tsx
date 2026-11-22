@@ -672,7 +672,7 @@ export default function HomeLive({
               <h2 className="text-[20px] font-extrabold uppercase">Send us a tip</h2>
               <p className={`${serif.className} text-[16px] italic text-white/90`}>Have a news tip, document or story idea? Our newsroom wants to hear from you.</p>
             </div>
-            <a href="/contact" className="shrink-0 bg-white px-5 py-2.5 text-[14px] font-bold uppercase text-[var(--lv-acc)] sm:ml-auto">Submit a tip →</a>
+            <a href="/submit" className="shrink-0 bg-white px-5 py-2.5 text-[14px] font-bold uppercase text-[var(--lv-acc)] sm:ml-auto">Submit a tip →</a>
           </div>
           <AlertsBox name={site.name} state={site.state} />
         </section>

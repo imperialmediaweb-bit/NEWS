@@ -463,7 +463,7 @@ export default function HomeMagazine({
               <p className={`${serifM.className} text-[26px] font-semibold italic text-[var(--mg-ink)]`}>Send us a tip</p>
               <p className="text-[15px] text-[#555]">Have a story, photo or information our team should know about? We want to hear from you.</p>
             </div>
-            <a href="/contact" className="border border-[var(--mg-acc)] px-4 py-2 text-[15px] font-semibold text-[var(--mg-acc)] hover:bg-[var(--mg-acc)] hover:text-white">Send a tip ›</a>
+            <a href="/submit" className="border border-[var(--mg-acc)] px-4 py-2 text-[15px] font-semibold text-[var(--mg-acc)] hover:bg-[var(--mg-acc)] hover:text-white">Send a tip ›</a>
           </div>
           <div className="bg-[#eef2f7]">
             <AlertsBox name={site.name} state={site.state} />

@@ -391,7 +391,7 @@ export default function HomeCoastal({
           <div className="rounded-2xl bg-[linear-gradient(135deg,#fdeef3,#fff)] p-6">
             <p className={`${crimson.className} text-[30px] font-semibold text-[var(--co-ink)]`}>Send us a tip</p>
             <p className={`${crimson.className} mt-1 text-[17px] italic text-[#4a5a66]`}>Have a news tip, photo or video for our newsroom? We want to hear from you.</p>
-            <a href="/contact" className="mt-3 inline-block rounded-md bg-[var(--co-acc)] px-5 py-2 text-[14px] font-bold text-white hover:brightness-110">Submit a tip ›</a>
+            <a href="/submit" className="mt-3 inline-block rounded-md bg-[var(--co-acc)] px-5 py-2 text-[14px] font-bold text-white hover:brightness-110">Submit a tip ›</a>
           </div>
           <div className="rounded-2xl bg-[linear-gradient(135deg,#e6f3f7,#fff)] p-2"><AlertsBox name={site.name} state={site.state} /></div>
         </section>
