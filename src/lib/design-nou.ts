@@ -32,6 +32,10 @@ const DESIGNS: Record<string, DesignFamily> = {
   "montana-express": "western",
   // 21.11.2026: Iowa, from its generated mockup (community gazette family).
   "iowa-express": "gazette",
+  // 22.11.2026: the rest of the network, each in its mockup's family, colours and art.
+  "alaska-express": "western",
+  "alabama-express": "broadsheet",
+  "colorado-express": "magazine",
 };
 
 export function designFor(slug: string): DesignFamily | null {

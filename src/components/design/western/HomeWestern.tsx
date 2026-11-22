@@ -170,6 +170,20 @@ export default function HomeWestern({
 
         {/* wildfires map · county, on a navy band across the page */}
         <section className="ws-band pc-in pc-stagger mt-10 grid gap-6 py-8 lg:grid-cols-[1.4fr_1fr]">
+          {outline && !fires && qs.length > 0 && (
+            <div className={card}>
+              <WHead sub="Past 7 days · USGS">{site.state} earthquakes</WHead>
+              <div className="grid items-center gap-4 p-4 pt-0 sm:grid-cols-[1.6fr_1fr]">
+                <StateMap outline={outline} fill="#e3ecef" stroke="#1b3a4b" label="#1b3a4b" font="var(--ws-slab), Georgia, serif" cities={citiesOf(site.state).slice(0, 4)}
+                  points={qs.map((q) => ({ key: q.url, lon: q.lon, lat: q.lat, r: 2 + (q.mag - 2.5) * 3, color: q.mag >= 4 ? "#c0392b" : q.mag >= 3 ? "#e67e22" : "#f1c40f", title: `M${q.mag.toFixed(1)} · ${q.place}` }))} />
+                <div className="text-[14px]">
+                  <p>Earthquakes this week: <b className={`${alfa.className} text-[24px] text-[#c0392b]`}>{qs.length}</b></p>
+                  {[...qs].sort((a, b) => b.mag - a.mag).slice(0, 3).map((q) => <a key={q.url} href={q.url} target="_blank" rel="noopener" className="mt-1 block hover:underline"><b>M{q.mag.toFixed(1)}</b> {q.place}</a>)}
+                  <p className="mt-3 text-[11px] italic text-[#7a6a50]">Source: U.S. Geological Survey, magnitude 2.5+</p>
+                </div>
+              </div>
+            </div>
+          )}
           {outline && fires && (
             <div className={card}>
               <WHead sub="Active fires (NIFC)">{site.state} wildfires</WHead>

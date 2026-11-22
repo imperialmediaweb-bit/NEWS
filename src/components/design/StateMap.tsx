@@ -16,7 +16,8 @@ export default function StateMap({ outline, points = [], cities = [], fill = "#f
   label?: string;
   font?: string;
 }) {
-  const x = (lon: number) => (lon - outline.lon0) * outline.k * outline.c;
+  // Alaska crosses the 180th meridian: its outline is drawn with west longitudes past -180
+  const x = (lon: number) => ((lon > 0 && outline.lon0 < -170 ? lon - 360 : lon) - outline.lon0) * outline.k * outline.c;
   const y = (lat: number) => (outline.lat0 - lat) * outline.k;
   const pad = 12;
   return (

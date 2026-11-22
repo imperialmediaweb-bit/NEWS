@@ -1,6 +1,6 @@
 import type { SiteConfig } from "@/config/site-config";
 import type { HomeArticles, HomeArticle } from "@/lib/homepage-data";
-import type { CityWeather, WeatherAlert, GasPrices, LotteryDraw, AirportStatus, SubwayLine } from "@/lib/local-data";
+import type { CityWeather, WeatherAlert, GasPrices, LotteryDraw, AirportStatus, SubwayLine, Storm } from "@/lib/local-data";
 import CountySearch from "../live/CountySearch";
 import AlertsBox from "../live/AlertsBox";
 import MobileMenu from "../live/MobileMenu";
@@ -60,11 +60,12 @@ export default function HomeBroadsheet({
   lottery,
   airports,
   subway,
+  storms,
 }: {
   site: SiteConfig;
   articles: HomeArticles;
   weather: CityWeather[];
-  storms?: unknown;
+  storms?: { storms: Storm[] } | null;
   counties: string[];
   sections?: Record<string, HomeArticle[]>;
   alerts?: WeatherAlert[] | null;
@@ -169,6 +170,22 @@ export default function HomeBroadsheet({
 
         {/* subway · county · weather */}
         <section className="pc-in pc-stagger mt-6 grid gap-6 lg:grid-cols-[1.3fr_1fr_1fr] lg:divide-x lg:divide-[var(--bs-gold)]">
+          {!subway && storms && ["Alabama", "Mississippi", "Louisiana", "Texas", "Florida", "Georgia", "South Carolina", "North Carolina", "Virginia", "Maryland", "Delaware", "New Jersey"].includes(site.state) && (
+            <div>
+              <BHead>Hurricane tracker</BHead>
+              <p className="-mt-1 mb-3 text-[12px] uppercase tracking-wide text-[#777]">Atlantic &amp; Gulf · National Hurricane Center</p>
+              <a href="https://www.nhc.noaa.gov/gtwo.php?basin=atlc&fdays=7" target="_blank" rel="noopener" className="pc-zoom block overflow-hidden">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="https://www.nhc.noaa.gov/xgtwo/two_atl_7d0.png" alt="National Hurricane Center seven-day tropical outlook" className="w-full" loading="lazy" />
+              </a>
+              {storms.storms.length === 0 ? (
+                <p className={`${caslon.className} mt-3 text-[17px] italic`}>No active tropical systems in the Atlantic or the Gulf.</p>
+              ) : (
+                storms.storms.map((st) => <p key={st.name} className="mt-2 text-[14.5px]"><b className="text-[#c0392b]">{st.classification} {st.name}</b>{st.intensity ? ` · winds ${st.intensity}` : ""}{st.movement ? ` · ${st.movement}` : ""}</p>)
+              )}
+              <a href="https://www.nhc.noaa.gov/" target="_blank" rel="noopener" className="mt-3 inline-block text-[13px] font-semibold text-[var(--bs-acc)]">NHC forecasts, maps and advisories ›</a>
+            </div>
+          )}
           {subway && (
             <div>
               <BHead>The subway right now</BHead>

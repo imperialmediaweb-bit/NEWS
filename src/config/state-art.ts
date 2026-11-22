@@ -9,6 +9,7 @@ export interface StateArt { masthead?: string; landscape?: string; sky?: string;
 
 export const STATE_ART: Record<string, StateArt> = {
   "montana-express": { masthead: "/design/montana/ridge.webp", landscape: "/design/montana/landscape.webp" },
+  "alaska-express": { masthead: "/design/alaska/ridge.webp", landscape: "/design/alaska/landscape.webp" },
   "arizona-express": { sky: "/design/arizona/dusk.webp" },
   "iowa-express": { county: "/design/iowa/farm.webp" },
 };
