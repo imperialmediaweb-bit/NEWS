@@ -24,3 +24,16 @@ export const OFFICIAL_FEEDS: Record<string, StateFeed[]> = {
     { url: "https://www.daytonohio.gov/RSSFeed.aspx?ModID=1", publisher: "City of Dayton", medianChars: 0 },
   ],
 };
+
+/**
+ * Press-release pages without RSS (read by lib/pipeline/press-pages.ts).
+ * Each was checked to list releases from the last days before it was added.
+ */
+export const OFFICIAL_PAGES: Record<string, { url: string; publisher: string }[]> = {
+  Ohio: [{ url: "https://ohioattorneygeneral.gov/Media/News-Releases", publisher: "Ohio Attorney General" }],
+  Delaware: [{ url: "https://news.delaware.gov/", publisher: "State of Delaware" }],
+  "Rhode Island": [
+    { url: "https://governor.ri.gov/press-releases", publisher: "Office of the Rhode Island Governor" },
+    { url: "https://www.providenceri.gov/news/", publisher: "City of Providence" },
+  ],
+};

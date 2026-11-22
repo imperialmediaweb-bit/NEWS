@@ -73,7 +73,7 @@ export async function fetchSourceText(rawUrl: string): Promise<SourceText> {
  * that are definitely not prose, then take what is left. A parser that tried
  * to be clever about article containers would fail differently on every site.
  */
-function extractArticleText(html: string): string {
+export function extractArticleText(html: string): string {
   let s = html;
 
   // Anything inside these is never article text.

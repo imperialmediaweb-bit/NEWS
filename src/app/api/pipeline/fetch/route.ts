@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { feeds, STATE_BATCHES, isPublishingHours } from "@/config/feeds";
+import { OFFICIAL_PAGES } from "@/config/official-feeds";
+import { scrapePressListing } from "@/lib/pipeline/press-pages";
 import { feedsForState } from "@/config/state-feeds";
 import { isRelevantToState } from "@/lib/pipeline/relevance";
 import { parseFeed } from "@/lib/pipeline/rss-parser";
@@ -178,13 +180,17 @@ export async function POST(req: NextRequest) {
     // the publisher — so everything written from it past that sentence was
     // invented. These feeds carry the article itself, 500 to 5,500 characters
     // of it, which is what makes an honest rewrite possible at all.
-    const stateFeeds = feedsForState(site.state).map((f) => ({
+    const stateFeeds: { id: string; url: () => string; category: string; intervalHours: number; maxItems: number; page?: boolean }[] = feedsForState(site.state).map((f) => ({
       id: f.publisher,
       url: () => f.url,
       category: "local-news",
       intervalHours: 2,
       maxItems: 8,
     }));
+    // official press-release pages without RSS, read like a feed
+    for (const pg of OFFICIAL_PAGES[site.state] || []) {
+      stateFeeds.unshift({ id: pg.publisher, url: () => pg.url, category: "local-news", intervalHours: 2, maxItems: 6, page: true });
+    }
 
     // Google News is kept only as a thin fallback for a state whose own feeds
     // are down: its items are rejected downstream for lack of material, so it
@@ -201,7 +207,7 @@ export async function POST(req: NextRequest) {
         group.map(async (feed) => {
           try {
             const url = feed.url(site.state, site.city);
-            const items = await parseFeed(url);
+            const items = (feed as { page?: boolean }).page ? await scrapePressListing(url, feed.id) : await parseFeed(url);
             if (items.length === 0) {
               console.log(`[fetch] No items from ${feed.id} for ${site.state} — URL: ${url}`);
             }

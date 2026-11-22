@@ -246,9 +246,13 @@ export async function POST(req: NextRequest) {
       const category = sectionFor(rewrite, item.category);
 
       // Find an image (with category fallback for precision)
-      const image = await findImage(rewrite.suggestedImageQuery, category, { title: rewrite.title, state: item.state });
+      // an official release's own photo comes first, credited to the agency
+      const releasePhoto = String(item.description || "").match(/<!--img:(https:[^>\s]+)-->/)?.[1];
+      const image = releasePhoto
+        ? { url: releasePhoto, alt: rewrite.title, credit: `Photo: ${item.source_feed || "official release"}` }
+        : await findImage(rewrite.suggestedImageQuery, category, { title: rewrite.title, state: item.state });
       // our own WebP copy on R2 for free-licence photos; the original if that fails
-      const stored = image?.url ? await storeImage(image.url, rewrite.title).catch(() => null) : null;
+      const stored = image?.url ? await storeImage(image.url, rewrite.title, !!releasePhoto).catch(() => null) : null;
 
       // Publish to the single matching state site
       const published = await publishArticle({

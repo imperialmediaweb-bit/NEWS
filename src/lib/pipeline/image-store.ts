@@ -24,8 +24,8 @@ function originalOf(url: string): string {
   return url.replace(/_(640|960)(\.\w+)$/, "_1280$2");
 }
 
-export async function storeImage(url: string, name = ""): Promise<string | null> {
-  if (!r2Ready() || !canStore(url)) return null;
+export async function storeImage(url: string, name = "", anyHost = false): Promise<string | null> {
+  if (!r2Ready() || (!anyHost && !canStore(url))) return null;
   const hash = createHash("sha1").update(url.split("?")[0]).digest("hex").slice(0, 12);
   const words = name.toLowerCase().normalize("NFKD").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").split("-").slice(0, 8).join("-");
   const id = words ? `${words}-${hash}` : hash;
