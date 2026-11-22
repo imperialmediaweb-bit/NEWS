@@ -21,6 +21,8 @@ import { serif, sans, PALETTE, TZ, href, hour, ago, WxIcon, SectionTitle, NAV, L
  * Every module shows real data or is left out.
  */
 
+const ROADS: Record<string, [string, string]> = { Michigan: ["MDOT", "https://mdotjboss.state.mi.us/MiDrive/map"], Minnesota: ["MnDOT", "https://511mn.org/"], Texas: ["TxDOT", "https://drivetexas.org/"] };
+
 export default function HomeLive({
   site,
   articles,
@@ -69,6 +71,11 @@ export default function HomeLive({
     }
     return out;
   };
+  // Each live-family state follows its own mockup's top: Texas (centred
+  // masthead, full-width slider) or Michigan (logo left, slider beside the
+  // live column, winter weather and county beside the brief).
+  const logoLeft = ["michigan-express"].includes(site.slug);
+  const winter = (alerts || []).filter((a) => /winter|snow|blizzard|ice|freez|wind chill|lake effect/i.test(a.event));
   const live = take(articles.latestPosts.concat(articles.heroSide), 6);
   const pool = articles.pool || articles.latestPosts;
   const brief = take(articles.trending.concat(articles.popular, articles.localNews, pool), 5);
@@ -117,11 +124,53 @@ export default function HomeLive({
   const logo = `/logos/${site.slug}.svg`;
   const nav = NAV;
 
+  const liveColumn = (
+          <aside className="border border-[#dde1ea] border-t-4 border-t-[var(--lv-acc)] bg-[#f6f7fb] p-4">
+      <h2 className="flex items-center gap-2 text-[18px] font-extrabold uppercase text-[var(--lv-acc)]"><span className="h-2.5 w-2.5 rounded-full bg-[var(--lv-acc)]" /> Live updates</h2>
+      <p className="mb-2 text-[13px] text-[#5a6275]">{site.state} stories as they publish</p>
+      <ol className="relative border-l-2 border-[var(--lv-acc)]/30 pl-4">
+        {live.map((a) => (
+          <li key={a.slug} className="relative py-2">
+            <span className="absolute -left-[22px] top-3.5 h-2.5 w-2.5 rounded-full bg-[var(--lv-acc)]" />
+            <p className="text-[12px] font-bold text-[var(--lv-acc)]">{hour(a, tz)}</p>
+            <a href={href(a)} className="text-[15px] font-semibold leading-snug text-[#141b2d] hover:text-[var(--lv-acc)]">{a.title}</a>
+          </li>
+        ))}
+      </ol>
+      <a href="/local-news" className="mt-2 block text-right text-[12px] font-bold uppercase text-[var(--lv-ink)] hover:underline">All {site.state} news →</a>
+    </aside>
+  );
+
   return (
     <div className={`${sans.className} min-h-screen overflow-x-hidden bg-white text-[#1b2233]`} style={{ ["--lv-ink" as string]: pal.ink, ["--lv-acc" as string]: pal.acc }}>
       <PeachFx />
       <LiveTopBar site={site} capital={capital} />
-      {/* masthead */}
+      {/* masthead: centred (Texas mockup) or logo left with the menu beside it (Michigan mockup) */}
+      {logoLeft ? (
+        <header className="border-b border-[#dde1ea]">
+          <div className="flex items-center justify-between px-2 py-1 md:hidden">
+            <MobileMenu nav={NAV} />
+            <a href="/" aria-label={site.name}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={logo} alt={site.name} width={200} height={100} className="h-[80px] w-auto" />
+            </a>
+            <a href="/search" aria-label="Search" className="flex h-11 w-11 items-center justify-center text-[var(--lv-ink)]"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" aria-hidden><circle cx="10.5" cy="10.5" r="7" /><path d="M16 16l6 6" strokeLinecap="round" /></svg></a>
+          </div>
+          <div className="mx-auto hidden max-w-[1400px] items-center gap-8 px-4 py-2 md:flex">
+            <a href="/" aria-label={site.name} className="shrink-0">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={logo} alt={site.name} width={320} height={160} className="h-[120px] w-auto" />
+            </a>
+            <nav className="ml-auto">
+              <ul className="flex items-center gap-8 text-[18px] font-bold text-[var(--lv-ink)]">
+                {nav.map(([l, h]) => <li key={l}><a href={h} className="block whitespace-nowrap py-3 hover:text-[var(--lv-acc)]">{l}</a></li>)}
+                <li><a href="/search" aria-label="Search" className="block py-3 hover:text-[var(--lv-acc)]"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" aria-hidden><circle cx="10.5" cy="10.5" r="7" /><path d="M16 16l6 6" strokeLinecap="round" /></svg></a></li>
+              </ul>
+            </nav>
+          </div>
+        </header>
+      ) : (
+      <>
       <header className="border-b border-[#dde1ea]">
         {/* phone: menu · logo · search */}
         <div className="flex items-center justify-between px-2 py-1 md:hidden">
@@ -151,6 +200,9 @@ export default function HomeLive({
         </nav>
       </header>
 
+      </>
+      )}
+
       {/* breaking bar */}
       <a href={href(breaking)} className="block bg-[var(--lv-acc)] text-white">
         <div className="mx-auto flex max-w-[1400px] items-center gap-3 px-4 py-2 md:gap-4 md:py-3">
@@ -163,27 +215,21 @@ export default function HomeLive({
       </a>
 
       {/* cinematic hero: the day's top stories (Imperial Design System slider) */}
-      <HeroCinema slides={heroSlides} />
+      {logoLeft ? (
+        <section className="mx-auto mt-4 grid max-w-[1400px] gap-5 px-4 lg:grid-cols-[2fr_1fr]">
+          <div className="overflow-hidden"><HeroCinema slides={heroSlides} /></div>
+          {liveColumn}
+        </section>
+      ) : (
+        <HeroCinema slides={heroSlides} />
+      )}
       <Reveal />
 
       <main className="mx-auto max-w-[1400px] px-4">
         {/* lead + live column */}
         {/* brief · local module · counties */}
         <section className="lv-reveal mt-6 grid gap-5 md:grid-cols-3">
-          <aside className="border border-[#dde1ea] border-t-4 border-t-[var(--lv-acc)] bg-[#f6f7fb] p-4">
-            <h2 className="flex items-center gap-2 text-[18px] font-extrabold uppercase text-[var(--lv-acc)]"><span className="h-2.5 w-2.5 rounded-full bg-[var(--lv-acc)]" /> Live updates</h2>
-            <p className="mb-2 text-[13px] text-[#5a6275]">{site.state} stories as they publish</p>
-            <ol className="relative border-l-2 border-[var(--lv-acc)]/30 pl-4">
-              {live.map((a) => (
-                <li key={a.slug} className="relative py-2">
-                  <span className="absolute -left-[22px] top-3.5 h-2.5 w-2.5 rounded-full bg-[var(--lv-acc)]" />
-                  <p className="text-[12px] font-bold text-[var(--lv-acc)]">{hour(a, tz)}</p>
-                  <a href={href(a)} className="text-[15px] font-semibold leading-snug text-[#141b2d] hover:text-[var(--lv-acc)]">{a.title}</a>
-                </li>
-              ))}
-            </ol>
-            <a href="/local-news" className="mt-2 block text-right text-[12px] font-bold uppercase text-[var(--lv-ink)] hover:underline">All {site.state} news →</a>
-          </aside>
+          {!logoLeft && liveColumn}
 
           <div className="border border-[#dde1ea] p-4">
             <SectionTitle>Today in brief</SectionTitle>
@@ -197,7 +243,43 @@ export default function HomeLive({
             </ol>
           </div>
 
-          {storms && ["Texas", "Louisiana", "Mississippi", "Alabama", "Florida", "Georgia", "South Carolina", "North Carolina", "Virginia"].includes(site.state) && (
+          {logoLeft && (
+            <div className="overflow-hidden border border-[#dde1ea]">
+              <div className="flex items-center gap-2 bg-[var(--lv-ink)] px-4 py-3 text-white">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden><path d="M12 2v20M4.9 4.9l14.2 14.2M2 12h20M4.9 19.1L19.1 4.9" strokeLinecap="round" /></svg>
+                <h2 className="text-[17px] font-extrabold uppercase">{winter.length ? `Winter weather: ${site.state}` : `Weather & roads: ${site.state}`}</h2>
+              </div>
+              <div className="p-4">
+                {winter.length ? (
+                  <>
+                    <p className={`${serif.className} text-[22px] font-bold leading-tight`}>{winter[0].event} in effect</p>
+                    <p className="mt-1 text-[14px] text-[#4a5266]">{winter.map((a) => a.area).join("; ").slice(0, 180)}</p>
+                  </>
+                ) : (
+                  <p className={`${serif.className} text-[20px] font-bold leading-tight`}>No winter storm warnings in {site.state} right now.</p>
+                )}
+                {capital && (
+                  <div className="mt-3 grid grid-cols-2 gap-3 border-t border-[#e3e6ee] pt-3 text-[13px]">
+                    <p><b className="block text-[var(--lv-ink)]">{capital.city} now</b>{capital.temp}° · {capital.short}</p>
+                    {capital.nextName && <p><b className="block text-[var(--lv-ink)]">{capital.nextName}</b>{capital.nextTemp}° · {capital.nextShort}</p>}
+                  </div>
+                )}
+                <p className="mt-2 text-[11px] text-[#6b7386]">National Weather Service · updated {new Date().toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: tz, timeZoneName: "short" })}</p>
+                <div className="mt-3 grid grid-cols-2 gap-2 text-center text-[13px] font-bold">
+                  <a href={`https://alerts.weather.gov/search?area=${site.stateAbbr}`} target="_blank" rel="noopener" className="bg-[var(--lv-ink)] py-2 text-white hover:brightness-110">Full forecast &amp; alerts</a>
+                  {ROADS[site.state] && <a href={ROADS[site.state]![1]} target="_blank" rel="noopener" className="border border-[var(--lv-ink)] py-2 text-[var(--lv-ink)] hover:bg-[#f6f7fb]">{ROADS[site.state]![0]} road conditions ↗</a>}
+                </div>
+              </div>
+            </div>
+          )}
+          {logoLeft && (
+            <div className="border border-[#dde1ea] p-4">
+              <SectionTitle>Your county</SectionTitle>
+              <p className="mb-2 text-[13px] text-[#5a6275]">News, weather alerts and more for all {counties.length} {site.state} counties.</p>
+              <CountySearch state={site.state} counties={counties} popular={popularCounties} />
+            </div>
+          )}
+          {!logoLeft && storms && ["Texas", "Louisiana", "Mississippi", "Alabama", "Florida", "Georgia", "South Carolina", "North Carolina", "Virginia"].includes(site.state) && (
             <div className="overflow-hidden border border-[#dde1ea]">
               <div className="bg-[var(--lv-ink)] px-4 py-3 text-white">
                 <h2 className="text-[17px] font-extrabold uppercase">Hurricane tracker</h2>
@@ -282,7 +364,7 @@ export default function HomeLive({
         )}
 
         {/* your county */}
-        <section className="lv-reveal mt-6 grid items-start gap-6 bg-gradient-to-r from-[#eef2fa] to-[#f7f8fc] p-5 md:grid-cols-[1fr_2fr]">
+        {!logoLeft && <section className="lv-reveal mt-6 grid items-start gap-6 bg-gradient-to-r from-[#eef2fa] to-[#f7f8fc] p-5 md:grid-cols-[1fr_2fr]">
           <div className="flex items-start gap-3">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={`/logos/outline/${site.slug}.svg`} alt="" className="h-14 w-14 shrink-0" />
@@ -292,7 +374,7 @@ export default function HomeLive({
             </div>
           </div>
           <CountySearch state={site.state} counties={counties} popular={popularCounties} />
-        </section>
+        </section>}
 
         {/* official weather alerts */}
         {alerts && alerts.length > 0 && (
