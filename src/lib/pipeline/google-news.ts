@@ -78,6 +78,19 @@ export const STATE_CITIES: Record<string, string[]> = {
   Wyoming: ["Cheyenne", "Casper", "Laramie", "Jackson Hole"],
 };
 
+/** Teams for the states whose facts in config/state-data.ts do not list them yet. */
+const TEAMS: Record<string, string[]> = {
+  Texas: ["Dallas Cowboys", "Houston Texans", "Texas Longhorns", "Texas A&M Aggies", "Houston Astros", "Texas Rangers", "Dallas Mavericks", "Houston Rockets", "San Antonio Spurs", "Dallas Stars", "Baylor Bears", "TCU Horned Frogs", "Texas Tech Red Raiders", "Houston Cougars"],
+  California: ["Los Angeles Rams", "San Francisco 49ers", "Los Angeles Chargers", "Los Angeles Dodgers", "San Francisco Giants", "San Diego Padres", "Los Angeles Lakers", "Golden State Warriors", "LA Clippers", "Sacramento Kings", "USC Trojans", "UCLA Bruins", "Cal Golden Bears", "Stanford Cardinal", "Los Angeles Kings", "San Jose Sharks", "Anaheim Ducks"],
+  Florida: ["Miami Dolphins", "Tampa Bay Buccaneers", "Jacksonville Jaguars", "Miami Heat", "Orlando Magic", "Tampa Bay Lightning", "Florida Panthers", "Tampa Bay Rays", "Miami Marlins", "Florida Gators", "Florida State Seminoles", "Miami Hurricanes", "UCF Knights"],
+  Georgia: ["Atlanta Falcons", "Atlanta Braves", "Atlanta Hawks", "Atlanta United", "Georgia Bulldogs", "Georgia Tech Yellow Jackets", "Atlanta Dream", "Georgia State Panthers"],
+  "New York": ["New York Giants", "New York Jets", "Buffalo Bills", "New York Yankees", "New York Mets", "New York Knicks", "Brooklyn Nets", "New York Rangers", "New York Islanders", "Buffalo Sabres", "Syracuse Orange", "New York Liberty"],
+  Arizona: ["Arizona Cardinals", "Arizona Diamondbacks", "Phoenix Suns", "Phoenix Mercury", "Arizona State Sun Devils", "Arizona Wildcats", "Northern Arizona Lumberjacks"],
+  Iowa: ["Iowa Hawkeyes", "Iowa State Cyclones", "Northern Iowa Panthers", "Drake Bulldogs", "Iowa Cubs", "Iowa Wolves"],
+  Montana: ["Montana Grizzlies", "Montana State Bobcats", "Billings Mustangs", "Missoula PaddleHeads"],
+  Hawaii: ["Hawaii Rainbow Warriors", "Hawaii Rainbow Wahine", "UH Manoa", "Sony Open in Hawaii"],
+};
+
 /**
  * The searches run for a state, each tied to the section it feeds.
  *
@@ -112,7 +125,12 @@ export function stateQueries(state: string, round = 0): Array<{ q: string; secti
   if (towns.length) out.push({ q: `(${orQ(towns)}) ${s}`, section: "local-news" });
   out.push({ q: `${s} (business OR jobs OR economy OR company)`, section: "business" });
   if (shire.length) out.push({ q: `(${orQ(shire)}) ${s}`, section: "local-news" });
-  out.push({ q: `${s} (football OR basketball OR baseball OR "high school")`, section: "sports" });
+  // sports by the state's own teams (pro and college), four a visit in rotation,
+  // plus high-school sports
+  const teams = TEAMS[state] || STATE_FACTS[state]?.teams || [];
+  const squad = group(teams, 4, round);
+  if (squad.length) out.push({ q: `(${orQ(squad)}) ${s}`, section: "sports" });
+  out.push({ q: `${s} ("high school" OR prep) (football OR basketball OR volleyball OR soccer)`, section: "sports" });
   out.push({ q: `${s} (festival OR restaurant OR museum OR "things to do")`, section: "life" });
   return out;
 }
