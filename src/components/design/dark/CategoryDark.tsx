@@ -1,4 +1,6 @@
 import type { SiteConfig } from "@/config/site-config";
+import PremiumFx from "../extras/PremiumFx";
+import { NAV as PNAV_ALL } from "../live/shared";
 import type { HomeArticle } from "@/lib/homepage-data";
 import type { CityWeather } from "@/lib/local-data";
 import { TZ, href, hour, ago, srcSetOf } from "../live/shared";
@@ -81,6 +83,7 @@ export default function CategoryDark({ site, slug, label, stories, latestState, 
     <div className={`${mont.className} ${spectral.variable} min-h-screen overflow-x-hidden bg-[var(--dk-bg)] text-[#e9ddd3]`} style={dkVars(site)}>
       <noscript><style>{`.pc-in{opacity:1!important;translate:none!important}.pc-in *{opacity:1!important;transform:none!important;clip-path:none!important}`}</style></noscript>
       <PeachFx />
+      <PremiumFx logo={`/logos/${site.slug}.svg`} name={site.name} nav={PNAV_ALL.map(([l, h]) => [l, h === "#weather" ? "/#weather" : h] as [string, string])} />
       <DkTopBar site={site} capital={capital} />
       <DkHeader site={site} MobileMenu={MobileMenu} compact active={slug} />
 

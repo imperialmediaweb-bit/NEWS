@@ -1,4 +1,6 @@
 import type { SiteConfig } from "@/config/site-config";
+import PremiumFx from "../extras/PremiumFx";
+import { NAV as PNAV_ALL } from "../live/shared";
 import type { HomeArticle } from "@/lib/homepage-data";
 import type { CityWeather } from "@/lib/local-data";
 import { TZ, href, hour, ago, srcSetOf } from "../live/shared";
@@ -90,6 +92,7 @@ export default function CategoryWestern({
     <div className={`${lora.className} ${zilla.variable} min-h-screen overflow-x-hidden ws-paper text-[#1a1a1a]`} style={wsVars(site)}>
       <noscript><style>{`.pc-in{opacity:1!important;translate:none!important}.pc-in *{opacity:1!important;transform:none!important;clip-path:none!important}`}</style></noscript>
       <PeachFx />
+      <PremiumFx logo={`/logos/${site.slug}.svg`} name={site.name} nav={PNAV_ALL.map(([l, h]) => [l, h === "#weather" ? "/#weather" : h] as [string, string])} />
       <WsTopBar site={site} capital={capital} />
       <WsHeader site={site} MobileMenu={MobileMenu} compact active={slug} />
 

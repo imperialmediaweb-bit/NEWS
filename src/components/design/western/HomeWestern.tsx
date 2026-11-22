@@ -1,4 +1,6 @@
 import type { SiteConfig } from "@/config/site-config";
+import PremiumFx, { Ticker } from "../extras/PremiumFx";
+import { NAV as PNAV_ALL } from "../live/shared";
 import type { HomeArticles, HomeArticle } from "@/lib/homepage-data";
 import type { CityWeather, WeatherAlert, GasPrices, LotteryDraw, AirportStatus, Fire, Quake, StateOutline, SnowStation } from "@/lib/local-data";
 import CountySearch from "../live/CountySearch";
@@ -116,6 +118,7 @@ export default function HomeWestern({
     <div className={`ws-paper ${lora.className} ${zilla.variable} min-h-screen overflow-x-hidden text-[#2a2a2a]`} style={wsVars(site)}>
       <noscript><style>{`.pc-in{opacity:1!important;translate:none!important}.pc-in *{opacity:1!important;transform:none!important;clip-path:none!important}`}</style></noscript>
       <PeachFx />
+      <PremiumFx logo={`/logos/${site.slug}.svg`} name={site.name} nav={PNAV_ALL.map(([l, h]) => [l, h === "#weather" ? "/#weather" : h] as [string, string])} />
       <WsTopBar site={site} capital={capital} />
       <WsHeader site={site} MobileMenu={MobileMenu} />
 
@@ -127,6 +130,8 @@ export default function HomeWestern({
           <span className="hidden pr-4 text-[12px] italic text-[#6b5d45] sm:block">Updated {hour(breaking, tz)}</span>
         </a>
       </div>
+
+      <Ticker items={articles.latestPosts.slice(0, 10).map((a) => ({ href: href(a), title: a.title, time: hour(a, tz) }))} />
 
       <main className={W}>
         {/* the opening, set like a western poster: the lead headline across the

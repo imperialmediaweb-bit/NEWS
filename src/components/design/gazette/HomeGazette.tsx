@@ -1,4 +1,6 @@
 import type { SiteConfig } from "@/config/site-config";
+import PremiumFx, { Ticker } from "../extras/PremiumFx";
+import { NAV as PNAV_ALL } from "../live/shared";
 import type { HomeArticles, HomeArticle } from "@/lib/homepage-data";
 import type { CityWeather, WeatherAlert, GasPrices, LotteryDraw, AirportStatus, StateOutline, Drought } from "@/lib/local-data";
 import CountySearch from "../live/CountySearch";
@@ -126,6 +128,7 @@ export default function HomeGazette({
     <div className={`${mulish.className} ${merri.variable} min-h-screen overflow-x-hidden bg-[var(--gz-paper)] text-[#2b2414]`} style={gzVars(site)}>
       <noscript><style>{`.pc-in{opacity:1!important;translate:none!important}.pc-in *{opacity:1!important;transform:none!important;clip-path:none!important}`}</style></noscript>
       <PeachFx />
+      <PremiumFx logo={`/logos/${site.slug}.svg`} name={site.name} nav={PNAV_ALL.map(([l, h]) => [l, h === "#weather" ? "/#weather" : h] as [string, string])} />
       <GzTopBar site={site} capital={capital} />
       <GzHeader site={site} MobileMenu={MobileMenu} />
 
@@ -137,6 +140,8 @@ export default function HomeGazette({
           <span className="pr-4 text-[22px] text-[#a06f00]" aria-hidden>›</span>
         </a>
       </div>
+
+      <Ticker items={articles.latestPosts.slice(0, 10).map((a) => ({ href: href(a), title: a.title, time: hour(a, tz) }))} />
 
       <main className={W}>
         {/* slider with the lead headline below · today in brief */}

@@ -1,4 +1,6 @@
 import type { SiteConfig } from "@/config/site-config";
+import PremiumFx, { Ticker } from "../extras/PremiumFx";
+import { NAV as PNAV_ALL } from "../live/shared";
 import type { HomeArticles, HomeArticle } from "@/lib/homepage-data";
 import type { CityWeather, WeatherAlert, GasPrices, LotteryDraw, AirportStatus, Quake, VolcanoStatus, Buoy } from "@/lib/local-data";
 import CountySearch from "../live/CountySearch";
@@ -115,6 +117,7 @@ export default function HomeCoastal({
     <div className={`${nunito.className} ${crimson.variable} min-h-screen overflow-x-hidden bg-white text-[#24323c]`} style={coVars(site)}>
       <noscript><style>{`.pc-in{opacity:1!important;translate:none!important}.pc-in *{opacity:1!important;transform:none!important;clip-path:none!important}`}</style></noscript>
       <PeachFx />
+      <PremiumFx logo={`/logos/${site.slug}.svg`} name={site.name} nav={PNAV_ALL.map(([l, h]) => [l, h === "#weather" ? "/#weather" : h] as [string, string])} />
       <CoTopBar site={site} capital={capital} />
       <CoHeader site={site} MobileMenu={MobileMenu} />
 
@@ -126,6 +129,8 @@ export default function HomeCoastal({
           <span className="hidden pr-4 text-[13px] font-bold text-[var(--co-acc)] sm:block">{ago(breaking)} ›</span>
         </a>
       </div>
+
+      <Ticker items={articles.latestPosts.slice(0, 10).map((a) => ({ href: href(a), title: a.title, time: hour(a, tz) }))} />
 
       <main className={W}>
         {/* slider with the lead headline below · today in brief */}

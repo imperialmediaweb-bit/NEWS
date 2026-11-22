@@ -1,4 +1,6 @@
 import type { SiteConfig } from "@/config/site-config";
+import PremiumFx, { Ticker } from "../extras/PremiumFx";
+import { NAV as PNAV_ALL } from "../live/shared";
 import type { HomeArticles, HomeArticle } from "@/lib/homepage-data";
 import type { CityWeather, Storm, WeatherAlert, GasPrices, LotteryDraw, AirportStatus, Launch } from "@/lib/local-data";
 import CountySearch from "./CountySearch";
@@ -144,6 +146,7 @@ export default function HomeLive({
   return (
     <div className={`${sans.className} min-h-screen overflow-x-hidden bg-white text-[#1b2233]`} style={{ ["--lv-ink" as string]: pal.ink, ["--lv-acc" as string]: pal.acc }}>
       <PeachFx />
+      <PremiumFx logo={`/logos/${site.slug}.svg`} name={site.name} nav={PNAV_ALL.map(([l, h]) => [l, h === "#weather" ? "/#weather" : h] as [string, string])} />
       <LiveTopBar site={site} capital={capital} />
       {/* masthead: centred (Texas mockup) or logo left with the menu beside it (Michigan mockup) */}
       {logoLeft ? (
@@ -224,6 +227,8 @@ export default function HomeLive({
         <HeroCinema slides={heroSlides} />
       )}
       <Reveal />
+
+      <Ticker items={articles.latestPosts.slice(0, 10).map((a) => ({ href: href(a), title: a.title, time: hour(a, tz) }))} />
 
       <main className="mx-auto max-w-[1400px] px-4">
         {/* lead + live column */}

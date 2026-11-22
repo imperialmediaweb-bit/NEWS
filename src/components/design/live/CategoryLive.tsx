@@ -1,4 +1,6 @@
 import type { SiteConfig } from "@/config/site-config";
+import PremiumFx from "../extras/PremiumFx";
+import { NAV as PNAV_ALL } from "../live/shared";
 import type { HomeArticle } from "@/lib/homepage-data";
 import type { CityWeather } from "@/lib/local-data";
 import { serif, sans, TZ, href, hour, ago, liveVars, LiveTopBar, LiveFooter, LiveCompactHeader } from "./shared";
@@ -76,6 +78,7 @@ export default function CategoryLive({
   return (
     <div className={`${sans.className} min-h-screen bg-white text-[#1b2233]`} style={liveVars(site)}>
       <LiveTopBar site={site} capital={capital} />
+      <PremiumFx logo={`/logos/${site.slug}.svg`} name={site.name} nav={PNAV_ALL.map(([l, h]) => [l, h === "#weather" ? "/#weather" : h] as [string, string])} />
       <LiveCompactHeader site={site} active={slug} MobileMenu={MobileMenu} />
 
       {breaking && (

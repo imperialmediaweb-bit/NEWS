@@ -1,4 +1,6 @@
 import type { SiteConfig } from "@/config/site-config";
+import PremiumFx from "../extras/PremiumFx";
+import { NAV as PNAV_ALL } from "../live/shared";
 import type { HomeArticles, HomeArticle } from "@/lib/homepage-data";
 import type { CityWeather, Storm, WeatherAlert, GasPrices, LotteryDraw, AirportStatus, Launch } from "@/lib/local-data";
 import CountySearch from "../live/CountySearch";
@@ -123,6 +125,7 @@ export default function HomePeach({
     <div className={`${body.className} ${display.variable} min-h-screen overflow-x-hidden bg-[var(--pc-paper)] text-[#2b1d17]`} style={peachVars(site)}>
       <noscript><style>{`.pc-in{opacity:1!important;translate:none!important}.pc-in *{opacity:1!important;transform:none!important;clip-path:none!important}`}</style></noscript>
       <PeachFx />
+      <PremiumFx logo={`/logos/${site.slug}.svg`} name={site.name} nav={PNAV_ALL.map(([l, h]) => [l, h === "#weather" ? "/#weather" : h] as [string, string])} />
       <PeachTopBar site={site} capital={capital} />
       <PeachHeader site={site} MobileMenu={MobileMenu} />
 

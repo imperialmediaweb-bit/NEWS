@@ -374,3 +374,10 @@ a.group:hover [class*="leading-"]:not(.pc-zoom) { text-decoration: underline; te
 .ws-band { isolation: isolate; }
 .x-ticket::before, .x-ticket::after { content: ""; position: absolute; top: 50%; width: 18px; height: 18px; margin-top: -9px; border-radius: 50%; background: var(--x-bg); border: 2px dashed var(--x-line); }
 .x-ticket::before { left: -11px; } .x-ticket::after { right: -11px; }
+/* Premium: aurora on the colour bands, magnetic CTAs, the sticky bar on dark pages */
+.x-numbers, .ws-band::before, .pc-footer { background-size: 200% 200%; animation: x-aurora 18s ease-in-out infinite alternate; }
+@keyframes x-aurora { from { background-position: 0% 0%; } to { background-position: 100% 100%; } }
+[data-slide-cta], .x-magnet { transition: translate .25s cubic-bezier(.2,.7,.2,1), transform .25s; }
+.is-magnet { transition: translate .08s linear; }
+.x-ticker { font-family: inherit; }
+@media (prefers-reduced-motion: reduce) { .x-numbers, .ws-band::before, .pc-footer { animation: none; } }

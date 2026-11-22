@@ -1,4 +1,6 @@
 import type { SiteConfig } from "@/config/site-config";
+import PremiumFx, { Ticker } from "../extras/PremiumFx";
+import { NAV as PNAV_ALL } from "../live/shared";
 import type { HomeArticles, HomeArticle } from "@/lib/homepage-data";
 import type { CityWeather, WeatherAlert, GasPrices, LotteryDraw, AirportStatus, Fire, StateOutline, UvHour } from "@/lib/local-data";
 import CountySearch from "../live/CountySearch";
@@ -120,6 +122,7 @@ export default function HomeDark({
     <div className={`${mont.className} ${spectral.variable} min-h-screen overflow-x-hidden bg-[var(--dk-bg)] text-[#e9ddd3]`} style={dkVars(site)}>
       <noscript><style>{`.pc-in{opacity:1!important;translate:none!important}.pc-in *{opacity:1!important;transform:none!important;clip-path:none!important}`}</style></noscript>
       <PeachFx />
+      <PremiumFx logo={`/logos/${site.slug}.svg`} name={site.name} nav={PNAV_ALL.map(([l, h]) => [l, h === "#weather" ? "/#weather" : h] as [string, string])} />
       <DkTopBar site={site} capital={capital} />
       <DkHeader site={site} MobileMenu={MobileMenu} />
 
@@ -131,6 +134,8 @@ export default function HomeDark({
           <span className="pr-4 text-[20px] text-[var(--dk-cu)]" aria-hidden>›</span>
         </a>
       </div>
+
+      <Ticker items={articles.latestPosts.slice(0, 10).map((a) => ({ href: href(a), title: a.title, time: hour(a, tz) }))} />
 
       <main className={W}>
         {/* lead beside the slider */}

@@ -1,4 +1,6 @@
 import type { SiteConfig } from "@/config/site-config";
+import PremiumFx, { Ticker } from "../extras/PremiumFx";
+import { NAV as PNAV_ALL } from "../live/shared";
 import type { HomeArticles, HomeArticle } from "@/lib/homepage-data";
 import type { CityWeather, WeatherAlert, GasPrices, LotteryDraw, AirportStatus, SubwayLine, Storm } from "@/lib/local-data";
 import CountySearch from "../live/CountySearch";
@@ -128,6 +130,7 @@ export default function HomeBroadsheet({
     <div className={`${pub.className} ${caslon.variable} min-h-screen overflow-x-hidden bg-[#fdfcf9] text-[#1a1a1a]`} style={bsVars(site)}>
       <noscript><style>{`.pc-in{opacity:1!important;translate:none!important}.pc-in *{opacity:1!important;transform:none!important;clip-path:none!important}`}</style></noscript>
       <PeachFx />
+      <PremiumFx logo={`/logos/${site.slug}.svg`} name={site.name} nav={PNAV_ALL.map(([l, h]) => [l, h === "#weather" ? "/#weather" : h] as [string, string])} />
       <BsTopBar site={site} capital={capital} />
       <BsHeader site={site} MobileMenu={MobileMenu} />
 
@@ -139,6 +142,8 @@ export default function HomeBroadsheet({
           <span className="hidden pr-4 text-[12px] text-[#777] sm:block">{hour(breaking, tz)} ET</span>
         </a>
       </div>
+
+      <Ticker items={articles.latestPosts.slice(0, 10).map((a) => ({ href: href(a), title: a.title, time: hour(a, tz) }))} />
 
       <main className={W}>
         {/* front page: lead · slider · brief */}

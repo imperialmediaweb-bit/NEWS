@@ -1,4 +1,6 @@
 import type { SiteConfig } from "@/config/site-config";
+import PremiumFx from "../extras/PremiumFx";
+import { NAV as PNAV_ALL } from "../live/shared";
 import type { HomeArticle } from "@/lib/homepage-data";
 import type { CityWeather, DayForecast } from "@/lib/local-data";
 import type { LiveArticle, LiveRelated } from "../live/ArticleLive";
@@ -74,6 +76,7 @@ export default function ArticleGazette({
     <div className={`${mulish.className} ${merri.variable} min-h-screen overflow-x-hidden bg-[var(--gz-paper)] text-[#2b2414]`} style={gzVars(site)}>
       <noscript><style>{`.pc-in{opacity:1!important;translate:none!important}.pc-in *{opacity:1!important;transform:none!important;clip-path:none!important}`}</style></noscript>
       <PeachFx />
+      <PremiumFx logo={`/logos/${site.slug}.svg`} name={site.name} nav={PNAV_ALL.map(([l, h]) => [l, h === "#weather" ? "/#weather" : h] as [string, string])} />
       <ReadingProgress target="#gz-story" />
       <GzTopBar site={site} capital={forecast?.now} />
       <GzHeader site={site} MobileMenu={MobileMenu} active={categorySlug} />

@@ -1,4 +1,6 @@
 import type { SiteConfig } from "@/config/site-config";
+import PremiumFx from "../extras/PremiumFx";
+import { NAV as PNAV_ALL } from "../live/shared";
 import type { HomeArticle } from "@/lib/homepage-data";
 import type { CityWeather, DayForecast } from "@/lib/local-data";
 import { serif, sans, TZ, href, hour, WxIcon, NAV, liveVars, LiveTopBar, LiveFooter } from "./shared";
@@ -94,6 +96,7 @@ export default function ArticleLive({
   return (
     <div className={`${sans.className} min-h-screen bg-white text-[#1b2233]`} style={liveVars(site)}>
       <LiveTopBar site={site} capital={forecast?.now} />
+      <PremiumFx logo={`/logos/${site.slug}.svg`} name={site.name} nav={PNAV_ALL.map(([l, h]) => [l, h === "#weather" ? "/#weather" : h] as [string, string])} />
 
       {/* compact masthead: logo left, menu right */}
       <header className="border-b border-[#dde1ea]">
