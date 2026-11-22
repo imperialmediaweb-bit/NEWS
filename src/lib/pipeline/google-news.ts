@@ -194,3 +194,30 @@ export function splitPublisher(item: FeedItem): { title: string; publisher: stri
   const m = item.title.match(/^(.*)\s+-\s+([^-]{2,80})$/);
   return m ? { title: m[1].trim(), publisher: m[2].trim() } : { title: item.title, publisher: item.source || "" };
 }
+
+const trendCache = new Map<string, { at: number; terms: string[] }>();
+
+/**
+ * What people in the state are searching Google for today (Google Trends'
+ * daily trending searches for the state), turned into news searches tied to
+ * the state. Cached for an hour; an empty list if Trends does not answer.
+ * The stories still go through the same relevance check and rewrite rules.
+ */
+export async function trendQueries(state: string, stateAbbr: string, n = 3): Promise<Array<{ q: string; section: string; max?: number }>> {
+  const hit = trendCache.get(stateAbbr);
+  let terms = hit && Date.now() - hit.at < 3600e3 ? hit.terms : null;
+  if (!terms) {
+    try {
+      const res = await fetch(`https://trends.google.com/trending/rss?geo=US-${stateAbbr}`, {
+        headers: { "User-Agent": "Mozilla/5.0 (compatible; StateExpressNewsroom/1.0)" },
+        signal: AbortSignal.timeout(10000),
+      });
+      const xml = res.ok ? await res.text() : "";
+      terms = Array.from(xml.matchAll(/<item>[\s\S]*?<title>([^<]{3,80})<\/title>/g)).map((m) => m[1].trim());
+    } catch {
+      terms = [];
+    }
+    trendCache.set(stateAbbr, { at: Date.now(), terms });
+  }
+  return terms.slice(0, n).map((t) => ({ q: `"${t.replace(/"/g, "")}" "${state}"`, section: "local-news", max: 2 }));
+}

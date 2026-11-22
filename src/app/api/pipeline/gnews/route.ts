@@ -4,7 +4,7 @@ import pool from "@/lib/db";
 import { parseFeed } from "@/lib/pipeline/rss-parser";
 import { duplicateReason, insertFeedItem, loadDedupContext } from "@/lib/pipeline/dedup";
 import { isRelevantToState } from "@/lib/pipeline/relevance";
-import { gnewsSearchUrl, stateQueries, resolveGoogleNews, skippableHost, splitPublisher, googlePaused } from "@/lib/pipeline/google-news";
+import { gnewsSearchUrl, stateQueries, trendQueries, resolveGoogleNews, skippableHost, splitPublisher, googlePaused } from "@/lib/pipeline/google-news";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 300;
@@ -25,7 +25,8 @@ export const maxDuration = 300;
  *
  * At most PER_STATE stories per state per run, so the rewrite bill stays known.
  */
-const PER_STATE = 12;
+// 12 from the standing searches plus up to 6 from what the state is searching today
+const PER_STATE = 18;
 const PER_QUERY = 5;
 const STATES_PER_SLOT = 5;
 
@@ -73,7 +74,12 @@ export async function GET(req: NextRequest) {
 
   for (const site of chosen) {
     const r = (report[site.state] = { found: 0, known: 0, unresolved: 0, skippedHost: 0, offState: 0, queued: 0, examples: [] as string[] });
-    for (const { q, section } of stateQueries(site.state, Number.isFinite(slot) ? slot : Math.floor(Date.now() / 1800000))) {
+    // what the state is searching Google for today first, then the standing searches
+    const queries: Array<{ q: string; section: string; max?: number }> = [
+      ...(await trendQueries(site.state, site.stateAbbr)),
+      ...stateQueries(site.state, Number.isFinite(slot) ? slot : Math.floor(Date.now() / 1800000)),
+    ];
+    for (const { q, section, max } of queries) {
       if (r.queued >= PER_STATE || googlePaused()) break;
       let items;
       try {
@@ -83,7 +89,7 @@ export async function GET(req: NextRequest) {
       }
       let taken = 0;
       for (const raw of items) {
-        if (taken >= PER_QUERY || r.queued >= PER_STATE || googlePaused()) break;
+        if (taken >= (max ?? PER_QUERY) || r.queued >= PER_STATE || googlePaused()) break;
         r.found++;
         const { title, publisher } = splitPublisher(raw);
         // Known by title already? Then skip it before spending a Google call.
