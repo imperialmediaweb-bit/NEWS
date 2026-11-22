@@ -19,6 +19,8 @@ export const OFFICIAL_FEEDS: Record<string, StateFeed[]> = {
     { url: "https://dojmt.gov/feed/", publisher: "Montana Department of Justice", medianChars: 0 },
     { url: "https://www.ci.missoula.mt.us/RSSFeed.aspx?ModID=1", publisher: "City of Missoula", medianChars: 0 },
   ],
+  Idaho: [{ url: "https://isp.idaho.gov/feed/", publisher: "Idaho State Police", medianChars: 0 }],
+  Kansas: [{ url: "https://kansashighwaypatrol.gov/feed/", publisher: "Kansas Highway Patrol", medianChars: 0 }],
   Hawaii: [{ url: "https://governor.hawaii.gov/category/newsroom/feed/", publisher: "Office of the Hawaii Governor", medianChars: 0 }],
   Alabama: [{ url: "https://www.alabamaag.gov/feed/", publisher: "Alabama Attorney General", medianChars: 0 }],
   "New Mexico": [{ url: "https://www.dps.nm.gov/feed/", publisher: "New Mexico Department of Public Safety", medianChars: 0 }],
@@ -34,6 +36,14 @@ export const OFFICIAL_FEEDS: Record<string, StateFeed[]> = {
  */
 export const OFFICIAL_PAGES: Record<string, { url: string; publisher: string }[]> = {
   Ohio: [{ url: "https://ohioattorneygeneral.gov/Media/News-Releases", publisher: "Ohio Attorney General" }],
+  Arizona: [
+    { url: "https://azgovernor.gov/news-releases", publisher: "Office of the Arizona Governor" },
+    { url: "https://www.azdps.gov/news", publisher: "Arizona Department of Public Safety" },
+  ],
+  Connecticut: [{ url: "https://portal.ct.gov/governor/news/press-releases", publisher: "Office of the Connecticut Governor" }],
+  Idaho: [{ url: "https://www.ag.idaho.gov/newsroom/", publisher: "Idaho Attorney General" }],
+  Louisiana: [{ url: "https://nola.gov/news/", publisher: "City of New Orleans" }],
+  Mississippi: [{ url: "https://governorreeves.ms.gov/news/", publisher: "Office of the Mississippi Governor" }],
   Colorado: [
     { url: "https://www.colorado.gov/governor/news", publisher: "Office of the Colorado Governor" },
     { url: "https://www.codot.gov/news", publisher: "Colorado Department of Transportation" },
