@@ -123,7 +123,15 @@ export function stateQueries(state: string, round = 0): Array<{ q: string; secti
     { q: `${s} (legislature OR governor OR lawmakers OR election)`, section: "politics" },
   ];
   if (towns.length) out.push({ q: `(${orQ(towns)}) ${s}`, section: "local-news" });
-  out.push({ q: `${s} (business OR jobs OR economy OR company)`, section: "business" });
+  // business the way a local paper covers it: who is hiring, cutting, building,
+  // moving, opening or closing in the state, two of the four angles a visit
+  const angles = [
+    `(hiring OR "new jobs" OR layoffs OR "job cuts" OR WARN)`,
+    `(plant OR factory OR expansion OR investment OR headquarters OR relocate)`,
+    `(opening OR closing OR "grand opening" OR "to close" OR store OR restaurant)`,
+    `(acquisition OR merger OR "files for bankruptcy" OR IPO OR "company announces")`,
+  ];
+  for (const a of group(angles, 2, round)) out.push({ q: `${s} ${a}`, section: "business" });
   if (shire.length) out.push({ q: `(${orQ(shire)}) ${s}`, section: "local-news" });
   // sports by the state's own teams (pro and college), four a visit in rotation,
   // plus high-school sports
