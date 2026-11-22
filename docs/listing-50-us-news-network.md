@@ -1,13 +1,22 @@
-# FOR SALE: 50 US State News Websites + MediaChief Press-Release Platform — Complete Automated Local Media Business
+# Own a 50-State American News Network — Built, Automated and Ready to Monetize
 
-**Asking price:** $50,000 · **Revenue:** pre-revenue (all monetization built and live) · **Fully online, run from anywhere**
+**Asking price: $50,000** · Pre-revenue · Fully online · Fast 24–72 h handover · Free support after the sale
 
-Two businesses sold together:
+**What you get in one purchase**
+- **49 live news websites**, one for (almost) every US state, each with its **own unique design**, logo and local data
+- **MediaChief (media-chief.com)** — a live press-release marketplace that sells publication across the network ($150–$1,500 packages)
+- **A news engine that runs itself 24/7**: 321 local outlets, official sources (governors, attorneys general, police, city halls) on 33 states, Google Trends per state, every city and county, every pro and college team — rewritten with accuracy safeguards and published automatically
+- **Money features already switched on**: $49 sponsored stories and $25 obituaries paid by card (Stripe), advertise page, daily newsletter per state, alerts & closings pages, AdSense-ready ad slots
+- **Search engines already wired in**: Google Search Console and Bing on all 49 sites, IndexNow, Google News sitemaps, city/county/team landing pages, Discover-ready images
+- **Modern custom code** — Next.js 14, TypeScript, PostgreSQL, Cloudflare, Railway — no WordPress, no plugins
 
-1. **The "Express" network** — a news website for every US state (Texas Express, California Express, Florida Express, New York Express…), each with its own design, fully automated news gathering, AI rewriting with strict accuracy rules, local data, SEO and built-in revenue features.
-2. **MediaChief (media-chief.com)** — a live press-release distribution platform that sells publication across the 50 Express newspapers (packages from $150 to $1,500), with customer accounts, Stripe checkout, admin and order tracking.
+**Why this is a good buy**
+- **Building it again** — 9 design families, the multi-site engine, 300+ source integrations, AI pipeline with accuracy rules, payments, newsletter, admin and reports — would take a developer team many months; agency quotes for comparable custom news platforms start well above the asking price
+- **One owner, one admin, 50 markets**: every local business, school, church, funeral home and event organizer in the US is a potential customer for sponsored stories, obituaries and press releases
+- **Low running cost** (about $50–150 a month) and **no daily manual work** — your time goes into selling and growing, not into publishing
+- **The hard part is done.** Traffic is early because all the effort so far went into building; the growth is the opportunity for the next owner
 
-Everything is custom code (Next.js 14 + TypeScript + PostgreSQL), no WordPress, no plugins. Sold honestly as a pre-revenue platform: traffic and revenue are early and every number below can be verified in Search Console, Analytics and Stripe.
+**Who it is for**: media entrepreneurs, local-advertising and PR agencies, SEO and content companies, newspaper groups wanting a ready digital network, investors looking for a scalable media asset.
 
 ---
 
@@ -135,4 +144,4 @@ The developer who built both platforms stays available:
 ## Why selling
 Both platforms are built and running; growing traffic and selling local advertising and press releases across 50 states needs an owner with the time and budget to focus on it.
 
-**Serious buyers only.** Live walkthrough of the sites, admin, Search Console and code on request.
+**Ready to talk?** Message for a live walkthrough of the sites, the admin, Search Console and the code. Serious buyers can see everything before they decide.
