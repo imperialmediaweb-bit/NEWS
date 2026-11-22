@@ -710,3 +710,33 @@ export async function getSignature(state: string, abbr: string): Promise<Signatu
   }
   return null;
 }
+
+export interface FullAlert {
+  id: string;
+  event: string;
+  headline: string;
+  severity: string;
+  area: string;
+  effective: string;
+  expires: string;
+  instruction: string;
+}
+
+/** Every active NWS alert for the state, most severe first (the /alerts page). */
+export async function getAllStateAlerts(abbr: string): Promise<FullAlert[] | null> {
+  return cached(`nwsalerts-all:${abbr}`, async () => {
+    const j = await getJson(`https://api.weather.gov/alerts/active?area=${abbr}`);
+    return ((j.features || []) as Array<{ id: string; properties: Record<string, string> }>)
+      .map((f) => ({
+        id: f.id,
+        event: f.properties.event,
+        headline: f.properties.headline || f.properties.event,
+        severity: f.properties.severity || "Unknown",
+        area: (f.properties.areaDesc || "").replace(/;\s*/g, ", "),
+        effective: f.properties.effective || f.properties.onset || "",
+        expires: f.properties.ends || f.properties.expires || "",
+        instruction: (f.properties.instruction || "").replace(/\s+/g, " ").trim().slice(0, 600),
+      }))
+      .sort((a, b) => SEVERITY.indexOf(a.severity) - SEVERITY.indexOf(b.severity));
+  });
+}

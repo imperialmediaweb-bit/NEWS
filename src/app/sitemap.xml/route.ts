@@ -44,6 +44,7 @@ export async function GET(request: NextRequest) {
     { url: `${baseUrl}/entertainment`, lastModified: now, changeFrequency: "daily", priority: 0.7 },
     { url: `${baseUrl}/business`, lastModified: now, changeFrequency: "daily", priority: 0.7 },
     { url: `${baseUrl}/technology`, lastModified: now, changeFrequency: "daily", priority: 0.7 },
+    { url: `${baseUrl}/alerts`, lastModified: now, changeFrequency: "hourly", priority: 0.8 },
     { url: `${baseUrl}/submit`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
     { url: `${baseUrl}/opinion`, lastModified: now, changeFrequency: "daily", priority: 0.6 },
     // Hub pages — topic cluster authority pages

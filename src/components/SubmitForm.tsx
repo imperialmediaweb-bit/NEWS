@@ -7,6 +7,7 @@ const TYPES: [string, string, string][] = [
   ["photo", "Photo or video", "Weather, a fire, a crash scene from a safe distance, a parade, an event."],
   ["event", "Community event", "A festival, fair, concert, fundraiser or meeting coming up."],
   ["achievement", "Local achievement", "A student award, a high-school title, a scholarship, a milestone."],
+  ["closing", "Closing or delay", "A school, office, church or business closed or opening late (weather, outage)."],
 ];
 
 /** The reader submission form. Everything goes to the newsroom's review queue first. */
@@ -69,9 +70,9 @@ export default function SubmitForm({ siteName, state, accent }: { siteName: stri
           City or town in {state}
           <input name="city" maxLength={120} className={input} />
         </label>
-        {type === "event" && (
+        {(type === "event" || type === "closing") && (
           <label className="block text-[14px] font-semibold">
-            Date and time of the event
+            {type === "closing" ? "Which day(s)" : "Date and time of the event"}
             <input name="event_date" maxLength={60} className={input} placeholder="Sat, Dec 6, 10 am–4 pm" />
           </label>
         )}

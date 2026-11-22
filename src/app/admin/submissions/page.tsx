@@ -26,7 +26,8 @@ async function decide(formData: FormData) {
   const { rows } = await pool.query<Row>("SELECT * FROM submissions WHERE id = $1 AND status = 'pending'", [id]);
   const s = rows[0];
   if (!s) return;
-  if (action === "approve") {
+  // a closing is shown as a line on /alerts, not rewritten into a story
+  if (action === "approve" && s.type !== "closing") {
     const section = s.type === "event" ? "life" : s.type === "achievement" ? "local-news" : "local-news";
     const facts = [
       s.city ? `Place: ${s.city}, ${s.state}.` : `State: ${s.state}.`,

@@ -11,6 +11,7 @@ export const SUBMISSION_TYPES = {
   photo: "Photo or video",
   event: "Community event",
   achievement: "Local achievement",
+  closing: "Closing or delay",
 } as const;
 export type SubmissionType = keyof typeof SUBMISSION_TYPES;
 
