@@ -3,7 +3,7 @@ import crypto from "crypto";
 import pool from "@/lib/db";
 import { getSiteByDomain } from "@/config/sites";
 import { r2Put, r2Ready, r2Url } from "@/lib/r2";
-import { ensurePaidTable, PRODUCTS, stripe, type Product } from "@/lib/paid";
+import { ensurePaidTable, PRODUCTS, stripe, bannedReason, type Product } from "@/lib/paid";
 
 /** POST /api/paid/checkout (multipart) — saves the order, returns the Stripe Checkout URL. */
 export const dynamic = "force-dynamic";
@@ -30,6 +30,10 @@ export async function POST(req: NextRequest) {
   if (product === "sponsored" && !business) return NextResponse.json({ error: "Please give the business name." }, { status: 400 });
   if (website && !/^https?:\/\//i.test(website)) return NextResponse.json({ error: "The website must start with http:// or https://" }, { status: 400 });
   if (form.get("consent") !== "on") return NextResponse.json({ error: "Please confirm the terms box." }, { status: 400 });
+  if (product === "sponsored") {
+    const banned = bannedReason(title, body, business, website);
+    if (banned) return NextResponse.json({ error: `We don't publish sponsored content about ${banned}. Nothing was charged.` }, { status: 400 });
+  }
 
   let photoUrl: string | null = null;
   const photo = form.get("photo");

@@ -1,7 +1,7 @@
 import { revalidatePath } from "next/cache";
 import pool from "@/lib/db";
 import { sites } from "@/config/sites";
-import { ensurePaidTable, PRODUCTS, stripe, type Product } from "@/lib/paid";
+import { ensurePaidTable, PRODUCTS, stripe, bannedReason, type Product } from "@/lib/paid";
 
 export const dynamic = "force-dynamic";
 
@@ -69,6 +69,7 @@ export default async function PaidPage({ searchParams }: { searchParams: { statu
           <div key={o.id} className="rounded border border-gray-300 bg-white p-4">
             <div className="text-xs uppercase text-gray-500">#{o.id} · {PRODUCTS[o.product]?.name} · ${(o.cents / 100).toFixed(2)} · {sites[o.site_slug]?.name || o.site_slug} · {new Date(o.created_at).toLocaleString("en-US")}</div>
             <h2 className="mt-1 text-lg font-bold">{o.title}</h2>
+            {bannedReason(o.title, o.body, o.business || "", o.website || "") && <p className="mt-1 rounded bg-red-100 p-2 text-sm font-bold text-red-800">⚠ Looks like {bannedReason(o.title, o.body, o.business || "", o.website || "")} — decline and refund.</p>}
             {o.business && <p className="text-sm">Business: <b>{o.business}</b>{o.website ? <> · <a href={o.website} target="_blank" rel="noreferrer" className="text-blue-700 underline">{o.website}</a></> : null}</p>}
             <p className="mt-2 whitespace-pre-wrap text-[15px]">{o.body}</p>
             {o.photo_url && (

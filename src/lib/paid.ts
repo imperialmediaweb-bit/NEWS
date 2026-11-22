@@ -64,3 +64,28 @@ export function verifyStripe(raw: string, header: string, secret: string, tolera
   const got = header.split(",").filter((p) => p.startsWith("v1=")).map((p) => p.slice(3));
   return got.some((g) => g.length === expected.length && crypto.timingSafeEqual(Buffer.from(g), Buffer.from(expected)));
 }
+
+/**
+ * What a sponsored story may not promote. Checked before payment, so nobody is
+ * charged for something that will not run; the editor still reviews the rest.
+ * Google, Stripe and US law all restrict these, and they are what link and
+ * "guest post" sellers push onto local news sites.
+ */
+const BANNED: Array<[RegExp, string]> = [
+  [/\b(cbd|thc|delta[- ]?[89]|cannabis|marijuana|weed|kratom|psilocybin|magic mushrooms?|dispensar(y|ies)|vape|vaping|e-?cig)\b/i, "cannabis, CBD, kratom or vaping products"],
+  [/\b(pills?|tablets?|capsules?|viagra|cialis|tramadol|oxy(codone|contin)|adderall|xanax|ozempic|semaglutide|tirzepatide|steroids?|peptides?|sarms?|no prescription|without (a )?prescription|online pharmacy|weight[- ]loss (pill|supplement|gumm)|keto (pill|gumm)|diet pills?|male enhancement|supplements?)\b/i, "drugs, pills, supplements or online pharmacies"],
+  [/\b(casino|sportsbook|sports betting|bet now|slot machines?|online slots|poker|gambling|lottery tickets? online|sweepstakes casino)\b/i, "gambling or betting"],
+  [/\b(crypto(currency)?|bitcoin|forex|binary options|trading signals?|guaranteed returns?|double your money|airdrop|nft|presale)\b/i, "crypto, forex or investment offers"],
+  [/\b(payday loans?|title loans?|cash advance|bad credit loans?|debt relief|credit repair)\b/i, "payday or high-cost loans and debt relief"],
+  [/\b(escorts?|adult (content|entertainment|toys|videos?)|porn|xxx|onlyfans|dating (app|site|service)s?|hookups?|sugar (daddy|baby))\b/i, "adult or dating services"],
+  [/\b(guns?|firearms?|ammo|ammunition|rifles?|pistols?|knives for sale|weapons?)\b/i, "weapons or ammunition"],
+  [/\b(backlinks?|guest posts?|seo services|link building|dofollow|essay writing|write my essay|fake (id|reviews?)|followers for sale|buy (likes|followers))\b/i, "SEO link selling, essay writing or fake reviews and followers"],
+  [/\b(tobacco|cigarettes?|cigars?|nicotine)\b/i, "tobacco or nicotine"],
+];
+
+/** The reason a sponsored text is refused, or null if it may go to review. */
+export function bannedReason(...texts: string[]): string | null {
+  const t = texts.join(" \n ");
+  for (const [re, label] of BANNED) if (re.test(t)) return label;
+  return null;
+}
