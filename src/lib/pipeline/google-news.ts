@@ -79,7 +79,7 @@ export const STATE_CITIES: Record<string, string[]> = {
 };
 
 /** Teams for the states whose facts in config/state-data.ts do not list them yet. */
-const TEAMS: Record<string, string[]> = {
+export const TEAMS: Record<string, string[]> = {
   Texas: ["Dallas Cowboys", "Houston Texans", "Texas Longhorns", "Texas A&M Aggies", "Houston Astros", "Texas Rangers", "Dallas Mavericks", "Houston Rockets", "San Antonio Spurs", "Dallas Stars", "Baylor Bears", "TCU Horned Frogs", "Texas Tech Red Raiders", "Houston Cougars"],
   California: ["Los Angeles Rams", "San Francisco 49ers", "Los Angeles Chargers", "Los Angeles Dodgers", "San Francisco Giants", "San Diego Padres", "Los Angeles Lakers", "Golden State Warriors", "LA Clippers", "Sacramento Kings", "USC Trojans", "UCLA Bruins", "Cal Golden Bears", "Stanford Cardinal", "Los Angeles Kings", "San Jose Sharks", "Anaheim Ducks"],
   Florida: ["Miami Dolphins", "Tampa Bay Buccaneers", "Jacksonville Jaguars", "Miami Heat", "Orlando Magic", "Tampa Bay Lightning", "Florida Panthers", "Tampa Bay Rays", "Miami Marlins", "Florida Gators", "Florida State Seminoles", "Miami Hurricanes", "UCF Knights"],

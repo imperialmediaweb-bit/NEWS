@@ -130,7 +130,8 @@ export async function POST(req: NextRequest) {
      WHERE id IN (
        SELECT ranked.id FROM (
          SELECT id, state,
-                row_number() OVER (PARTITION BY state ORDER BY created_at DESC) AS rn
+                -- what the state is searching Google for right now is written first
+                row_number() OVER (PARTITION BY state ORDER BY (source_feed = 'gnews:trend') DESC, created_at DESC) AS rn
            FROM feed_items
           WHERE status = 'pending'
             AND created_at > NOW() - INTERVAL '24 hours'

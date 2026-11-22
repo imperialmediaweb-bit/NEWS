@@ -112,7 +112,7 @@ export async function GET(req: NextRequest) {
           if (r.examples.length < 8) r.examples.push(`[${section}] ${title} — ${url}`);
           continue;
         }
-        const id = await insertFeedItem(item, `gnews:${section}`, section, site.state);
+        const id = await insertFeedItem(item, max === 2 && q.startsWith('"') ? `gnews:trend` : `gnews:${section}`, section, site.state);
         if (id) {
           r.queued++;
           if (r.examples.length < 5) r.examples.push(`[${section}] ${title}`);

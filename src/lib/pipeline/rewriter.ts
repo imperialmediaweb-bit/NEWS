@@ -254,6 +254,7 @@ WRITING:
 - Your own sentences and your own structure. Do not copy phrasing from the source, except inside quotation marks where you are quoting someone.
 - A plain, accurate headline describing what happened. No superlatives the facts do not support.
 - Put the place in the headline when the source names it: the city, town or county where it happened (e.g. "Lubbock police arrest..." rather than "Police arrest..."). Use only a place the source gives.
+- Write the headline the way people search for the news: lead with the place and the main name (team, agency, company, person) and the plain fact. Where the source supports it, a reader-question form is fine ("What we know about...", "Why ... closed", "When ... reopens"), but never ask a question the article does not answer.
 - The first paragraph answers who, what, where and when in one or two sentences, with the place and the day as the source states them, so a reader (or a search engine) gets the news from it alone.
 - Third person, straightforward news style.
 

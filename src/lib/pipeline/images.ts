@@ -1,5 +1,7 @@
 import { searchOpenverse, REAL_PHOTO_SUBJECT } from "./free-images";
 import { PLACES } from "./relevance";
+import { TEAMS } from "./google-news";
+import { STATE_FACTS } from "@/config/state-data";
 import allCounties from "@/config/counties/us-counties.json";
 
 interface ImageResult {
@@ -155,6 +157,17 @@ function buildQueryCascade(query: string, category?: string): string[] {
  *
  * Always returns an image — never null.
  */
+/** The state's team a headline names (the full name, or a nickname of three letters or more). */
+function teamIn(title: string, state: string): string | null {
+  const t = title.toLowerCase();
+  const teams = (TEAMS[state] || STATE_FACTS[state]?.teams || []).filter((x) => x.length >= 4).sort((a, b) => b.length - a.length);
+  for (const team of teams) {
+    const esc = team.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    if (new RegExp(`\\b${esc}\\b`).test(t)) return team;
+  }
+  return null;
+}
+
 /** The town or county of the state a headline names, longest names first. */
 function placeOf(title: string, state: string): string | null {
   const t = title.toLowerCase();
@@ -182,6 +195,12 @@ export async function findImage(
     if (place) {
       const real = await searchOpenverse(`${place} ${ctx.state}`, "wikimedia,flickr");
       if (real) return real;
+    }
+    // a team named in the headline: a free-licence photo of the team or its venue
+    const team = teamIn(ctx.title, ctx.state);
+    if (team) {
+      const t = await searchOpenverse(team, "wikimedia,flickr");
+      if (t) return t;
     }
     if (REAL_PHOTO_SUBJECT.test(`${ctx.title} ${query}`)) {
       const subject = await searchOpenverse(query);
