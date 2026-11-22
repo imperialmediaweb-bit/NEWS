@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { sites } from "@/config/sites";
 import pool from "@/lib/db";
 import { getGoogleAccessToken } from "@/lib/google-auth";
+import { generateIndexNowKey } from "@/lib/indexnow";
 
 /**
  * Submit all 50 site sitemaps to search engines.
@@ -15,7 +16,6 @@ import { getGoogleAccessToken } from "@/lib/google-auth";
  * GET  — check results
  */
 
-const INDEXNOW_KEY = "b7d8e9f2a1c4d6e8f0a2b4c6d8e0f2a4";
 
 async function getGSCToken(): Promise<string | null> {
   const email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
@@ -40,21 +40,22 @@ async function submitToGSC(
   sitemapUrl: string
 ): Promise<string> {
   try {
-    const siteUrl = encodeURIComponent(`https://${domain}/`);
+    // the account owns domain properties (sc-domain:); fall back to the URL-prefix one
     const feedpath = encodeURIComponent(sitemapUrl);
-    const url = `https://www.googleapis.com/webmasters/v3/sites/${siteUrl}/sitemaps/${feedpath}`;
-
-    const res = await fetch(url, {
-      method: "PUT",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (res.ok || res.status === 204) return "OK";
-    const body = await res.text();
-    return `FAILED (${res.status}): ${body.slice(0, 120)}`;
+    let last = "";
+    for (const prop of [`sc-domain:${domain}`, `https://${domain}/`]) {
+      const url = `https://www.googleapis.com/webmasters/v3/sites/${encodeURIComponent(prop)}/sitemaps/${feedpath}`;
+      const res = await fetch(url, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+      if (res.ok || res.status === 204) return "OK";
+      last = `FAILED (${res.status}): ${(await res.text()).slice(0, 120)}`;
+    }
+    return last;
   } catch (err) {
     return `ERROR: ${String(err).slice(0, 80)}`;
   }
@@ -87,7 +88,7 @@ async function submitSitemaps() {
     // 1. IndexNow — submit sitemap URL to Bing/Yandex
     try {
       const indexnowRes = await fetch(
-        `https://api.indexnow.org/indexnow?url=${encodeURIComponent(`https://${domain}/sitemap.xml`)}&key=${INDEXNOW_KEY}`,
+        `https://api.indexnow.org/indexnow?url=${encodeURIComponent(`https://${domain}/sitemap.xml`)}&key=${generateIndexNowKey(domain)}&keyLocation=${encodeURIComponent(`https://${domain}/indexnow.txt`)}`,
         { method: "GET" }
       );
       if (!indexnowRes.ok && indexnowRes.status !== 202) {
