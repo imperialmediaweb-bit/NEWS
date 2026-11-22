@@ -34,8 +34,8 @@
 - **Low running cost** (about $50–150 a month) and **no daily manual work** — your time goes into selling and growing, not into publishing
 - **The hard part is done.** Traffic is early because all the effort so far went into building; the growth is the opportunity for the next owner
 
-**You are buying the technology, not just websites**
-The full platform and its source code are part of the sale, with all rights. The same engine can be pointed at **any country, region, city network or niche** (sports, business, real estate, local events) by changing the sources and designs — or licensed white-label to other publishers and agencies. The 49 US sites and MediaChief are the working proof that it runs.
+**You are buying unique, fully customized technology, not just websites**
+Nothing here is a template: every site, design and feature was custom-built for this network. The full platform and its source code are part of the sale, with all rights. The same engine can be pointed at **any country, region, city network or niche** (sports, business, real estate, local events) by changing the sources and designs — or licensed white-label to other publishers and agencies. The 49 US sites and MediaChief are the working proof that it runs.
 
 **Who it is for**: media entrepreneurs, local-advertising and PR agencies, SEO and content companies, newspaper groups wanting a ready digital network, investors looking for a scalable media asset.
 
