@@ -90,6 +90,16 @@ A live B2B site selling press-release publication across the 50 Express newspape
 ## Facebook
 **47 Facebook pages** were created for the states. In late October 2026 Meta restricted them after high-volume automated posting; automated posting is switched off. The pages are included as-is, with no guarantee they can be restored.
 
+## Why traffic is still low
+All the time so far went into building the platform, not into growing the audience: no paid promotion, no outreach, no link building, and search submission was only fixed in November 2026. The infrastructure for growth is finished — a new owner can put 100% of the effort into audience and sales from day one.
+
+## The technology in short
+- **Next.js 14 (App Router) + TypeScript + PostgreSQL**, custom code end to end — no WordPress, no plugins, no themes
+- One codebase serves all 50 sites by domain, each with its own design, colours, logo and data
+- Hosted on Railway; Cloudflare for DNS, cache, email routing, Workers and R2 image storage
+- Fully automated around the clock: source discovery, Google Trends, deduplication, relevance checks, AI rewriting with accuracy safeguards, images with licences, publishing, sitemaps, Google/Bing/IndexNow submission, daily newsletter, alerts — no daily manual work required; the owner only reviews reader submissions and paid placements
+- Clean, documented code; admin reports for every stage
+
 ## Current numbers (honest, verifiable)
 - **Search**: indexing is in progress. Search Console submission was fixed in November 2026; at that point most articles were not yet indexed. ~73 Google clicks network-wide in the 28 days before the fix.
 - **Analytics**: ~100,000 users in 28 days recorded in GA4, but ~97% are "Direct" single-page visits that look automated; real organic, social and AI-assistant visitors were ~2,400. Judge traffic on Search Console.
