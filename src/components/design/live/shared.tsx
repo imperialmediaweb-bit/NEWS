@@ -12,7 +12,8 @@ export const sans = Libre_Franklin({ subsets: ["latin"], weight: ["400", "500", 
 export const PALETTE: Record<string, { ink: string; acc: string }> = {
   "texas-express": { ink: "#002868", acc: "#bf0a30" },
 };
-export { TZ } from "@/config/timezones";
+import { TZ } from "@/config/timezones";
+export { TZ };
 
 export function href(a: HomeArticle) {
   const c = (a.category || "news").toLowerCase().replace(/\s+/g, "-");
