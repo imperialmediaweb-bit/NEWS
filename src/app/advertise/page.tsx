@@ -56,14 +56,14 @@ export default function AdvertisePage() {
               Why Advertise With {site.name}?
             </h2>
             <p>
-              {site.name} is the go-to news source for {site.state} residents. As part of the MediaChief network — a network of 50 state publications — we offer advertisers unmatched access to engaged, local audiences across the country.
+              {site.name} covers news from across {site.state}: local government, public safety, schools, business, sports and weather. Advertising with us puts your business in front of readers looking for what is happening where they live.
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 not-prose my-8">
-              <div className="bg-gray-50 rounded-lg p-5 text-center">
-                <div className="text-3xl font-black text-[var(--accent)]" style={{ fontFamily: "'Oswald', sans-serif" }}>50</div>
-                <div className="text-sm text-gray-600 mt-1">State Publications</div>
-              </div>
+              <a href="/promote" className="block bg-gray-50 rounded-lg p-5 text-center hover:bg-gray-100">
+                <div className="text-3xl font-black text-[var(--accent)]" style={{ fontFamily: "'Oswald', sans-serif" }}>$49</div>
+                <div className="text-sm text-gray-600 mt-1">Sponsored story — order online ›</div>
+              </a>
               <div className="bg-gray-50 rounded-lg p-5 text-center">
                 <div className="text-3xl font-black text-[var(--accent)]" style={{ fontFamily: "'Oswald', sans-serif" }}>Local</div>
                 <div className="text-sm text-gray-600 mt-1">Targeted Audiences</div>
