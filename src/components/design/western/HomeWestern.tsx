@@ -8,7 +8,7 @@ import AlertsBox from "../live/AlertsBox";
 import MobileMenu from "../live/MobileMenu";
 import HeroCinema from "../live/HeroCinema";
 import { TZ, href, hour, ago, WxIcon, TOPIC_RE, srcSetOf } from "../live/shared";
-import PeachFx, { SplitWords } from "../peach/PeachFx";
+import PeachFx from "../peach/PeachFx";
 import AdSlot from "../AdSlot";
 import { popularOf, sportsReOf } from "@/config/state-data";
 import { citiesOf } from "@/lib/local-data";
@@ -97,7 +97,7 @@ export default function HomeWestern({
     return out;
   };
   const pool = articles.pool || articles.latestPosts;
-  const heroSlides = take(articles.heroSide.concat(articles.trending), 5).map((a) => ({ id: a.slug, image: a.img, title: a.title, subtitle: a.summary, eyebrow: a.category.replace(/-/g, " ").toUpperCase(), href: href(a) }));
+  const heroSlides = [lead, ...take(articles.heroSide.concat(articles.trending), 4)].map((a) => ({ id: a.slug, image: a.img, title: a.title, subtitle: a.summary, eyebrow: a.category.replace(/-/g, " ").toUpperCase(), href: href(a) }));
   const brief = take(articles.latestPosts.concat(pool), 5);
   const sec = (key: string, re: RegExp, n: number) => take((sections?.[key] || []).concat(pool.filter((a) => re.test(a.title))), n);
   const pol = sec("politics", TOPIC_RE.politics, 4);
@@ -138,22 +138,8 @@ export default function HomeWestern({
       <Ticker items={articles.latestPosts.slice(0, 10).map((a) => ({ href: href(a), title: a.title, time: hour(a, tz) }))} />
 
       <main className={W}>
-        {/* the opening, set like a western poster: the lead headline across the
-            page in big slab capitals between amber rules, then the slider in a
-            heavy wooden frame beside a navy board with the day's brief */}
-        <section className="mt-6 text-center">
-          <div className="flex items-center justify-center gap-4">
-            <span className="h-[3px] w-16 bg-[var(--ws-acc)] sm:w-32" />
-            <span className={`${alfa.className} text-[13px] uppercase tracking-[.24em] text-[var(--ws-acc)]`}>{lead.category.replace(/-/g, " ")} · {ago(lead)}</span>
-            <span className="h-[3px] w-16 bg-[var(--ws-acc)] sm:w-32" />
-          </div>
-          <a href={href(lead)} className="group mx-auto mt-3 block max-w-[1180px]">
-            <h1 className={`${zilla.className} text-[38px] font-bold uppercase leading-[1.02] tracking-tight text-[var(--ws-ink)] md:text-[64px] group-hover:text-[#a6461f]`}><SplitWords text={lead.title} /></h1>
-            {lead.summary && <p className="mx-auto mt-4 max-w-[820px] text-[18px] italic leading-relaxed text-[#3a3a3a]">{lead.summary}</p>}
-            <p className="mt-3 text-[13px]"><b>{lead.author ? `By ${lead.author}` : site.name}</b></p>
-          </a>
-          <div className="mx-auto mt-5 flex max-w-[600px] items-center gap-3" aria-hidden><span className="h-px flex-1 bg-[var(--ws-ink)]/40" /><span className="text-[var(--ws-acc)]">★ ★ ★</span><span className="h-px flex-1 bg-[var(--ws-ink)]/40" /></div>
-        </section>
+        {/* the slider opens the page in a heavy wooden frame, the lead story first */}
+        <h1 className="sr-only">{site.name}: {site.state} news, weather and local stories</h1>
         <section className="mt-6 grid gap-0 lg:grid-cols-[1.7fr_1fr]">
           <div className="ws-hero border-[10px] border-[var(--ws-ink)] shadow-[inset_0_0_0_2px_var(--ws-acc)] outline outline-2 outline-offset-[-14px] outline-[var(--ws-acc)]"><HeroCinema slides={heroSlides} /></div>
           {brief.length > 0 && (
