@@ -19,7 +19,7 @@
  * genuinely about the state almost always names one of them, which is all this
  * needs to do. Add to it freely.
  */
-const PLACES: Record<string, string[]> = {
+export const PLACES: Record<string, string[]> = {
   Alabama: ["birmingham", "montgomery", "mobile", "huntsville", "tuscaloosa", "auburn", "dothan", "decatur", "hoover", "florence"],
   Alaska: ["anchorage", "fairbanks", "juneau", "wasilla", "sitka", "ketchikan", "kenai", "bethel", "kodiak", "nome"],
   Arizona: ["phoenix", "tucson", "mesa", "scottsdale", "chandler", "glendale", "gilbert", "tempe", "flagstaff", "yuma"],

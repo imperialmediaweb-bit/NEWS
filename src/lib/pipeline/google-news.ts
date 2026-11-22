@@ -1,4 +1,7 @@
 import type { FeedItem } from "./rss-parser";
+import { PLACES } from "./relevance";
+import { STATE_FACTS } from "@/config/state-data";
+import allCounties from "@/config/counties/us-counties.json";
 
 /**
  * Google News as an active source, the way the Romanian Expres network uses
@@ -75,17 +78,43 @@ export const STATE_CITIES: Record<string, string[]> = {
   Wyoming: ["Cheyenne", "Casper", "Laramie", "Jackson Hole"],
 };
 
-/** The searches run for a state, each tied to the section it feeds. */
-export function stateQueries(state: string): Array<{ q: string; section: string }> {
-  const cities = (STATE_CITIES[state] || []).map((c) => `"${c}"`).join(" OR ");
+/**
+ * The searches run for a state, each tied to the section it feeds.
+ *
+ * Local first, the way the Romanian Expres network works county by county:
+ * besides the big cities, every visit also searches a rotating group of the
+ * state's smaller towns and of its counties, so over a day the whole state is
+ * covered, not only its largest metro. `round` turns the rotation (the cron slot).
+ * Local searches alternate with the sections so a busy town cannot fill the run.
+ */
+export function stateQueries(state: string, round = 0): Array<{ q: string; section: string }> {
+  const big = STATE_CITIES[state] || [];
+  const cities = big.map((c) => `"${c}"`).join(" OR ");
   const s = `"${state}"`;
-  return [
+  const title = (x: string) => x.replace(/\b\w/g, (c) => c.toUpperCase());
+  const small = (PLACES[state] || []).map(title).filter((c) => !big.includes(c));
+  // the largest counties first, then every other county in the state
+  const top = STATE_FACTS[state]?.counties || [];
+  const rest = ((allCounties as Record<string, string[]>)[state] || []).filter((c) => !top.includes(c));
+  const counties = top.concat(rest).map((c) => (/(County|Parish|Borough|Census Area)$/.test(c) ? c : `${c} ${state === "Louisiana" ? "Parish" : "County"}`));
+  const group = (list: string[], n: number, k: number) => {
+    if (!list.length) return [];
+    const start = (k * n) % list.length;
+    return list.concat(list).slice(start, start + Math.min(n, list.length));
+  };
+  const orQ = (list: string[]) => list.map((x) => `"${x}"`).join(" OR ");
+  const towns = group(small, 4, round);
+  const shire = group(counties, 3, round);
+  const out: Array<{ q: string; section: string }> = [
     { q: cities || s, section: "local-news" },
     { q: `${s} (legislature OR governor OR lawmakers OR election)`, section: "politics" },
-    { q: `${s} (business OR jobs OR economy OR company)`, section: "business" },
-    { q: `${s} (football OR basketball OR baseball OR "high school")`, section: "sports" },
-    { q: `${s} (festival OR restaurant OR museum OR "things to do")`, section: "life" },
   ];
+  if (towns.length) out.push({ q: `(${orQ(towns)}) ${s}`, section: "local-news" });
+  out.push({ q: `${s} (business OR jobs OR economy OR company)`, section: "business" });
+  if (shire.length) out.push({ q: `(${orQ(shire)}) ${s}`, section: "local-news" });
+  out.push({ q: `${s} (football OR basketball OR baseball OR "high school")`, section: "sports" });
+  out.push({ q: `${s} (festival OR restaurant OR museum OR "things to do")`, section: "life" });
+  return out;
 }
 
 // Aggregators, social networks and video carry no article text of their own.

@@ -73,7 +73,7 @@ export async function GET(req: NextRequest) {
 
   for (const site of chosen) {
     const r = (report[site.state] = { found: 0, known: 0, unresolved: 0, skippedHost: 0, offState: 0, queued: 0, examples: [] as string[] });
-    for (const { q, section } of stateQueries(site.state)) {
+    for (const { q, section } of stateQueries(site.state, Number.isFinite(slot) ? slot : Math.floor(Date.now() / 1800000))) {
       if (r.queued >= PER_STATE || googlePaused()) break;
       let items;
       try {

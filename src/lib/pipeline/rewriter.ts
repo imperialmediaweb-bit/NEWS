@@ -253,6 +253,8 @@ WRITING:
 - Length follows the material: cover what the source covers, in 400-800 words. Do not pad and do not compress out substance.
 - Your own sentences and your own structure. Do not copy phrasing from the source, except inside quotation marks where you are quoting someone.
 - A plain, accurate headline describing what happened. No superlatives the facts do not support.
+- Put the place in the headline when the source names it: the city, town or county where it happened (e.g. "Lubbock police arrest..." rather than "Police arrest..."). Use only a place the source gives.
+- The first paragraph answers who, what, where and when in one or two sentences, with the place and the day as the source states them, so a reader (or a search engine) gets the news from it alone.
 - Third person, straightforward news style.
 
 LEGAL SAFETY (mandatory):
