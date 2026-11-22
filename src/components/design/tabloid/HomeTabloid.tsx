@@ -261,7 +261,7 @@ export default function HomeTabloid({
           <div className="space-y-5">
             {gas && gas.grades[0] && (
               <div className="border-2 border-[var(--tb-ink)] p-4">
-                <p className={`${cond.className} text-[26px] font-black uppercase italic leading-none`}>Gas prices in {gas.isRegion ? gas.area : "Florida"} this week</p>
+                <p className={`${cond.className} text-[26px] font-black uppercase italic leading-none`}>Gas prices in {gas.isRegion ? gas.area : site.state} this week</p>
                 <div className="mt-3 flex items-end gap-4">
                   <span className={`${cond.className} text-[64px] font-black leading-none text-[var(--tb-ink)]`}>${gas.grades[0].price.toFixed(2)}</span>
                   <span className={`mb-2 rounded-sm px-2 py-1 text-[16px] font-bold ${gas.grades[0].change > 0 ? "bg-[#fde8e4] text-[#c0392b]" : "bg-[#e3f4ea] text-[#1f8a4c]"}`}>{gas.grades[0].change > 0 ? "▲" : "▼"} {Math.abs(gas.grades[0].change * 100).toFixed(1)}¢</span>
