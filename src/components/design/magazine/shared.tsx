@@ -2,6 +2,7 @@ import { Newsreader, Source_Sans_3 } from "next/font/google";
 import type { SiteConfig } from "@/config/site-config";
 import type { CityWeather } from "@/lib/local-data";
 import PreviewLinks from "../live/PreviewLinks";
+import { mockupOf } from "@/config/design-cfg";
 import { TZ, WxIcon } from "../live/shared";
 
 /**
@@ -18,7 +19,8 @@ export const MAG: Record<string, { ink: string; acc: string; gold: string; sloga
 };
 
 export function magOf(site: SiteConfig) {
-  return MAG[site.slug] || { ink: "#14213d", acc: site.accent, gold: "#c9a227", slogan: site.tagline, capital: site.city };
+  const m = mockupOf(site.slug);
+  return MAG[site.slug] || { ink: m?.ink || "#14213d", acc: m?.acc || site.accent, gold: m?.metal || "#c9a227", slogan: m?.slogan || site.tagline, capital: m?.capital || site.city };
 }
 
 export function magVars(site: SiteConfig) {

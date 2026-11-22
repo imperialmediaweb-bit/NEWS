@@ -2,6 +2,7 @@ import { Fraunces, Work_Sans } from "next/font/google";
 import type { SiteConfig } from "@/config/site-config";
 import type { CityWeather } from "@/lib/local-data";
 import PreviewLinks from "../live/PreviewLinks";
+import { mockupOf, tint } from "@/config/design-cfg";
 import { TZ, WxIcon } from "../live/shared";
 
 /**
@@ -18,7 +19,8 @@ export const PEACH: Record<string, { ink: string; acc: string; copper: string; p
 };
 
 export function peachOf(site: SiteConfig) {
-  return PEACH[site.slug] || { ink: "#2b2118", acc: site.accent, copper: "#b87333", paper: "#fbf7f2", slogan: site.tagline, capital: site.city };
+  const m = mockupOf(site.slug);
+  return PEACH[site.slug] || { ink: m?.ink || "#2b2118", acc: m?.acc || site.accent, copper: m?.metal || "#b87333", paper: tint(m?.acc || "#e07a5f", 0.94), slogan: m?.slogan || site.tagline, capital: m?.capital || site.city };
 }
 
 export function peachVars(site: SiteConfig) {

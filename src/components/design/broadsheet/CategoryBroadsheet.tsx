@@ -7,6 +7,7 @@ import CountySearch from "../live/CountySearch";
 import AlertsBox from "../live/AlertsBox";
 import PeachFx, { SplitWords } from "../peach/PeachFx";
 import AdSlot from "../AdSlot";
+import { popularOf, genericAbout, genericSub } from "@/config/state-data";
 import { caslon, pub, bsVars, BHead, Kick, Double, BsTopBar, BsHeader, BsFooter } from "./shared";
 
 /**
@@ -16,7 +17,7 @@ import { caslon, pub, bsVars, BHead, Kick, Double, BsTopBar, BsHeader, BsFooter 
  * politics, Wall Street for business...), the county finder, headlines and
  * pagination. Real stories only.
  */
-const ABOUT: Record<string, string> = {
+const ABOUT_ORIG: Record<string, string> = {
   politics: "Albany, City Hall, Congress and the races shaping New York.",
   business: "Wall Street, real estate, tech, upstate industry and the New York economy.",
   sports: "Yankees, Mets, Knicks, Nets, Rangers, Islanders, Giants, Jets, Bills, Sabres and the high school and college teams statewide.",
@@ -24,7 +25,7 @@ const ABOUT: Record<string, string> = {
   life: "Food, the arts, the outdoors and everyday life from the city to upstate.",
   "local-news": "News from the five boroughs, Long Island, the Hudson Valley and all 62 counties.",
 };
-const SUB: Record<string, [string, RegExp]> = {
+const SUB_ORIG: Record<string, [string, RegExp]> = {
   politics: ["Albany", /\b(albany|legislat|senat|assembly|capitol|governor|hochul|lawmaker|bill)\b/i],
   business: ["Wall Street & real estate", /\b(wall street|stock|bank|real estate|rent|housing|developer|office)\b/i],
   sports: ["New York teams", /\b(yankees|mets|knicks|nets|rangers|islanders|sabres|giants|jets|bills|liberty)\b/i],
@@ -54,6 +55,9 @@ export default function CategoryBroadsheet({
   totalPages: number;
 }) {
   const tz = TZ[site.state] || "America/New_York";
+  // the descriptions and sub-sections written for New York; any other state gets general ones
+  const ABOUT = site.state === "New York" ? ABOUT_ORIG : genericAbout(site.state);
+  const SUB = site.state === "New York" ? SUB_ORIG : genericSub(site.state);
   const used = new Set<string>();
   const take = (list: HomeArticle[], n: number) => {
     const out: HomeArticle[] = [];
@@ -140,7 +144,7 @@ export default function CategoryBroadsheet({
           <div className="space-y-6 lg:border-l lg:border-[var(--bs-gold)] lg:pl-8">
             <div>
               <BHead>Your county</BHead>
-              <CountySearch state={site.state} counties={counties} popular={["New York", "Kings", "Queens", "Bronx", "Nassau", "Suffolk"].filter((c) => counties.includes(c))} />
+              <CountySearch state={site.state} counties={counties} popular={popularOf(site.state, ["New York", "Kings", "Queens", "Bronx", "Nassau", "Suffolk"]).filter((c) => counties.includes(c))} />
             </div>
             <AlertsBox name={site.name} state={site.state} />
           </div>
@@ -161,7 +165,7 @@ export default function CategoryBroadsheet({
             )}
             {stateLatest.length > 0 && (
               <div className="lg:pl-10">
-                <BHead>Latest in New York</BHead>
+                <BHead>Latest in {site.state}</BHead>
                 {stateLatest.map((a) => (
                   <a key={a.slug} href={href(a)} className="flex gap-4 border-b border-[#e3dccb] py-2.5">
                     <span className="w-16 shrink-0 pt-0.5 text-[12px] font-semibold text-[#777]">{hour(a, tz)}</span>

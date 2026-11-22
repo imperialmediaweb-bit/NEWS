@@ -2,6 +2,7 @@ import { Libre_Caslon_Text, Public_Sans } from "next/font/google";
 import type { SiteConfig } from "@/config/site-config";
 import type { CityWeather } from "@/lib/local-data";
 import PreviewLinks from "../live/PreviewLinks";
+import { mockupOf } from "@/config/design-cfg";
 import { TZ, WxIcon } from "../live/shared";
 
 /**
@@ -18,7 +19,8 @@ export const BS: Record<string, { ink: string; acc: string; gold: string; slogan
 };
 
 export function bsOf(site: SiteConfig) {
-  return BS[site.slug] || { ink: "#0a0a0a", acc: site.accent, gold: "#c8a24a", slogan: site.tagline, capital: site.city, dateline: site.city.toUpperCase() };
+  const m = mockupOf(site.slug);
+  return BS[site.slug] || { ink: m?.ink || "#0a0a0a", acc: m?.acc || site.accent, gold: m?.metal || "#c8a24a", slogan: m?.slogan || site.tagline, capital: m?.capital || site.city, dateline: (m?.capital || site.city).toUpperCase() };
 }
 
 export function bsVars(site: SiteConfig) {

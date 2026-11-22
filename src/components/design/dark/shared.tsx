@@ -2,6 +2,7 @@ import { Spectral, Montserrat } from "next/font/google";
 import type { SiteConfig } from "@/config/site-config";
 import type { CityWeather } from "@/lib/local-data";
 import PreviewLinks from "../live/PreviewLinks";
+import { mockupOf, shade } from "@/config/design-cfg";
 import { TZ, WxIcon } from "../live/shared";
 
 /**
@@ -18,7 +19,10 @@ export const DK: Record<string, { bg: string; panel: string; acc: string; cu: st
 };
 
 export function dkOf(site: SiteConfig) {
-  return DK[site.slug] || { bg: "#111", panel: "#1a1a1a", acc: site.accent, cu: "#c0703f", deep: "#3a1a10", slogan: site.tagline, capital: site.city, sky: "linear-gradient(180deg,#111,#3a1a10)" };
+  const m = mockupOf(site.slug);
+  const deep = m?.ink || "#3a1a10";
+  const cu = m?.metal || "#c0703f";
+  return DK[site.slug] || { bg: shade(deep, 0.82), panel: shade(deep, 0.72), acc: m?.acc || site.accent, cu, deep, slogan: m?.slogan || site.tagline, capital: m?.capital || site.city, sky: `linear-gradient(180deg,${shade(deep, 0.75)} 0%,${deep} 50%,${m?.acc || cu} 100%)` };
 }
 
 export function dkVars(site: SiteConfig) {

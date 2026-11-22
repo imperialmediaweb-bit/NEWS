@@ -7,6 +7,7 @@ import CountySearch from "../live/CountySearch";
 import AlertsBox from "../live/AlertsBox";
 import PeachFx from "../peach/PeachFx";
 import AdSlot from "../AdSlot";
+import { popularOf, genericAbout, genericSub } from "@/config/state-data";
 import { cond, text, tabVars, THead, Slant, TabTopBar, TabHeader, TabFooter } from "./shared";
 
 /**
@@ -16,7 +17,7 @@ import { cond, text, tabVars, THead, Slant, TabTopBar, TabHeader, TabFooter } fr
  * sub-section (Tallahassee for politics, Gators and Noles for sports...),
  * county finder, headlines and pagination. Real stories only.
  */
-const ABOUT: Record<string, (st: string) => string> = {
+const ABOUT_ORIG: Record<string, (st: string) => string> = {
   politics: () => "Tallahassee, the governor's office, Congress and the races shaping Florida.",
   business: () => "Tourism, ports, space, real estate, insurance and the companies building Florida.",
   sports: () => "Gators, Seminoles, Knights and Canes, the Dolphins, Bucs, Jaguars, Heat, Magic, Lightning and Panthers, and Friday nights statewide.",
@@ -24,7 +25,7 @@ const ABOUT: Record<string, (st: string) => string> = {
   life: () => "Beaches, food, festivals and everyday life from the Keys to the Panhandle.",
   "local-news": () => "News from every city and all 67 counties of Florida.",
 };
-const SUB: Record<string, [string, RegExp]> = {
+const SUB_ORIG: Record<string, [string, RegExp]> = {
   politics: ["Tallahassee", /\b(legislat|senat|house|capitol|governor|desantis|lawmaker|bill|tallahassee)\b/i],
   business: ["Tourism & jobs", /\b(tourism|tourist|hotel|cruise|jobs?|hiring|layoff|port|insurance|real estate)\b/i],
   sports: ["College football", /\b(gators|seminoles|fsu|ucf|knights|canes|football|bowl)\b/i],
@@ -54,6 +55,9 @@ export default function CategoryTabloid({
   totalPages: number;
 }) {
   const tz = TZ[site.state] || "America/New_York";
+  // the descriptions and sub-sections written for Florida; any other state gets general ones
+  const ABOUT = site.state === "Florida" ? ABOUT_ORIG : Object.fromEntries(Object.entries(genericAbout(site.state)).map(([k, v]) => [k, () => v]));
+  const SUB = site.state === "Florida" ? SUB_ORIG : genericSub(site.state);
   const used = new Set<string>();
   const take = (list: HomeArticle[], n: number) => {
     const out: HomeArticle[] = [];
@@ -75,7 +79,7 @@ export default function CategoryTabloid({
   const subList = sub ? take(stories.concat(latestState).filter((a) => sub[1].test(a.title)), 4) : [];
   const rest = take(stories, 12);
   const stateLatest = take(latestState, 8);
-  const about = (ABOUT[slug] || (() => `The latest ${label.toLowerCase()} from across Florida.`))(site.state);
+  const about = (ABOUT[slug] || (() => `The latest ${label.toLowerCase()} from across ${site.state}.`))(site.state);
   const W = "mx-auto max-w-[1360px] px-4";
   const Img = ({ a, sizes = "(max-width: 640px) 92vw, 420px" }: { a: HomeArticle; sizes?: string }) =>
     a.img ? (
@@ -162,7 +166,7 @@ export default function CategoryTabloid({
           <div className="space-y-6">
             <div className="border border-[#d9d9d9] p-5">
               <THead>Your county</THead>
-              <CountySearch state={site.state} counties={counties} popular={["Miami-Dade", "Broward", "Palm Beach", "Hillsborough", "Orange", "Duval"].filter((c) => counties.includes(c))} />
+              <CountySearch state={site.state} counties={counties} popular={popularOf(site.state, ["Miami-Dade", "Broward", "Palm Beach", "Hillsborough", "Orange", "Duval"]).filter((c) => counties.includes(c))} />
             </div>
             <AlertsBox name={site.name} state={site.state} />
           </div>
@@ -183,7 +187,7 @@ export default function CategoryTabloid({
             )}
             {stateLatest.length > 0 && (
               <div className="bg-[#111] p-6 text-white">
-                <THead light>Latest in Florida</THead>
+                <THead light>Latest in {site.state}</THead>
                 {stateLatest.map((a) => (
                   <a key={a.slug} href={href(a)} className="flex gap-4 border-b border-white/15 py-2.5 last:border-0">
                     <span className={`${cond.className} w-16 shrink-0 text-[16px] font-bold italic text-[var(--tb-gold)]`}>{hour(a, tz)}</span>

@@ -7,6 +7,7 @@ import CountySearch from "../live/CountySearch";
 import AlertsBox from "../live/AlertsBox";
 import PeachFx, { SplitWords } from "../peach/PeachFx";
 import AdSlot from "../AdSlot";
+import { popularOf, genericAbout, genericSub } from "@/config/state-data";
 import { serifM, sansM, magVars, MHead, Label, MagTopBar, MagHeader, MagFooter } from "./shared";
 
 /**
@@ -16,7 +17,7 @@ import { serifM, sansM, magVars, MHead, Label, MagTopBar, MagHeader, MagFooter }
  * (Sacramento for politics, Silicon Valley for business...), the county
  * finder, headlines and pagination. Real stories only.
  */
-const ABOUT: Record<string, string> = {
+const ABOUT_ORIG: Record<string, string> = {
   politics: "Sacramento, the governor, Congress and the local races shaping California.",
   business: "Tech, entertainment, agriculture, housing and the companies building California's economy.",
   sports: "The Dodgers, Giants, Lakers, Warriors, Rams, 49ers and the college and high school teams across the state.",
@@ -24,7 +25,7 @@ const ABOUT: Record<string, string> = {
   life: "Food, culture, the outdoors and everyday life from the coast to the Sierra.",
   "local-news": "News from every city and all 58 counties of California.",
 };
-const SUB: Record<string, [string, RegExp]> = {
+const SUB_ORIG: Record<string, [string, RegExp]> = {
   politics: ["Sacramento", /\b(legislat|senat|assembly|capitol|governor|newsom|lawmaker|bill|sacramento)\b/i],
   business: ["Silicon Valley & tech", /\b(tech|ai|startup|silicon|apple|google|meta|nvidia|software|chip)\b/i],
   sports: ["Pro teams", /\b(dodgers|giants|angels|padres|lakers|clippers|warriors|kings|49ers|niners|rams|chargers)\b/i],
@@ -54,6 +55,9 @@ export default function CategoryMagazine({
   totalPages: number;
 }) {
   const tz = TZ[site.state] || "America/New_York";
+  // the descriptions and sub-sections written for California; any other state gets general ones
+  const ABOUT = site.state === "California" ? ABOUT_ORIG : genericAbout(site.state);
+  const SUB = site.state === "California" ? SUB_ORIG : genericSub(site.state);
   const used = new Set<string>();
   const take = (list: HomeArticle[], n: number) => {
     const out: HomeArticle[] = [];
@@ -145,7 +149,7 @@ export default function CategoryMagazine({
           <div className="space-y-6">
             <div>
               <MHead>Your county</MHead>
-              <CountySearch state={site.state} counties={counties} popular={["Los Angeles", "San Diego", "Orange", "Santa Clara", "Alameda", "Sacramento"].filter((c) => counties.includes(c))} />
+              <CountySearch state={site.state} counties={counties} popular={popularOf(site.state, ["Los Angeles", "San Diego", "Orange", "Santa Clara", "Alameda", "Sacramento"]).filter((c) => counties.includes(c))} />
             </div>
             <AlertsBox name={site.name} state={site.state} />
           </div>

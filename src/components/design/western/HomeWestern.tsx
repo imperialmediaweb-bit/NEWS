@@ -8,6 +8,8 @@ import HeroCinema from "../live/HeroCinema";
 import { TZ, href, hour, ago, WxIcon, TOPIC_RE, srcSetOf } from "../live/shared";
 import PeachFx, { SplitWords } from "../peach/PeachFx";
 import AdSlot from "../AdSlot";
+import { popularOf, sportsReOf } from "@/config/state-data";
+import { citiesOf } from "@/lib/local-data";
 import Extras from "../extras/Extras";
 import StateMap from "../StateMap";
 import { zilla, alfa, lora, wsOf, wsVars, WHead, WKick, Ridge, WsTopBar, WsHeader, WsFooter } from "./shared";
@@ -94,7 +96,7 @@ export default function HomeWestern({
   const sec = (key: string, re: RegExp, n: number) => take((sections?.[key] || []).concat(pool.filter((a) => re.test(a.title))), n);
   const pol = sec("politics", TOPIC_RE.politics, 4);
   const biz = sec("business", TOPIC_RE.business, 3);
-  const spo = sec("sports", SPORTS_MT, 3);
+  const spo = sec("sports", sportsReOf(site.state, SPORTS_MT), 3);
   const opinion = take(articles.opinion, 4);
   const life = sec("life", TOPIC_RE.life, 4);
   const safety = take(pool.filter((a) => SAFETY.test(a.title)), 4);
@@ -173,7 +175,7 @@ export default function HomeWestern({
               <WHead sub="Active fires (NIFC)">{site.state} wildfires</WHead>
               <div className="grid items-center gap-4 p-4 pt-0 sm:grid-cols-[1.6fr_1fr]">
                 <StateMap outline={outline} fill="#efe3c6" stroke="#1b3a4b" label="#1b3a4b" font="var(--ws-slab), Georgia, serif"
-                  cities={[["Kalispell", 48.2, -114.31], ["Missoula", 46.87, -113.99], ["Great Falls", 47.5, -111.3], ["Helena", 46.59, -112.04], ["Bozeman", 45.68, -111.04], ["Billings", 45.78, -108.5]]}
+                  cities={citiesOf(site.state).slice(0, 5)}
                   points={fl.map((f) => ({ key: f.name + f.county, lon: f.lon!, lat: f.lat!, r: Math.min(16, 4 + Math.sqrt(f.acres) / 12), color: "#c0392b", title: `${f.name} Fire · ${f.acres.toLocaleString("en-US")} acres` }))} />
                 <div className="text-[14px]">
                   <p>Active wildfires: <b className={`${alfa.className} text-[24px] text-[#c0392b]`}>{fires.length}</b></p>
@@ -191,7 +193,7 @@ export default function HomeWestern({
             <WHead>Your county</WHead>
             <div className="p-4 pt-0">
               <p className="mb-3 text-[15px] text-[#3a3a3a]">News, alerts and resources for all {counties.length} {site.state} counties.</p>
-              <CountySearch state={site.state} counties={counties} popular={["Yellowstone", "Gallatin", "Missoula", "Flathead", "Cascade", "Lewis and Clark", "Ravalli", "Silver Bow"].filter((c) => counties.includes(c))} />
+              <CountySearch state={site.state} counties={counties} popular={popularOf(site.state, ["Yellowstone", "Gallatin", "Missoula", "Flathead", "Cascade", "Lewis and Clark", "Ravalli", "Silver Bow"]).filter((c) => counties.includes(c))} />
             </div>
           </div>
         </section>
@@ -387,7 +389,7 @@ export default function HomeWestern({
                   {x.numbers.map((n, i) => <span key={i} className={`${zilla.className} flex h-10 w-10 items-center justify-center rounded-full border-2 border-[var(--ws-ink)] text-[17px] font-bold`}>{n.replace(/^0/, "")}</span>)}
                   {x.bonus && <span className={`${zilla.className} flex h-10 w-10 items-center justify-center rounded-full bg-[var(--ws-acc)] text-[17px] font-bold`}>{x.bonus.replace(/^0/, "")}</span>}
                 </div>
-                <p className="mt-2 text-[11px] italic text-[#7a6a50]">Official draw record (New York State open data). Check your ticket with the Montana Lottery.</p>
+                <p className="mt-2 text-[11px] italic text-[#7a6a50]">Official draw record (New York State open data). Check your ticket with the {site.state} Lottery.</p>
               </div>
             ))}
           </section>

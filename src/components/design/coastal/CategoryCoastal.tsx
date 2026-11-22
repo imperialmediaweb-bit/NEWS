@@ -7,6 +7,7 @@ import CountySearch from "../live/CountySearch";
 import AlertsBox from "../live/AlertsBox";
 import PeachFx, { SplitWords } from "../peach/PeachFx";
 import AdSlot from "../AdSlot";
+import { popularOf, genericAbout, genericSub } from "@/config/state-data";
 import { crimson, nunito, coVars, CHead, Label, CoTopBar, CoHeader, CoFooter , ok } from "./shared";
 
 /**
@@ -16,7 +17,7 @@ import { crimson, nunito, coVars, CHead, Label, CoTopBar, CoHeader, CoFooter , o
  * (the Capitol for politics, tourism and housing for business...), the county
  * finder, headlines and pagination. Real stories only.
  */
-const ABOUT: Record<string, string> = {
+const ABOUT_ORIG: Record<string, string> = {
   politics: "The State Capitol, the governor, the counties and the races shaping Hawai‘i.",
   business: "Tourism, agriculture, the military economy, housing and the companies of the islands.",
   sports: "The Rainbow Warriors and Rainbow Wahine, surfing, paddling and high school sports across the islands.",
@@ -24,7 +25,7 @@ const ABOUT: Record<string, string> = {
   life: "Food, culture, the ocean, the land and everyday island life.",
   "local-news": "News from O‘ahu, Maui, the Big Island, Kaua‘i and every island community.",
 };
-const SUB: Record<string, [string, RegExp]> = {
+const SUB_ORIG: Record<string, [string, RegExp]> = {
   politics: ["At the Capitol", /(legislat|senat|house|capitol|governor|green|lawmaker|bill)/i],
   business: ["Tourism & housing", /(tourism|tourist|visitor|hotel|airline|housing|rent|vacation rental)/i],
   sports: ["Surf & ocean sports", /(surf|surfing|pipeline|paddl|canoe|swim|ocean)/i],
@@ -54,6 +55,9 @@ export default function CategoryCoastal({
   totalPages: number;
 }) {
   const tz = TZ[site.state] || "America/New_York";
+  // the descriptions and sub-sections written for Hawaii; any other state gets general ones
+  const ABOUT = site.state === "Hawaii" ? ABOUT_ORIG : genericAbout(site.state);
+  const SUB = site.state === "Hawaii" ? SUB_ORIG : genericSub(site.state);
   const used = new Set<string>();
   const take = (list: HomeArticle[], n: number) => {
     const out: HomeArticle[] = [];
@@ -145,7 +149,7 @@ export default function CategoryCoastal({
           <div className="space-y-6">
             <div>
               <CHead>Your county</CHead>
-              <CountySearch state={site.state} counties={counties} popular={["Honolulu", "Hawaii", "Maui", "Kauai"].filter((c) => counties.includes(c))} />
+              <CountySearch state={site.state} counties={counties} popular={popularOf(site.state, ["Honolulu", "Hawaii", "Maui", "Kauai"]).filter((c) => counties.includes(c))} />
             </div>
             <AlertsBox name={site.name} state={site.state} />
           </div>

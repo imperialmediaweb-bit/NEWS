@@ -3,6 +3,7 @@ import type { HomeArticle } from "@/lib/homepage-data";
 import type { CityWeather } from "@/lib/local-data";
 import { TZ, href, hour, ago, srcSetOf } from "../live/shared";
 import MobileMenu from "../live/MobileMenu";
+import { popularOf, genericAbout, genericSub } from "@/config/state-data";
 import CountySearch from "../live/CountySearch";
 import AlertsBox from "../live/AlertsBox";
 import PeachFx, { SplitWords } from "./PeachFx";
@@ -15,7 +16,7 @@ import { display, body, peachVars, PHead, Ico, PeachTopBar, PeachHeader, PeachFo
  * football for sports...), the county finder and alerts, more headlines and
  * pagination. Built only from real stories; empty blocks are left out.
  */
-const ABOUT: Record<string, (st: string) => string> = {
+const ABOUT_ORIG: Record<string, (st: string) => string> = {
   politics: (st) => `The Gold Dome, the governor, Congress and the local races shaping ${st}.`,
   business: (st) => `Jobs, ports, film, farms and the companies building ${st}'s economy.`,
   sports: (st) => `The Dawgs, the Yellow Jackets, the Braves, Falcons and Hawks, and Friday nights across ${st}.`,
@@ -23,7 +24,7 @@ const ABOUT: Record<string, (st: string) => string> = {
   life: (st) => `Food, festivals, the outdoors and everyday life from the mountains to the coast of ${st}.`,
   "local-news": (st) => `News from cities, towns and all 159 counties of ${st}.`,
 };
-const SUB: Record<string, [string, RegExp]> = {
+const SUB_ORIG: Record<string, [string, RegExp]> = {
   politics: ["Under the Gold Dome", /\b(legislat|general assembly|senat|house|capitol|governor|kemp|lawmaker|bill)\b/i],
   business: ["Jobs & economy", /\b(jobs?|hiring|layoff|econom|wage|unemploy|plant|factory|port)\b/i],
   sports: ["College football", /\b(bulldogs|uga|dawgs|georgia tech|yellow jackets|football|sec)\b/i],
@@ -53,6 +54,9 @@ export default function CategoryPeach({
   totalPages: number;
 }) {
   const tz = TZ[site.state] || "America/New_York";
+  // the descriptions and sub-sections written for Georgia; any other state gets general ones
+  const ABOUT = site.state === "Georgia" ? ABOUT_ORIG : Object.fromEntries(Object.entries(genericAbout(site.state)).map(([k, v]) => [k, () => v]));
+  const SUB = site.state === "Georgia" ? SUB_ORIG : genericSub(site.state);
   const used = new Set<string>();
   const take = (list: HomeArticle[], n: number) => {
     const out: HomeArticle[] = [];
@@ -176,7 +180,7 @@ export default function CategoryPeach({
           <div className="space-y-6">
             <div className="rounded-md border border-[var(--pc-cu)]/30 bg-white p-5">
               <PHead icon={Ico.pin}>Your county</PHead>
-              <CountySearch state={site.state} counties={counties} popular={["Fulton", "Gwinnett", "Cobb", "DeKalb", "Chatham", "Richmond"].filter((c) => counties.includes(c))} />
+              <CountySearch state={site.state} counties={counties} popular={popularOf(site.state, ["Fulton", "Gwinnett", "Cobb", "DeKalb", "Chatham", "Richmond"]).filter((c) => counties.includes(c))} />
             </div>
             <AlertsBox name={site.name} state={site.state} />
           </div>

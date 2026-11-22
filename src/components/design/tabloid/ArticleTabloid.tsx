@@ -10,6 +10,7 @@ import AlertsBox from "../live/AlertsBox";
 import CountySearch from "../live/CountySearch";
 import PeachFx from "../peach/PeachFx";
 import AdSlot from "../AdSlot";
+import { popularOf } from "@/config/state-data";
 import { cond, text, tabVars, THead, Slant, TabTopBar, TabHeader, TabFooter } from "./shared";
 
 /**
@@ -114,7 +115,7 @@ export default function ArticleTabloid({
           <AdSlot position="side" />
           {side.length > 0 && (
             <div>
-              <THead>Latest in Florida</THead>
+              <THead>Latest in {site.state}</THead>
               {side.map((a) => (
                 <a key={a.slug} href={href(a)} className="flex gap-3 border-b border-[#e2e2e2] py-2.5">
                   <span className={`${cond.className} w-16 shrink-0 text-[16px] font-bold italic text-[var(--tb-acc)]`}>{hour(a, tz)}</span>
@@ -147,7 +148,7 @@ export default function ArticleTabloid({
           )}
           <div className="border border-[#d9d9d9] p-4">
             <THead>Your county</THead>
-            <CountySearch state={site.state} counties={counties} popular={["Miami-Dade", "Broward", "Palm Beach", "Hillsborough", "Orange", "Duval"].filter((c) => counties.includes(c))} />
+            <CountySearch state={site.state} counties={counties} popular={popularOf(site.state, ["Miami-Dade", "Broward", "Palm Beach", "Hillsborough", "Orange", "Duval"]).filter((c) => counties.includes(c))} />
           </div>
           <AlertsBox name={site.name} state={site.state} />
         </aside>
@@ -173,7 +174,7 @@ export default function ArticleTabloid({
       )}
       {headlines.length > 0 && (
         <section className={`${W} pc-in pc-up mt-10`}>
-          <THead link="/local-news" more="All the latest">More from Florida</THead>
+          <THead link="/local-news" more="All the latest">More from {site.state}</THead>
           <ul className="grid gap-x-10 md:grid-cols-2">
             {headlines.map((a) => (
               <li key={a.slug} className="flex gap-4 border-b border-[#e2e2e2] py-2.5">

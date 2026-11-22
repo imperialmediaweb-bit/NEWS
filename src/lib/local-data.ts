@@ -1,5 +1,6 @@
 import counties from "@/config/counties/us-counties.json";
 import outlines from "@/config/state-outlines.json";
+import { STATE_FACTS } from "@/config/state-data";
 
 /**
  * Real local data for the per-state designs. Every source is official and
@@ -159,7 +160,7 @@ async function nwsCity(city: string, lat: number, lon: number): Promise<CityWeat
 }
 
 export async function getStateWeather(state: string): Promise<CityWeather[]> {
-  const list = WEATHER_CITIES[state] || [];
+  const list = citiesOf(state);
   const res = await Promise.all(list.map(([c, la, lo]) => cached(`nws:${c}`, () => nwsCity(c, la, lo))));
   return res.filter((x): x is CityWeather => !!x);
 }
@@ -201,7 +202,7 @@ export interface DayForecast {
 }
 
 export async function getCityForecast(state: string): Promise<{ city: string; now: CityWeather; days: DayForecast[] } | null> {
-  const first = (WEATHER_CITIES[state] || [])[0];
+  const first = citiesOf(state)[0];
   if (!first) return null;
   const [city, lat, lon] = first;
   return cached(`nwsfc:${city}`, async () => {
@@ -606,4 +607,12 @@ export async function getDrought(fips: string): Promise<Drought | null> {
     // the numbers are cumulative (D1 includes D2-D4), as the Monitor reports them
     return { date: String(a.mapDate).slice(0, 10), none: n(a.none), d0: n(a.d0), d1: n(a.d1), d2: n(a.d2), d3: n(a.d3), d4: n(a.d4), prev: b ? { d1: n(b.d1) } : undefined };
   });
+}
+
+/** The weather-strip cities of a state: the hand-tuned list, else the state's facts. */
+export function citiesOf(state: string): Array<[string, number, number]> {
+  return WEATHER_CITIES[state] || STATE_FACTS[state]?.cities || [];
+}
+export function airportsOf(state: string): Array<[string, string]> | undefined {
+  return STATE_AIRPORTS[state] || STATE_FACTS[state]?.airports;
 }

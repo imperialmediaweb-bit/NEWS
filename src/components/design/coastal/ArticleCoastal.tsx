@@ -10,6 +10,7 @@ import AlertsBox from "../live/AlertsBox";
 import CountySearch from "../live/CountySearch";
 import PeachFx, { SplitWords } from "../peach/PeachFx";
 import AdSlot from "../AdSlot";
+import { popularOf } from "@/config/state-data";
 import { crimson, nunito, coVars, CHead, Label, CoTopBar, CoHeader, CoFooter , ok } from "./shared";
 
 /**
@@ -148,7 +149,7 @@ export default function ArticleCoastal({
               </div>
             </div>
           )}
-          <CountySearch state={site.state} counties={counties} popular={["Honolulu", "Hawaii", "Maui", "Kauai"].filter((c) => counties.includes(c))} />
+          <CountySearch state={site.state} counties={counties} popular={popularOf(site.state, ["Honolulu", "Hawaii", "Maui", "Kauai"]).filter((c) => counties.includes(c))} />
           <AlertsBox name={site.name} state={site.state} />
         </div>
       </section>

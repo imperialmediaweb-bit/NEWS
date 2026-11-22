@@ -2,6 +2,7 @@ import { Barlow_Condensed, Barlow } from "next/font/google";
 import type { SiteConfig } from "@/config/site-config";
 import type { CityWeather } from "@/lib/local-data";
 import PreviewLinks from "../live/PreviewLinks";
+import { mockupOf } from "@/config/design-cfg";
 import { TZ, WxIcon } from "../live/shared";
 
 /**
@@ -18,7 +19,8 @@ export const TAB: Record<string, { ink: string; acc: string; gold: string; sloga
 };
 
 export function tabOf(site: SiteConfig) {
-  return TAB[site.slug] || { ink: "#0b2a4a", acc: site.accent, gold: "#e9b44c", slogan: site.tagline, capital: site.city };
+  const m = mockupOf(site.slug);
+  return TAB[site.slug] || { ink: m?.ink || "#0b2a4a", acc: m?.acc || site.accent, gold: m?.metal || "#e9b44c", slogan: m?.slogan || site.tagline, capital: m?.capital || site.city };
 }
 
 export function tabVars(site: SiteConfig) {

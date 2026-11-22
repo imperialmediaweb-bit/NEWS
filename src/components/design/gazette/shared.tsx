@@ -2,6 +2,7 @@ import { Merriweather, Mulish } from "next/font/google";
 import type { SiteConfig } from "@/config/site-config";
 import type { CityWeather } from "@/lib/local-data";
 import PreviewLinks from "../live/PreviewLinks";
+import { mockupOf, tint } from "@/config/design-cfg";
 import { TZ, WxIcon } from "../live/shared";
 
 /**
@@ -18,7 +19,8 @@ export const GZ: Record<string, { ink: string; acc: string; paper: string; sloga
 };
 
 export function gzOf(site: SiteConfig) {
-  return GZ[site.slug] || { ink: "#3d2f12", acc: site.accent, paper: "#fbf6ea", slogan: site.tagline, capital: site.city, fips: "" };
+  const m = mockupOf(site.slug);
+  return GZ[site.slug] || { ink: m?.ink || "#3d2f12", acc: m?.acc || site.accent, paper: tint(m?.acc || "#d19a00", 0.93), slogan: m?.slogan || site.tagline, capital: m?.capital || site.city, fips: "" };
 }
 
 export function gzVars(site: SiteConfig) {

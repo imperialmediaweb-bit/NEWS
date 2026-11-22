@@ -8,6 +8,7 @@ import HeroCinema from "../live/HeroCinema";
 import { TZ, href, hour, ago, WxIcon, TOPIC_RE, srcSetOf } from "../live/shared";
 import PeachFx, { SplitWords } from "../peach/PeachFx";
 import AdSlot from "../AdSlot";
+import { popularOf, sportsReOf } from "@/config/state-data";
 import Extras from "../extras/Extras";
 import { crimson, nunito, coOf, coVars, CHead, CoTopBar, CoHeader, CoFooter , ok } from "./shared";
 
@@ -93,7 +94,7 @@ export default function HomeCoastal({
   const sec = (key: string, re: RegExp, n: number) => take((sections?.[key] || []).concat(pool.filter((a) => re.test(a.title))), n);
   const pol = sec("politics", TOPIC_RE.politics, 3);
   const biz = sec("business", TOPIC_RE.business, 3);
-  const spo = sec("sports", SPORTS_HI, 3);
+  const spo = sec("sports", sportsReOf(site.state, SPORTS_HI), 3);
   const life = sec("life", TOPIC_RE.life, 4);
   const opinion = take(articles.opinion, 4);
   const safety = take(pool.filter((a) => SAFETY.test(a.title)), 4);
@@ -183,7 +184,7 @@ export default function HomeCoastal({
           <div className={`${card} p-5`}>
             <CHead>Your county</CHead>
             <p className={`${crimson.className} -mt-3 mb-3 text-[15px] italic text-[#5b6b76]`}>News, alerts and resources for your island community.</p>
-            <CountySearch state={site.state} counties={counties} popular={["Honolulu", "Hawaii", "Maui", "Kauai"].filter((x) => counties.includes(x))} />
+            <CountySearch state={site.state} counties={counties} popular={popularOf(site.state, ["Honolulu", "Hawaii", "Maui", "Kauai"]).filter((x) => counties.includes(x))} />
           </div>
           {weather.length > 0 && (
             <div id="weather" className={`${card} scroll-mt-4 p-5`}>
@@ -206,7 +207,7 @@ export default function HomeCoastal({
                 <CHead>Gas prices</CHead>
                 <p className={`${crimson.className} text-[46px] font-semibold leading-none text-[var(--co-ink)]`}>${gas.grades[0].price.toFixed(2)}<span className="text-[20px]">/gal</span></p>
                 <p className={`text-[13px] font-bold ${gas.grades[0].change > 0 ? "text-[#c0392b]" : "text-[#2e7d4f]"}`}>{gas.grades[0].change > 0 ? "▲" : "▼"} {Math.abs(gas.grades[0].change * 100).toFixed(1)}¢ from last week</p>
-                <p className="mt-1 text-[12px] italic text-[#6b7b86]">{gas.isRegion ? `${gas.area} average — EIA does not publish a Hawai‘i-only weekly price` : "Statewide average"} · week of {gas.week}</p>
+                <p className="mt-1 text-[12px] italic text-[#6b7b86]">{gas.isRegion ? `${gas.area} average — EIA publishes no weekly price for this state alone` : "Statewide average"} · week of {gas.week}</p>
               </>
             )}
             {airports && airports.length > 0 && (
@@ -363,7 +364,7 @@ export default function HomeCoastal({
 
         {more.length > 0 && (
           <section className="pc-in pc-up mt-12">
-            <CHead>More from Hawai‘i</CHead>
+            <CHead>More from {site.state === "Hawaii" ? "Hawai‘i" : site.state}</CHead>
             <ul className="grid gap-x-10 md:grid-cols-2">
               {more.map((a) => (
                 <li key={a.slug} className="flex gap-4 border-b border-[#e4edf1] py-2.5">

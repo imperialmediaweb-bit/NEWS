@@ -10,6 +10,7 @@ import AlertsBox from "../live/AlertsBox";
 import CountySearch from "../live/CountySearch";
 import PeachFx, { SplitWords } from "../peach/PeachFx";
 import AdSlot from "../AdSlot";
+import { popularOf } from "@/config/state-data";
 import { serifM, sansM, magVars, MHead, Label, MagTopBar, MagHeader, MagFooter } from "./shared";
 
 /**
@@ -146,7 +147,7 @@ export default function ArticleMagazine({
               </div>
             </div>
           )}
-          <CountySearch state={site.state} counties={counties} popular={["Los Angeles", "San Diego", "Orange", "Santa Clara", "Alameda", "Sacramento"].filter((c) => counties.includes(c))} />
+          <CountySearch state={site.state} counties={counties} popular={popularOf(site.state, ["Los Angeles", "San Diego", "Orange", "Santa Clara", "Alameda", "Sacramento"]).filter((c) => counties.includes(c))} />
           <AlertsBox name={site.name} state={site.state} />
         </div>
       </section>

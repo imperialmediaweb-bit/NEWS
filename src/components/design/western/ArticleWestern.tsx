@@ -10,6 +10,7 @@ import AlertsBox from "../live/AlertsBox";
 import CountySearch from "../live/CountySearch";
 import PeachFx from "../peach/PeachFx";
 import AdSlot from "../AdSlot";
+import { popularOf } from "@/config/state-data";
 import { zilla, lora, wsOf, wsVars, WHead, WKick, WRule, WsTopBar, WsHeader, WsFooter } from "./shared";
 
 /**
@@ -141,7 +142,7 @@ export default function ArticleWestern({
           )}
           <div>
             <WHead>Your county</WHead>
-            <CountySearch state={site.state} counties={counties} popular={["Yellowstone", "Gallatin", "Missoula", "Flathead", "Cascade", "Lewis and Clark"].filter((c) => counties.includes(c))} />
+            <CountySearch state={site.state} counties={counties} popular={popularOf(site.state, ["Yellowstone", "Gallatin", "Missoula", "Flathead", "Cascade", "Lewis and Clark"]).filter((c) => counties.includes(c))} />
           </div>
           <AlertsBox name={site.name} state={site.state} />
         </aside>

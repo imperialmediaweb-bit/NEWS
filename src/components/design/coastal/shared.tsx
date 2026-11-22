@@ -2,6 +2,7 @@ import { Crimson_Pro, Nunito_Sans } from "next/font/google";
 import type { SiteConfig } from "@/config/site-config";
 import type { CityWeather } from "@/lib/local-data";
 import PreviewLinks from "../live/PreviewLinks";
+import { mockupOf, tint } from "@/config/design-cfg";
 import { TZ, WxIcon } from "../live/shared";
 
 /**
@@ -18,7 +19,8 @@ export const CO: Record<string, { ink: string; acc: string; gold: string; sea: s
 };
 
 export function coOf(site: SiteConfig) {
-  return CO[site.slug] || { ink: "#0b3c5d", acc: site.accent, gold: "#c9a55a", sea: "#eaf4f7", slogan: site.tagline, capital: site.city };
+  const m = mockupOf(site.slug);
+  return CO[site.slug] || { ink: m?.ink || "#0b3c5d", acc: m?.acc || site.accent, gold: m?.metal || "#c9a55a", sea: tint(m?.ink || "#0b3c5d", 0.9), slogan: m?.slogan || site.tagline, capital: m?.capital || site.city };
 }
 
 export function coVars(site: SiteConfig) {

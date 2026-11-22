@@ -8,6 +8,8 @@ import HeroCinema from "../live/HeroCinema";
 import { TZ, href, hour, ago, WxIcon, TOPIC_RE, srcSetOf } from "../live/shared";
 import PeachFx, { SplitWords } from "../peach/PeachFx";
 import AdSlot from "../AdSlot";
+import { popularOf, sportsReOf } from "@/config/state-data";
+import { citiesOf } from "@/lib/local-data";
 import Extras from "../extras/Extras";
 import StateMap from "../StateMap";
 import { spectral, mont, dkOf, dkVars, DHead, DLabel, DkTopBar, DkHeader, DkFooter } from "./shared";
@@ -94,7 +96,7 @@ export default function HomeDark({
   const sec = (key: string, re: RegExp, n: number) => take((sections?.[key] || []).concat(pool.filter((a) => re.test(a.title))), n);
   const pol = sec("politics", TOPIC_RE.politics, 3);
   const biz = sec("business", TOPIC_RE.business, 3);
-  const spo = sec("sports", SPORTS_AZ, 3);
+  const spo = sec("sports", sportsReOf(site.state, SPORTS_AZ), 3);
   const feature = take(articles.popular.concat(pool).filter((a) => !!a.img), 1)[0];
   const life = sec("life", TOPIC_RE.life, 4);
   const opinion = take(articles.opinion, 3);
@@ -170,7 +172,7 @@ export default function HomeDark({
               <div className="grid items-center gap-4 sm:grid-cols-[1.3fr_1fr]">
                 <div className={`${panel} p-3`}>
                   <StateMap outline={outline} fill="#3a2a22" stroke="#c0703f" label="#e9ddd3" font="var(--dk-serif), Georgia, serif"
-                    cities={[["Flagstaff", 35.2, -111.65], ["Phoenix", 33.45, -112.07], ["Tucson", 32.22, -110.97], ["Yuma", 32.69, -114.63], ["Prescott", 34.54, -112.47]]}
+                    cities={citiesOf(site.state).slice(0, 5)}
                     points={fl.map((f) => ({ key: f.name + f.county, lon: f.lon!, lat: f.lat!, r: Math.min(16, 4 + Math.sqrt(f.acres) / 12), color: "#ff6b2c", title: `${f.name} Fire · ${f.acres.toLocaleString("en-US")} acres` }))} />
                 </div>
                 <div className={`${panel} p-4`}>
@@ -188,7 +190,7 @@ export default function HomeDark({
           <div className="lg:pl-8">
             <DHead>Your county</DHead>
             <div className="bg-[#f6efe9] p-4 text-[#2a1d17]" style={light}>
-              <CountySearch state={site.state} counties={counties} popular={["Maricopa", "Pima", "Pinal", "Yavapai", "Coconino", "Mohave", "Yuma", "Cochise"].filter((c) => counties.includes(c))} />
+              <CountySearch state={site.state} counties={counties} popular={popularOf(site.state, ["Maricopa", "Pima", "Pinal", "Yavapai", "Coconino", "Mohave", "Yuma", "Cochise"]).filter((c) => counties.includes(c))} />
             </div>
           </div>
         </section>
@@ -375,7 +377,7 @@ export default function HomeDark({
                   {x.numbers.map((n, i) => <span key={i} className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--dk-cu)] text-[15px] font-semibold">{n.replace(/^0/, "")}</span>)}
                   {x.bonus && <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--dk-acc)] text-[15px] font-semibold text-white">{x.bonus.replace(/^0/, "")}</span>}
                 </div>
-                <p className="mt-2 text-[11px] text-white/40">Official draw record (New York State open data). Check your ticket with the Arizona Lottery.</p>
+                <p className="mt-2 text-[11px] text-white/40">Official draw record (New York State open data). Check your ticket with the {site.state} Lottery.</p>
               </div>
             ))}
           </section>

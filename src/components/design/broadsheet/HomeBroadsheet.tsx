@@ -8,6 +8,7 @@ import HeroCinema from "../live/HeroCinema";
 import { TZ, href, hour, ago, WxIcon, TOPIC_RE, srcSetOf } from "../live/shared";
 import PeachFx, { SplitWords } from "../peach/PeachFx";
 import AdSlot from "../AdSlot";
+import { popularOf, sportsReOf } from "@/config/state-data";
 import Extras from "../extras/Extras";
 import { caslon, pub, bsOf, bsVars, BHead, Kick, Double, BsTopBar, BsHeader, BsFooter } from "./shared";
 
@@ -104,7 +105,7 @@ export default function HomeBroadsheet({
   const sec = (key: string, re: RegExp, n: number) => take((sections?.[key] || []).concat(pool.filter((a) => re.test(a.title))), n);
   const pol = sec("politics", TOPIC_RE.politics, 3);
   const biz = sec("business", TOPIC_RE.business, 3);
-  const spo = sec("sports", SPORTS_NY, 3);
+  const spo = sec("sports", sportsReOf(site.state, SPORTS_NY), 3);
   const metro = take(articles.localNews.concat(pool), 6);
   const life = sec("life", TOPIC_RE.life, 4);
   const opinion = take(articles.opinion, 3);
@@ -115,7 +116,7 @@ export default function HomeBroadsheet({
   const more = take(pool, 20);
   const breaking = brief[0] || lead;
   const capital = weather.find((w) => w.city === b.capital) || weather[0];
-  const popularCounties = ["New York", "Kings", "Queens", "Bronx", "Richmond", "Nassau", "Suffolk", "Westchester", "Erie", "Monroe"].filter((c) => counties.includes(c));
+  const popularCounties = popularOf(site.state, ["New York", "Kings", "Queens", "Bronx", "Richmond", "Nassau", "Suffolk", "Westchester", "Erie", "Monroe"]).filter((c) => counties.includes(c));
   const troubled = (subway || []).filter((l) => l.status !== "Good service");
   const good = (subway || []).filter((l) => l.status === "Good service");
   const W = "mx-auto max-w-[1340px] px-4";
@@ -196,12 +197,12 @@ export default function HomeBroadsheet({
           )}
           <div className="lg:pl-6">
             <BHead>Your county</BHead>
-            <p className={`${deck} mb-3 text-[15px]`}>Local news, alerts and resources for all {counties.length} New York counties.</p>
+            <p className={`${deck} mb-3 text-[15px]`}>Local news, alerts and resources for all {counties.length} {site.state} counties.</p>
             <CountySearch state={site.state} counties={counties} popular={popularCounties} />
           </div>
           {weather.length > 0 && (
             <div id="weather" className="scroll-mt-4 lg:pl-6">
-              <BHead>Weather across New York</BHead>
+              <BHead>Weather across {site.state}</BHead>
               <ul>
                 {weather.map((w) => (
                   <li key={w.city} className="flex items-center gap-3 border-b border-[#e3dccb] py-1.5 text-[15px]">
@@ -332,7 +333,7 @@ export default function HomeBroadsheet({
 
         {life.length >= 2 && (
           <section className="pc-in pc-up mt-12">
-            <BHead link="/life" more="More life">Life in New York</BHead>
+            <BHead link="/life" more="More life">Life in {site.state}</BHead>
             <div className="pc-in pc-stagger grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {life.map((a) => (
                 <a key={a.slug} href={href(a)} className="pc-card group block">
@@ -377,7 +378,7 @@ export default function HomeBroadsheet({
         {lottery && lottery.length > 0 && (
           <section className="pc-in pc-up mt-12 border-y border-[var(--bs-gold)] py-5">
             <div className="grid gap-6 md:grid-cols-[220px_1fr_1fr]">
-              <p className={`${caslon.className} text-[26px] italic leading-tight`}>New York Lottery<br /><span className="text-[13px] not-italic text-[#777]">Latest draws</span></p>
+              <p className={`${caslon.className} text-[26px] italic leading-tight`}>{site.state} Lottery<br /><span className="text-[13px] not-italic text-[#777]">Latest draws</span></p>
               {lottery.map((d) => (
                 <div key={d.game}>
                   <p className="text-[14px] font-bold">{d.game} <span className="font-normal text-[#777]">· {new Date(d.date).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", timeZone: "UTC" })}</span></p>
@@ -412,7 +413,7 @@ export default function HomeBroadsheet({
 
         {more.length > 0 && (
           <section className="pc-in pc-up mt-12">
-            <BHead>More from New York</BHead>
+            <BHead>More from {site.state}</BHead>
             <ul className="grid gap-x-10 md:grid-cols-2">
               {more.map((a) => (
                 <li key={a.slug} className="flex gap-4 border-b border-[#e3dccb] py-2.5">
@@ -427,7 +428,7 @@ export default function HomeBroadsheet({
         <section id="alerts" className="pc-in pc-up mt-12 grid scroll-mt-4 gap-6 md:grid-cols-2 md:divide-x md:divide-[var(--bs-gold)]">
           <div className="bg-[#f7f1e6] p-6">
             <p className={`${caslon.className} text-[30px] italic`}>Send us a tip</p>
-            <p className="mt-1 text-[15px] text-[#444]">Have a news tip, document or story idea about New York? Our newsroom wants to hear from you.</p>
+            <p className="mt-1 text-[15px] text-[#444]">Have a news tip, document or story idea about {site.state}? Our newsroom wants to hear from you.</p>
             <a href="/contact" className="mt-3 inline-block border-2 border-[var(--bs-acc)] px-4 py-2 text-[15px] font-semibold text-[var(--bs-acc)] hover:bg-[var(--bs-acc)] hover:text-white">Send a tip securely ›</a>
           </div>
           <div className="md:pl-6"><AlertsBox name={site.name} state={site.state} /></div>

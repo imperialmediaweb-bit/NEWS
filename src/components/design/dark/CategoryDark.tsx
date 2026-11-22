@@ -7,6 +7,7 @@ import CountySearch from "../live/CountySearch";
 import AlertsBox from "../live/AlertsBox";
 import PeachFx, { SplitWords } from "../peach/PeachFx";
 import AdSlot from "../AdSlot";
+import { popularOf, genericAbout, genericSub } from "@/config/state-data";
 import { spectral, mont, dkOf, dkVars, DHead, DLabel, DkTopBar, DkHeader, DkFooter } from "./shared";
 
 /**
@@ -14,7 +15,7 @@ import { spectral, mont, dkOf, dkVars, DHead, DLabel, DkTopBar, DkHeader, DkFoot
  * the dusk gradient, the lead as a cinematic panel, a dark grid, an Arizona
  * sub-section, county finder on parchment, headlines and pagination.
  */
-const ABOUT: Record<string, string> = {
+const ABOUT_ORIG: Record<string, string> = {
   politics: "The Capitol, the governor, the border and the races shaping Arizona.",
   business: "Water, chips, housing, tourism and the companies building the desert economy.",
   sports: "Cardinals, Diamondbacks, Suns, Mercury, the Sun Devils, the Wildcats and Friday nights statewide.",
@@ -22,7 +23,7 @@ const ABOUT: Record<string, string> = {
   life: "Food, culture, the outdoors and life under the desert sun.",
   "local-news": "News from Phoenix to Flagstaff, Tucson to Yuma, and all 15 counties.",
 };
-const SUB: Record<string, [string, RegExp]> = {
+const SUB_ORIG: Record<string, [string, RegExp]> = {
   politics: ["Border & water", /\b(border|migrant|immigra|water|colorado river|drought)\b/i],
   business: ["Chips & growth", /\b(tsmc|chip|semiconductor|plant|jobs?|housing|growth)\b/i],
   sports: ["Arizona teams", /\b(cardinals|diamondbacks|d-backs|suns|mercury|sun devils|wildcats)\b/i],
@@ -43,6 +44,9 @@ export default function CategoryDark({ site, slug, label, stories, latestState, 
 }) {
   const d = dkOf(site);
   const tz = TZ[site.state] || "America/New_York";
+  // the descriptions and sub-sections written for Arizona; any other state gets general ones
+  const ABOUT = site.state === "Arizona" ? ABOUT_ORIG : genericAbout(site.state);
+  const SUB = site.state === "Arizona" ? SUB_ORIG : genericSub(site.state);
   const used = new Set<string>();
   const take = (list: HomeArticle[], n: number) => {
     const out: HomeArticle[] = [];
@@ -132,7 +136,7 @@ export default function CategoryDark({ site, slug, label, stories, latestState, 
             <div />
           )}
           <div className="space-y-4 bg-[#f6efe9] p-4 text-[#2a1d17]" style={light}>
-            <CountySearch state={site.state} counties={counties} popular={["Maricopa", "Pima", "Pinal", "Yavapai", "Coconino", "Yuma"].filter((c) => counties.includes(c))} />
+            <CountySearch state={site.state} counties={counties} popular={popularOf(site.state, ["Maricopa", "Pima", "Pinal", "Yavapai", "Coconino", "Yuma"]).filter((c) => counties.includes(c))} />
             <AlertsBox name={site.name} state={site.state} />
           </div>
         </section>

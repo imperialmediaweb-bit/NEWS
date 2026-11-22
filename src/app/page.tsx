@@ -6,7 +6,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import type { Metadata } from "next";
 import { designState } from "@/lib/design-nou";
-import { getStateWeather, getActiveStorms, countiesOf, getStateAlerts, getGasPrices, getLottery, getAirportStatus, getSpaceCoastLaunches, STATE_AIRPORTS, getStateQuakes, getStateFires, outlineOf, getSubwayStatus, getVolcanoStatus, getBuoys, getUvHourly, getSnow, getDrought } from "@/lib/local-data";
+import { getStateWeather, getActiveStorms, countiesOf, getStateAlerts, getGasPrices, getLottery, getAirportStatus, getSpaceCoastLaunches, airportsOf, getStateQuakes, getStateFires, outlineOf, getSubwayStatus, getVolcanoStatus, getBuoys, getUvHourly, getSnow, getDrought } from "@/lib/local-data";
 import { getCategoryArticles } from "@/lib/category-data";
 import HomeLive from "@/components/design/live/HomeLive";
 import HomePeach from "@/components/design/peach/HomePeach";
@@ -68,7 +68,7 @@ export default async function Home({ searchParams }: Props) {
 
   if (design.family) {
     const SECTIONS = ["politics", "sports", "business", "life"];
-    const ports = STATE_AIRPORTS[site.state];
+    const ports = airportsOf(site.state);
     const QUAKE_STATES = ["California", "Alaska", "Oregon", "Washington", "Wyoming", "Nevada", "Utah", "Idaho", "Montana", "Hawaii"];
     const FIRE_STATES = ["California", "Oregon", "Washington", "Idaho", "Montana", "Nevada", "Arizona", "New Mexico", "Colorado", "Utah", "Wyoming"];
     const NO_LOTTERY = ["Alabama", "Alaska", "Hawaii", "Nevada", "Utah"];

@@ -8,6 +8,7 @@ import HeroCinema from "../live/HeroCinema";
 import { TZ, href, hour, ago, WxIcon, TOPIC_RE, srcSetOf } from "../live/shared";
 import PeachFx from "../peach/PeachFx";
 import AdSlot from "../AdSlot";
+import { popularOf, sportsReOf } from "@/config/state-data";
 import Extras from "../extras/Extras";
 import Countdown from "./Countdown";
 import { cond, text, tabOf, tabVars, THead, Slant, TabTopBar, TabHeader, TabFooter } from "./shared";
@@ -95,7 +96,7 @@ export default function HomeTabloid({
   const sec = (key: string, re: RegExp, n: number) => take((sections?.[key] || []).concat(pool.filter((a) => re.test(a.title))), n);
   const pol = sec("politics", TOPIC_RE.politics, 3);
   const biz = sec("business", TOPIC_RE.business, 3);
-  const spo = sec("sports", SPORTS_FL, 3);
+  const spo = sec("sports", sportsReOf(site.state, SPORTS_FL), 3);
   const wall = take(articles.popular.concat(articles.trending, pool), 5);
   const life = sec("life", TOPIC_RE.life, 4);
   const opinion = take(articles.opinion, 4);
@@ -107,7 +108,7 @@ export default function HomeTabloid({
   const breaking = brief[0] || lead;
   const fresh = breaking.iso && Date.now() - new Date(breaking.iso).getTime() < 90 * 60000;
   const capital = weather.find((w) => w.city === t.capital) || weather[0];
-  const popularCounties = ["Miami-Dade", "Broward", "Palm Beach", "Hillsborough", "Orange", "Duval", "Pinellas", "Lee", "Polk", "Brevard"].filter((c) => counties.includes(c));
+  const popularCounties = popularOf(site.state, ["Miami-Dade", "Broward", "Palm Beach", "Hillsborough", "Orange", "Duval", "Pinellas", "Lee", "Polk", "Brevard"]).filter((c) => counties.includes(c));
   const nextLaunch = (launches || []).find((l) => new Date(l.net).getTime() > Date.now());
   const laterLaunches = (launches || []).filter((l) => l !== nextLaunch && new Date(l.net).getTime() > Date.now()).slice(0, 4);
   const W = "mx-auto max-w-[1360px] px-4";
@@ -242,7 +243,7 @@ export default function HomeTabloid({
         <section id="weather" className="pc-in pc-up mt-10 grid scroll-mt-4 gap-5 lg:grid-cols-[1.5fr_1fr]">
           {weather.length > 0 && (
             <div>
-              <THead>Weather across Florida</THead>
+              <THead>Weather across {site.state}</THead>
               <div className="grid grid-cols-2 gap-px bg-[#e2e2e2] sm:grid-cols-4">
                 {weather.map((w) => (
                   <div key={w.city} className="bg-white p-3 text-center">
@@ -271,7 +272,7 @@ export default function HomeTabloid({
             )}
             {airports && airports.length > 0 && (
               <div className="bg-[var(--tb-ink)] p-4 text-white">
-                <p className={`${cond.className} text-[26px] font-black uppercase italic leading-none`}>Florida airports now</p>
+                <p className={`${cond.className} text-[26px] font-black uppercase italic leading-none`}>{site.state} airports now</p>
                 <ul className="mt-2 divide-y divide-white/15">
                   {airports.map((ap) => (
                     <li key={ap.code} className="flex items-center gap-3 py-2">
@@ -371,7 +372,7 @@ export default function HomeTabloid({
       {life.length >= 2 && (
         <section className="pc-in pc-up bg-[linear-gradient(120deg,#ffe3d6,#fff4d9_60%,#d9f2f0)] py-10">
           <div className={W}>
-            <THead link="/life" more="More life">Sunshine State life</THead>
+            <THead link="/life" more="More life">{site.state === "Florida" ? "Sunshine State life" : `Life in ${site.state}`}</THead>
             <div className="pc-in pc-stagger grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
               {life.map((a) => (
                 <a key={a.slug} href={href(a)} className="pc-card group block bg-white p-2 shadow-[0_10px_30px_-20px_rgba(0,0,0,.5)]">
@@ -441,7 +442,7 @@ export default function HomeTabloid({
                 <p className={`${cond.className} w-full text-[28px] font-black uppercase italic leading-none`}>{d.game} <span className="text-[14px] font-semibold not-italic text-[#777]">{new Date(d.date).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", timeZone: "UTC" })}</span></p>
                 {d.numbers.map((n, i) => <span key={i} className={`${cond.className} flex h-12 w-12 items-center justify-center rounded-full bg-[#111] text-[22px] font-black text-white`}>{n.replace(/^0/, "")}</span>)}
                 {d.bonus && <span className={`${cond.className} flex h-12 w-12 items-center justify-center rounded-full bg-[var(--tb-acc)] text-[22px] font-black text-white`}>{d.bonus.replace(/^0/, "")}</span>}
-                <p className="w-full text-[11px] text-[#888]">Official draw record (New York State open data). Check your ticket with the Florida Lottery.</p>
+                <p className="w-full text-[11px] text-[#888]">Official draw record (New York State open data). Check your ticket with the {site.state} Lottery.</p>
               </div>
             ))}
           </section>
@@ -467,7 +468,7 @@ export default function HomeTabloid({
 
         {more.length > 0 && (
           <section className="pc-in pc-up mt-12">
-            <THead>More from Florida</THead>
+            <THead>More from {site.state}</THead>
             <ul className="grid gap-x-10 md:grid-cols-2">
               {more.map((a) => (
                 <li key={a.slug} className="flex gap-4 border-b border-[#e2e2e2] py-2.5">
@@ -484,7 +485,7 @@ export default function HomeTabloid({
             <svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1zM15 9a3 3 0 0 1 0 6M18 6a7 7 0 0 1 0 12" strokeLinecap="round" /></svg>
             <div className="flex-1">
               <p className={`${cond.className} text-[36px] font-black uppercase italic leading-none`}>Send us a tip</p>
-              <p className="mt-1 text-[14px] text-white/80">A news tip, photo or video from across Florida? Our newsroom wants to hear from you.</p>
+              <p className="mt-1 text-[14px] text-white/80">A news tip, photo or video from across {site.state}? Our newsroom wants to hear from you.</p>
             </div>
             <a href="/contact" className={`${cond.className} bg-[var(--tb-acc)] px-5 py-2 text-[20px] font-extrabold uppercase italic`}>Send a tip »</a>
           </div>

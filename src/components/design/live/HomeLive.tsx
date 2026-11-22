@@ -7,6 +7,8 @@ import MobileMenu from "./MobileMenu";
 import HeroCinema from "./HeroCinema";
 import Reveal from "./Reveal";
 import Extras from "../extras/Extras";
+import { popularOf, sportsReOf } from "@/config/state-data";
+import { citiesOf } from "@/lib/local-data";
 import PeachFx from "../peach/PeachFx";
 import { serif, sans, PALETTE, TZ, href, hour, ago, WxIcon, SectionTitle, NAV, LiveTopBar, LiveFooter } from "./shared";
 
@@ -76,7 +78,7 @@ export default function HomeLive({
   const TOPICS: Array<[string, RegExp, HomeArticle[]]> = [
     ["Politics", /\b(governor|gov\.|abbott|senat|legislat|lawmaker|congress|election|vote|voter|ballot|mayor|council|commissioner|statehouse|capitol|campaign|republican|democrat|policy|bill)\b/i, articles.politics],
     ["Business", /\b(business|compan|jobs?|hiring|layoff|plant|factory|econom|market|price|sales|retail|store|restaurant|opens?|opening|invest|startup|bank|oil|energy|tax|budget|million|billion)\b/i, articles.business],
-    ["Sports", /\b(game|coach|football|basketball|baseball|soccer|playoff|season|team|athlet|longhorns|aggies|cowboys|texans|rangers|astros|mavericks|spurs|rockets|isd football|tournament|championship|win|wins|score)\b/i, articles.sports],
+    ["Sports", sportsReOf(site.state, /\b(game|coach|football|basketball|baseball|soccer|playoff|season|team|athlet|longhorns|aggies|cowboys|texans|rangers|astros|mavericks|spurs|rockets|isd football|tournament|championship|win|wins|score)\b/i), articles.sports],
     ["Crime & Safety", /\b(police|sheriff|deput|arrest|charged|indicted|court|judge|crash|fire|shooting|killed|death|investigat|trooper|jail|prison|execution)\b/i, []],
     ["Education", /\b(school|isd|student|teacher|college|universit|campus|education|graduat)\b/i, []],
   ];
@@ -95,7 +97,7 @@ export default function HomeLive({
   const secLife = take(sections?.life || [], 5);
   // Further down the page, all from the same recent pool, never repeating.
   const latestGrid = take(pool, 6);
-  const CITY_BLOCKS = ["Houston", "Dallas", "Austin", "San Antonio", "Fort Worth", "El Paso"];
+  const CITY_BLOCKS = site.state === "Texas" ? ["Houston", "Dallas", "Austin", "San Antonio", "Fort Worth", "El Paso"] : citiesOf(site.state).map((c) => c[0]);
   const cities: Array<[string, HomeArticle[]]> = [];
   for (const c of CITY_BLOCKS) {
     if (cities.length >= 4) break;
@@ -109,7 +111,7 @@ export default function HomeLive({
   const moreNews = take(pool, 20);
   const breaking = live[0] || lead;
   const capital = weather[0];
-  const popularCounties = ["Harris", "Dallas", "Tarrant", "Bexar", "Travis", "Collin", "Denton", "El Paso", "Hidalgo", "Lubbock"].filter((c) => counties.includes(c));
+  const popularCounties = popularOf(site.state, ["Harris", "Dallas", "Tarrant", "Bexar", "Travis", "Collin", "Denton", "El Paso", "Hidalgo", "Lubbock"]).filter((c) => counties.includes(c));
   const logo = `/logos/${site.slug}.svg`;
   const nav = NAV;
 

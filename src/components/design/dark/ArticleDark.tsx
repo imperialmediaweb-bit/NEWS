@@ -10,6 +10,7 @@ import AlertsBox from "../live/AlertsBox";
 import CountySearch from "../live/CountySearch";
 import PeachFx, { SplitWords } from "../peach/PeachFx";
 import AdSlot from "../AdSlot";
+import { popularOf } from "@/config/state-data";
 import { spectral, mont, dkOf, dkVars, DHead, DLabel, DkTopBar, DkHeader, DkFooter } from "./shared";
 
 /**
@@ -134,7 +135,7 @@ export default function ArticleDark({ site, article, categorySlug, related, late
             </div>
           )}
           <div className="space-y-4 bg-[#f6efe9] p-4 text-[#2a1d17]" style={light}>
-            <CountySearch state={site.state} counties={counties} popular={["Maricopa", "Pima", "Pinal", "Yavapai", "Coconino", "Yuma"].filter((c) => counties.includes(c))} />
+            <CountySearch state={site.state} counties={counties} popular={popularOf(site.state, ["Maricopa", "Pima", "Pinal", "Yavapai", "Coconino", "Yuma"]).filter((c) => counties.includes(c))} />
             <AlertsBox name={site.name} state={site.state} />
           </div>
         </aside>

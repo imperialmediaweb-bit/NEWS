@@ -8,6 +8,8 @@ import HeroCinema from "../live/HeroCinema";
 import { TZ, href, hour, ago, WxIcon, TOPIC_RE, srcSetOf } from "../live/shared";
 import PeachFx, { SplitWords } from "../peach/PeachFx";
 import AdSlot from "../AdSlot";
+import { popularOf, sportsReOf } from "@/config/state-data";
+import { citiesOf } from "@/lib/local-data";
 import Extras from "../extras/Extras";
 import QuakeMap, { quakeColor } from "./QuakeMap";
 import { serifM, sansM, magOf, magVars, MHead, Label, MagTopBar, MagHeader, MagFooter } from "./shared";
@@ -94,7 +96,7 @@ export default function HomeMagazine({
   const sec = (key: string, re: RegExp, n: number) => take((sections?.[key] || []).concat(pool.filter((a) => re.test(a.title))), n);
   const pol = sec("politics", TOPIC_RE.politics, 3);
   const biz = sec("business", TOPIC_RE.business, 3);
-  const spo = sec("sports", SPORTS_CA, 3);
+  const spo = sec("sports", sportsReOf(site.state, SPORTS_CA), 3);
   const feature = take(articles.popular.concat(pool).filter((a) => !!a.img), 1)[0];
   const life = sec("life", TOPIC_RE.life, 4);
   const opinion = take(articles.opinion, 4);
@@ -105,7 +107,7 @@ export default function HomeMagazine({
   const more = take(pool, 20);
   const breaking = brief[0] || lead;
   const capital = weather.find((w) => w.city === m.capital) || weather[0];
-  const popularCounties = ["Los Angeles", "San Diego", "Orange", "Riverside", "San Bernardino", "Santa Clara", "Alameda", "Sacramento", "San Francisco", "Fresno"].filter((c) => counties.includes(c));
+  const popularCounties = popularOf(site.state, ["Los Angeles", "San Diego", "Orange", "Riverside", "San Bernardino", "Santa Clara", "Alameda", "Sacramento", "San Francisco", "Fresno"]).filter((c) => counties.includes(c));
   const qs = quakes || [];
   const biggest = [...qs].sort((a, b) => b.mag - a.mag).slice(0, 3);
   const W = "mx-auto max-w-[1320px] px-4";
@@ -165,7 +167,7 @@ export default function HomeMagazine({
               <MHead>Recent earthquakes</MHead>
               <p className="-mt-2 mb-2 text-[13px] text-[#777]">Past 7 days, magnitude 2.5+ · {qs.length} in {site.state} · Source: USGS</p>
               <div className="relative rounded-sm bg-[#eef4f8] p-2">
-                <QuakeMap outline={outline} quakes={qs} cities={[["Los Angeles", 34.05, -118.24], ["San Francisco", 37.77, -122.42], ["Sacramento", 38.58, -121.49], ["Fresno", 36.74, -119.79], ["San Diego", 32.72, -117.16]]} />
+                <QuakeMap outline={outline} quakes={qs} cities={citiesOf(site.state).slice(0, 5)} />
                 <div className="absolute right-3 top-3 rounded-sm bg-white/90 p-2 text-[12px] shadow-sm">
                   <p className="mb-1 font-bold">Magnitude</p>
                   {[[4.2, "4.0 +"], [3.4, "3.0 – 3.9"], [2.7, "2.5 – 2.9"]].map(([v, l]) => (
@@ -318,7 +320,7 @@ export default function HomeMagazine({
       <div className={W}>
         {life.length >= 2 && (
           <section className="pc-in pc-up mt-14">
-            <MHead link="/life" more="More life">The California life</MHead>
+            <MHead link="/life" more="More life">{site.state === "California" ? "The California life" : `Life in ${site.state}`}</MHead>
             <div className="pc-in pc-stagger grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
               {life.map((a, i) => (
                 <a key={a.slug} href={href(a)} className="pc-card group block">
@@ -387,7 +389,7 @@ export default function HomeMagazine({
                   {d.numbers.map((n, i) => <span key={i} className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--mg-ink)] text-[16px] font-semibold">{n.replace(/^0/, "")}</span>)}
                   {d.bonus && <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--mg-acc)] text-[16px] font-semibold text-white">{d.bonus.replace(/^0/, "")}</span>}
                 </div>
-                <p className="mt-2 text-[11px] text-[#999]">Official draw record (New York State open data). Check your ticket with the California Lottery.</p>
+                <p className="mt-2 text-[11px] text-[#999]">Official draw record (New York State open data). Check your ticket with the {site.state} Lottery.</p>
               </div>
             ))}
           </section>

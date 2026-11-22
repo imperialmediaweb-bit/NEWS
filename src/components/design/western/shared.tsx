@@ -2,6 +2,7 @@ import { Zilla_Slab, Alfa_Slab_One, Lora } from "next/font/google";
 import type { SiteConfig } from "@/config/site-config";
 import type { CityWeather } from "@/lib/local-data";
 import PreviewLinks from "../live/PreviewLinks";
+import { mockupOf, tint } from "@/config/design-cfg";
 import { TZ, WxIcon } from "../live/shared";
 
 /**
@@ -19,7 +20,8 @@ export const WS: Record<string, { ink: string; acc: string; gold: string; paper:
 };
 
 export function wsOf(site: SiteConfig) {
-  return WS[site.slug] || { ink: "#1b3a4b", acc: site.accent, gold: "#b8862b", paper: "#f4ecdc", slogan: site.tagline, capital: site.city, dateline: site.city.toUpperCase() };
+  const m = mockupOf(site.slug);
+  return WS[site.slug] || { ink: m?.ink || "#1b3a4b", acc: m?.acc || site.accent, gold: m?.metal || "#b8862b", paper: tint(m?.acc || "#d18a04", 0.9), slogan: m?.slogan || site.tagline, capital: m?.capital || site.city, dateline: (m?.capital || site.city).toUpperCase() };
 }
 
 export function wsVars(site: SiteConfig) {

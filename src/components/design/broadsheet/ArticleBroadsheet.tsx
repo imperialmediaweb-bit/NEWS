@@ -10,6 +10,7 @@ import AlertsBox from "../live/AlertsBox";
 import CountySearch from "../live/CountySearch";
 import PeachFx from "../peach/PeachFx";
 import AdSlot from "../AdSlot";
+import { popularOf } from "@/config/state-data";
 import { caslon, pub, bsOf, bsVars, BHead, Kick, Double, BsTopBar, BsHeader, BsFooter } from "./shared";
 
 /**
@@ -141,7 +142,7 @@ export default function ArticleBroadsheet({
           )}
           <div>
             <BHead>Your county</BHead>
-            <CountySearch state={site.state} counties={counties} popular={["New York", "Kings", "Queens", "Bronx", "Nassau", "Suffolk"].filter((c) => counties.includes(c))} />
+            <CountySearch state={site.state} counties={counties} popular={popularOf(site.state, ["New York", "Kings", "Queens", "Bronx", "Nassau", "Suffolk"]).filter((c) => counties.includes(c))} />
           </div>
           <AlertsBox name={site.name} state={site.state} />
         </aside>
@@ -149,7 +150,7 @@ export default function ArticleBroadsheet({
 
       {row.length > 0 && (
         <section className={`${W} pc-in pc-up mt-14 border-t-[3px] border-[#0a0a0a] pt-5`}>
-          <BHead>More from New York</BHead>
+          <BHead>More from {site.state}</BHead>
           <div className="pc-in pc-stagger grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {row.map((a) => (
               <a key={a.slug} href={link(a)} className="pc-card group block">

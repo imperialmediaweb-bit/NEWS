@@ -7,6 +7,7 @@ import CountySearch from "../live/CountySearch";
 import AlertsBox from "../live/AlertsBox";
 import PeachFx from "../peach/PeachFx";
 import AdSlot from "../AdSlot";
+import { popularOf, genericAbout, genericSub } from "@/config/state-data";
 import { merri, mulish, gzVars, GHead, Slant, GzTopBar, GzHeader, GzFooter } from "./shared";
 
 /**
@@ -16,7 +17,7 @@ import { merri, mulish, gzVars, GHead, Slant, GzTopBar, GzHeader, GzFooter } fro
  * sub-section (the Statehouse for politics, farm and ag for business...),
  * county finder, headlines and pagination. Real stories only.
  */
-const ABOUT: Record<string, (st: string) => string> = {
+const ABOUT_ORIG: Record<string, (st: string) => string> = {
   politics: () => "The Statehouse, the governor, the caucuses and the races shaping Iowa.",
   business: () => "Farms, ag business, manufacturing, insurance and the companies of Iowa.",
   sports: () => "The Hawkeyes, the Cyclones, the Panthers, Drake, wrestling and Friday nights in every county.",
@@ -24,7 +25,7 @@ const ABOUT: Record<string, (st: string) => string> = {
   life: () => "County fairs, food, faith and everyday life in every corner of Iowa.",
   "local-news": () => "News from all 99 counties of Iowa.",
 };
-const SUB: Record<string, [string, RegExp]> = {
+const SUB_ORIG: Record<string, [string, RegExp]> = {
   politics: ["At the Statehouse", /(legislat|senat|house|capitol|statehouse|governor|reynolds|lawmaker|bill|caucus)/i],
   business: ["Farm & ag", /(farm|corn|soy|hog|cattle|ag|ethanol|crop|harvest|deere)/i],
   sports: ["Hawkeyes & Cyclones", /(hawkeyes|cyclones|iowa state|uni|panthers|drake)/i],
@@ -54,6 +55,9 @@ export default function CategoryGazette({
   totalPages: number;
 }) {
   const tz = TZ[site.state] || "America/New_York";
+  // the descriptions and sub-sections written for Iowa; any other state gets general ones
+  const ABOUT = site.state === "Iowa" ? ABOUT_ORIG : Object.fromEntries(Object.entries(genericAbout(site.state)).map(([k, v]) => [k, () => v]));
+  const SUB = site.state === "Iowa" ? SUB_ORIG : genericSub(site.state);
   const used = new Set<string>();
   const take = (list: HomeArticle[], n: number) => {
     const out: HomeArticle[] = [];
@@ -162,7 +166,7 @@ export default function CategoryGazette({
           <div className="space-y-6">
             <div className="border border-[#d9d9d9] p-5">
               <GHead>Your county</GHead>
-              <CountySearch state={site.state} counties={counties} popular={["Polk", "Linn", "Scott", "Johnson", "Black Hawk", "Story"].filter((c) => counties.includes(c))} />
+              <CountySearch state={site.state} counties={counties} popular={popularOf(site.state, ["Polk", "Linn", "Scott", "Johnson", "Black Hawk", "Story"]).filter((c) => counties.includes(c))} />
             </div>
             <AlertsBox name={site.name} state={site.state} />
           </div>

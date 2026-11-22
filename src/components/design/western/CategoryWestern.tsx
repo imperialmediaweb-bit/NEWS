@@ -7,6 +7,7 @@ import CountySearch from "../live/CountySearch";
 import AlertsBox from "../live/AlertsBox";
 import PeachFx, { SplitWords } from "../peach/PeachFx";
 import AdSlot from "../AdSlot";
+import { popularOf, genericAbout, genericSub } from "@/config/state-data";
 import { zilla, lora, wsVars, WHead, WKick, WRule, WsTopBar, WsHeader, WsFooter } from "./shared";
 
 /**
@@ -16,7 +17,7 @@ import { zilla, lora, wsVars, WHead, WKick, WRule, WsTopBar, WsHeader, WsFooter 
  * politics, Wall Street for business...), the county finder, headlines and
  * pagination. Real stories only.
  */
-const ABOUT: Record<string, string> = {
+const ABOUT_ORIG: Record<string, string> = {
   politics: "The Capitol in Helena, the governor, Congress and the races shaping Montana.",
   business: "Ranching, energy, tourism, tech in Bozeman and the companies of Big Sky country.",
   sports: "The Griz, the Bobcats, Carroll, rodeo, skiing and Friday nights across Montana.",
@@ -24,7 +25,7 @@ const ABOUT: Record<string, string> = {
   life: "The outdoors, food, culture and life in Big Sky country.",
   "local-news": "News from Billings to Kalispell and all 56 counties.",
 };
-const SUB: Record<string, [string, RegExp]> = {
+const SUB_ORIG: Record<string, [string, RegExp]> = {
   politics: ["Helena", /(helena|legislat|senat|house|capitol|governor|gianforte|lawmaker|bill)/i],
   business: ["Land & energy", /(ranch|cattle|land|energy|oil|coal|mine|timber|tourism)/i],
   sports: ["Griz & Cats", /(griz|grizzlies|bobcats|cats|montana state|um )/i],
@@ -54,6 +55,9 @@ export default function CategoryWestern({
   totalPages: number;
 }) {
   const tz = TZ[site.state] || "America/New_York";
+  // the descriptions and sub-sections written for Montana; any other state gets general ones
+  const ABOUT = site.state === "Montana" ? ABOUT_ORIG : genericAbout(site.state);
+  const SUB = site.state === "Montana" ? SUB_ORIG : genericSub(site.state);
   const used = new Set<string>();
   const take = (list: HomeArticle[], n: number) => {
     const out: HomeArticle[] = [];
@@ -140,7 +144,7 @@ export default function CategoryWestern({
           <div className="space-y-6 lg:border-l lg:border-[var(--ws-gold)] lg:pl-8">
             <div>
               <WHead>Your county</WHead>
-              <CountySearch state={site.state} counties={counties} popular={["Yellowstone", "Gallatin", "Missoula", "Flathead", "Cascade", "Lewis and Clark"].filter((c) => counties.includes(c))} />
+              <CountySearch state={site.state} counties={counties} popular={popularOf(site.state, ["Yellowstone", "Gallatin", "Missoula", "Flathead", "Cascade", "Lewis and Clark"]).filter((c) => counties.includes(c))} />
             </div>
             <AlertsBox name={site.name} state={site.state} />
           </div>

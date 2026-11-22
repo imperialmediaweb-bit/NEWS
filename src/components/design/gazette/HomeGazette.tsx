@@ -8,6 +8,8 @@ import HeroCinema from "../live/HeroCinema";
 import { TZ, href, hour, ago, WxIcon, TOPIC_RE, srcSetOf } from "../live/shared";
 import PeachFx, { SplitWords } from "../peach/PeachFx";
 import AdSlot from "../AdSlot";
+import { popularOf, sportsReOf } from "@/config/state-data";
+import { citiesOf } from "@/lib/local-data";
 import Extras from "../extras/Extras";
 import StateMap from "../StateMap";
 import { merri, mulish, gzOf, gzVars, GHead, GzTopBar, GzHeader, GzFooter } from "./shared";
@@ -94,7 +96,7 @@ export default function HomeGazette({
   const sec = (key: string, re: RegExp, n: number) => take((sections?.[key] || []).concat(pool.filter((a) => re.test(a.title))), n);
   const pol = sec("politics", TOPIC_RE.politics, 3);
   const biz = sec("business", TOPIC_RE.business, 3);
-  const spo = sec("sports", SPORTS_IA, 3);
+  const spo = sec("sports", sportsReOf(site.state, SPORTS_IA), 3);
   const opinion = take(articles.opinion, 3);
   const life = sec("life", TOPIC_RE.life, 4);
   const safety = take(pool.filter((a) => SAFETY.test(a.title)), 4);
@@ -181,7 +183,7 @@ export default function HomeGazette({
             <div className="p-4">
               {outline && (
                 <div className="mb-3">
-                  <StateMap outline={outline} fill={severe.length ? "#fde3a1" : "#f4ecd6"} stroke="#3d2f12" label="#3d2f12" font="var(--gz-serif), Georgia, serif" cities={[["Des Moines", 41.59, -93.62], ["Cedar Rapids", 41.98, -91.67], ["Sioux City", 42.5, -96.4], ["Waterloo", 42.49, -92.34]]} />
+                  <StateMap outline={outline} fill={severe.length ? "#fde3a1" : "#f4ecd6"} stroke="#3d2f12" label="#3d2f12" font="var(--gz-serif), Georgia, serif" cities={citiesOf(site.state).slice(0, 5)} />
                 </div>
               )}
               {severe.length ? (
@@ -207,7 +209,7 @@ export default function HomeGazette({
           <div className={`${card} p-5`}>
             <GHead>Your county</GHead>
             <p className="-mt-1 mb-3 text-[14px] text-[#4a3f28]">Local news, schools, events and more from all {counties.length} {site.state} counties.</p>
-            <CountySearch state={site.state} counties={counties} popular={["Polk", "Linn", "Scott", "Johnson", "Black Hawk", "Story", "Woodbury", "Dubuque"].filter((c) => counties.includes(c))} />
+            <CountySearch state={site.state} counties={counties} popular={popularOf(site.state, ["Polk", "Linn", "Scott", "Johnson", "Black Hawk", "Story", "Woodbury", "Dubuque"]).filter((c) => counties.includes(c))} />
             <p className="mt-4 text-[12px] font-bold uppercase tracking-wide">Browse by letter</p>
             <div className="mt-2 flex flex-wrap gap-1.5">
               {letters.map((l) => <a key={l} href={`/search?q=${encodeURIComponent(`${counties.find((c) => c[0].toUpperCase() === l)} County`)}`} className="flex h-8 w-8 items-center justify-center rounded border border-[#e3d3ad] text-[14px] font-bold text-[#a06f00] hover:bg-[var(--gz-acc)] hover:text-white">{l}</a>)}
@@ -381,7 +383,7 @@ export default function HomeGazette({
                   {x.numbers.map((n, i) => <span key={i} className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-[var(--gz-ink)] text-[16px] font-extrabold">{n.replace(/^0/, "")}</span>)}
                   {x.bonus && <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--gz-acc)] text-[16px] font-extrabold">{x.bonus.replace(/^0/, "")}</span>}
                 </div>
-                <p className="mt-2 text-[11px] text-[#8a7a58]">Official draw record (New York State open data). Check your ticket with the Iowa Lottery.</p>
+                <p className="mt-2 text-[11px] text-[#8a7a58]">Official draw record (New York State open data). Check your ticket with the {site.state} Lottery.</p>
               </div>
             ))}
           </section>

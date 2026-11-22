@@ -10,6 +10,7 @@ import AlertsBox from "../live/AlertsBox";
 import CountySearch from "../live/CountySearch";
 import PeachFx from "../peach/PeachFx";
 import AdSlot from "../AdSlot";
+import { popularOf } from "@/config/state-data";
 import { merri, mulish, gzVars, GHead, Slant, GzTopBar, GzHeader, GzFooter } from "./shared";
 
 /**
@@ -147,7 +148,7 @@ export default function ArticleGazette({
           )}
           <div className="border border-[#d9d9d9] p-4">
             <GHead>Your county</GHead>
-            <CountySearch state={site.state} counties={counties} popular={["Polk", "Linn", "Scott", "Johnson", "Black Hawk", "Story"].filter((c) => counties.includes(c))} />
+            <CountySearch state={site.state} counties={counties} popular={popularOf(site.state, ["Polk", "Linn", "Scott", "Johnson", "Black Hawk", "Story"]).filter((c) => counties.includes(c))} />
           </div>
           <AlertsBox name={site.name} state={site.state} />
         </aside>

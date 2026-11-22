@@ -8,6 +8,7 @@ import { TZ, href, hour, ago, WxIcon, TOPIC_RE, srcSetOf } from "../live/shared"
 import HeroCinema from "../live/HeroCinema";
 import PeachFx from "./PeachFx";
 import Extras from "../extras/Extras";
+import { popularOf, sportsReOf } from "@/config/state-data";
 import { display, body, peachOf, peachVars, PHead, Ico, PeachTopBar, PeachHeader, PeachFooter } from "./shared";
 
 /**
@@ -101,7 +102,7 @@ export default function HomePeach({
   const sec = (key: string, re: RegExp, n: number) => take((sections?.[key] || []).concat(pool.filter((a) => re.test(a.title))), n);
   const pol = sec("politics", TOPIC_RE.politics, 4);
   const biz = sec("business", TOPIC_RE.business, 4);
-  const spo = sec("sports", SPORTS_GA, 4);
+  const spo = sec("sports", sportsReOf(site.state, SPORTS_GA), 4);
   const report = take(articles.heroSide.concat(pool), 5);
   const life = sec("life", TOPIC_RE.life, 6);
   const opinion = take(articles.opinion, 3);
@@ -114,7 +115,7 @@ export default function HomePeach({
   const breaking = live[0] || lead;
   const fresh = breaking.iso && Date.now() - new Date(breaking.iso).getTime() < 90 * 60000;
   const capital = weather.find((w) => w.city === p.capital) || weather[0];
-  const popularCounties = ["Fulton", "Gwinnett", "Cobb", "DeKalb", "Chatham", "Clayton", "Henry", "Forsyth", "Cherokee", "Richmond"].filter((c) => counties.includes(c));
+  const popularCounties = popularOf(site.state, ["Fulton", "Gwinnett", "Cobb", "DeKalb", "Chatham", "Clayton", "Henry", "Forsyth", "Cherokee", "Richmond"]).filter((c) => counties.includes(c));
   const W = "mx-auto max-w-[1360px] px-4";
   const card = "pc-spot rounded-md border border-[var(--pc-cu)]/30 bg-white";
 
@@ -467,7 +468,7 @@ export default function HomePeach({
                   {d.numbers.map((n, i) => <span key={i} className="flex h-11 w-11 items-center justify-center rounded-full border-2 border-[var(--pc-ink)] text-[17px] font-extrabold text-[var(--pc-ink)]">{n.replace(/^0/, "")}</span>)}
                   {d.bonus && <span className="flex h-11 w-11 items-center justify-center rounded-full bg-[var(--pc-acc)] text-[17px] font-extrabold text-white">{d.bonus.replace(/^0/, "")}</span>}
                 </div>
-                <p className="mt-3 text-[11px] text-[#8a7a72]">From the official draw record (New York State open data). Always check your ticket with the Georgia Lottery.</p>
+                <p className="mt-3 text-[11px] text-[#8a7a72]">From the official draw record (New York State open data). Always check your ticket with the {site.state} Lottery.</p>
               </div>
             ))}
           </section>
