@@ -16,6 +16,7 @@ import ArticleWestern from "@/components/design/western/ArticleWestern";
 import ArticleGazette from "@/components/design/gazette/ArticleGazette";
 import { getSiteByDomain, getActiveSite } from "@/config/sites";
 import pool from "@/lib/db";
+import { PLACES } from "@/lib/pipeline/relevance";
 import { getSiteId } from "@/lib/site-id";
 import ArticlePageClient from "@/components/ArticlePageClient";
 
@@ -85,6 +86,18 @@ function injectInternalLinks(
 
 // React cache() dedupes within a single request: generateMetadata and the
 // page component both call this, which previously ran all four queries twice.
+/** The first town or county of the state named in a headline, longest names first. */
+function placeIn(title: string, state: string): string | null {
+  const t = title.toLowerCase();
+  const names = (PLACES[state] || [])
+    .concat(countiesOf(state).map((c) => `${c} County`.toLowerCase()))
+    .sort((a, b) => b.length - a.length);
+  for (const n of names) {
+    if (new RegExp(`\\b${n.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`).test(t)) return n;
+  }
+  return null;
+}
+
 const getArticleData = cache(async (siteSlug: string, articleSlug: string, domain: string) => {
   try {
     const siteId = await getSiteId(siteSlug);
@@ -100,12 +113,31 @@ const getArticleData = cache(async (siteSlug: string, articleSlug: string, domai
 
     // Related articles for the sidebar — list columns only. SELECT * pulled
     // five full article bodies (~50KB of unused HTML) on every article view.
+    // Related: first other stories from the same town or county as this one
+    // (any date, so the archive keeps receiving links), then the same section
+    // around this story's date, then the newest in the section.
+    const cols = "title, slug, summary, featured_image, category, author, published_at";
+    const state = getSiteByDomain(domain)?.state || "";
+    const place = placeIn(article.title, state);
     const { rows: relatedRows } = await pool.query(
-      `SELECT title, slug, summary, featured_image, category, author, published_at
-       FROM articles WHERE site_id = $1 AND category = $2 AND id != $3
-       ORDER BY published_at DESC LIMIT 5`,
-      [siteId, article.category, article.id]
+      `(SELECT ${cols}, 0 AS rk FROM articles
+         WHERE site_id = $1 AND id != $3 AND $4::text IS NOT NULL AND title ILIKE '%' || $4 || '%'
+         ORDER BY published_at DESC LIMIT 4)
+       UNION ALL
+       (SELECT ${cols}, 1 AS rk FROM articles
+         WHERE site_id = $1 AND category = $2 AND id != $3 AND published_at < $5
+         ORDER BY published_at DESC LIMIT 3)
+       UNION ALL
+       (SELECT ${cols}, 2 AS rk FROM articles
+         WHERE site_id = $1 AND category = $2 AND id != $3
+         ORDER BY published_at DESC LIMIT 5)`,
+      [siteId, article.category, article.id, place, article.published_at || new Date()]
     );
+    const seenRel = new Set<string>();
+    relatedRows.splice(0, relatedRows.length, ...relatedRows
+      .sort((a: { rk: number }, b: { rk: number }) => a.rk - b.rk)
+      .filter((r: { slug: string }) => (seenRel.has(r.slug) ? false : (seenRel.add(r.slug), true)))
+      .slice(0, 5));
 
     // Get articles for internal linking (mix of same category + other categories)
     const { rows: linkRows } = await pool.query(
