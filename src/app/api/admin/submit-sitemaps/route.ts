@@ -61,6 +61,46 @@ async function submitToGSC(
   }
 }
 
+const BING_API = "https://ssl.bing.com/webmaster/api.svc/json";
+
+/** Sites registered in Bing Webmaster Tools, keyed by bare host (Bing may hold the www form). */
+async function getBingSites(): Promise<Map<string, string>> {
+  const map = new Map<string, string>();
+  const key = process.env.BING_WEBMASTER_KEY;
+  if (!key) return map;
+  try {
+    const res = await fetch(`${BING_API}/GetUserSites?apikey=${key}`);
+    const data = (await res.json()) as { d?: { Url: string; IsVerified: boolean }[] };
+    for (const x of data.d || []) {
+      if (x.IsVerified) map.set(x.Url.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, ""), x.Url);
+    }
+  } catch {
+    // Bing unreachable: the per-site step reports it
+  }
+  return map;
+}
+
+/** Submit sitemap.xml and news-sitemap.xml to Bing Webmaster Tools for one site. */
+async function submitToBing(domain: string, bingSites: Map<string, string>): Promise<string> {
+  const key = process.env.BING_WEBMASTER_KEY;
+  if (!key) return "SKIPPED";
+  const siteUrl = bingSites.get(domain);
+  if (!siteUrl) return "NOT IN BING";
+  try {
+    for (const feed of ["sitemap.xml", "news-sitemap.xml"]) {
+      const res = await fetch(`${BING_API}/SubmitFeed?apikey=${key}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json; charset=utf-8" },
+        body: JSON.stringify({ siteUrl, feedUrl: `${siteUrl.replace(/\/$/, "")}/${feed}` }),
+      });
+      if (!res.ok) return `FAILED (${res.status}): ${(await res.text()).slice(0, 100)}`;
+    }
+    return "OK";
+  } catch (err) {
+    return `ERROR: ${String(err).slice(0, 80)}`;
+  }
+}
+
 async function submitSitemaps() {
   const results: {
     domain: string;
@@ -68,6 +108,7 @@ async function submitSitemaps() {
     websub: string;
     gsc_sitemap: string;
     gsc_news: string;
+    bing: string;
   }[] = [];
 
   // Get Google Search Console token once for all sites
@@ -77,6 +118,8 @@ async function submitSitemaps() {
   } else {
     console.log("[sitemap-submit] GSC token obtained, will submit sitemaps to Search Console");
   }
+
+  const bingSites = await getBingSites();
 
   for (const site of Object.values(sites)) {
     const domain = site.domain;
@@ -128,6 +171,7 @@ async function submitSitemaps() {
       websub: websubStatus,
       gsc_sitemap: gscSitemapStatus,
       gsc_news: gscNewsStatus,
+      bing: await submitToBing(domain, bingSites),
     });
 
     // Small delay to avoid rate limits
@@ -138,6 +182,7 @@ async function submitSitemaps() {
   const websubOk = results.filter((r) => r.websub === "OK").length;
   const gscSitemapOk = results.filter((r) => r.gsc_sitemap === "OK").length;
   const gscNewsOk = results.filter((r) => r.gsc_news === "OK").length;
+  const bingOk = results.filter((r) => r.bing === "OK").length;
 
   const summary = {
     total: results.length,
@@ -145,6 +190,7 @@ async function submitSitemaps() {
     websubOk,
     gscSitemapOk,
     gscNewsOk,
+    bingOk,
     gscConfigured: !!gscToken,
     results,
     completedAt: new Date().toISOString(),
