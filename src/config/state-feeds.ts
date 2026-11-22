@@ -25,6 +25,8 @@
  * 321 feeds across 50 states.
  */
 
+import { OFFICIAL_FEEDS } from "./official-feeds";
+
 export interface StateFeed {
   url: string;
   publisher: string;
@@ -458,5 +460,6 @@ export const STATE_FEEDS: Record<string, StateFeed[]> = {
 
 /** The feeds for a state, best first. Empty for a state we have none for. */
 export function feedsForState(state: string): StateFeed[] {
-  return STATE_FEEDS[state] || [];
+  // official sources first: they are the first-hand news
+  return (OFFICIAL_FEEDS[state] || []).concat(STATE_FEEDS[state] || []);
 }
