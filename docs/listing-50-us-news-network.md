@@ -12,7 +12,7 @@
 
 **Already built and working today — checklist**
 - ✅ 49 live state news sites + media-chief.com
-- ✅ 9 unique design families: own colours, logo, slogan, artwork and state map per state
+- ✅ 9 unique newspaper designs: own colours, logo, slogan, artwork and state map per state
 - ✅ Homepage, article, section, city, county, team, alerts, submit, advertise and policy pages in the new design
 - ✅ Live local data: weather and alerts, hurricanes, earthquakes, wildfires, gas prices, airport delays, launches, drought, snow and more
 - ✅ **Personalized news for every city, town and county**: each has its own page gathering every story about it from all sources, and every article links to "More from {town}"
@@ -29,7 +29,7 @@
 - ✅ Fast pages: Lighthouse mobile 80–90
 
 **Why this is a good buy**
-- **Building it again** — 9 design families, the multi-site engine, 300+ source integrations, AI pipeline with accuracy rules, payments, newsletter, admin and reports — would take a developer team many months; agency quotes for comparable custom news platforms start well above the asking price
+- **Building it again** — 9 unique newspaper designs, the multi-site engine, 300+ source integrations, AI pipeline with accuracy rules, payments, newsletter, admin and reports — would take a developer team many months; agency quotes for comparable custom news platforms start well above the asking price
 - **One owner, one admin, 50 markets**: every local business, school, church, funeral home and event organizer in the US is a potential customer for sponsored stories, obituaries and press releases
 - **Low running cost** (about $50–150 a month) and **no daily manual work** — your time goes into selling and growing, not into publishing
 - **The hard part is done.** Traffic is early because all the effort so far went into building; the growth is the opportunity for the next owner
@@ -50,7 +50,7 @@ Nothing here is a template: every site, design and feature was custom-built for 
 - Archive of 50,000+ articles; ~480+ new articles a day, scaling to 12+ per site per day
 
 ### 2. A unique design for every state
-- **9 design families** — newspaper, magazine, tabloid, broadsheet, coastal, dark premium, western, gazette and "live" — each state with its own colours, custom logo, slogan, landscape artwork and state map
+- **9 unique newspaper designs** — newspaper, magazine, tabloid, broadsheet, coastal, dark premium, western, gazette and "live" — each state with its own colours, custom logo, slogan, landscape artwork and state map
 - Cinematic homepage slider, breaking ticker, animated sections, mobile menus
 - Every page in the new design: home, articles, sections, county / city / team pages, alerts, submit, contact, about, policies
 - **Fast**: Lighthouse mobile performance 80–90, CLS 0; images as WebP in 5 sizes from **Cloudflare R2** (own image CDN, 150,000+ images migrated)
