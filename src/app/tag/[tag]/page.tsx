@@ -33,8 +33,11 @@ export async function generateMetadata({
     .replace(/-/g, " ")
     .replace(/\b\w/g, (c: string) => c.toUpperCase());
   const url = `https://${site.domain}/tag/${params.tag}`;
+  // a tag with fewer than three stories is a thin page: keep it for readers, out of the index
+  const { total } = await getTagArticles(site.slug, params.tag, 1);
 
   return {
+    ...(total < 3 ? { robots: { index: false, follow: true } } : {}),
     title: `${tagLabel} News & Articles`,
     description: `Articles tagged with "${tagLabel}" on ${site.name}. Latest news from ${site.city}, ${site.state}.`,
     keywords: [tagLabel, site.city, site.state, site.name, "news"],
