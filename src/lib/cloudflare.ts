@@ -182,3 +182,65 @@ export async function forwardContactAddress(zoneId: string, domain: string, to: 
       });
   return { dest, enable, rule };
 }
+
+/** The Email Worker: hands every message it receives to the server, untouched. */
+const INBOUND_WORKER = `export default {
+  async email(message, env) {
+    const raw = await new Response(message.raw).arrayBuffer();
+    const res = await fetch(env.ENDPOINT, {
+      method: "POST",
+      headers: { Authorization: "Bearer " + env.KEY, "X-Envelope-To": message.to, "User-Agent": "Mozilla/5.0 (compatible; ExpressInbound/1.0)" },
+      body: raw,
+    });
+    if (!res.ok) console.log("inbound failed", res.status, message.to);
+  },
+};`;
+
+/**
+ * Deploy the inbound Email Worker once per account, then on each zone turn
+ * Email Routing on and send releases@{domain} to it. Each step reports its result.
+ */
+export async function setupReleaseInbox(zoneId: string, domain: string, endpoint: string, key: string, deployed: Set<string>) {
+  const zone = await cf<{ account: { id: string } }>(`/zones/${zoneId}`);
+  if (!zone.ok) return { zone };
+  const account = zone.result.account.id;
+  const script = "express-release-inbox";
+  let worker: unknown = "already";
+  if (!deployed.has(account)) {
+    const form = new FormData();
+    form.append(
+      "metadata",
+      new Blob([JSON.stringify({
+        main_module: "worker.js",
+        compatibility_date: "2024-09-01",
+        bindings: [
+          { type: "plain_text", name: "ENDPOINT", text: endpoint },
+          { type: "secret_text", name: "KEY", text: key },
+        ],
+      })], { type: "application/json" })
+    );
+    form.append("worker.js", new Blob([INBOUND_WORKER], { type: "application/javascript+module" }), "worker.js");
+    const headers = authHeaders();
+    if (!headers) return { error: "No Cloudflare credentials configured" };
+    const res = await fetch(`${API}/accounts/${account}/workers/scripts/${script}`, { method: "PUT", headers, body: form, signal: AbortSignal.timeout(30000) });
+    const body = (await res.json()) as { success: boolean; errors?: { code: number; message: string }[] };
+    worker = body.success ? "deployed" : body.errors?.map((e) => `${e.code}: ${e.message}`).join("; ");
+    if (body.success) deployed.add(account);
+  }
+  const enable = await cf<unknown>(`/zones/${zoneId}/email/routing/dns`, { method: "POST", body: "{}" });
+  const address = `releases@${domain}`;
+  const existing = await cf<{ matchers: { value?: string }[] }[]>(`/zones/${zoneId}/email/routing/rules`);
+  const has = existing.ok && existing.result.some((r) => r.matchers?.some((m) => m.value === address));
+  const rule = has
+    ? "exists"
+    : await cf<unknown>(`/zones/${zoneId}/email/routing/rules`, {
+        method: "POST",
+        body: JSON.stringify({
+          name: `${address} to release inbox`,
+          enabled: true,
+          matchers: [{ type: "literal", field: "to", value: address }],
+          actions: [{ type: "worker", value: [script] }],
+        }),
+      });
+  return { worker, enable, rule };
+}
