@@ -73,8 +73,10 @@ export async function POST(req: NextRequest) {
       actions.push(`fetch_batch_${batchIndex}`);
     }
 
-    // ─── Rewrite: every 15 min ───
-    if ((await claimJob("rewrite", 15 * 60)).claimed) {
+    // ─── Rewrite: every 5 min ───
+    // 10 a run every 15 minutes left 7,000 stories queued while every site
+    // published under 12 a day; each run claims its items, so runs can overlap.
+    if ((await claimJob("rewrite", 5 * 60)).claimed) {
       fireAndForget(baseUrl, "pipeline/rewrite", { batchSize: 10 }, secret);
       actions.push("rewrite");
     }

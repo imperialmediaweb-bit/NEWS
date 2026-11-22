@@ -115,9 +115,13 @@ export async function POST(req: NextRequest) {
   // Breaking the tie by how long each state has gone without publishing turns
   // the batch into a queue the quietest state is always at the front of. A
   // state that has never published sorts first of all.
+  // Goal: at least 12 stories a day on every site. A state's count over the
+  // last 24 hours comes first (the furthest behind is served first), then how
+  // long it has been silent.
   const { rows: pending } = await pool.query(
     `WITH silence AS (
-       SELECT s.state, max(a.published_at) AS last_published
+       SELECT s.state, max(a.published_at) AS last_published,
+              count(a.id) FILTER (WHERE a.published_at > now() - interval '24 hours') AS day_count
          FROM sites s
          LEFT JOIN articles a ON a.site_id = s.id
         GROUP BY s.state
@@ -132,7 +136,7 @@ export async function POST(req: NextRequest) {
             AND created_at > NOW() - INTERVAL '24 hours'
        ) ranked
        LEFT JOIN silence ON silence.state = ranked.state
-       ORDER BY ranked.rn ASC, silence.last_published ASC NULLS FIRST
+       ORDER BY ranked.rn ASC, LEAST(coalesce(silence.day_count, 0), 12) ASC, silence.last_published ASC NULLS FIRST
        LIMIT $1
      )
      RETURNING *`,
