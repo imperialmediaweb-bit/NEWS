@@ -162,7 +162,7 @@ export default function HomeCoastal({
         <AdSlot position="top" className="mt-8" />
 
         {/* volcano & earthquake watch · county · weather · gas */}
-        <section className="pc-in pc-stagger mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+        <section className="pc-in pc-stagger mt-10 grid gap-5 md:grid-cols-2 xl:[grid-template-columns:repeat(auto-fit,minmax(260px,1fr))]">
           {volcanoes && volcanoes.length > 0 && (
             <div className={`${card} overflow-hidden bg-[linear-gradient(180deg,#eef6f9,#fff_40%)] p-5`}>
               <CHead>Volcano &amp; earthquake watch</CHead>

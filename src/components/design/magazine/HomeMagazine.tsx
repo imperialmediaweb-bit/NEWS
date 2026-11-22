@@ -12,6 +12,7 @@ import { popularOf, sportsReOf } from "@/config/state-data";
 import { citiesOf } from "@/lib/local-data";
 import Extras from "../extras/Extras";
 import QuakeMap, { quakeColor } from "./QuakeMap";
+import StateMap from "../StateMap";
 import { serifM, sansM, magOf, magVars, MHead, Label, MagTopBar, MagHeader, MagFooter } from "./shared";
 
 /**
@@ -147,7 +148,7 @@ export default function HomeMagazine({
         <AdSlot position="top" className="mt-8" />
 
         {/* brief · earthquakes · county */}
-        <section className="pc-in pc-stagger mt-10 grid gap-8 lg:grid-cols-3 lg:divide-x lg:divide-[#e6ddcc]">
+        <section className="pc-in pc-stagger mt-10 grid gap-8 lg:[grid-template-columns:repeat(auto-fit,minmax(300px,1fr))] lg:divide-x lg:divide-[#e6ddcc]">
           {brief.length > 0 && (
             <div>
               <MHead>Today in brief</MHead>
@@ -160,6 +161,23 @@ export default function HomeMagazine({
                   </li>
                 ))}
               </ol>
+            </div>
+          )}
+          {outline && !quakes && fires && (
+            <div className="lg:pl-8">
+              <MHead>Wildfires in {site.state}</MHead>
+              <p className="-mt-2 mb-2 text-[13px] text-[#777]">Active fires over 10 acres · National Interagency Fire Center</p>
+              <div className="rounded-sm bg-[#f6f1e7] p-2">
+                <StateMap outline={outline} fill="#efe6d2" stroke="#8a7a5a" label="#333" font="var(--mg-serif), Georgia, serif" cities={citiesOf(site.state).slice(0, 5)}
+                  points={fires.filter((f) => f.lon != null && f.lat != null).map((f) => ({ key: f.name + f.county, lon: f.lon!, lat: f.lat!, r: Math.min(16, 4 + Math.sqrt(f.acres) / 12), color: "#d9480f", title: `${f.name} Fire · ${f.acres.toLocaleString("en-US")} acres` }))} />
+              </div>
+              {fires.length ? (
+                <ul className="mt-2 text-[14px]">
+                  {fires.slice(0, 3).map((f) => <li key={f.name + f.county} className="py-0.5"><b className="text-[#d9480f]">{f.name} Fire</b> · {f.county} County · {f.acres.toLocaleString("en-US")} acres{f.contained != null ? ` · ${f.contained}% contained` : ""}</li>)}
+                </ul>
+              ) : (
+                <p className="mt-2 text-[14px] text-[#555]">No wildfires over 10 acres are burning in {site.state} right now.</p>
+              )}
             </div>
           )}
           {outline && quakes && (
@@ -193,7 +211,7 @@ export default function HomeMagazine({
         </section>
 
         {/* wildfire watch */}
-        {fires && (
+        {fires && quakes && (
           <section className="pc-in pc-up mt-10 flex flex-wrap items-center gap-x-8 gap-y-3 border-y border-[#e6ddcc] py-4">
             <p className={`${serifM.className} text-[24px] font-semibold italic text-[var(--mg-ink)]`}>Wildfire watch</p>
             {fires.length === 0 ? (

@@ -213,7 +213,7 @@ export default function HomeWestern({
         </section>
 
         {/* the state's own module: snow on the mountains, the week's earthquakes */}
-        {((snow && snow.length > 0) || qs.length > 0) && (
+        {snow && snow.length > 0 && (
           <section className="pc-in pc-up relative mt-10 overflow-hidden bg-[linear-gradient(180deg,#1b3a4b,#24506a)] p-6 text-[#f4ecdc] md:p-8">
             <Ridge className="pointer-events-none absolute inset-x-0 bottom-0 h-28 w-full opacity-30" stroke="#f4ecdc" />
             <p className={`${alfa.className} text-[14px] uppercase tracking-[.14em] text-[var(--ws-acc)]`}>High country report</p>

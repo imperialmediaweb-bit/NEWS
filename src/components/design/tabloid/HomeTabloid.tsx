@@ -159,8 +159,8 @@ export default function HomeTabloid({
         <AdSlot position="top" className="mt-6" />
 
         {/* hurricane tracker + county */}
-        <section className="pc-in pc-stagger mt-8 grid gap-5 lg:grid-cols-[1.25fr_1fr]">
-          {storms && (
+        <section className="pc-in pc-stagger mt-8 grid gap-5 lg:[grid-template-columns:repeat(auto-fit,minmax(380px,1fr))]">
+          {storms && ["Florida", "New Jersey", "Texas", "Louisiana", "Alabama", "Mississippi", "Georgia", "South Carolina", "North Carolina"].includes(site.state) && (
             <div className="overflow-hidden border border-[#d9d9d9]">
               <div className="flex items-center gap-3 bg-[var(--tb-ink)] px-4 py-3 text-white">
                 <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" aria-hidden className="text-[var(--tb-acc)]"><circle cx="12" cy="12" r="3" /><path d="M14 4c-6 0-10 3-10 8M10 20c6 0 10-3 10-8" strokeLinecap="round" /></svg>

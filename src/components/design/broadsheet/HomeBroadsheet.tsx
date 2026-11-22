@@ -169,7 +169,7 @@ export default function HomeBroadsheet({
         <AdSlot position="top" className="mt-6" />
 
         {/* subway · county · weather */}
-        <section className="pc-in pc-stagger mt-6 grid gap-6 lg:grid-cols-[1.3fr_1fr_1fr] lg:divide-x lg:divide-[var(--bs-gold)]">
+        <section className="pc-in pc-stagger mt-6 grid gap-6 lg:[grid-template-columns:repeat(auto-fit,minmax(300px,1fr))] lg:divide-x lg:divide-[var(--bs-gold)]">
           {!subway && storms && ["Alabama", "Mississippi", "Louisiana", "Texas", "Florida", "Georgia", "South Carolina", "North Carolina", "Virginia", "Maryland", "Delaware", "New Jersey"].includes(site.state) && (
             <div>
               <BHead>Hurricane tracker</BHead>
