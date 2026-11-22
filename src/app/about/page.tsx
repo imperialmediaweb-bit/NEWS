@@ -62,7 +62,7 @@ export default function AboutPage() {
               Part of the MediaChief Network
             </h2>
             <p>
-              {site.name} is a proud member of the MediaChief network — America&apos;s largest digital newspaper trust with 50 state-based publications covering every corner of the United States. From coast to coast, MediaChief delivers local news with a national reach, connecting communities through trusted journalism.
+              {site.name} is a proud member of the MediaChief network — a network of 50 state-based publications covering every corner of the United States. From coast to coast, MediaChief delivers local news with a national reach, connecting communities through trusted journalism.
             </p>
             <p>
               Each MediaChief publication is tailored to its state and community, with content focused on local issues, local government, local businesses, and the people who make each state unique. While we share resources and infrastructure, our editorial voice is distinctly {site.state}.

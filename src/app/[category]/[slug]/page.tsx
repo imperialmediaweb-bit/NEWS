@@ -245,9 +245,10 @@ export default async function ArticlePage({
     datePublished: article?.published_at || "",
     dateModified: article?.published_at || "",
     author: {
-      "@type": "Person",
+      // a desk byline ("… Newsroom", "Opinion Desk") is the organisation, not a person
+      "@type": /\b(Newsroom|Desk|Staff)\b/.test(authorName) ? "Organization" : "Person",
       name: authorName,
-      jobTitle: authorTitle,
+      ...(/\b(Newsroom|Desk|Staff)\b/.test(authorName) ? {} : { jobTitle: authorTitle }),
       url: `https://${site.domain}/author/${authorSlug}`,
       worksFor: {
         "@type": "NewsMediaOrganization",

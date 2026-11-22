@@ -116,6 +116,11 @@ export default async function AuthorPage({
               </p>
             </div>
           </div>
+          {/Newsroom$/.test(displayName) && (
+            <p className="mt-6 max-w-[720px] text-[15px] leading-relaxed text-gray-600">
+              The {site.name} Newsroom covers {site.state} using public records, official statements and live data from agencies such as the National Weather Service, the U.S. Geological Survey and state departments. Stories are produced with automated tools and published quickly. Spotted an error? <a href="/corrections" className="underline">Tell us</a> and we will correct it. Read our <a href="/editorial-policy" className="underline">editorial policy</a>.
+            </p>
+          )}
           <p className="mt-6 text-sm text-gray-400">
             {articles.length} article{articles.length !== 1 ? "s" : ""} published
           </p>

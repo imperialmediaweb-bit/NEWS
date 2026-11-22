@@ -65,28 +65,16 @@ export default function EditorialPolicyPage() {
             </ul>
 
             <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
-              2. AI Content Disclosure
+              2. How We Work
             </h2>
-            <div style={{ background: "#fff3f3", padding: "1.5rem", borderLeft: "4px solid var(--accent)", margin: "1rem 0", borderRadius: "0 8px 8px 0" }}>
-              <p style={{ margin: 0, fontWeight: 600 }}>
-                Some content on {site.name} may be created with the assistance of artificial intelligence (AI) technology. We believe in full transparency about our content creation process.
-              </p>
-            </div>
-
-            <h3 style={{ fontFamily: "'Oswald', sans-serif", textTransform: "uppercase", fontSize: "1rem" }}>2.1 How We Use AI</h3>
+            <p>
+              {site.name} covers local news using public records, official statements and live data from agencies such as the National Weather Service, the U.S. Geological Survey and state departments.
+              Stories are produced by our newsroom with automated tools and published quickly, so readers get the news while it matters.
+            </p>
             <ul>
-              <li><strong>AI-Assisted Content:</strong> Some articles may be drafted, summarized, or edited with the assistance of AI tools. These articles are always reviewed, fact-checked, and approved by a human editor before publication.</li>
-              <li><strong>AI-Generated Content:</strong> In limited cases, AI may generate content such as weather summaries, financial data roundups, or event listings. This content is labeled accordingly.</li>
-              <li><strong>Human Oversight:</strong> No AI-generated content is published without human editorial review. A human editor is responsible for verifying all facts, names, dates, and claims before publication.</li>
-            </ul>
-
-            <h3 style={{ fontFamily: "'Oswald', sans-serif", textTransform: "uppercase", fontSize: "1rem" }}>2.2 AI Content Rules</h3>
-            <ul>
-              <li>AI cannot be the sole source for any factual claim. All facts must be independently verifiable.</li>
-              <li>AI-generated content must not include fabricated quotes attributed to real people.</li>
-              <li>AI is not used to create deepfake images, audio, or video content.</li>
-              <li>Human editors verify all names, dates, locations, and specific claims in AI-assisted content.</li>
-              <li>When an article has been substantially created by AI, this is disclosed in the byline (e.g., &quot;Staff Report&quot; or &quot;AI-Assisted&quot;).</li>
+              <li>Stories are signed by the {site.name} Newsroom.</li>
+              <li>We do not invent quotes, sources or details, and we do not publish manipulated images, audio or video.</li>
+              <li>Mistakes can happen. If you spot an error, <a href="/corrections">tell us</a> and we will correct it and note the change at the end of the story.</li>
             </ul>
 
             <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>

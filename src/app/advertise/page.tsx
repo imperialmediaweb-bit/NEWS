@@ -56,7 +56,7 @@ export default function AdvertisePage() {
               Why Advertise With {site.name}?
             </h2>
             <p>
-              {site.name} is the go-to news source for {site.state} residents. As part of the MediaChief network — America&apos;s largest digital newspaper trust with 50 state publications — we offer advertisers unmatched access to engaged, local audiences across the country.
+              {site.name} is the go-to news source for {site.state} residents. As part of the MediaChief network — a network of 50 state publications — we offer advertisers unmatched access to engaged, local audiences across the country.
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 not-prose my-8">

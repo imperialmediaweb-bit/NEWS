@@ -20,7 +20,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const site = getSiteFromHeaders();
   return {
     title: "Careers",
-    description: `Careers at ${site.name} and MediaChief. Join America's largest digital newspaper network with 50 state publications.`,
+    description: `Careers at ${site.name} and MediaChief. Join a network of 50 state news publications.`,
     alternates: { canonical: `https://${site.domain}/careers` },
   };
 }
@@ -43,7 +43,7 @@ export default function CareersPage() {
           <h1 className="text-3xl md:text-5xl" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900 }}>
             Careers at MediaChief
           </h1>
-          <p className="text-gray-400 mt-2 text-sm">Join America&apos;s largest digital newspaper network</p>
+          <p className="text-gray-400 mt-2 text-sm">Join a network of 50 state news publications</p>
         </div>
       </div>
 
@@ -55,7 +55,7 @@ export default function CareersPage() {
               About MediaChief
             </h2>
             <p>
-              MediaChief is the largest digital newspaper trust in the United States, operating 50 state-based news publications — including {site.name}. We are dedicated to revitalizing local journalism through modern technology, innovative storytelling, and a commitment to serving every community in America.
+              MediaChief operates 50 state-based news publications — including {site.name}. We are dedicated to revitalizing local journalism through modern technology, innovative storytelling, and a commitment to serving every community in America.
             </p>
 
             <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>

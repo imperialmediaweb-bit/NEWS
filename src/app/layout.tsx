@@ -112,7 +112,7 @@ export default function RootLayout({
     parentOrganization: {
       "@type": "Organization",
       name: "MediaChief",
-      description: "America's largest media trust with 50 state newspapers delivering breaking news coast to coast.",
+      description: "A network of 50 state news publications covering local news across the United States.",
     },
     address: {
       "@type": "PostalAddress",
