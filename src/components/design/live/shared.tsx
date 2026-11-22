@@ -191,5 +191,5 @@ export function sized(url: string, w: number): string {
 }
 export function srcSetOf(url: string): string | undefined {
   if (!/images\.pexels\.com|images\.unsplash\.com/.test(url || "")) return undefined;
-  return [400, 800, 1200].map((w) => `${sized(url, w)} ${w}w`).join(", ");
+  return [400, 600, 900, 1200, 1600].map((w) => `${sized(url, w)} ${w}w`).join(", ");
 }
