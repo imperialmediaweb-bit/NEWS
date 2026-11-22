@@ -2,6 +2,7 @@ import { Spectral, Montserrat } from "next/font/google";
 import type { SiteConfig } from "@/config/site-config";
 import type { CityWeather } from "@/lib/local-data";
 import PreviewLinks from "../live/PreviewLinks";
+import { artOf } from "@/config/state-art";
 import { mockupOf, shade } from "@/config/design-cfg";
 import { TZ, WxIcon } from "../live/shared";
 
@@ -94,7 +95,7 @@ export function DkHeader({ site, MobileMenu, compact = false, active }: { site: 
         </a>
         <a href="/search" aria-label="Search" className="flex h-11 w-11 items-center justify-center"><Search /></a>
       </div>
-      <div className="relative hidden overflow-hidden md:block" style={{ background: d.sky }}>
+      <div className="relative hidden overflow-hidden md:block" style={artOf(site.slug).sky ? { background: `center / cover no-repeat url(${artOf(site.slug).sky}), ${d.sky}` } : { background: d.sky }}>
         <svg className="absolute inset-x-0 bottom-0 h-16 w-full text-[var(--dk-bg)]" viewBox="0 0 1440 60" preserveAspectRatio="none" aria-hidden><path d="M0 60 L0 38 L90 30 L160 36 L250 18 L330 30 L420 26 L520 40 L640 22 L720 30 L820 14 L900 28 L1010 24 L1100 36 L1180 20 L1260 30 L1360 22 L1440 32 L1440 60 Z" fill="currentColor" /></svg>
         <div className={`relative mx-auto max-w-[1340px] px-4 text-center ${compact ? "py-2" : "py-5"}`}>
           <a href="/" aria-label={site.name} className="inline-block">

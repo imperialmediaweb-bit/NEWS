@@ -2,6 +2,7 @@ import { Zilla_Slab, Alfa_Slab_One, Lora } from "next/font/google";
 import type { SiteConfig } from "@/config/site-config";
 import type { CityWeather } from "@/lib/local-data";
 import PreviewLinks from "../live/PreviewLinks";
+import { artOf } from "@/config/state-art";
 import { mockupOf, tint } from "@/config/design-cfg";
 import { TZ, WxIcon } from "../live/shared";
 
@@ -111,7 +112,12 @@ export function WsHeader({ site, MobileMenu, compact = false, active }: { site: 
           <img src={logo} alt={site.name} width={300} height={150} className={`w-auto ${compact ? "h-[104px]" : "h-[150px]"}`} />
         </a>
         <div className="flex flex-col justify-end">
-          {!compact && <Ridge className="h-[90px] w-full text-[var(--ws-ink)]/70" />}
+          {!compact && (artOf(site.slug).masthead ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={artOf(site.slug).masthead} alt="" width={1536} height={330} className="h-[130px] w-full object-cover mix-blend-multiply" />
+          ) : (
+            <Ridge className="h-[90px] w-full text-[var(--ws-ink)]/70" />
+          ))}
           <nav className="flex items-center justify-end gap-1 pb-3">
             <ul className={`${zilla.className} flex items-center text-[20px] font-bold text-[var(--ws-ink)]`}>
               {WNAV.map(([l, h], i) => {
@@ -142,13 +148,18 @@ export function WsFooter({ site }: { site: SiteConfig }) {
   return (
     <>
       <PreviewLinks />
-      {/* the landscape above the footer */}
+      {/* the landscape above the footer: the mockup's painting, else a drawn one */}
+      {artOf(site.slug).landscape ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={artOf(site.slug).landscape} alt="" width={1536} height={420} loading="lazy" className="mt-16 block h-[180px] w-full object-cover md:h-[260px]" />
+      ) : (
       <div className="mt-16 h-[120px] w-full bg-[linear-gradient(180deg,#f4ecdc_0%,#f6d9a8_45%,#e9a95b_100%)]" aria-hidden>
         <svg viewBox="0 0 1440 120" className="h-full w-full" preserveAspectRatio="none">
           <path d="M0 120 L0 70 L120 40 L210 66 L320 22 L420 58 L520 30 L640 64 L760 18 L880 56 L980 34 L1100 62 L1220 26 L1330 54 L1440 40 L1440 120 Z" fill="#5d6f7a" opacity=".55" />
           <path d="M0 120 L0 92 L160 72 L300 90 L460 70 L620 92 L780 74 L940 94 L1100 76 L1260 92 L1440 80 L1440 120 Z" fill="#1b3a4b" />
         </svg>
       </div>
+      )}
       <footer className="bg-[var(--ws-ink)] text-[#f4ecdc]">
         <div className="mx-auto grid max-w-[1340px] gap-10 px-4 py-12 md:grid-cols-[300px_1fr]">
           <a href="/" aria-label={site.name} className="md:border-r md:border-white/20 md:pr-8">

@@ -12,6 +12,7 @@ import { popularOf, sportsReOf } from "@/config/state-data";
 import { citiesOf } from "@/lib/local-data";
 import Extras from "../extras/Extras";
 import StateMap from "../StateMap";
+import { artOf } from "@/config/state-art";
 import { merri, mulish, gzOf, gzVars, GHead, GzTopBar, GzHeader, GzFooter } from "./shared";
 
 /**
@@ -214,6 +215,10 @@ export default function HomeGazette({
             <div className="mt-2 flex flex-wrap gap-1.5">
               {letters.map((l) => <a key={l} href={`/search?q=${encodeURIComponent(`${counties.find((c) => c[0].toUpperCase() === l)} County`)}`} className="flex h-8 w-8 items-center justify-center rounded border border-[#e3d3ad] text-[14px] font-bold text-[#a06f00] hover:bg-[var(--gz-acc)] hover:text-white">{l}</a>)}
             </div>
+            {artOf(site.slug).county && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={artOf(site.slug).county} alt="" width={800} height={400} loading="lazy" className="mt-4 aspect-[2/1] w-full rounded object-cover" />
+            )}
           </div>
           {weather.length > 0 && (
             <div id="weather" className={`${card} scroll-mt-4 p-5`}>
