@@ -35,6 +35,57 @@ export async function GET(req: NextRequest) {
   const sums = ((await sumRes.json()) as { accountSummaries?: Summary[] }).accountSummaries || [];
   const props = sums.flatMap((a) => (a.propertySummaries || []).map((p) => ({ account: a.displayName, id: p.property.replace("properties/", ""), name: p.displayName })));
 
+  // streams=1: each property's measurement IDs, to match against the sites' GA codes
+  if (req.nextUrl.searchParams.get("streams") === "1") {
+    const streams = [];
+    for (const p of props) {
+      const r = await fetch(`https://analyticsadmin.googleapis.com/v1beta/properties/${p.id}/dataStreams`, { headers: auth });
+      const d = r.ok ? ((await r.json()) as { dataStreams?: { webStreamData?: { measurementId?: string; defaultUri?: string } }[] }) : {};
+      streams.push({ name: p.name, id: p.id, streams: (d.dataStreams || []).map((x) => `${x.webStreamData?.measurementId} ${x.webStreamData?.defaultUri || ""}`.trim()) });
+    }
+    return NextResponse.json({ streams });
+  }
+
+  // detail=1: where the "Direct" visitors come from, on the biggest properties
+  if (req.nextUrl.searchParams.get("detail") === "1") {
+    const only = req.nextUrl.searchParams.get("property");
+    const targets = only ? props.filter((p) => p.id === only) : props.slice(0, 48);
+    const detail = [];
+    for (const p of targets) {
+      const one = async (dimension: string) => {
+        const r = await fetch(`https://analyticsdata.googleapis.com/v1beta/properties/${p.id}:runReport`, {
+          method: "POST",
+          headers: { ...auth, "Content-Type": "application/json" },
+          body: JSON.stringify({
+            dateRanges: [{ startDate: `${days}daysAgo`, endDate: "today" }],
+            dimensions: [{ name: dimension }],
+            metrics: [{ name: "totalUsers" }, { name: "engagedSessions" }, { name: "userEngagementDuration" }],
+            dimensionFilter: { filter: { fieldName: "sessionDefaultChannelGroup", stringFilter: { value: "Direct" } } },
+            orderBys: [{ metric: { metricName: "totalUsers" }, desc: true }],
+            limit: 6,
+          }),
+        });
+        if (!r.ok) return `${r.status}`;
+        const d = (await r.json()) as { rows?: { dimensionValues: { value: string }[]; metricValues: { value: string }[] }[] };
+        return (d.rows || []).map((row) => {
+          const [u, eng, secs] = row.metricValues.map((m) => Number(m.value) || 0);
+          return { [row.dimensionValues[0].value]: { users: u, engagedPct: u ? Math.round((eng / u) * 100) : 0, secPerUser: u ? Math.round(secs / u) : 0 } };
+        });
+      };
+      detail.push({
+        name: p.name,
+        country: await one("country"),
+        city: await one("city"),
+        browser: await one("browser"),
+        device: await one("deviceCategory"),
+        landing: await one("landingPage"),
+        hour: await one("hour"),
+      });
+      if (!only && detail.length >= 6) break;
+    }
+    return NextResponse.json({ days, detail });
+  }
+
   const out = [];
   for (const p of props) {
     const r = await fetch(`https://analyticsdata.googleapis.com/v1beta/properties/${p.id}:runReport`, {
