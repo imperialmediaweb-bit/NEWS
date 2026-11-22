@@ -15,6 +15,7 @@
 - ✅ 9 unique design families: own colours, logo, slogan, artwork and state map per state
 - ✅ Homepage, article, section, city, county, team, alerts, submit, advertise and policy pages in the new design
 - ✅ Live local data: weather and alerts, hurricanes, earthquakes, wildfires, gas prices, airport delays, launches, drought, snow and more
+- ✅ **Personalized news for every city, town and county**: each has its own page gathering every story about it from all sources, and every article links to "More from {town}"
 - ✅ 321 local news sources + official sources on 33 states + Google News + Google Trends per state + email release inbox
 - ✅ AI rewriting every 5 minutes with accuracy safeguards (no invented facts, exact names, legal wording)
 - ✅ Free-licence real photos with credits; images stored and resized on Cloudflare R2
