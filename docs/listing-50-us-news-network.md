@@ -25,7 +25,7 @@
 - ✅ Daily newsletter per state with double opt-in and one-click unsubscribe
 - ✅ Reader submissions (tips, photos, events, achievements, closings) with email alerts to the owner
 - ✅ contact@ and releases@ email on every domain
-- ✅ One admin with reports: indexing, Analytics, Search Console, pipeline, Facebook history
+- ✅ **Everything managed from one admin panel** — all 50 sites, articles, sources and pipeline, reader submissions, paid orders and refunds, newsletter, settings — plus reports: indexing, Analytics, Search Console, pipeline, Facebook history
 - ✅ Fast pages: Lighthouse mobile 80–90
 
 **Why this is a good buy**
