@@ -133,3 +133,20 @@ export async function purgeEverything(zoneId: string): Promise<{ ok: boolean; er
   });
   return res.ok ? { ok: true } : { ok: false, error: res.error };
 }
+
+/**
+ * Let AI answer engines (Perplexity, Gemini) reach a zone: turn off Cloudflare's
+ * blanket "Block AI bots" and its managed robots.txt, so the app's own robots.txt
+ * and middleware decide (they still refuse the training crawlers).
+ * With apply=false it only reads the current settings.
+ */
+export async function openZoneToAnswerBots(zoneId: string, apply: boolean) {
+  type Bm = { ai_bots_protection?: string; is_robots_txt_managed?: boolean; fight_mode?: boolean };
+  const before = await cf<Bm>(`/zones/${zoneId}/bot_management`);
+  if (!before.ok || !apply) return { before };
+  const after = await cf<Bm>(`/zones/${zoneId}/bot_management`, {
+    method: "PUT",
+    body: JSON.stringify({ ai_bots_protection: "disabled", is_robots_txt_managed: false }),
+  });
+  return { before, after };
+}
