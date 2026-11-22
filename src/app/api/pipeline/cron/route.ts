@@ -138,6 +138,12 @@ export async function POST(req: NextRequest) {
     actions.push("cleanup");
   }
 
+  // ─── Morning newsletter: the route sends at 7 am local time per state ───
+  if ((await claimJob("newsletter", 50 * 60)).claimed) {
+    fireAndForgetGet(baseUrl, "pipeline/newsletter-send", secret);
+    actions.push("newsletter");
+  }
+
   // ─── Submit sitemaps to Google & Bing: daily ───
   if ((await claimJob("submit_sitemaps", 24 * 60 * 60)).claimed) {
     fireAndForget(baseUrl, "admin/submit-sitemaps", {}, secret);
