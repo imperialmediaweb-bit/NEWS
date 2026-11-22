@@ -3,6 +3,7 @@ import type { SiteConfig } from "@/config/site-config";
 import type { HomeArticle } from "@/lib/homepage-data";
 import type { CityWeather } from "@/lib/local-data";
 import PreviewLinks from "./PreviewLinks";
+import { mockupOf } from "@/config/design-cfg";
 
 /** Shared pieces of the "live" family: fonts, palette, icons, top bar, footer. */
 export const serif = Source_Serif_4({ subsets: ["latin"], weight: ["600", "700", "800"], display: "swap", preload: false });
@@ -11,7 +12,7 @@ export const sans = Libre_Franklin({ subsets: ["latin"], weight: ["400", "500", 
 export const PALETTE: Record<string, { ink: string; acc: string }> = {
   "texas-express": { ink: "#002868", acc: "#bf0a30" },
 };
-export const TZ: Record<string, string> = { Texas: "America/Chicago", Georgia: "America/New_York", Florida: "America/New_York", California: "America/Los_Angeles", "New York": "America/New_York", Hawaii: "Pacific/Honolulu", Arizona: "America/Phoenix", Montana: "America/Denver", Iowa: "America/Chicago" };
+export const TZ: Record<string, string> = { "Connecticut": "America/New_York", "Delaware": "America/New_York", "Florida": "America/New_York", "Georgia": "America/New_York", "Indiana": "America/New_York", "Maine": "America/New_York", "Maryland": "America/New_York", "Massachusetts": "America/New_York", "Michigan": "America/New_York", "New Hampshire": "America/New_York", "New Jersey": "America/New_York", "New York": "America/New_York", "North Carolina": "America/New_York", "Ohio": "America/New_York", "Pennsylvania": "America/New_York", "Rhode Island": "America/New_York", "South Carolina": "America/New_York", "Vermont": "America/New_York", "Virginia": "America/New_York", "West Virginia": "America/New_York", "Kentucky": "America/New_York", "Alabama": "America/Chicago", "Arkansas": "America/Chicago", "Illinois": "America/Chicago", "Iowa": "America/Chicago", "Kansas": "America/Chicago", "Louisiana": "America/Chicago", "Minnesota": "America/Chicago", "Mississippi": "America/Chicago", "Missouri": "America/Chicago", "Nebraska": "America/Chicago", "North Dakota": "America/Chicago", "Oklahoma": "America/Chicago", "South Dakota": "America/Chicago", "Tennessee": "America/Chicago", "Texas": "America/Chicago", "Wisconsin": "America/Chicago", "Colorado": "America/Denver", "Idaho": "America/Denver", "Montana": "America/Denver", "New Mexico": "America/Denver", "Utah": "America/Denver", "Wyoming": "America/Denver", "Arizona": "America/Phoenix", "California": "America/Los_Angeles", "Nevada": "America/Los_Angeles", "Oregon": "America/Los_Angeles", "Washington": "America/Los_Angeles", "Alaska": "America/Anchorage", "Hawaii": "Pacific/Honolulu" };
 
 export function href(a: HomeArticle) {
   const c = (a.category || "news").toLowerCase().replace(/\s+/g, "-");
@@ -61,7 +62,8 @@ export function SectionTitle({ children, href: link }: { children: React.ReactNo
 export const NAV: Array<[string, string]> = [["Local", "/local-news"], ["Politics", "/politics"], ["Business", "/business"], ["Sports", "/sports"], ["Weather", "#weather"], ["Opinion", "/opinion"], ["Life", "/life"]];
 
 export function liveVars(site: SiteConfig) {
-  const pal = PALETTE[site.slug] || { ink: "#14213d", acc: site.accent };
+  const mk = mockupOf(site.slug);
+  const pal = PALETTE[site.slug] || { ink: mk?.ink || "#14213d", acc: mk?.acc || site.accent };
   return { ["--lv-ink" as string]: pal.ink, ["--lv-acc" as string]: pal.acc } as React.CSSProperties;
 }
 

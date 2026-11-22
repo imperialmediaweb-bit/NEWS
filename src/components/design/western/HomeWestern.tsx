@@ -169,7 +169,7 @@ export default function HomeWestern({
         <AdSlot position="top" className="mt-8" />
 
         {/* wildfires map · county, on a navy band across the page */}
-        <section className="ws-band pc-in pc-stagger mt-10 grid gap-6 py-8 lg:grid-cols-[1.4fr_1fr]">
+        <section className="ws-band pc-in pc-stagger mt-10 grid gap-6 py-8 lg:[grid-template-columns:repeat(auto-fit,minmax(420px,1fr))]">
           {outline && !fires && qs.length > 0 && (
             <div className={card}>
               <WHead sub="Past 7 days · USGS">{site.state} earthquakes</WHead>

@@ -7,6 +7,7 @@ import MobileMenu from "./MobileMenu";
 import HeroCinema from "./HeroCinema";
 import Reveal from "./Reveal";
 import Extras from "../extras/Extras";
+import { mockupOf } from "@/config/design-cfg";
 import { popularOf, sportsReOf } from "@/config/state-data";
 import { citiesOf } from "@/lib/local-data";
 import PeachFx from "../peach/PeachFx";
@@ -52,7 +53,8 @@ export default function HomeLive({
   snow?: unknown;
   drought?: unknown;
 }) {
-  const pal = PALETTE[site.slug] || { ink: "#14213d", acc: site.accent };
+  const mk = mockupOf(site.slug);
+  const pal = PALETTE[site.slug] || { ink: mk?.ink || "#14213d", acc: mk?.acc || site.accent };
   const tz = TZ[site.state] || "America/New_York";
   const lead = articles.heroMain!;
   const used = new Set<string>([lead.slug]);
@@ -195,7 +197,7 @@ export default function HomeLive({
             </ol>
           </div>
 
-          {storms && (
+          {storms && ["Texas", "Louisiana", "Mississippi", "Alabama", "Florida", "Georgia", "South Carolina", "North Carolina", "Virginia"].includes(site.state) && (
             <div className="overflow-hidden border border-[#dde1ea]">
               <div className="bg-[var(--lv-ink)] px-4 py-3 text-white">
                 <h2 className="text-[17px] font-extrabold uppercase">Hurricane tracker</h2>

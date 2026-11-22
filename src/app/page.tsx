@@ -71,6 +71,7 @@ export default async function Home({ searchParams }: Props) {
     const ports = airportsOf(site.state);
     const QUAKE_STATES = ["California", "Alaska", "Oregon", "Washington", "Wyoming", "Nevada", "Utah", "Idaho", "Montana", "Hawaii"];
     const FIRE_STATES = ["California", "Oregon", "Washington", "Idaho", "Montana", "Nevada", "Arizona", "New Mexico", "Colorado", "Utah", "Wyoming"];
+    const DROUGHT_FIPS: Record<string, string> = { Iowa: "19", Arkansas: "05", Indiana: "18", Kansas: "20", Mississippi: "28", Nebraska: "31", "North Dakota": "38", "South Dakota": "46", "West Virginia": "54", Wisconsin: "55" };
     const NO_LOTTERY = ["Alabama", "Alaska", "Hawaii", "Nevada", "Utah"];
     const [weather, storms, alerts, gas, lottery, airports, launches, quakes, fires, subway, volcanoes, buoys, uv, snow, drought, ...lists] = await Promise.all([
       getStateWeather(site.state),
@@ -88,7 +89,7 @@ export default async function Home({ searchParams }: Props) {
       site.state === "Hawaii" ? getBuoys([["51201", "Waimea Bay, O‘ahu"], ["51202", "Mokapu Point, O‘ahu"], ["51206", "Hilo, Big Island"], ["51208", "Hanalei, Kaua‘i"], ["51205", "Pauwela, Maui"]]) : Promise.resolve(null),
       site.state === "Arizona" ? getUvHourly("Phoenix", "AZ") : Promise.resolve(null),
       site.state === "Montana" ? getSnow([["590:MT:SNTL", "Lone Mountain (Big Sky)"], ["480:MT:SNTL", "Fisher Creek (Beartooths)"], ["385:MT:SNTL", "Carrot Basin (West Yellowstone)"], ["696:MT:SNTL", "Placer Basin (Crazy Mtns)"], ["436:MT:SNTL", "Darkhorse Lake (Bitterroot)"]]) : Promise.resolve(null),
-      site.state === "Iowa" ? getDrought("19") : Promise.resolve(null),
+      DROUGHT_FIPS[site.state] ? getDrought(DROUGHT_FIPS[site.state]) : Promise.resolve(null),
       ...SECTIONS.map((c) => getCategoryArticles(site.slug, c, 1)),
     ]);
     const sections = Object.fromEntries(SECTIONS.map((c, i) => [c, (lists[i] as Awaited<ReturnType<typeof getCategoryArticles>>).articles]));

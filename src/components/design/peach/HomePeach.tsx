@@ -199,7 +199,7 @@ export default function HomePeach({
               </ul>
             </div>
           )}
-          {storms && (
+          {storms && ["Texas", "Louisiana", "Mississippi", "Alabama", "Florida", "Georgia", "South Carolina", "North Carolina", "Virginia"].includes(site.state) && (
             <div className={`${card} p-5`}>
               <PHead icon={Ico.storm}>Hurricane tracker</PHead>
               <p className="mb-2 text-[13px] text-[#6d5d55]"><b className="text-[var(--pc-ink)]">Atlantic &amp; Gulf</b> · National Hurricane Center</p>

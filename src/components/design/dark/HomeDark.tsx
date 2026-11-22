@@ -148,7 +148,7 @@ export default function HomeDark({
         <AdSlot position="top" className="mt-8" />
 
         {/* brief · wildfire map · county */}
-        <section className="pc-in pc-stagger mt-10 grid gap-8 lg:grid-cols-[1fr_1.3fr_1fr] lg:divide-x lg:divide-[var(--dk-cu)]/30">
+        <section className="pc-in pc-stagger mt-10 grid gap-8 lg:[grid-template-columns:repeat(auto-fit,minmax(300px,1fr))] lg:divide-x lg:divide-[var(--dk-cu)]/30">
           {brief.length > 0 && (
             <div>
               <DHead>Today in brief</DHead>
@@ -196,7 +196,7 @@ export default function HomeDark({
         </section>
 
         {/* sun & heat · weather · gas and airports */}
-        <section id="weather" className="pc-in pc-up mt-10 grid scroll-mt-4 gap-6 border-y border-[var(--dk-cu)]/30 py-8 lg:grid-cols-[1fr_1.6fr_1fr]">
+        <section id="weather" className="pc-in pc-up mt-10 grid scroll-mt-4 gap-6 border-y border-[var(--dk-cu)]/30 py-8 lg:[grid-template-columns:repeat(auto-fit,minmax(300px,1fr))]">
           {uv && uv.length > 0 && uvMax != null && (
             <div>
               <DHead>Sun &amp; heat today</DHead>
