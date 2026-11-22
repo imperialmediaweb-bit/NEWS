@@ -1,3 +1,4 @@
+import { Resend } from "resend";
 import { NextRequest, NextResponse } from "next/server";
 import pool from "@/lib/db";
 import { sites, getSiteByDomain } from "@/config/sites";
@@ -104,6 +105,19 @@ export async function POST(req: NextRequest) {
       ]
     );
 
+    // tell the newsroom; a failed email never fails the request
+    if (process.env.RESEND_API_KEY) {
+      const esc = (x: unknown) => String(x || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+      await new Resend(process.env.RESEND_API_KEY).emails
+        .send({
+          from: `${site?.name || "Express"} <contact@alabama-express.com>`,
+          to: process.env.SUBMISSIONS_EMAIL || "ainewss2023@gmail.com",
+          replyTo: email,
+          subject: `[Advertising request] ${company} — ${site?.name || host}`.slice(0, 180),
+          html: `<p><b>${esc(company)}</b> — ${esc(contactName)} &lt;${esc(email)}&gt; ${esc(body.phone)}</p><p>Website: ${esc(body.website)}<br>Interested in: ${esc(body.package)}<br>Budget: ${esc(body.budget)}<br>States: ${esc(states.join(", "))}</p><p style="white-space:pre-wrap">${esc(body.message)}</p>`,
+        })
+        .catch(() => null);
+    }
     return NextResponse.json({
       ok: true,
       requestId: rows[0].id,

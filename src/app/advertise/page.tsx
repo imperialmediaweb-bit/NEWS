@@ -111,7 +111,26 @@ export default function AdvertisePage() {
             </ul>
 
             <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
-              Get Started
+              Buy now by card
+            </h2>
+            <div className="not-prose my-6 grid gap-4 sm:grid-cols-2">
+              <a href="/promote" className="block rounded-lg border-2 p-5 hover:bg-gray-50" style={{ borderColor: "var(--accent)" }}>
+                <div className="text-[13px] font-bold uppercase tracking-wide text-gray-500">Sponsored story</div>
+                <div className="mt-1 text-3xl font-black" style={{ color: "var(--accent)" }}>$49</div>
+                <p className="mt-2 text-[14px] text-gray-700">Your announcement on {site.name}, labelled Sponsored, with a link to your website. Write it, pay by card, live within one business day.</p>
+                <span className="mt-3 inline-block rounded px-4 py-2 text-[14px] font-bold text-white" style={{ background: "var(--accent)" }}>Order and pay ›</span>
+              </a>
+              <a href="/obituaries/submit" className="block rounded-lg border-2 border-gray-300 p-5 hover:bg-gray-50">
+                <div className="text-[13px] font-bold uppercase tracking-wide text-gray-500">Obituary</div>
+                <div className="mt-1 text-3xl font-black text-gray-800">$25</div>
+                <p className="mt-2 text-[14px] text-gray-700">An obituary with photo that stays on the site and can be shared with family and friends.</p>
+                <span className="mt-3 inline-block rounded bg-gray-800 px-4 py-2 text-[14px] font-bold text-white">Place an obituary ›</span>
+              </a>
+            </div>
+            <p className="not-prose text-[13px] text-gray-500">Secure card payment by Stripe. Full refund if we decline it.</p>
+
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>
+              Bigger campaigns
             </h2>
             <p>
               Ready to reach {site.state} readers? Tell us what you want to promote and
