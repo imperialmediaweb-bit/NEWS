@@ -36,6 +36,14 @@ export const OFFICIAL_FEEDS: Record<string, StateFeed[]> = {
  */
 export const OFFICIAL_PAGES: Record<string, { url: string; publisher: string }[]> = {
   Ohio: [{ url: "https://ohioattorneygeneral.gov/Media/News-Releases", publisher: "Ohio Attorney General" }],
+  Arkansas: [{ url: "https://governor.arkansas.gov/news/", publisher: "Office of the Arkansas Governor" }],
+  California: [
+    { url: "https://www.gov.ca.gov/newsroom/", publisher: "Office of the California Governor" },
+    { url: "https://oag.ca.gov/news", publisher: "California Attorney General" },
+  ],
+  Nebraska: [{ url: "https://ago.nebraska.gov/news", publisher: "Nebraska Attorney General" }],
+  Oregon: [{ url: "https://www.portland.gov/news", publisher: "City of Portland" }],
+  Pennsylvania: [{ url: "https://www.phila.gov/news/", publisher: "City of Philadelphia" }],
   Arizona: [
     { url: "https://azgovernor.gov/news-releases", publisher: "Office of the Arizona Governor" },
     { url: "https://www.azdps.gov/news", publisher: "Arizona Department of Public Safety" },
