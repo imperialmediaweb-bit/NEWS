@@ -43,6 +43,7 @@ export default function CategoryLive({
   counties,
   page,
   totalPages,
+  basePath,
 }: {
   site: SiteConfig;
   slug: string;
@@ -53,6 +54,8 @@ export default function CategoryLive({
   counties: string[];
   page: number;
   totalPages: number;
+  /** Path of page 1 when it is not /{slug} (county pages). */
+  basePath?: string;
 }) {
   const tz = TZ[site.state] || "America/New_York";
   const used = new Set<string>();
@@ -231,11 +234,11 @@ export default function CategoryLive({
 
         {totalPages > 1 && (
           <nav className="mt-8 flex items-center justify-center gap-2" aria-label="Pages">
-            {page > 1 && <a href={`/${slug}?page=${page - 1}`} className="border border-[#c9cfdc] px-3 py-2 text-[14px] font-bold text-[var(--lv-ink)]">‹ Previous</a>}
+            {page > 1 && <a href={`${basePath || `/${slug}`}?page=${page - 1}`} className="border border-[#c9cfdc] px-3 py-2 text-[14px] font-bold text-[var(--lv-ink)]">‹ Previous</a>}
             {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => i + Math.max(1, Math.min(page - 2, totalPages - 4))).map((n) => (
-              <a key={n} href={`/${slug}?page=${n}`} className={`flex h-10 w-10 items-center justify-center border text-[14px] font-bold ${n === page ? "border-[var(--lv-acc)] bg-[var(--lv-acc)] text-white" : "border-[#c9cfdc] text-[var(--lv-ink)]"}`}>{n}</a>
+              <a key={n} href={`${basePath || `/${slug}`}?page=${n}`} className={`flex h-10 w-10 items-center justify-center border text-[14px] font-bold ${n === page ? "border-[var(--lv-acc)] bg-[var(--lv-acc)] text-white" : "border-[#c9cfdc] text-[var(--lv-ink)]"}`}>{n}</a>
             ))}
-            {page < totalPages && <a href={`/${slug}?page=${page + 1}`} className="border border-[#c9cfdc] px-3 py-2 text-[14px] font-bold text-[var(--lv-ink)]">Next ›</a>}
+            {page < totalPages && <a href={`${basePath || `/${slug}`}?page=${page + 1}`} className="border border-[#c9cfdc] px-3 py-2 text-[14px] font-bold text-[var(--lv-ink)]">Next ›</a>}
           </nav>
         )}
 

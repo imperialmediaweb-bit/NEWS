@@ -4,7 +4,18 @@ import { notFound } from "next/navigation";
 import { getSiteByDomain, getActiveSite } from "@/config/sites";
 import TagPageClient from "@/components/TagPageClient";
 import { getTagArticles } from "@/lib/category-data";
-import { countiesOf } from "@/lib/local-data";
+import { countiesOf, getStateWeather } from "@/lib/local-data";
+import { designState } from "@/lib/design-nou";
+import { getHomepageArticles } from "@/lib/homepage-data";
+import CategoryLive from "@/components/design/live/CategoryLive";
+import CategoryPeach from "@/components/design/peach/CategoryPeach";
+import CategoryTabloid from "@/components/design/tabloid/CategoryTabloid";
+import CategoryMagazine from "@/components/design/magazine/CategoryMagazine";
+import CategoryBroadsheet from "@/components/design/broadsheet/CategoryBroadsheet";
+import CategoryCoastal from "@/components/design/coastal/CategoryCoastal";
+import CategoryDark from "@/components/design/dark/CategoryDark";
+import CategoryWestern from "@/components/design/western/CategoryWestern";
+import CategoryGazette from "@/components/design/gazette/CategoryGazette";
 
 export const dynamic = "force-dynamic";
 
@@ -45,7 +56,7 @@ export async function generateMetadata({ params }: { params: { county: string } 
   };
 }
 
-export default async function CountyPage({ params, searchParams }: { params: { county: string }; searchParams: { page?: string } }) {
+export default async function CountyPage({ params, searchParams }: { params: { county: string }; searchParams: { page?: string; design?: string } }) {
   const site = siteFromHeaders();
   const label = countyFor(params.county, site.state);
   if (!label) notFound();
@@ -61,6 +72,18 @@ export default async function CountyPage({ params, searchParams }: { params: { c
       { "@type": "ListItem", position: 3, name: label, item: `https://${site.domain}/county/${params.county}` },
     ],
   };
+  // the site's own design, like its section pages; the plain list only as a fallback
+  const design = designState(site.slug, searchParams.design);
+  if (design.family && articles.length > 0) {
+    const [home, weather] = await Promise.all([getHomepageArticles(site), getStateWeather(site.state)]);
+    const View = { peach: CategoryPeach, tabloid: CategoryTabloid, magazine: CategoryMagazine, broadsheet: CategoryBroadsheet, coastal: CategoryCoastal, dark: CategoryDark, western: CategoryWestern, gazette: CategoryGazette, live: CategoryLive }[design.family];
+    return (
+      <>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }} />
+        <View site={site} slug="local-news" label={label} stories={articles.map((a) => ({ ...a }))} latestState={home?.pool || []} capital={weather[0]} counties={countiesOf(site.state)} page={page} totalPages={totalPages} basePath={`/county/${params.county}`} />
+      </>
+    );
+  }
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }} />

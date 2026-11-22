@@ -33,7 +33,7 @@ const SUB_ORIG: Record<string, [string, RegExp]> = {
   "local-news": ["Public safety", /\b(police|arrest|court|crash|fire|shooting)\b/i],
 };
 
-export default function CategoryDark({ site, slug, label, stories, latestState, capital, counties, page, totalPages }: {
+export default function CategoryDark({ site, slug, label, stories, latestState, capital, counties, page, totalPages, basePath }: {
   site: SiteConfig;
   slug: string;
   label: string;
@@ -43,6 +43,8 @@ export default function CategoryDark({ site, slug, label, stories, latestState, 
   counties: string[];
   page: number;
   totalPages: number;
+  /** Path of page 1 when it is not /{slug} (county pages). */
+  basePath?: string;
 }) {
   const d = dkOf(site);
   const tz = TZ[site.state] || "America/New_York";
@@ -173,11 +175,11 @@ export default function CategoryDark({ site, slug, label, stories, latestState, 
 
         {totalPages > 1 && (
           <nav className="mt-10 flex flex-wrap items-center justify-center gap-2 text-[15px]" aria-label="Pages">
-            {page > 1 && <a href={`/${slug}?page=${page - 1}`} className="px-3 py-1 hover:text-[var(--dk-acc)]">‹ Previous</a>}
+            {page > 1 && <a href={`${basePath || `/${slug}`}?page=${page - 1}`} className="px-3 py-1 hover:text-[var(--dk-acc)]">‹ Previous</a>}
             {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => i + Math.max(1, Math.min(page - 2, totalPages - 4))).map((n) => (
-              <a key={n} href={`/${slug}?page=${n}`} className={`flex h-10 w-10 items-center justify-center border ${n === page ? "border-[var(--dk-cu)] bg-[var(--dk-deep)] text-white" : "border-white/20 hover:border-[var(--dk-cu)]"}`}>{n}</a>
+              <a key={n} href={`${basePath || `/${slug}`}?page=${n}`} className={`flex h-10 w-10 items-center justify-center border ${n === page ? "border-[var(--dk-cu)] bg-[var(--dk-deep)] text-white" : "border-white/20 hover:border-[var(--dk-cu)]"}`}>{n}</a>
             ))}
-            {page < totalPages && <a href={`/${slug}?page=${page + 1}`} className="px-3 py-1 hover:text-[var(--dk-acc)]">Next ›</a>}
+            {page < totalPages && <a href={`${basePath || `/${slug}`}?page=${page + 1}`} className="px-3 py-1 hover:text-[var(--dk-acc)]">Next ›</a>}
           </nav>
         )}
       </main>

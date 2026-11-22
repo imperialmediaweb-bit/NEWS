@@ -93,9 +93,28 @@ function placeIn(title: string, state: string): string | null {
     .concat(countiesOf(state).map((c) => `${c} County`.toLowerCase()))
     .sort((a, b) => b.length - a.length);
   for (const n of names) {
-    if (new RegExp(`\\b${n.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`).test(t)) return n;
+    if (new RegExp(`\\b${n.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`).test(t) && samePlace(title, n)) return n;
   }
   return null;
+}
+
+/**
+ * Whether a headline names the place itself rather than something called after
+ * it: "Houston County" is not Houston, nor are "Sam Houston Elementary" or
+ * "Houston Christian" (a school), "Lubbock Christian" or "Austin Peay".
+ */
+function samePlace(title: string, place: string): boolean {
+  const esc = place.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const re = new RegExp(`(\\b[A-Za-z]+\\s+)?\\b${esc}\\b(\\s+[A-Za-z]+)?`, "gi");
+  const isCounty = /\b(county|parish)$/i.test(place);
+  for (const m of Array.from(title.matchAll(re))) {
+    const before = (m[1] || "").trim().toLowerCase();
+    const after = (m[2] || "").trim().toLowerCase();
+    if (!isCounty && /^(county|parish|christian|baptist|university|college|elementary|middle|high|isd|community|state|tech)$/.test(after)) continue;
+    if (/^(sam|lake|fort|port|mount|new|little|el|la)$/.test(before)) continue;
+    return true;
+  }
+  return false;
 }
 
 const getArticleData = cache(async (siteSlug: string, articleSlug: string, domain: string) => {
@@ -122,7 +141,7 @@ const getArticleData = cache(async (siteSlug: string, articleSlug: string, domai
     const { rows: relatedRows } = await pool.query(
       `(SELECT ${cols}, 0 AS rk FROM articles
          WHERE site_id = $1 AND id != $3 AND $4::text IS NOT NULL AND title ILIKE '%' || $4 || '%'
-         ORDER BY published_at DESC LIMIT 4)
+         ORDER BY published_at DESC LIMIT 12)
        UNION ALL
        (SELECT ${cols}, 1 AS rk FROM articles
          WHERE site_id = $1 AND category = $2 AND id != $3 AND published_at < $5
@@ -163,7 +182,9 @@ const getArticleData = cache(async (siteSlug: string, articleSlug: string, domai
 
     // "More from {place}": the other stories from the town or county this one
     // names, linked inside the story itself, so the archive stays connected.
-    const placeLinks = (relatedRows as { rk: number; title: string; slug: string; category: string }[]).filter((r) => r.rk === 0).slice(0, 4);
+    const placeLinks = (relatedRows as { rk: number; title: string; slug: string; category: string }[])
+      .filter((r) => r.rk === 0 && place && samePlace(r.title, place))
+      .slice(0, 4);
     const esc = (x: string) => x.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
     const placeLabel = place ? place.replace(/\b\w/g, (c) => c.toUpperCase()) : "";
     const placeBox = !isSponsored && place && placeLinks.length >= 2

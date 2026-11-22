@@ -45,6 +45,7 @@ export default function CategoryBroadsheet({
   counties,
   page,
   totalPages,
+  basePath,
 }: {
   site: SiteConfig;
   slug: string;
@@ -55,6 +56,8 @@ export default function CategoryBroadsheet({
   counties: string[];
   page: number;
   totalPages: number;
+  /** Path of page 1 when it is not /{slug} (county pages). */
+  basePath?: string;
 }) {
   const tz = TZ[site.state] || "America/New_York";
   // the descriptions and sub-sections written for New York; any other state gets general ones
@@ -182,11 +185,11 @@ export default function CategoryBroadsheet({
 
         {totalPages > 1 && (
           <nav className={`${caslon.className} mt-10 flex flex-wrap items-center justify-center gap-2 text-[17px]`} aria-label="Pages">
-            {page > 1 && <a href={`/${slug}?page=${page - 1}`} className="px-2 italic hover:text-[var(--bs-acc)]">‹ Previous</a>}
+            {page > 1 && <a href={`${basePath || `/${slug}`}?page=${page - 1}`} className="px-2 italic hover:text-[var(--bs-acc)]">‹ Previous</a>}
             {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => i + Math.max(1, Math.min(page - 2, totalPages - 4))).map((n) => (
-              <a key={n} href={`/${slug}?page=${n}`} className={`flex h-9 w-9 items-center justify-center border ${n === page ? "border-[#0a0a0a] bg-[#0a0a0a] text-white" : "border-[var(--bs-gold)] hover:border-[#0a0a0a]"}`}>{n}</a>
+              <a key={n} href={`${basePath || `/${slug}`}?page=${n}`} className={`flex h-9 w-9 items-center justify-center border ${n === page ? "border-[#0a0a0a] bg-[#0a0a0a] text-white" : "border-[var(--bs-gold)] hover:border-[#0a0a0a]"}`}>{n}</a>
             ))}
-            {page < totalPages && <a href={`/${slug}?page=${page + 1}`} className="px-2 italic hover:text-[var(--bs-acc)]">Next ›</a>}
+            {page < totalPages && <a href={`${basePath || `/${slug}`}?page=${page + 1}`} className="px-2 italic hover:text-[var(--bs-acc)]">Next ›</a>}
           </nav>
         )}
       </main>

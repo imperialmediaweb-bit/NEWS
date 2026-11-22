@@ -45,6 +45,7 @@ export default function CategoryGazette({
   counties,
   page,
   totalPages,
+  basePath,
 }: {
   site: SiteConfig;
   slug: string;
@@ -55,6 +56,8 @@ export default function CategoryGazette({
   counties: string[];
   page: number;
   totalPages: number;
+  /** Path of page 1 when it is not /{slug} (county pages). */
+  basePath?: string;
 }) {
   const tz = TZ[site.state] || "America/New_York";
   // the descriptions and sub-sections written for Iowa; any other state gets general ones
@@ -204,11 +207,11 @@ export default function CategoryGazette({
 
         {totalPages > 1 && (
           <nav className="mt-10 flex flex-wrap items-center justify-center gap-2" aria-label="Pages">
-            {page > 1 && <a href={`/${slug}?page=${page - 1}`} className={`${merri.className} border-2 border-[#111] px-3 py-1 text-[18px] font-bold italic`}>‹ Previous</a>}
+            {page > 1 && <a href={`${basePath || `/${slug}`}?page=${page - 1}`} className={`${merri.className} border-2 border-[#111] px-3 py-1 text-[18px] font-bold italic`}>‹ Previous</a>}
             {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => i + Math.max(1, Math.min(page - 2, totalPages - 4))).map((n) => (
-              <a key={n} href={`/${slug}?page=${n}`} className={`${merri.className} flex h-10 w-10 items-center justify-center border-2 text-[18px] font-black ${n === page ? "border-[var(--gz-acc)] bg-[var(--gz-acc)] text-white" : "border-[#111]"}`}>{n}</a>
+              <a key={n} href={`${basePath || `/${slug}`}?page=${n}`} className={`${merri.className} flex h-10 w-10 items-center justify-center border-2 text-[18px] font-black ${n === page ? "border-[var(--gz-acc)] bg-[var(--gz-acc)] text-white" : "border-[#111]"}`}>{n}</a>
             ))}
-            {page < totalPages && <a href={`/${slug}?page=${page + 1}`} className={`${merri.className} border-2 border-[#111] px-3 py-1 text-[18px] font-bold italic`}>Next ›</a>}
+            {page < totalPages && <a href={`${basePath || `/${slug}`}?page=${page + 1}`} className={`${merri.className} border-2 border-[#111] px-3 py-1 text-[18px] font-bold italic`}>Next ›</a>}
           </nav>
         )}
       </main>

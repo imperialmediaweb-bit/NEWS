@@ -45,6 +45,7 @@ export default function CategoryCoastal({
   counties,
   page,
   totalPages,
+  basePath,
 }: {
   site: SiteConfig;
   slug: string;
@@ -55,6 +56,8 @@ export default function CategoryCoastal({
   counties: string[];
   page: number;
   totalPages: number;
+  /** Path of page 1 when it is not /{slug} (county pages). */
+  basePath?: string;
 }) {
   const tz = TZ[site.state] || "America/New_York";
   // the descriptions and sub-sections written for Hawaii; any other state gets general ones
@@ -187,11 +190,11 @@ export default function CategoryCoastal({
 
         {totalPages > 1 && (
           <nav className={`${crimson.className} mt-12 flex flex-wrap items-center justify-center gap-3 text-[18px]`} aria-label="Pages">
-            {page > 1 && <a href={`/${slug}?page=${page - 1}`} className="px-2 italic hover:text-[var(--co-acc)]">‹ Previous</a>}
+            {page > 1 && <a href={`${basePath || `/${slug}`}?page=${page - 1}`} className="px-2 italic hover:text-[var(--co-acc)]">‹ Previous</a>}
             {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => i + Math.max(1, Math.min(page - 2, totalPages - 4))).map((n) => (
-              <a key={n} href={`/${slug}?page=${n}`} className={`flex h-10 w-10 items-center justify-center rounded-full ${n === page ? "bg-[var(--co-ink)] text-white" : "hover:bg-[#f3ede1]"}`}>{n}</a>
+              <a key={n} href={`${basePath || `/${slug}`}?page=${n}`} className={`flex h-10 w-10 items-center justify-center rounded-full ${n === page ? "bg-[var(--co-ink)] text-white" : "hover:bg-[#f3ede1]"}`}>{n}</a>
             ))}
-            {page < totalPages && <a href={`/${slug}?page=${page + 1}`} className="px-2 italic hover:text-[var(--co-acc)]">Next ›</a>}
+            {page < totalPages && <a href={`${basePath || `/${slug}`}?page=${page + 1}`} className="px-2 italic hover:text-[var(--co-acc)]">Next ›</a>}
           </nav>
         )}
       </main>
