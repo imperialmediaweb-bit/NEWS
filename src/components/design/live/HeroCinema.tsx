@@ -1,7 +1,6 @@
 "use client";
 
-import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ComponentType } from "react";
 import { srcSetOf } from "./shared";
 
 type Slide = { id: string; image: string; title: string; subtitle?: string; eyebrow?: string; href: string };
@@ -10,7 +9,10 @@ type Slide = { id: string; image: string; title: string; subtitle?: string; eyeb
 // idle after the first paint; until then the first story is drawn with the
 // same classes, straight from the server, so the largest paint is the photo
 // and nothing blocks the main thread at load.
-const Slider = dynamic(() => import("@/components/design/imperial/CinematicParallaxSlider").then((m) => m.CinematicParallaxSlider), { ssr: false });
+// The module is fetched first and swapped in only when it is ready, so the
+// static first story never disappears and nothing on the page moves.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type SliderType = ComponentType<any>;
 
 const HEIGHT = "clamp(460px, 46vw, 640px)";
 const SIZES = "(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 60vw";
@@ -35,15 +37,17 @@ function StaticFirst({ s }: { s: Slide }) {
 
 /** The Imperial Design System cinematic slider, with the top stories of the day. */
 export default function HeroCinema({ slides }: { slides: Slide[] }) {
-  const [ready, setReady] = useState(false);
+  const [Slider, setSlider] = useState<SliderType | null>(null);
   useEffect(() => {
     const w = window as Window & { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number };
-    const go = () => setReady(true);
+    const go = () => {
+      import("@/components/design/imperial/CinematicParallaxSlider").then((m) => setSlider(() => m.CinematicParallaxSlider));
+    };
     if (w.requestIdleCallback) w.requestIdleCallback(go, { timeout: 3000 });
     else setTimeout(go, 1500);
   }, []);
   if (!slides.length) return null;
-  if (!ready) return <StaticFirst s={slides[0]} />;
+  if (!Slider) return <StaticFirst s={slides[0]} />;
   return (
     <Slider
       key={slides.map((s) => s.id).join("|")}
@@ -54,7 +58,7 @@ export default function HeroCinema({ slides }: { slides: Slide[] }) {
       className="lv-cinema"
       showArrows
       showDots
-      renderImage={({ src, alt, className, priority, onLoad }) => (
+      renderImage={({ src, alt, className, priority, onLoad }: { src: string; alt: string; className?: string; priority?: boolean; onLoad?: () => void }) => (
         // eslint-disable-next-line @next/next/no-img-element
         <img src={src} srcSet={srcSetOf(src)} sizes={SIZES} alt={alt} className={className} loading={priority ? "eager" : "lazy"} decoding="async" draggable={false} onLoad={onLoad} />
       )}
