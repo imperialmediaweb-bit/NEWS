@@ -2,6 +2,9 @@ import { Newsreader, Source_Sans_3 } from "next/font/google";
 import type { SiteConfig } from "@/config/site-config";
 import type { CityWeather } from "@/lib/local-data";
 import PreviewLinks from "../live/PreviewLinks";
+import { InlineMast } from "../MastheadAlt";
+import { logoLeftOf } from "@/config/design-cfg";
+
 import { mockupOf } from "@/config/design-cfg";
 import { TZ, WxIcon } from "../live/shared";
 
@@ -90,6 +93,10 @@ export function MagHeader({ site, MobileMenu, compact = false, active }: { site:
         </a>
         <a href="/search" aria-label="Search" className="flex h-11 w-11 items-center justify-center text-[var(--mg-ink)]"><Search /></a>
       </div>
+      {logoLeftOf(site.slug) ? (
+        <InlineMast logo={logo} name={site.name} nav={MNAV} active={active} font={serifM.className} ink="var(--mg-ink)" />
+      ) : (
+        <>
       <div className="mx-auto hidden max-w-[1320px] px-4 md:block">
         <div className={`text-center ${compact ? "pt-1" : "pt-3"}`}>
           <a href="/" aria-label={site.name} className="inline-block">
@@ -107,6 +114,8 @@ export function MagHeader({ site, MobileMenu, compact = false, active }: { site:
           </ul>
         </nav>
       </div>
+        </>
+      )}
     </header>
   );
 }

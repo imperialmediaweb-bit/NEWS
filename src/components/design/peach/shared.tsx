@@ -2,6 +2,9 @@ import { Fraunces, Work_Sans } from "next/font/google";
 import type { SiteConfig } from "@/config/site-config";
 import type { CityWeather } from "@/lib/local-data";
 import PreviewLinks from "../live/PreviewLinks";
+import { InlineMast } from "../MastheadAlt";
+import { logoLeftOf } from "@/config/design-cfg";
+
 import { mockupOf, tint } from "@/config/design-cfg";
 import { TZ, WxIcon } from "../live/shared";
 
@@ -110,6 +113,10 @@ export function PeachHeader({ site, MobileMenu, compact = false, active }: { sit
         </a>
         <a href="/search" aria-label="Search" className="flex h-11 w-11 items-center justify-center text-[var(--pc-ink)]"><SearchIcon /></a>
       </div>
+      {logoLeftOf(site.slug) ? (
+        <InlineMast logo={logo} name={site.name} nav={PNAV} active={active} font={display.className} ink="var(--pc-ink)" />
+      ) : (
+        <>
       {compact ? (
         <div className="mx-auto hidden max-w-[1360px] items-center gap-6 px-4 md:flex">
           <a href="/" aria-label={site.name} className="shrink-0">
@@ -147,6 +154,8 @@ export function PeachHeader({ site, MobileMenu, compact = false, active }: { sit
               <li className="ml-8"><a href="/search" aria-label="Search" className="block py-3 hover:text-[var(--pc-acc)]"><SearchIcon s={20} /></a></li>
             </ul>
           </nav>
+        </>
+      )}
         </>
       )}
     </header>

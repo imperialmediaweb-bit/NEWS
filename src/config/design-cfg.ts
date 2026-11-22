@@ -27,3 +27,7 @@ export function shade(hex: string, amount: number): string {
   const ch = (shift: number) => Math.round(((n >> shift) & 255) * (1 - amount));
   return `#${[16, 8, 0].map((s) => ch(s).toString(16).padStart(2, "0")).join("")}`;
 }
+
+/** States whose mockup puts the logo at the left with the menu on the same line. */
+const LOGO_LEFT = new Set(["florida", "iowa", "montana", "michigan", "idaho", "illinois", "indiana", "minnesota", "missouri", "nebraska", "nevada", "new-jersey", "ohio", "south-dakota", "utah", "washington", "wisconsin"].map((s) => `${s}-express`));
+export const logoLeftOf = (slug: string) => LOGO_LEFT.has(slug);

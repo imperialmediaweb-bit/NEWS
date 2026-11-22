@@ -9,7 +9,7 @@ import MobileMenu from "./MobileMenu";
 import HeroCinema from "./HeroCinema";
 import Reveal from "./Reveal";
 import Extras from "../extras/Extras";
-import { mockupOf } from "@/config/design-cfg";
+import { mockupOf, logoLeftOf } from "@/config/design-cfg";
 import { popularOf, sportsReOf } from "@/config/state-data";
 import { citiesOf } from "@/lib/local-data";
 import PeachFx from "../peach/PeachFx";
@@ -76,7 +76,7 @@ export default function HomeLive({
   // Each live-family state follows its own mockup's top: Texas (centred
   // masthead, full-width slider) or Michigan (logo left, slider beside the
   // live column, winter weather and county beside the brief).
-  const logoLeft = ["michigan-express"].includes(site.slug);
+  const logoLeft = logoLeftOf(site.slug) && site.slug !== "texas-express";
   const winter = (alerts || []).filter((a) => /winter|snow|blizzard|ice|freez|wind chill|lake effect/i.test(a.event));
   const live = take(articles.latestPosts.concat(articles.heroSide), 6);
   const pool = articles.pool || articles.latestPosts;

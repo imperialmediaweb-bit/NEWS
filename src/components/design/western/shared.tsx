@@ -2,6 +2,9 @@ import { Zilla_Slab, Alfa_Slab_One, Lora } from "next/font/google";
 import type { SiteConfig } from "@/config/site-config";
 import type { CityWeather } from "@/lib/local-data";
 import PreviewLinks from "../live/PreviewLinks";
+import { CenteredMast } from "../MastheadAlt";
+import { logoLeftOf } from "@/config/design-cfg";
+
 import { artOf } from "@/config/state-art";
 import { mockupOf, tint } from "@/config/design-cfg";
 import { TZ, WxIcon } from "../live/shared";
@@ -106,6 +109,10 @@ export function WsHeader({ site, MobileMenu, compact = false, active }: { site: 
         </a>
         <a href="/search" aria-label="Search" className="flex h-11 w-11 items-center justify-center text-[var(--ws-ink)]"><Search /></a>
       </div>
+      {!logoLeftOf(site.slug) ? (
+        <CenteredMast logo={logo} name={site.name} nav={WNAV} active={active} font={zilla.className} ink="var(--ws-ink)" art={artOf(site.slug).masthead} compact={compact} />
+      ) : (
+        <>
       <div className="mx-auto hidden max-w-[1340px] grid-cols-[auto_1fr] items-end gap-8 px-4 md:grid">
         <a href="/" aria-label={site.name} className="py-3">
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -135,6 +142,8 @@ export function WsHeader({ site, MobileMenu, compact = false, active }: { site: 
           </nav>
         </div>
       </div>
+        </>
+      )}
     </header>
   );
 }

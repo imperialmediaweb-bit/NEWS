@@ -2,6 +2,10 @@ import { Merriweather, Mulish } from "next/font/google";
 import type { SiteConfig } from "@/config/site-config";
 import type { CityWeather } from "@/lib/local-data";
 import PreviewLinks from "../live/PreviewLinks";
+import { CenteredMast } from "../MastheadAlt";
+import { logoLeftOf } from "@/config/design-cfg";
+import { artOf } from "@/config/state-art";
+
 import { mockupOf, tint } from "@/config/design-cfg";
 import { TZ, WxIcon } from "../live/shared";
 
@@ -83,6 +87,10 @@ export function GzHeader({ site, MobileMenu, active }: { site: SiteConfig; Mobil
         </a>
         <a href="/search" aria-label="Search" className="flex h-11 w-11 items-center justify-center text-[var(--gz-ink)]"><Search /></a>
       </div>
+      {!logoLeftOf(site.slug) ? (
+        <CenteredMast logo={logo} name={site.name} nav={GNAV} active={active} font={merri.className} ink="var(--gz-ink)" art={artOf(site.slug).masthead} />
+      ) : (
+        <>
       <div className="mx-auto hidden max-w-[1340px] items-center gap-8 px-4 py-2 md:flex">
         <a href="/" aria-label={site.name} className="shrink-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -99,6 +107,8 @@ export function GzHeader({ site, MobileMenu, active }: { site: SiteConfig; Mobil
         </nav>
         <a href="/search" aria-label="Search" className="flex h-10 w-10 items-center justify-center rounded-full bg-[#efe3c4] text-[var(--gz-ink)] hover:bg-[var(--gz-acc)]"><Search /></a>
       </div>
+        </>
+      )}
     </header>
   );
 }
