@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { Menu, X, Search } from "lucide-react";
 import { SiteConfig } from "@/config/site-config";
+import { LiveTopBar, LiveCompactHeader, liveVars } from "@/components/design/live/shared";
+import MobileMenu from "@/components/design/live/MobileMenu";
 
 // Nav items map to real category routes via toLowerCase + dashes.
 // NOTE: no fake "breaking" ticker here — every headline shown to users
@@ -22,7 +24,8 @@ interface HeaderProps {
   asHeading?: boolean;
 }
 
-export default function Header({ site, asHeading = false }: HeaderProps) {
+/** The original header, kept for reference; every page now uses the new design's header below. */
+export function ClassicHeader({ site, asHeading = false }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const Masthead = asHeading ? "h1" : "div";
 
@@ -127,5 +130,15 @@ export default function Header({ site, asHeading = false }: HeaderProps) {
         )}
       </AnimatePresence>
     </header>
+  );
+}
+
+/** The site header on secondary pages (contact, about, policies, submit…): the new design's. */
+export default function Header({ site }: HeaderProps) {
+  return (
+    <div style={liveVars(site)} className="bg-white text-[#1b2233]">
+      <LiveTopBar site={site} />
+      <LiveCompactHeader site={site} MobileMenu={MobileMenu} />
+    </div>
   );
 }

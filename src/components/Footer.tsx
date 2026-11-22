@@ -1,6 +1,7 @@
 "use client";
 
 import { SiteConfig } from "@/config/site-config";
+import { LiveFooter, liveVars } from "@/components/design/live/shared";
 import { Mail } from "lucide-react";
 import Link from "next/link";
 
@@ -22,7 +23,8 @@ interface FooterProps {
   about: string;
 }
 
-export default function Footer({ site, about }: FooterProps) {
+/** The original footer, kept for reference. */
+export function ClassicFooter({ site, about }: FooterProps) {
   return (
     <footer className="bg-[#111] text-white mt-10">
       {/* Main footer */}
@@ -119,5 +121,14 @@ export default function Footer({ site, about }: FooterProps) {
         </div>
       </div>
     </footer>
+  );
+}
+
+/** The site footer on secondary pages: the new design's. */
+export default function Footer({ site }: FooterProps) {
+  return (
+    <div style={liveVars(site)}>
+      <LiveFooter site={site} />
+    </div>
   );
 }
