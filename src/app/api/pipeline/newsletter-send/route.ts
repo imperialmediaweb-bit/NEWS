@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import pool from "@/lib/db";
 import { sites } from "@/config/sites";
-import { TZ } from "@/components/design/live/shared";
+import { TZ } from "@/config/timezones";
 import { ensureNewsletterTable, senderFor } from "@/lib/newsletter";
 import { Resend } from "resend";
 
