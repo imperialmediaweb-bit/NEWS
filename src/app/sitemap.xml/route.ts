@@ -1,3 +1,7 @@
+import { STATE_CITIES, TEAMS } from "@/lib/pipeline/google-news";
+import { PLACES } from "@/lib/pipeline/relevance";
+import { STATE_FACTS } from "@/config/state-data";
+import { countiesOf } from "@/lib/local-data";
 import { NextRequest, NextResponse } from "next/server";
 import pool from "@/lib/db";
 import { getActiveSite, getSiteByDomain } from "@/config/sites";
@@ -56,7 +60,18 @@ export async function GET(request: NextRequest) {
     { url: `${baseUrl}/hub/opinion`, lastModified: now, changeFrequency: "daily", priority: 0.7 },
   ];
 
-  let entries: SitemapEntry[] = staticPages;
+  // city, county and team pages: what people search for locally
+  const slug = (x: string) => x.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  const cityNames = Array.from(new Set((STATE_CITIES[site.state] || []).concat(PLACES[site.state] || [])));
+  const teamNames = (TEAMS[site.state] || STATE_FACTS[site.state]?.teams || []).filter((t) => t.length >= 4);
+  const unit = site.state === "Louisiana" ? "parish" : "county";
+  const topicPages: SitemapEntry[] = [
+    ...cityNames.map((c) => ({ url: `${baseUrl}/city/${slug(c)}`, lastModified: now, changeFrequency: "daily" as const, priority: 0.8 })),
+    ...(STATE_FACTS[site.state]?.counties || countiesOf(site.state).slice(0, 10)).map((c) => ({ url: `${baseUrl}/county/${slug(`${c} ${unit}`)}`, lastModified: now, changeFrequency: "daily" as const, priority: 0.7 })),
+    ...teamNames.map((t) => ({ url: `${baseUrl}/team/${slug(t)}`, lastModified: now, changeFrequency: "daily" as const, priority: 0.75 })),
+  ];
+
+  let entries: SitemapEntry[] = staticPages.concat(topicPages);
 
   try {
     const { rows: siteRows } = await pool.query("SELECT id FROM sites WHERE slug = $1", [site.slug]);

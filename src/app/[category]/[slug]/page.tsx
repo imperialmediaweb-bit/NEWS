@@ -192,7 +192,7 @@ const getArticleData = cache(async (siteSlug: string, articleSlug: string, domai
     const esc = (x: string) => x.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
     const placeLabel = place ? place.replace(/\b\w/g, (c) => c.toUpperCase()) : "";
     const placeBox = !isSponsored && place && placeLinks.length >= 2
-      ? `\n<section class="more-from"><h2>More from ${esc(placeLabel)}</h2><ul>${placeLinks
+      ? `\n<section class="more-from"><h2>More from <a href="/${/ (county|parish)$/i.test(place) ? "county" : "city"}/${esc(place.toLowerCase().replace(/[^a-z0-9]+/g, "-"))}">${esc(placeLabel)}</a></h2><ul>${placeLinks
           .map((r) => `<li><a href="/${esc((r.category || "local-news").toLowerCase().replace(/\s+/g, "-"))}/${esc(r.slug)}">${esc(r.title)}</a></li>`)
           .join("")}</ul></section>`
       : "";
