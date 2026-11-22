@@ -35,7 +35,7 @@ const SCHOOL = /\b(school|student|teacher|college|universit|campus|education|gra
 const Img = ({ a, className = "", sizes = "(max-width: 640px) 92vw, 420px" }: { a: HomeArticle; className?: string; sizes?: string }) =>
   a.img ? (
     // eslint-disable-next-line @next/next/no-img-element
-    <img src={a.img} srcSet={srcSetOf(a.img)} sizes={sizes} alt="" className={`h-full w-full object-cover ${className}`} loading="lazy" decoding="async" />
+    <img src={a.img} srcSet={srcSetOf(a.img)} sizes={sizes} alt={a.title} className={`h-full w-full object-cover ${className}`} loading="lazy" decoding="async" />
   ) : (
     <div className="h-full w-full bg-gradient-to-br from-[var(--tb-ink)] to-[var(--tb-acc)]" />
   );

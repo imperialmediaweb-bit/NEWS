@@ -285,7 +285,7 @@ export default function ArticleLive({
               <a key={a.slug} href={`/${(a.category || "news").toLowerCase().replace(/\s+/g, "-")}/${a.slug}`} className="group block">
                 {a.img && (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={a.img} alt="" className="aspect-[16/9] w-full object-cover" loading="lazy" />
+                  <img src={a.img} alt={a.title} className="aspect-[16/9] w-full object-cover" loading="lazy" />
                 )}
                 <p className="mt-2 text-[12px] font-extrabold uppercase text-[var(--lv-acc)]">{a.category.replace(/-/g, " ")}</p>
                 <h3 className={`${serif.className} text-[19px] font-bold leading-snug group-hover:text-[var(--lv-acc)]`}>{a.title}</h3>

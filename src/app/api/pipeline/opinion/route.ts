@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import pool from "@/lib/db";
 import { generateOpinion } from "@/lib/pipeline/rewriter";
 import { findImage } from "@/lib/pipeline/images";
+import { storeImage } from "@/lib/pipeline/image-store";
 import { publishArticle } from "@/lib/pipeline/publisher";
 import { logRunStart, logRunEnd, isPipelineEnabled } from "@/lib/pipeline/scheduler";
 import { FORBIDDEN_OPINION_TOPICS } from "@/config/feeds";
@@ -84,12 +85,16 @@ export async function POST(req: NextRequest) {
 
         const image = await findImage(rewrite.suggestedImageQuery, "opinion");
 
+        // our own WebP copy on R2 for free-licence photos; the original if that fails
+
+        const stored = image?.url ? await storeImage(image.url, rewrite.title).catch(() => null) : null;
+
         await publishArticle({
           feedItemId: topic.id,
           rewrite,
           category: "opinion",
           sourceUrl: "",
-          imageUrl: image?.url || null,
+          imageUrl: stored || image?.url || null,
           state: topic.state,
           author: "Opinion Desk",
         });

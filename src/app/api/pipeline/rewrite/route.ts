@@ -4,6 +4,7 @@ import { isPublishingHours } from "@/config/feeds";
 import { sectionFor, rewriteFromSource } from "@/lib/pipeline/rewriter";
 import { fetchSourceText } from "@/lib/pipeline/source-fetch";
 import { findImage } from "@/lib/pipeline/images";
+import { storeImage } from "@/lib/pipeline/image-store";
 import { publishArticle } from "@/lib/pipeline/publisher";
 import { logRunStart, logRunEnd, isPipelineEnabled } from "@/lib/pipeline/scheduler";
 import { sites } from "@/config/sites";
@@ -242,6 +243,8 @@ export async function POST(req: NextRequest) {
 
       // Find an image (with category fallback for precision)
       const image = await findImage(rewrite.suggestedImageQuery, category);
+      // our own WebP copy on R2 for free-licence photos; the original if that fails
+      const stored = image?.url ? await storeImage(image.url, rewrite.title).catch(() => null) : null;
 
       // Publish to the single matching state site
       const published = await publishArticle({
@@ -249,7 +252,7 @@ export async function POST(req: NextRequest) {
         rewrite,
         category,
         sourceUrl: item.source_url,
-        imageUrl: image?.url || null,
+        imageUrl: stored || image?.url || null,
         state: item.state,
       });
 

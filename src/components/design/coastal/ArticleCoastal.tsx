@@ -86,7 +86,7 @@ export default function ArticleCoastal({
           {article.featured_image && (
             <div className="pc-clip pc-in relative min-h-[300px] lg:min-h-[520px]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={article.featured_image} alt="" className="absolute inset-0 h-full w-full object-cover" />
+              <img src={article.featured_image} alt={article.title} className="absolute inset-0 h-full w-full object-cover" />
             </div>
           )}
           <header className="flex flex-col justify-center p-6 md:p-10">
@@ -165,7 +165,7 @@ export default function ArticleCoastal({
               <a key={a.slug} href={link(a)} className="pc-card group block">
                 <span className="pc-zoom block aspect-[3/2] overflow-hidden bg-[#eee]">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  {a.img && <img src={a.img} alt="" className="h-full w-full object-cover" loading="lazy" />}
+                  {a.img && <img src={a.img} alt={a.title} className="h-full w-full object-cover" loading="lazy" />}
                 </span>
                 <span className={`${crimson.className} mt-3 block text-[22px] font-semibold leading-snug group-hover:text-[var(--co-acc)]`}>{ok(a.title)}</span>
                 {a.summary && <span className="mt-1 block line-clamp-2 text-[15px] text-[#666]">{ok(a.summary)}</span>}

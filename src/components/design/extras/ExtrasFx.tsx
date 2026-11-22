@@ -50,7 +50,7 @@ export function CityTabs({ tabs, className = "" }: { tabs: Array<{ city: string;
           <a key={a.href} href={a.href} className="x-tilt group block">
             <span className="x-zoom block aspect-[4/3] overflow-hidden rounded-md">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              {a.img ? <img src={a.img} alt="" className="h-full w-full object-cover" loading="lazy" /> : <span className="block h-full w-full bg-[var(--x-acc)]/20" />}
+              {a.img ? <img src={a.img} alt={a.title} className="h-full w-full object-cover" loading="lazy" /> : <span className="block h-full w-full bg-[var(--x-acc)]/20" />}
             </span>
             <span className="x-title mt-2 block text-[17px] font-semibold leading-snug">{a.title}</span>
             <span className="text-[12px] opacity-60">{a.when}</span>

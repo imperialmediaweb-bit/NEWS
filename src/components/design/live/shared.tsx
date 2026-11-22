@@ -184,12 +184,15 @@ export function LiveCompactHeader({ site, active, MobileMenu }: { site: SiteConf
  */
 export function sized(url: string, w: number): string {
   if (!url) return url;
+  if (/\/p\/[a-z0-9-]+-1200\.webp$/.test(url)) return url.replace(/-1200\.webp$/, `-${[400, 600, 900, 1200, 1600].find((x) => x >= w) || 1600}.webp`);
   if (/images\.pexels\.com/.test(url)) return url.replace(/([?&])(w|h|dpr)=\d+/g, "$1").replace(/[?&]+$/, "").replace(/\?&+/, "?") + (url.includes("?") ? "&" : "?") + `w=${w}`;
   if (/images\.unsplash\.com/.test(url)) return url.replace(/([?&])w=\d+/g, "$1").replace(/[?&]+$/, "") + (url.includes("?") ? "&" : "?") + `w=${w}`;
   if (/pixabay\.com\/get\//.test(url) && w <= 640) return url.replace(/_1280(\.\w+)$/, "_640$1");
   return url;
 }
 export function srcSetOf(url: string): string | undefined {
+  // our own R2 copies: p/<id>-1200.webp has siblings at each width
+  if (/\/p\/[a-z0-9-]+-1200\.webp$/.test(url || "")) return [400, 600, 900, 1200, 1600].map((w) => `${url.replace(/-1200\.webp$/, `-${w}.webp`)} ${w}w`).join(", ");
   if (!/images\.pexels\.com|images\.unsplash\.com/.test(url || "")) return undefined;
   return [400, 600, 900, 1200, 1600].map((w) => `${sized(url, w)} ${w}w`).join(", ");
 }

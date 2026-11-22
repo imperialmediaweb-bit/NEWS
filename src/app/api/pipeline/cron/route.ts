@@ -170,6 +170,13 @@ export async function POST(req: NextRequest) {
   // The daily cleanup deletes from feed_items, facebook_posts and page_views
   // but a delete never shrinks the file; feed_items reached 385 MB for 29 MB
   // of rows. VACUUM FULL rewrites them, locking each for a few seconds.
+  // Move existing free-licence photos to our R2 bucket, newest first, until
+  // none are left (api/admin/images-to-r2). Off with IMAGES_R2=0.
+  if (process.env.IMAGES_R2 !== "0" && process.env.R2_BUCKET && (await claimJob("images_r2", 5 * 60)).claimed) {
+    fireAndForgetGet(baseUrl, "admin/images-to-r2?limit=400&par=8", secret);
+    actions.push("images_r2");
+  }
+
   if ((await claimJob("compact_db", 7 * 24 * 60 * 60)).claimed) {
     fireAndForgetGet(baseUrl, "admin/archive-prune?action=compact", secret);
     actions.push("compact_db");

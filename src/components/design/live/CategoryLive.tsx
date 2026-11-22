@@ -147,7 +147,7 @@ export default function CategoryLive({
               {grid.map((a) => (
                 <a key={a.slug} href={href(a)} className="group block">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={a.img} alt="" className="aspect-[16/9] w-full object-cover" loading="lazy" />
+                  <img src={a.img} alt={a.title} className="aspect-[16/9] w-full object-cover" loading="lazy" />
                   <h3 className={`${serif.className} mt-2 text-[21px] font-bold leading-snug group-hover:text-[var(--lv-acc)]`}>{a.title}</h3>
                   {a.summary && <p className="mt-1 line-clamp-2 text-[14px] text-[#4a5266]">{a.summary}</p>}
                   <p className="mt-1 text-[12px] text-[#6b7386]">By {a.author.split(",")[0]} · {ago(a)}</p>
@@ -218,7 +218,7 @@ export default function CategoryLive({
               {rest.map((a) => (
                 <li key={a.slug} className="flex gap-4 border-b border-[#e3e6ee] py-4">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={a.img} alt="" className="h-20 w-28 shrink-0 object-cover" loading="lazy" />
+                  <img src={a.img} alt={a.title} className="h-20 w-28 shrink-0 object-cover" loading="lazy" />
                   <span>
                     <a href={href(a)} className={`${serif.className} text-[17px] font-bold leading-snug hover:text-[var(--lv-acc)]`}>{a.title}</a>
                     <span className="mt-1 block text-[12px] text-[#6b7386]">{ago(a)}</span>

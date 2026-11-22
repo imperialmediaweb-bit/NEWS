@@ -93,7 +93,7 @@ export default function ArticleMagazine({
         <figure className="pc-parallax mt-10 overflow-hidden">
           <div className="mx-auto aspect-[21/9] max-h-[640px] w-full overflow-hidden bg-[#eee]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={article.featured_image} alt="" className="h-full w-full object-cover" />
+            <img src={article.featured_image} alt={article.title} className="h-full w-full object-cover" />
           </div>
           {isStock(article.featured_image) && <figcaption className={`${W} mt-2 text-[12px] italic text-[#999]`}>Illustrative photo from a free stock library; it does not show the people or places in this story.</figcaption>}
         </figure>
@@ -163,7 +163,7 @@ export default function ArticleMagazine({
               <a key={a.slug} href={link(a)} className="pc-card group block">
                 <span className="pc-zoom block aspect-[3/2] overflow-hidden bg-[#eee]">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  {a.img && <img src={a.img} alt="" className="h-full w-full object-cover" loading="lazy" />}
+                  {a.img && <img src={a.img} alt={a.title} className="h-full w-full object-cover" loading="lazy" />}
                 </span>
                 <span className={`${serifM.className} mt-3 block text-[22px] font-semibold leading-snug group-hover:text-[var(--mg-acc)]`}>{a.title}</span>
                 {a.summary && <span className="mt-1 block line-clamp-2 text-[15px] text-[#666]">{a.summary}</span>}

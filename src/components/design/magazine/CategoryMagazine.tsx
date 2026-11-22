@@ -85,7 +85,7 @@ export default function CategoryMagazine({
   const Img = ({ a, sizes = "(max-width: 640px) 92vw, 420px" }: { a: HomeArticle; sizes?: string }) =>
     a.img ? (
       // eslint-disable-next-line @next/next/no-img-element
-      <img src={a.img} srcSet={srcSetOf(a.img)} sizes={sizes} alt="" className="h-full w-full object-cover" loading="lazy" decoding="async" />
+      <img src={a.img} srcSet={srcSetOf(a.img)} sizes={sizes} alt={a.title} className="h-full w-full object-cover" loading="lazy" decoding="async" />
     ) : (
       <div className="h-full w-full bg-gradient-to-br from-[var(--mg-ink)] to-[var(--mg-acc)]" />
     );

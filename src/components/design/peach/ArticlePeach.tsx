@@ -132,7 +132,7 @@ export default function ArticlePeach({
             <a href={href(upNext)} className="pc-card pc-spot group mx-auto mt-8 flex max-w-[720px] items-center gap-5 overflow-hidden rounded-md bg-[linear-gradient(135deg,#f7dccf,#fbeee6)] p-4">
               <span className="pc-zoom h-24 w-32 shrink-0 overflow-hidden rounded-sm">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                {upNext.img && <img src={upNext.img} alt="" className="h-full w-full object-cover" loading="lazy" />}
+                {upNext.img && <img src={upNext.img} alt={upNext.title} className="h-full w-full object-cover" loading="lazy" />}
               </span>
               <span>
                 <span className="text-[12px] font-extrabold uppercase tracking-[.08em] text-[var(--pc-acc)]">Up next</span>
@@ -215,7 +215,7 @@ export default function ArticlePeach({
                   {a.img && (
                     <span className="pc-zoom absolute inset-0">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={a.img} alt="" className="h-full w-full object-cover" loading="lazy" />
+                      <img src={a.img} alt={a.title} className="h-full w-full object-cover" loading="lazy" />
                     </span>
                   )}
                   <span className="absolute inset-0 bg-[linear-gradient(180deg,transparent_35%,rgba(30,12,8,.92))]" />

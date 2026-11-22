@@ -407,7 +407,7 @@ export default function HomeLive({
               {topStories.map((a) => (
                 <a key={a.slug} href={href(a)} className="lv-lift lv-zoom group block overflow-hidden">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={a.img} alt="" className="aspect-[3/2] w-full object-cover" loading="lazy" />
+                  <img src={a.img} alt={a.title} className="aspect-[3/2] w-full object-cover" loading="lazy" />
                   <p className="mt-2 text-[11px] font-extrabold uppercase tracking-wider text-[var(--lv-acc)]">{a.category.replace(/-/g, " ")}</p>
                   <h3 className={`${serif.className} text-[18px] font-bold leading-snug group-hover:text-[var(--lv-acc)]`}>{a.title}</h3>
                 </a>
@@ -434,7 +434,7 @@ export default function HomeLive({
                 {secPol.slice(1, 6).map((a) => (
                   <li key={a.slug} className="flex gap-4 py-3">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={a.img} alt="" className="h-20 w-28 shrink-0 object-cover" loading="lazy" />
+                    <img src={a.img} alt={a.title} className="h-20 w-28 shrink-0 object-cover" loading="lazy" />
                     <a href={href(a)} className={`${serif.className} text-[17px] font-bold leading-snug hover:text-[var(--lv-acc)]`}>{a.title}<span className="mt-1 block font-sans text-[12px] font-normal text-[#6b7386]">{ago(a)}</span></a>
                   </li>
                 ))}
@@ -462,7 +462,7 @@ export default function HomeLive({
               {secSpo.slice(1, 5).map((a) => (
                 <a key={a.slug} href={href(a)} className="lv-lift lv-zoom group block overflow-hidden">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={a.img} alt="" className="aspect-[16/9] w-full object-cover opacity-95" loading="lazy" />
+                  <img src={a.img} alt={a.title} className="aspect-[16/9] w-full object-cover opacity-95" loading="lazy" />
                   <h3 className={`${serif.className} mt-2 text-[17px] font-bold leading-snug group-hover:underline`}>{a.title}</h3>
                 </a>
               ))}
@@ -480,7 +480,7 @@ export default function HomeLive({
               {secBiz.slice(0, 3).map((a) => (
                 <a key={a.slug} href={href(a)} className="group block border-t-4 border-[var(--lv-ink)] pt-3">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={a.img} alt="" className="aspect-[3/2] w-full object-cover" loading="lazy" />
+                  <img src={a.img} alt={a.title} className="aspect-[3/2] w-full object-cover" loading="lazy" />
                   <h3 className={`${serif.className} mt-2 text-[20px] font-bold leading-snug group-hover:text-[var(--lv-acc)]`}>{a.title}</h3>
                   {a.summary && <p className="mt-1 line-clamp-2 text-[14px] text-[#4a5266]">{a.summary}</p>}
                 </a>
@@ -499,7 +499,7 @@ export default function HomeLive({
               {secLife.slice(0, 5).map((a, i) => (
                 <a key={a.slug} href={href(a)} className={`group relative block overflow-hidden ${i === 0 ? "md:col-span-2 md:row-span-2" : ""}`}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={a.img} alt="" className={`w-full object-cover transition-transform duration-700 group-hover:scale-[1.03] ${i === 0 ? "aspect-[4/3] md:h-full" : "aspect-[4/3]"}`} loading="lazy" />
+                  <img src={a.img} alt={a.title} className={`w-full object-cover transition-transform duration-700 group-hover:scale-[1.03] ${i === 0 ? "aspect-[4/3] md:h-full" : "aspect-[4/3]"}`} loading="lazy" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
                   <h3 className={`${serif.className} absolute inset-x-0 bottom-0 p-3 font-bold leading-snug text-white ${i === 0 ? "text-[24px]" : "text-[15px]"}`}>{a.title}</h3>
                 </a>
@@ -542,7 +542,7 @@ export default function HomeLive({
               {latestGrid.map((a) => (
                 <a key={a.slug} href={href(a)} className="lv-lift lv-zoom group block overflow-hidden">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={a.img} alt="" className="aspect-[16/9] w-full object-cover" loading="lazy" />
+                  <img src={a.img} alt={a.title} className="aspect-[16/9] w-full object-cover" loading="lazy" />
                   <p className="mt-2 text-[12px] font-bold uppercase text-[var(--lv-acc)]">{ago(a)}</p>
                   <h3 className={`${serif.className} text-[20px] font-bold leading-snug group-hover:text-[var(--lv-acc)]`}>{a.title}</h3>
                   {a.summary && <p className="mt-1 line-clamp-2 text-[14px] text-[#4a5266]">{a.summary}</p>}
@@ -632,7 +632,7 @@ export default function HomeLive({
               {opinion.map((a, i) => (
                 <a key={a.slug} href={href(a)} className={`group flex gap-3 ${i > 0 ? "lg:border-l lg:border-[#e3e6ee] lg:pl-5" : ""}`}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={a.img} alt="" className="h-20 w-20 shrink-0 object-cover" loading="lazy" />
+                  <img src={a.img} alt={a.title} className="h-20 w-20 shrink-0 object-cover" loading="lazy" />
                   <span>
                     <span className="block text-[11px] font-bold uppercase text-[var(--lv-acc)]">Opinion</span>
                     <span className={`${serif.className} block text-[17px] font-bold leading-snug group-hover:text-[var(--lv-acc)]`}>{a.title}</span>
@@ -652,7 +652,7 @@ export default function HomeLive({
               {moreNews.map((a) => (
                 <li key={a.slug} className="lv-zoom flex gap-4 overflow-hidden border-b border-[#e3e6ee] py-4">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={a.img} alt="" className="h-24 w-36 shrink-0 object-cover" loading="lazy" />
+                  <img src={a.img} alt={a.title} className="h-24 w-36 shrink-0 object-cover" loading="lazy" />
                   <span>
                     <span className="text-[11px] font-extrabold uppercase tracking-wider text-[var(--lv-acc)]">{a.category.replace(/-/g, " ")}</span>
                     <a href={href(a)} className={`${serif.className} block text-[18px] font-bold leading-snug hover:text-[var(--lv-acc)]`}>{a.title}</a>

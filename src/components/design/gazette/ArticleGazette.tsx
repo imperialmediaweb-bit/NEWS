@@ -98,7 +98,7 @@ export default function ArticleGazette({
         <figure className={`${W} mt-5`}>
           <div className="pc-clip pc-in aspect-[21/9] overflow-hidden bg-[#111]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={article.featured_image} alt="" className="h-full w-full object-cover" />
+            <img src={article.featured_image} alt={article.title} className="h-full w-full object-cover" />
           </div>
           {isStock(article.featured_image) && <figcaption className="mt-1 text-[12px] italic text-[#888]">Illustrative photo from a free stock library; it does not show the people or places in this story.</figcaption>}
         </figure>
@@ -166,7 +166,7 @@ export default function ArticleGazette({
                 <a key={a.slug} href={link(a)} className="pc-card group block">
                   <span className="pc-zoom block aspect-[4/3] overflow-hidden bg-[#222]">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    {a.img && <img src={a.img} alt="" className="h-full w-full object-cover" loading="lazy" />}
+                    {a.img && <img src={a.img} alt={a.title} className="h-full w-full object-cover" loading="lazy" />}
                   </span>
                   <span className={`${merri.className} mt-2 block text-[22px] font-extrabold leading-[1.05] group-hover:text-[var(--gz-acc)]`}>{a.title}</span>
                 </a>

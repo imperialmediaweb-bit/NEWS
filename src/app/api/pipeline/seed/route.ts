@@ -5,6 +5,7 @@ import { parseFeed } from "@/lib/pipeline/rss-parser";
 import { generateGuid } from "@/lib/pipeline/dedup";
 import { rewriteArticleShort } from "@/lib/pipeline/rewriter";
 import { findImage } from "@/lib/pipeline/images";
+import { storeImage } from "@/lib/pipeline/image-store";
 import { publishArticle } from "@/lib/pipeline/publisher";
 import { logRunStart, logRunEnd } from "@/lib/pipeline/scheduler";
 import { sites } from "@/config/sites";
@@ -98,6 +99,8 @@ export async function POST(req: NextRequest) {
 
             // Get image
             const image = await findImage(rewrite.suggestedImageQuery, feed.category);
+            // our own WebP copy on R2 for free-licence photos; the original if that fails
+            const stored = image?.url ? await storeImage(image.url, rewrite.title).catch(() => null) : null;
 
             // Insert feed item
             await pool.query(
@@ -113,7 +116,7 @@ export async function POST(req: NextRequest) {
               rewrite,
               category: feed.category,
               sourceUrl: item.link,
-              imageUrl: image?.url || null,
+              imageUrl: stored || image?.url || null,
               state: site.state,
             });
 

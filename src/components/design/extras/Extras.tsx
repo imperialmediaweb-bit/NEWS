@@ -145,7 +145,7 @@ export default function Extras({ site, pool, used, weather, gas, counties, theme
                 <a key={a.slug} href={href(a)} className="x-tilt group relative block w-[82%] shrink-0 snap-start overflow-hidden rounded-lg sm:w-[46%] lg:w-[31%]" draggable={false}>
                   <span className="x-zoom block aspect-[4/5] overflow-hidden">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={a.img} srcSet={srcSetOf(a.img)} sizes="(max-width: 640px) 82vw, 31vw" alt="" className="h-full w-full object-cover" loading="lazy" decoding="async" draggable={false} />
+                    <img src={a.img} srcSet={srcSetOf(a.img)} sizes="(max-width: 640px) 82vw, 31vw" alt={a.title} className="h-full w-full object-cover" loading="lazy" decoding="async" draggable={false} />
                   </span>
                   <span className="absolute inset-0 bg-[linear-gradient(180deg,transparent_40%,rgba(0,0,0,.88))]" />
                   <span className="absolute inset-x-0 bottom-0 p-5 text-white">
@@ -179,7 +179,7 @@ export default function Extras({ site, pool, used, weather, gas, counties, theme
                       {a.img && (
                         <span className="x-zoom h-[64px] w-[88px] shrink-0 overflow-hidden rounded">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img src={sized(a.img, 400)} alt="" className="h-full w-full object-cover" loading="lazy" decoding="async" />
+                          <img src={sized(a.img, 400)} alt={a!.title} className="h-full w-full object-cover" loading="lazy" decoding="async" />
                         </span>
                       )}
                       <span className="x-title text-[15.5px] font-semibold leading-snug">{a.title}</span>
@@ -206,7 +206,7 @@ export default function Extras({ site, pool, used, weather, gas, counties, theme
               <a key={slug} href={`/${slug}`} className={`x-tilt x-glow group relative block overflow-hidden rounded-lg ${spans[i]}`}>
                 <span className="x-zoom absolute inset-0">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={a!.img} srcSet={srcSetOf(a!.img)} sizes="(max-width: 1024px) 50vw, 33vw" alt="" className="h-full w-full object-cover" loading="lazy" decoding="async" />
+                  <img src={a!.img} srcSet={srcSetOf(a!.img)} sizes="(max-width: 1024px) 50vw, 33vw" alt={a!.title} className="h-full w-full object-cover" loading="lazy" decoding="async" />
                 </span>
                 <span className="absolute inset-0 bg-[linear-gradient(200deg,transparent_30%,rgba(0,0,0,.85))]" />
                 <span className="absolute inset-x-0 bottom-0 p-4 text-white md:p-6">
@@ -243,7 +243,7 @@ export default function Extras({ site, pool, used, weather, gas, counties, theme
           <a key={a.slug} href={href(a)} className="x-tilt group relative mb-4 block break-inside-avoid overflow-hidden rounded-md">
             <span className={`x-zoom block overflow-hidden ${["aspect-[4/5]", "aspect-[4/3]", "aspect-square"][i % 3]}`}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={a.img} srcSet={srcSetOf(a.img)} sizes="(max-width: 1024px) 50vw, 33vw" alt="" className="h-full w-full object-cover" loading="lazy" decoding="async" />
+              <img src={a.img} srcSet={srcSetOf(a.img)} sizes="(max-width: 1024px) 50vw, 33vw" alt={a.title} className="h-full w-full object-cover" loading="lazy" decoding="async" />
             </span>
             <span className="absolute inset-0 bg-[linear-gradient(180deg,transparent_50%,rgba(0,0,0,.85))] opacity-90" />
             <span className={`${theme.head} absolute inset-x-0 bottom-0 p-4 text-[18px] font-bold leading-tight text-white`}>{a.title}</span>
@@ -263,7 +263,7 @@ export default function Extras({ site, pool, used, weather, gas, counties, theme
               <span className={`${theme.head} w-12 shrink-0 text-[56px] font-bold leading-none text-[var(--x-acc)]`}>{i + 1}</span>
               <span className="x-zoom h-[96px] w-[140px] shrink-0 overflow-hidden rounded">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={sized(a.img, 400)} alt="" className="h-full w-full object-cover" loading="lazy" decoding="async" />
+                <img src={sized(a.img, 400)} alt={a!.title} className="h-full w-full object-cover" loading="lazy" decoding="async" />
               </span>
               <span className={`x-title ${theme.head} text-[19px] font-bold leading-snug`}>{a.title}</span>
             </a>
@@ -294,7 +294,7 @@ export default function Extras({ site, pool, used, weather, gas, counties, theme
           <a key={slug} href={`/${slug}`} className="x-tilt group flex items-center gap-3 rounded-full border border-[var(--x-line)] py-1.5 pl-1.5 pr-5">
             <span className="x-zoom h-12 w-12 overflow-hidden rounded-full">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={sized(a!.img, 400)} alt="" className="h-full w-full object-cover" loading="lazy" decoding="async" />
+              <img src={sized(a!.img, 400)} alt={a!.title} className="h-full w-full object-cover" loading="lazy" decoding="async" />
             </span>
             <span className={`x-title ${theme.head} text-[18px] font-bold`}>{label} →</span>
           </a>
