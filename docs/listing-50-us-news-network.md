@@ -114,9 +114,15 @@ All the time so far went into building the platform, not into growing the audien
 ## Support and maintenance after the sale
 The developer who built both platforms stays available:
 - **Free support** after the handover: setup on the buyer's accounts, questions about running the network, fixes for anything that does not work as described
-- **Monthly maintenance (optional)**: keeping sources and feeds working, AI provider and API updates, security and dependency updates, monitoring the pipeline, indexing and Search Console reports, monthly performance report
-- **Growth development (optional)**: AdSense / Raptive setup, new revenue features, more official sources per state, new sites or countries, custom work on request
-- Retainer pricing agreed with the buyer; quick response by email and chat
+- **Optional monthly packages** after the free period:
+
+| Package | What it covers |
+|---|---|
+| **Maintenance** | Sources and feeds kept working, AI and API updates, security and dependency updates, pipeline and indexing monitoring, monthly report |
+| **Growth** | Everything in Maintenance, plus new features every month: AdSense / Raptive setup, more official sources per state, new pages and revenue tools, SEO improvements |
+| **Custom development** | Any new feature, new sites or countries, integrations — quoted per project |
+
+- Package prices agreed with the buyer; quick response by email and chat
 
 ## Included in the sale
 - 49 news domains + media-chief.com (transfer at Namecheap), Cloudflare setup
