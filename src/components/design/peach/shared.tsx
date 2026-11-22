@@ -92,7 +92,7 @@ export function PeachTopBar({ site, capital }: { site: SiteConfig; capital?: Cit
           </a>
         )}
         <span className="ml-auto flex items-center gap-4">
-          <a href="/#alerts" className="rounded-sm bg-[var(--pc-acc)] px-3 py-1 font-semibold text-white hover:brightness-110">Get alerts</a>
+          <a href="/#alerts" className="rounded-sm bg-[var(--pc-acc)] px-3 py-1 font-semibold text-[#1d0d08] hover:brightness-110">Get alerts</a>
           <a href="/contact" className="hidden text-white/85 hover:text-white sm:inline">Contact</a>
         </span>
       </div>
