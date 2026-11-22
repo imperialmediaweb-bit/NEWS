@@ -2,6 +2,16 @@ import pool from "@/lib/db";
 import { RewriteResult } from "./rewriter";
 import { sites as siteConfigs } from "@/config/sites";
 
+let creditColumn: Promise<unknown> | null = null;
+/** articles.image_credit holds the photo credit a free licence requires. */
+function ensureImageCreditColumn() {
+  creditColumn ??= pool.query("ALTER TABLE articles ADD COLUMN IF NOT EXISTS image_credit TEXT").catch((e) => {
+    creditColumn = null;
+    throw e;
+  });
+  return creditColumn;
+}
+
 /** Byline for stories the newsroom publishes: "{Site name} Newsroom". */
 export function newsroomByline(state: string): string {
   const cfg = Object.values(siteConfigs).find((x) => x.state === state);
@@ -22,6 +32,8 @@ interface PublishOptions {
   category: string;
   sourceUrl: string;
   imageUrl: string | null;
+  /** Credit line the photo's licence requires, printed under the story. */
+  imageCredit?: string | null;
   state: string;
   author?: string;
 }
@@ -65,6 +77,8 @@ export async function publishArticle(opts: PublishOptions): Promise<PublishResul
   const now = new Date().toISOString();
 
   // Find the one site matching this state
+  await ensureImageCreditColumn();
+
   const { rows: siteRows } = await pool.query(
     "SELECT id FROM sites WHERE state = $1 LIMIT 1",
     [opts.state]
@@ -98,8 +112,8 @@ export async function publishArticle(opts: PublishOptions): Promise<PublishResul
 
   try {
     const { rowCount } = await pool.query(
-      `INSERT INTO articles (site_id, title, slug, content, summary, category, author, featured_image, published_at, source_url, auto_generated)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+      `INSERT INTO articles (site_id, title, slug, content, summary, category, author, featured_image, published_at, source_url, auto_generated, image_credit)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
        ON CONFLICT (site_id, slug) DO NOTHING`,
       [
         siteId,
@@ -113,6 +127,7 @@ export async function publishArticle(opts: PublishOptions): Promise<PublishResul
         now,
         opts.sourceUrl,
         true,
+        opts.imageCredit || null,
       ]
     );
 

@@ -15,7 +15,7 @@ import { r2Ready, r2Put, r2Exists, r2Url } from "@/lib/r2";
 export const R2_WIDTHS = [400, 600, 900, 1200, 1600];
 
 export function canStore(url: string | null | undefined): boolean {
-  return !!url && /images\.pexels\.com|pixabay\.com\/get\/|cdn\.pixabay\.com/.test(url);
+  return !!url && /images\.pexels\.com|pixabay\.com\/get\/|cdn\.pixabay\.com|upload\.wikimedia\.org|staticflickr\.com/.test(url);
 }
 
 /** The original, as large as the library offers, for the best WebP. */

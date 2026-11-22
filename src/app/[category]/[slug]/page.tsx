@@ -180,6 +180,10 @@ const getArticleData = cache(async (siteSlug: string, articleSlug: string, domai
           domain
         );
 
+    // the photo credit a free licence (CC BY, BY-SA) requires
+    const creditLine = article.image_credit
+      ? `\n<p class="photo-credit"><em>${String(article.image_credit).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")}</em></p>`
+      : "";
     // "More from {place}": the other stories from the town or county this one
     // names, linked inside the story itself, so the archive stays connected.
     const placeLinks = (relatedRows as { rk: number; title: string; slug: string; category: string }[])
@@ -196,7 +200,7 @@ const getArticleData = cache(async (siteSlug: string, articleSlug: string, domai
     const format = (row: Record<string, unknown>, useEnrichedContent = false) => ({
       title: row.title as string,
       slug: row.slug as string,
-      content: useEnrichedContent ? enrichedContent + placeBox : ((row.content as string) || ""),
+      content: useEnrichedContent ? enrichedContent + placeBox + creditLine : ((row.content as string) || ""),
       summary: (row.summary as string) || "",
       category: (row.category as string) || "news",
       author: (row.author as string) || "Staff Reporter",

@@ -1,3 +1,7 @@
+import { searchOpenverse, REAL_PHOTO_SUBJECT } from "./free-images";
+import { PLACES } from "./relevance";
+import allCounties from "@/config/counties/us-counties.json";
+
 interface ImageResult {
   url: string;
   alt: string;
@@ -151,11 +155,39 @@ function buildQueryCascade(query: string, category?: string): string[] {
  *
  * Always returns an image — never null.
  */
+/** The town or county of the state a headline names, longest names first. */
+function placeOf(title: string, state: string): string | null {
+  const t = title.toLowerCase();
+  const counties = ((allCounties as Record<string, string[]>)[state] || []).map((c) => `${c} ${state === "Louisiana" ? "parish" : "county"}`.toLowerCase());
+  const names = (PLACES[state] || []).concat(counties).sort((a, b) => b.length - a.length);
+  for (const n of names) {
+    const esc = n.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    if (new RegExp(`\\b${esc}\\b(?!\\s+(county|parish|christian|university|college|elementary|isd))`).test(t)) return n;
+  }
+  return null;
+}
+
 export async function findImage(
   query: string,
-  category?: string
+  category?: string,
+  ctx?: { title?: string; state?: string }
 ): Promise<ImageResult | null> {
   if (!query && !category) return null;
+
+  // 1. A real photo of the place the story is about (Wikimedia, Flickr CC)
+  // 2. For storms, fires, quakes, launches and landmarks, a real photo of the subject
+  // Both free-licence, with the credit printed under the article.
+  if (ctx?.title && ctx.state) {
+    const place = placeOf(ctx.title, ctx.state);
+    if (place) {
+      const real = await searchOpenverse(`${place} ${ctx.state}`, "wikimedia,flickr");
+      if (real) return real;
+    }
+    if (REAL_PHOTO_SUBJECT.test(`${ctx.title} ${query}`)) {
+      const subject = await searchOpenverse(query);
+      if (subject) return subject;
+    }
+  }
 
   // Check cache with category context
   const cacheKey = `${query}|${category || ""}`;

@@ -242,7 +242,7 @@ export async function POST(req: NextRequest) {
       const category = sectionFor(rewrite, item.category);
 
       // Find an image (with category fallback for precision)
-      const image = await findImage(rewrite.suggestedImageQuery, category);
+      const image = await findImage(rewrite.suggestedImageQuery, category, { title: rewrite.title, state: item.state });
       // our own WebP copy on R2 for free-licence photos; the original if that fails
       const stored = image?.url ? await storeImage(image.url, rewrite.title).catch(() => null) : null;
 
@@ -253,6 +253,7 @@ export async function POST(req: NextRequest) {
         category,
         sourceUrl: item.source_url,
         imageUrl: stored || image?.url || null,
+        imageCredit: image?.credit || null,
         state: item.state,
       });
 
