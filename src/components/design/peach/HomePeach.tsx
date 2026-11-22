@@ -129,6 +129,7 @@ export default function HomePeach({
     <div className={`${body.className} ${display.variable} min-h-screen overflow-x-hidden bg-[var(--pc-paper)] text-[#2b1d17]`} style={peachVars(site)}>
       <noscript><style>{`.pc-in{opacity:1!important;translate:none!important}.pc-in *{opacity:1!important;transform:none!important;clip-path:none!important}`}</style></noscript>
       <PeachFx />
+      <h1 className="sr-only">{site.name}: {site.state} news, weather and local stories</h1>
       <PremiumFx logo={`/logos/${site.slug}.svg`} name={site.name} nav={PNAV_ALL.map(([l, h]) => [l, h === "#weather" ? "/#weather" : h] as [string, string])} />
       <PeachTopBar site={site} capital={capital} />
       <PeachHeader site={site} MobileMenu={MobileMenu} />

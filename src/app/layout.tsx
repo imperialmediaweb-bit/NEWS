@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import { getSiteByDomain, getActiveSite } from "@/config/sites";
 import "./globals.css";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
+import { STATE_FACTS } from "@/config/state-data";
 import AnalyticsTracker from "@/components/AnalyticsTracker";
 import CookieConsent from "@/components/CookieConsent";
 import FacebookPixel from "@/components/FacebookPixel";
@@ -22,15 +23,22 @@ function getSiteFromHeaders() {
   }
 }
 
+/** A homepage description that says what the site is, in about 155 characters. */
+function siteDescription(site: { name: string; state: string; city: string }) {
+  const cities = (STATE_FACTS[site.state]?.cities || []).slice(0, 3).map((c) => c[0]).join(", ") || site.city;
+  const d = `${site.state} news today from ${site.name}: local news, politics, business, sports and weather from ${cities} and every county.`;
+  return d.length > 160 ? d.slice(0, 157).replace(/\s+\S*$/, "") + "…" : d;
+}
+
 export async function generateMetadata(): Promise<Metadata> {
   const site = getSiteFromHeaders();
 
   return {
     title: {
-      default: `${site.name} | ${site.tagline}`,
+      default: `${site.name}: ${site.state} News, Weather & Local Stories`,
       template: `%s | ${site.name}`,
     },
-    description: `Breaking news, celebrity gossip, sports, politics and more from ${site.name} — ${site.city}, ${site.state}'s most-read news source.`,
+    description: siteDescription(site),
     keywords: [
       site.name,
       site.city,
@@ -39,8 +47,6 @@ export async function generateMetadata(): Promise<Metadata> {
       "local news",
       "politics",
       "sports",
-      "entertainment",
-      "celebrity",
       "crime",
       "weather",
       `${site.city} news`,
@@ -64,13 +70,15 @@ export async function generateMetadata(): Promise<Metadata> {
       type: "website",
       locale: "en_US",
       siteName: site.name,
-      title: `${site.name} | ${site.tagline}`,
-      description: `Breaking news from ${site.city}, ${site.state}. Local news, politics, sports, entertainment and more.`,
+      title: `${site.name}: ${site.state} News, Weather & Local Stories`,
+      description: siteDescription(site),
+      images: [{ url: `https://${site.domain}/api/og`, width: 1200, height: 630, alt: site.name }],
     },
     twitter: {
       card: "summary_large_image",
-      title: `${site.name} | ${site.tagline}`,
-      description: `Breaking news from ${site.city}, ${site.state}. Local news, politics, sports, entertainment and more.`,
+      title: `${site.name}: ${site.state} News, Weather & Local Stories`,
+      description: siteDescription(site),
+      images: [`https://${site.domain}/api/og`],
     },
     alternates: {
       canonical: `https://${site.domain}`,
@@ -135,15 +143,23 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
-        {/* Google AdSense — one publisher ID across all 50 sites */}
-        <script
-          async
-          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
-          crossOrigin="anonymous"
-        />
+        {/* Google AdSense — one publisher ID across all 50 sites. Off for now
+            (user, 22.11.2026: "deocamdată fără AdSense", for speed); set
+            ADSENSE_ON=1 in Railway to bring it back without a code change. */}
+        {process.env.ADSENSE_ON === "1" && (
+          <script
+            async
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
+            crossOrigin="anonymous"
+          />
+        )}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify({ "@context": "https://schema.org", "@type": "WebSite", name: site.name, url: `https://${site.domain}`, inLanguage: "en-US", publisher: { "@type": "NewsMediaOrganization", name: site.name }, potentialAction: { "@type": "SearchAction", target: { "@type": "EntryPoint", urlTemplate: `https://${site.domain}/search?q={search_term_string}` }, "query-input": "required name=search_term_string" } }) }}
         />
       </head>
       <body className="antialiased bg-white overflow-x-hidden">

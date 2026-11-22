@@ -43,7 +43,7 @@ export default function FacebookPixel({ pixelId }: { pixelId?: string }) {
 
   return (
     <>
-      <Script id="fb-pixel" strategy="afterInteractive">
+      <Script id="fb-pixel" strategy="lazyOnload">
         {`
           !function(f,b,e,v,n,t,s)
           {if(f.fbq)return;n=f.fbq=function(){n.callMethod?

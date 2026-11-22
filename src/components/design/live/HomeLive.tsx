@@ -150,6 +150,7 @@ export default function HomeLive({
   return (
     <div className={`${sans.className} min-h-screen overflow-x-hidden bg-white text-[#1b2233]`} style={{ ["--lv-ink" as string]: pal.ink, ["--lv-acc" as string]: pal.acc }}>
       <PeachFx />
+      <h1 className="sr-only">{site.name}: {site.state} news, weather and local stories</h1>
       <PremiumFx logo={`/logos/${site.slug}.svg`} name={site.name} nav={PNAV_ALL.map(([l, h]) => [l, h === "#weather" ? "/#weather" : h] as [string, string])} />
       <LiveTopBar site={site} capital={capital} />
       {/* masthead: centred (Texas mockup) or logo left with the menu beside it (Michigan mockup) */}
