@@ -161,10 +161,21 @@ const getArticleData = cache(async (siteSlug: string, articleSlug: string, domai
           domain
         );
 
+    // "More from {place}": the other stories from the town or county this one
+    // names, linked inside the story itself, so the archive stays connected.
+    const placeLinks = (relatedRows as { rk: number; title: string; slug: string; category: string }[]).filter((r) => r.rk === 0).slice(0, 4);
+    const esc = (x: string) => x.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    const placeLabel = place ? place.replace(/\b\w/g, (c) => c.toUpperCase()) : "";
+    const placeBox = !isSponsored && place && placeLinks.length >= 2
+      ? `\n<section class="more-from"><h2>More from ${esc(placeLabel)}</h2><ul>${placeLinks
+          .map((r) => `<li><a href="/${esc((r.category || "local-news").toLowerCase().replace(/\s+/g, "-"))}/${esc(r.slug)}">${esc(r.title)}</a></li>`)
+          .join("")}</ul></section>`
+      : "";
+
     const format = (row: Record<string, unknown>, useEnrichedContent = false) => ({
       title: row.title as string,
       slug: row.slug as string,
-      content: useEnrichedContent ? enrichedContent : ((row.content as string) || ""),
+      content: useEnrichedContent ? enrichedContent + placeBox : ((row.content as string) || ""),
       summary: (row.summary as string) || "",
       category: (row.category as string) || "news",
       author: (row.author as string) || "Staff Reporter",
