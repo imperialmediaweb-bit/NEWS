@@ -4,6 +4,10 @@ import pool from "@/lib/db";
 import { getSiteByDomain } from "@/config/sites";
 import { r2Put, r2Ready, r2Url } from "@/lib/r2";
 import { ensureSubmissionsTable, SUBMISSION_TYPES, type SubmissionType } from "@/lib/submissions";
+import { Resend } from "resend";
+
+const NEWSROOM_INBOX = process.env.SUBMISSIONS_EMAIL || "ainewss2023@gmail.com";
+const esc = (x: string) => x.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
 /**
  * POST /api/submit — a reader's tip, photo/video, event or achievement
@@ -79,5 +83,23 @@ export async function POST(req: NextRequest) {
      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)`,
     [site.slug, site.state, type, title, body, city || null, eventDate || null, name, email, phone || null, photoUrl, videoUrl || null, consent, ipHash]
   );
+  // tell the newsroom; a failed email never fails the submission
+  if (process.env.RESEND_API_KEY) {
+    try {
+      await new Resend(process.env.RESEND_API_KEY).emails.send({
+        from: `${site.name} <contact@alabama-express.com>`,
+        to: NEWSROOM_INBOX,
+        replyTo: email,
+        subject: `[${site.name}] ${SUBMISSION_TYPES[type]}: ${title}`.slice(0, 180),
+        html: `<p><b>${esc(SUBMISSION_TYPES[type])}</b> on ${esc(site.name)}${city ? ` — ${esc(city)}` : ""}${eventDate ? ` — ${esc(eventDate)}` : ""}</p>
+<h2>${esc(title)}</h2><p style="white-space:pre-wrap">${esc(body)}</p>
+${photoUrl ? `<p><img src="${photoUrl}" style="max-width:520px"></p>` : ""}${videoUrl ? `<p>Video: <a href="${esc(videoUrl)}">${esc(videoUrl)}</a></p>` : ""}
+<p>From ${esc(name)} &lt;${esc(email)}&gt;${phone ? ` · ${esc(phone)}` : ""}</p>
+<p><a href="https://${site.domain}/admin/submissions">Review it in the admin</a> (approve or reject).</p>`,
+      });
+    } catch (e) {
+      console.error("[submit] notify failed", e instanceof Error ? e.message : e);
+    }
+  }
   return NextResponse.json({ ok: true });
 }
