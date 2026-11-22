@@ -124,3 +124,12 @@ export async function upsertTxtRecord(
   if (!created.ok) return { ok: false, error: created.error };
   return { ok: true };
 }
+
+/** Drop everything a zone has cached (after a site-wide redesign). Needs Zone:Cache Purge. */
+export async function purgeEverything(zoneId: string): Promise<{ ok: boolean; error?: string }> {
+  const res = await cf<{ id: string }>(`/zones/${zoneId}/purge_cache`, {
+    method: "POST",
+    body: JSON.stringify({ purge_everything: true }),
+  });
+  return res.ok ? { ok: true } : { ok: false, error: res.error };
+}
