@@ -74,7 +74,6 @@ export function verifyStripe(raw: string, header: string, secret: string, tolera
 const BANNED: Array<[RegExp, string]> = [
   [/\b(cbd|thc|delta[- ]?[89]|cannabis|marijuana|weed|kratom|psilocybin|magic mushrooms?|dispensar(y|ies)|vape|vaping|e-?cig)\b/i, "cannabis, CBD, kratom or vaping products"],
   [/\b(pills?|tablets?|capsules?|viagra|cialis|tramadol|oxy(codone|contin)|adderall|xanax|ozempic|semaglutide|tirzepatide|steroids?|peptides?|sarms?|no prescription|without (a )?prescription|online pharmacy|weight[- ]loss (pill|supplement|gumm)|keto (pill|gumm)|diet pills?|male enhancement|supplements?)\b/i, "drugs, pills, supplements or online pharmacies"],
-  [/\b(casino|sportsbook|sports betting|bet now|slot machines?|online slots|poker|gambling|lottery tickets? online|sweepstakes casino)\b/i, "gambling or betting"],
   [/\b(crypto(currency)?|bitcoin|forex|binary options|trading signals?|guaranteed returns?|double your money|airdrop|nft|presale)\b/i, "crypto, forex or investment offers"],
   [/\b(payday loans?|title loans?|cash advance|bad credit loans?|debt relief|credit repair)\b/i, "payday or high-cost loans and debt relief"],
   [/\b(escorts?|adult (content|entertainment|toys|videos?)|porn|xxx|onlyfans|dating (app|site|service)s?|hookups?|sugar (daddy|baby))\b/i, "adult or dating services"],
@@ -88,4 +87,16 @@ export function bannedReason(...texts: string[]): string | null {
   const t = texts.join(" \n ");
   for (const [re, label] of BANNED) if (re.test(t)) return label;
   return null;
+}
+
+/**
+ * Allowed, but at the premium price: casinos and gaming, burlesque, cabaret and
+ * other 18+ shows. Licensed venues only; the editor still reviews each one.
+ */
+export const PREMIUM_CENTS = Number(process.env.PRICE_PREMIUM_CENTS || 9900);
+const PREMIUM = /\b(casinos?|sportsbooks?|sports betting|betting|poker|slot machines?|gaming floor|bingo|burlesque|cabaret|revue|18\+|21\+|adults? only|nightclubs?|gentlemen'?s club)\b/i;
+
+/** True when a sponsored story is in a premium-priced category. */
+export function isPremium(...texts: string[]): boolean {
+  return PREMIUM.test(texts.join(" \n "));
 }

@@ -25,7 +25,7 @@ export default function PromotePage({ searchParams }: { searchParams: { paid?: s
           A grand opening, a new service, an event or a milestone: publish a sponsored story on {site.name} for {price}. It stays on the site, is labelled &quot;Sponsored&quot;, and links to your website.
         </p>
         <p className="mt-3 text-[14px] text-gray-600">
-          We accept announcements from real local businesses, events and organizations. We do not publish ads for cannabis, CBD or vaping, drugs, pills or supplements, gambling, crypto or investment offers, payday loans, adult or dating services, weapons, tobacco, or SEO link selling.
+          We accept announcements from real local businesses, events and organizations. Casinos, gaming and 18+ shows (burlesque, cabaret, nightclubs) are welcome at $99 from licensed venues. We do not publish ads for cannabis, CBD or vaping, drugs, pills or supplements, crypto or investment offers, payday loans, adult content, escorts or dating services, weapons, tobacco, or SEO link selling.
         </p>
         {searchParams.paid && <p className="mt-6 rounded bg-green-50 p-4 font-semibold text-green-900">Payment received, thank you. An editor will review your story within one business day.</p>}
         {searchParams.cancelled && <p className="mt-6 rounded bg-yellow-50 p-4 text-yellow-900">Payment was cancelled; nothing was charged.</p>}

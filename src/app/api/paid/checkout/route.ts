@@ -3,7 +3,7 @@ import crypto from "crypto";
 import pool from "@/lib/db";
 import { getSiteByDomain } from "@/config/sites";
 import { r2Put, r2Ready, r2Url } from "@/lib/r2";
-import { ensurePaidTable, PRODUCTS, stripe, bannedReason, type Product } from "@/lib/paid";
+import { ensurePaidTable, PRODUCTS, PREMIUM_CENTS, stripe, bannedReason, isPremium, type Product } from "@/lib/paid";
 
 /** POST /api/paid/checkout (multipart) — saves the order, returns the Stripe Checkout URL. */
 export const dynamic = "force-dynamic";
@@ -48,10 +48,13 @@ export async function POST(req: NextRequest) {
 
   await ensurePaidTable();
   const p = PRODUCTS[product];
+  // casinos, gaming and 18+ shows are published at the premium price
+  const premium = product === "sponsored" && isPremium(title, body, business, website);
+  const cents = premium ? PREMIUM_CENTS : p.cents;
   const { rows } = await pool.query(
     `INSERT INTO paid_orders (site_slug, product, title, body, business, website, name, email, photo_url, cents)
      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING id`,
-    [site.slug, product, title, body, business || null, website || null, name, email, photoUrl, p.cents]
+    [site.slug, product, title, body, business || null, website || null, name, email, photoUrl, cents]
   );
   const id = rows[0].id;
   const back = product === "sponsored" ? "promote" : "obituaries/submit";
@@ -60,8 +63,8 @@ export async function POST(req: NextRequest) {
     customer_email: email,
     "line_items[0][quantity]": "1",
     "line_items[0][price_data][currency]": "usd",
-    "line_items[0][price_data][unit_amount]": String(p.cents),
-    "line_items[0][price_data][product_data][name]": `${p.name} — ${site.name}`,
+    "line_items[0][price_data][unit_amount]": String(cents),
+    "line_items[0][price_data][product_data][name]": `${premium ? "Sponsored story (casino, gaming or 18+ entertainment)" : p.name} — ${site.name}`,
     "metadata[order_id]": String(id),
     "metadata[site]": site.slug,
     success_url: `https://${site.domain}/${back}?paid=1`,
