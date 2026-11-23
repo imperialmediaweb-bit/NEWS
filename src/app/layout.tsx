@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { getSiteByDomain, getActiveSite } from "@/config/sites";
 import "./globals.css";
+import AlertTicker from "@/components/design/AlertTicker";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import { STATE_FACTS } from "@/config/state-data";
 import AnalyticsTracker from "@/components/AnalyticsTracker";
@@ -167,6 +168,7 @@ export default function RootLayout({
         />
       </head>
       <body className="antialiased bg-white overflow-x-hidden">
+        <AlertTicker />
         {children}
         <GoogleAnalytics />
         {/* Meta pixel — only renders when FACEBOOK_PIXEL_ID is set, and only

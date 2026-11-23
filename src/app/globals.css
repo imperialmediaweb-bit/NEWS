@@ -399,3 +399,6 @@ a.group:hover [class*="leading-"]:not(.pc-zoom) { text-decoration: underline; te
 html.read-night .pc-article, html.read-night article .pc-article { background: #15171c; color: #e7e3da !important; padding: 1.2em 1.4em; border-radius: 4px; }
 html.read-night .pc-article * { color: inherit !important; }
 html.read-night .pc-article a { color: #ffcf66 !important; }
+.by-numbers { margin: 1.6em 0; padding: 1em 1.2em; border: 2px solid currentColor; font-size: .9em; }
+.by-numbers b { display: block; text-transform: uppercase; letter-spacing: .08em; font-size: .85em; margin-bottom: .5em; }
+.by-numbers ul { margin: 0; padding-left: 1.1em; } .by-numbers li { margin: .35em 0; }

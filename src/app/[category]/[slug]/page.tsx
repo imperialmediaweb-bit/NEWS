@@ -149,6 +149,16 @@ function readingExtras(html: string, article: Record<string, unknown>, place: st
     return /\bid=/.test(attrs) ? m : `<h2 id="${id}"${attrs}>${inner}</h2>`;
   });
   const toc = heads.length >= 3 ? `<nav class="toc" aria-label="In this story"><b>In this story</b><ol>${heads.map((h, i) => `<li><a href="#s-${i + 1}">${esc(h)}</a></li>`).join("")}</ol></nav>` : "";
+  // "By the numbers": up to three sentences from the story that carry its figures, word for word
+  const sentences = text.replace(/\s+/g, " ").split(/(?<=[.!?])\s+(?=[A-Z“"])/);
+  const figures = sentences
+    .filter((x) => /(\$\s?\d|\d+(\.\d+)?\s?(%|percent|million|billion|acres|miles|people|students|homes|jobs|cases|votes))/i.test(x) && x.length >= 50 && x.length <= 240)
+    .slice(0, 3);
+  const numbers = figures.length >= 2 && words > 350 ? `<aside class="by-numbers"><b>By the numbers</b><ul>${figures.map((f) => `<li>${esc(f.trim())}</li>`).join("")}</ul></aside>` : "";
+  if (numbers) {
+    const parts = out.split("</p>");
+    if (parts.length > 4) { parts[3] += `</p>${numbers}<p hidden`; out = parts.join("</p>").replace("<p hidden</p>", ""); }
+  }
   return glance + toc + out;
 }
 
