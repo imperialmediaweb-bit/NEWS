@@ -135,6 +135,7 @@ export default function Footer({ site }: FooterProps) {
           <b>{site.state} guides:</b>
           <a href="/swipe" className="font-bold hover:underline">▶ Express Swipe</a>
           <a href="/quiz" className="font-bold hover:underline">Weekly Quiz</a>
+          <a href="/live" className="font-bold hover:underline">● Live</a>
           {["/alerts", "/gas-prices", "/things-to-do", ...specialPagesFor(site.stateAbbr)].map((p) => (
             <a key={p} href={p} className="hover:underline">{p.slice(1).replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())}</a>
           ))}
