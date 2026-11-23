@@ -1,7 +1,8 @@
 "use client";
 
 import { SiteConfig } from "@/config/site-config";
-import { LiveFooter, liveVars } from "@/components/design/live/shared";
+import { liveVars } from "@/components/design/live/shared";
+import { FamilyFooter } from "@/components/design/FamilyChrome";
 import { specialPagesFor } from "@/config/special-pages";
 import { Mail } from "lucide-react";
 import Link from "next/link";
@@ -137,7 +138,7 @@ export default function Footer({ site }: FooterProps) {
           ))}
         </div>
       </nav>
-      <LiveFooter site={site} />
+      <FamilyFooter site={site} />
     </div>
   );
 }

@@ -4,12 +4,12 @@ import pool from "@/lib/db";
 export async function siteStories(siteSlug: string, pattern: string, days = 21, limit = 6) {
   try {
     const { rows } = await pool.query(
-      `SELECT a.title, a.slug, a.category, a.published_at FROM articles a JOIN sites s ON s.id = a.site_id
+      `SELECT a.title, a.slug, a.category, a.published_at, a.featured_image FROM articles a JOIN sites s ON s.id = a.site_id
         WHERE s.slug = $1 AND a.published_at > now() - ($2 || ' days')::interval AND a.title ~* $3
         ORDER BY a.published_at DESC LIMIT $4`,
       [siteSlug, String(days), pattern, limit]
     );
-    return rows as { title: string; slug: string; category: string; published_at: string }[];
+    return rows as { title: string; slug: string; category: string; published_at: string; featured_image: string | null }[];
   } catch {
     return [];
   }

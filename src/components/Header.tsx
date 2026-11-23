@@ -5,8 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { Menu, X, Search } from "lucide-react";
 import { SiteConfig } from "@/config/site-config";
-import { LiveTopBar, LiveCompactHeader, liveVars } from "@/components/design/live/shared";
-import MobileMenu from "@/components/design/live/MobileMenu";
+import { FamilyHeader } from "@/components/design/FamilyChrome";
 
 // Nav items map to real category routes via toLowerCase + dashes.
 // NOTE: no fake "breaking" ticker here — every headline shown to users
@@ -133,12 +132,7 @@ export function ClassicHeader({ site, asHeading = false }: HeaderProps) {
   );
 }
 
-/** The site header on secondary pages (contact, about, policies, submit…): the new design's. */
+/** The site header on secondary pages: the newspaper's own design. */
 export default function Header({ site }: HeaderProps) {
-  return (
-    <div style={liveVars(site)} className="bg-white text-[#1b2233]">
-      <LiveTopBar site={site} />
-      <LiveCompactHeader site={site} MobileMenu={MobileMenu} />
-    </div>
-  );
+  return <FamilyHeader site={site} />;
 }
