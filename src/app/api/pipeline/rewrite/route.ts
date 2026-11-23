@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import pool from "@/lib/db";
 import { isPublishingHours } from "@/config/feeds";
 import { sectionFor, rewriteFromSource } from "@/lib/pipeline/rewriter";
+import { factCheck } from "@/lib/pipeline/fact-check";
 import { fetchSourceText } from "@/lib/pipeline/source-fetch";
 import { findImage } from "@/lib/pipeline/images";
 import { storeImage } from "@/lib/pipeline/image-store";
@@ -222,7 +223,7 @@ export async function POST(req: NextRequest) {
 
       // With the real article in hand, write from it — real quotes from named
       // people, real institutions, credited to the outlet that reported them.
-      const rewrite = await rewriteFromSource(
+      const write = () => rewriteFromSource(
         siteEntry.name,
         siteEntry.state,
         siteEntry.city,
@@ -231,6 +232,21 @@ export async function POST(req: NextRequest) {
         sourceLink,
         item.category
       );
+      let rewrite = await write();
+      // names and numbers must match the source exactly: one more try, then drop the story
+      const allowed = [siteEntry.name, siteEntry.state, siteEntry.city, publisher || "", hostOf(sourceLink), String(new Date().getFullYear())];
+      let mismatch = factCheck(rewrite, material, allowed);
+      if (mismatch.length) {
+        rewrite = await write();
+        mismatch = factCheck(rewrite, material, allowed);
+      }
+      if (mismatch.length) {
+        failed++;
+        const reason = `Fact check: not in the source: ${mismatch.join("; ")}`.slice(0, 500);
+        rejections.push({ state: item.state, reason });
+        await pool.query("UPDATE feed_items SET status = 'failed', error_message = $2 WHERE id = $1", [item.id, reason]);
+        continue;
+      }
 
       // A story with no connection to the state does not belong on its site;
       // the feeds are local outlets, but they carry wire and world stories too.
