@@ -5,6 +5,7 @@ import { getSiteByDomain } from "@/config/sites";
 import { r2Put, r2Ready, r2Url } from "@/lib/r2";
 import { ensureSubmissionsTable, SUBMISSION_TYPES, type SubmissionType } from "@/lib/submissions";
 import { Resend } from "resend";
+import { isPremium, PREMIUM_CENTS, PRODUCTS } from "@/lib/paid";
 
 const NEWSROOM_INBOX = process.env.SUBMISSIONS_EMAIL || "ainewss2023@gmail.com";
 const esc = (x: string) => x.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -83,6 +84,28 @@ export async function POST(req: NextRequest) {
      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)`,
     [site.slug, site.state, type, title, body, city || null, eventDate || null, name, email, phone || null, photoUrl, videoUrl || null, consent, ipHash]
   );
+  // A business promoting itself (tickets, prices, offers) is offered a sponsored
+  // story by email straight away; the editor still sees the submission.
+  const promo = /\b(tickets?|discount|% off|\d+% ?off|limited time|promo code|coupon|book now|buy now|order now|call now|sale|special offer|free admission|reservations?|on sale)\b|\$\d/i.test(`${title} ${body}`);
+  if (promo && process.env.RESEND_API_KEY && type !== "closing") {
+    const cents = isPremium(title, body) ? PREMIUM_CENTS : PRODUCTS.sponsored.cents;
+    const price = `$${(cents / 100).toFixed(0)}`;
+    await new Resend(process.env.RESEND_API_KEY).emails
+      .send({
+        from: `${site.name} <contact@alabama-express.com>`,
+        to: email,
+        replyTo: process.env.SUBMISSIONS_EMAIL || "ainewss2023@gmail.com",
+        subject: `Your submission to ${site.name}: publish it as a sponsored story`,
+        html: `<p>Hi ${esc(name)},</p>
+<p>Thanks for sending <b>${esc(title)}</b> to ${esc(site.name)}.</p>
+<p>Because it promotes sales, tickets or offers, we can't run it as a free news item, but we'd be glad to publish it as a <b>Sponsored story</b> on ${esc(site.name)} for <b>${price}</b>: live within one business day, clearly labelled, with a link to your website.</p>
+<p><a href="https://${site.domain}/promote" style="display:inline-block;padding:10px 18px;background:#b91c1c;color:#fff;text-decoration:none;border-radius:4px">Order your sponsored story</a></p>
+<p>Want more visibility? A <b>Featured</b> story stays on the homepage for 7 days.</p>
+<p>Best regards,<br>${esc(site.name)}</p>`,
+      })
+      .catch(() => null);
+  }
+
   // tell the newsroom; a failed email never fails the submission
   if (process.env.RESEND_API_KEY) {
     try {
