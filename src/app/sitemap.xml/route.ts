@@ -80,6 +80,20 @@ export async function GET(request: NextRequest) {
   const special: Record<string, string[]> = { AK: ["/aurora-forecast", "/snow-report"], NV: ["/las-vegas-shows", "/snow-report"], LA: ["/mardi-gras"] };
   for (const ab of ["AZ", "CA", "CO", "ID", "MT", "NM", "OR", "UT", "WA", "WY", "SD"]) (special[ab] ||= []).push("/snow-report");
   for (const ab of ["ND", "MN", "ME", "MT", "WA", "ID", "WI", "MI", "VT", "NH", "SD", "NY", "OR", "WY", "IA", "MA"]) (special[ab] ||= []).push("/aurora-forecast");
+  for (const ab of ["FL", "LA", "TX", "NC", "SC", "GA", "AL", "MS", "HI"]) (special[ab] ||= []).push("/hurricane-tracker");
+  for (const ab of ["CA", "AK", "NV", "WA", "OR", "UT", "HI", "ID", "MT", "WY", "OK", "TX", "NM", "AZ"]) (special[ab] ||= []).push("/earthquakes");
+  for (const ab of ["CA", "OR", "WA", "AZ", "CO", "ID", "MT", "NM", "NV", "UT", "WY", "TX", "OK", "AK"]) (special[ab] ||= []).push("/wildfires");
+  for (const ab of ["HI"]) (special[ab] ||= []).push("/surf-report");
+  for (const ab of ["NY"]) (special[ab] ||= []).push("/subway-status");
+  for (const ab of ["OK", "KS", "NE", "TX", "IA", "MO", "AR", "AL", "MS", "TN", "KY", "IL", "IN", "MN", "SD", "ND", "LA", "GA"]) (special[ab] ||= []).push("/tornado-reports");
+  for (const ab of ["TX", "GA", "FL", "OH", "PA", "AL", "LA", "CA", "MS", "OK"]) (special[ab] ||= []).push("/high-school-football");
+  for (const ab of ["KY"]) (special[ab] ||= []).push("/kentucky-derby");
+  for (const ab of ["TN"]) (special[ab] ||= []).push("/nashville-concerts");
+  for (const ab of ["VT", "ME", "NH", "NY", "MA", "CT"]) (special[ab] ||= []).push("/fall-foliage");
+  for (const ab of ["MN", "WI", "MI", "ND", "ME", "VT", "NH", "NY"]) (special[ab] ||= []).push("/ice-fishing");
+  for (const ab of ["IA", "NE", "KS", "IL", "IN", "MN", "ND", "SD", "MO", "OH"]) (special[ab] ||= []).push("/crop-report");
+  for (const ab of ["MT", "WY", "UT", "AZ", "CO", "CA", "WA"]) (special[ab] ||= []).push("/national-park-roads");
+  for (const ab of ["AZ", "NV", "TX", "CA", "NM", "FL"]) (special[ab] ||= []).push("/heat-index");
   const specialPages: SitemapEntry[] = (special[site.stateAbbr] || []).map((p) => ({ url: `${baseUrl}${p}`, lastModified: now, changeFrequency: "daily" as const, priority: 0.8 }));
 
   let entries: SitemapEntry[] = staticPages.concat(topicPages, specialPages);

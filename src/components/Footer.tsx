@@ -2,6 +2,7 @@
 
 import { SiteConfig } from "@/config/site-config";
 import { LiveFooter, liveVars } from "@/components/design/live/shared";
+import { specialPagesFor } from "@/config/special-pages";
 import { Mail } from "lucide-react";
 import Link from "next/link";
 
@@ -128,6 +129,14 @@ export function ClassicFooter({ site, about }: FooterProps) {
 export default function Footer({ site }: FooterProps) {
   return (
     <div style={liveVars(site)}>
+      <nav aria-label={`${site.state} guides`} className="border-t border-[#dde1ea] bg-white px-4 py-5 text-[14px] text-[#1b2233]">
+        <div className="mx-auto flex max-w-[1240px] flex-wrap gap-x-5 gap-y-2">
+          <b>{site.state} guides:</b>
+          {["/alerts", "/gas-prices", "/things-to-do", ...specialPagesFor(site.stateAbbr)].map((p) => (
+            <a key={p} href={p} className="hover:underline">{p.slice(1).replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())}</a>
+          ))}
+        </div>
+      </nav>
       <LiveFooter site={site} />
     </div>
   );

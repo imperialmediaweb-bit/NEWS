@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { sites } from "@/config/sites";
 import { submitToIndexNow } from "@/lib/indexnow";
 import { citiesOf } from "@/lib/local-data";
+import { specialPagesFor } from "@/config/special-pages";
 
 /**
  * Announce the network's standing pages (weather, gas, things to do, alerts,
@@ -21,7 +22,8 @@ export async function GET(req: NextRequest) {
   for (const s of Object.values(sites)) {
     const base = `https://${s.domain}`;
     const urls = ["/gas-prices", "/things-to-do", "/alerts", "/submit", "/promote", "/obituaries/submit"].map((p) => base + p)
-      .concat(citiesOf(s.state).map(([c]) => `${base}/weather/${slug(c)}`));
+      .concat(citiesOf(s.state).map(([c]) => `${base}/weather/${slug(c)}`))
+      .concat(specialPagesFor(s.stateAbbr).map((p) => base + p));
     if (await submitToIndexNow(s.domain, urls)) ok++;
     else failed.push(s.domain);
   }
