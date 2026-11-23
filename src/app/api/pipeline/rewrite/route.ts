@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import pool from "@/lib/db";
 import { isPublishingHours } from "@/config/feeds";
 import { sectionFor, rewriteFromSource } from "@/lib/pipeline/rewriter";
-import { factCheck } from "@/lib/pipeline/fact-check";
+import { factCheck, repairNames, inventedDurations } from "@/lib/pipeline/fact-check";
 import { fetchSourceText } from "@/lib/pipeline/source-fetch";
 import { findImage } from "@/lib/pipeline/images";
 import { storeImage } from "@/lib/pipeline/image-store";
@@ -232,14 +232,15 @@ export async function POST(req: NextRequest) {
         sourceLink,
         item.category
       );
-      let rewrite = await write();
-      // names and numbers must match the source exactly: one more try, then drop the story
+      // names and numbers must match the source exactly: misspelled names are put back to the
+      // source's spelling, invented durations count as errors; one more try, then drop the story
       const allowed = [siteEntry.name, siteEntry.state, siteEntry.city, publisher || "", hostOf(sourceLink), String(new Date().getFullYear())];
-      let mismatch = factCheck(rewrite, material, allowed);
-      if (mismatch.length) {
-        rewrite = await write();
-        mismatch = factCheck(rewrite, material, allowed);
-      }
+      const check = (r: Awaited<ReturnType<typeof write>>) => {
+        const { rewrite: repaired } = repairNames(r, material);
+        return { r: repaired, problems: [...factCheck(repaired, material, allowed), ...inventedDurations(repaired, material).map((d) => `duration "${d}"`)] };
+      };
+      let { r: rewrite, problems: mismatch } = check(await write());
+      if (mismatch.length) ({ r: rewrite, problems: mismatch } = check(await write()));
       if (mismatch.length) {
         failed++;
         const reason = `Fact check: not in the source: ${mismatch.join("; ")}`.slice(0, 500);

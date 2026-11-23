@@ -33,7 +33,10 @@ export function factCheck(r: RewriteResult, source: string, allowed: string[] = 
     const n = m.replace(/[$%]/g, "").replace(/,/g, "").replace(/\.$/, "");
     if (!n || (n.length < 3 && !/[.,$%]/.test(m))) continue; // small counts are often written as words
     if (/^20[0-3]\d$/.test(n) && (srcNums.has(n) || extra.includes(n))) continue;
-    if (!srcNums.has(n) && !extra.includes(n)) problems.push(`number ${m}`);
+    if (srcNums.has(n) || extra.includes(n)) continue;
+    const v = Number(n);
+    if (Number.isFinite(v) && v > 0 && Array.from(srcNums).some((x) => { const y = Number(x); return y > 0 && Math.abs(y - v) / Math.max(y, v) < 0.01 && y !== v && String(y).length === String(v).length; })) continue;
+    problems.push(`number ${m}`);
   }
 
   // names: runs of 2-4 capitalised words; every distinctive word must appear in the source
@@ -47,4 +50,40 @@ export function factCheck(r: RewriteResult, source: string, allowed: string[] = 
     }
   }
   return Array.from(new Set(problems)).slice(0, 12);
+}
+
+function lev(a: string, b: string): number {
+  if (Math.abs(a.length - b.length) > 2) return 9;
+  const d = Array.from({ length: a.length + 1 }, (_, i) => [i, ...Array(b.length).fill(0)]);
+  for (let j = 1; j <= b.length; j++) d[0][j] = j;
+  for (let i = 1; i <= a.length; i++) for (let j = 1; j <= b.length; j++)
+    d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+  return d[a.length][b.length];
+}
+
+/**
+ * Put the source's own spelling back: a capitalised word in the rewrite that is
+ * not in the source but is one or two letters away from exactly one name in
+ * the source (Moffitt → Moffett, Smethils → Smethills) is replaced by it.
+ */
+export function repairNames(r: RewriteResult, source: string): { rewrite: RewriteResult; fixed: string[] } {
+  const srcWords = Array.from(new Set((strip(source).match(/\b[A-Z][a-zA-Z'’-]{2,}\b/g) || [])));
+  const srcSet = new Set(srcWords.map((w) => w.toLowerCase()));
+  const fixed: string[] = [];
+  const fix = (text: string) => text.replace(/\b[A-Z][a-zA-Z'’-]{3,}\b/g, (w) => {
+    if (srcSet.has(w.toLowerCase()) || COMMON.has(w.toLowerCase())) return w;
+    const near = srcWords.filter((s) => s[0] === w[0] && lev(s.toLowerCase(), w.toLowerCase()) <= (w.length >= 7 ? 2 : 1));
+    if (near.length !== 1) return w;
+    fixed.push(`${w} → ${near[0]}`);
+    return near[0];
+  });
+  const rewrite = { ...r, title: fix(r.title), summary: fix(r.summary), content: r.content.replace(/>([^<]+)</g, (_, t) => `>${fix(t)}<`) };
+  return { rewrite, fixed: Array.from(new Set(fixed)) };
+}
+
+/** Durations the source never gave ("for several days", "for weeks"): a new claim about how long something lasts. */
+export function inventedDurations(r: RewriteResult, source: string): string[] {
+  const re = /\b(?:for\s+)?(?:several|a few|many|multiple)\s+(?:hours|days|weeks|months)\b|\bfor\s+(?:days|weeks|months)\b|\bindefinitely\b|\buntil further notice\b/gi;
+  const src = norm(strip(source));
+  return Array.from(new Set((strip(`${r.title} ${r.summary} ${r.content}`).match(re) || []).filter((p) => !src.includes(norm(p).replace(/^for\s+/, "")))));
 }
