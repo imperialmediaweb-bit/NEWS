@@ -141,7 +141,15 @@ function readingExtras(html: string, article: Record<string, unknown>, place: st
       out = paras.join("</p>").replace("</blockquote</p>", "</blockquote>");
     }
   }
-  return glance + out;
+  // a table of contents when the story has three or more subheads
+  const heads: string[] = [];
+  out = out.replace(/<h2([^>]*)>([\s\S]*?)<\/h2>/gi, (m, attrs, inner) => {
+    const id = `s-${heads.length + 1}`;
+    heads.push(inner.replace(/<[^>]+>/g, "").trim());
+    return /\bid=/.test(attrs) ? m : `<h2 id="${id}"${attrs}>${inner}</h2>`;
+  });
+  const toc = heads.length >= 3 ? `<nav class="toc" aria-label="In this story"><b>In this story</b><ol>${heads.map((h, i) => `<li><a href="#s-${i + 1}">${esc(h)}</a></li>`).join("")}</ol></nav>` : "";
+  return glance + toc + out;
 }
 
 const getArticleData = cache(async (siteSlug: string, articleSlug: string, domain: string) => {

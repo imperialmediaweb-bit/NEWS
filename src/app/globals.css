@@ -391,3 +391,11 @@ a.group:hover [class*="leading-"]:not(.pc-zoom) { text-decoration: underline; te
 .at-a-glance { margin: 0 0 1.4em; padding: .9em 1.1em; border: 1px solid currentColor; border-left-width: 5px; font-size: .82em; line-height: 1.55; }
 .at-a-glance b { text-transform: uppercase; letter-spacing: .06em; font-size: .85em; margin-right: .4em; }
 .pc-dropcap > p:first-of-type::first-letter, .first-cap > p:first-of-type::first-letter { float: left; font-size: 3.6em; line-height: .85; font-weight: 800; padding: .06em .1em 0 0; }
+.toc { margin: 0 0 1.6em; padding: 1em 1.2em; background: rgba(127,127,127,.08); border-top: 3px solid currentColor; font-size: .85em; }
+.toc b { display: block; text-transform: uppercase; letter-spacing: .08em; font-size: .85em; margin-bottom: .4em; }
+.toc ol { margin: 0; padding-left: 1.2em; } .toc li { margin: .25em 0; } .toc a { text-decoration: underline; text-underline-offset: 3px; }
+.pc-article h2[id] { scroll-margin-top: 90px; }
+.pc-article img, article figure img { cursor: zoom-in; }
+html.read-night .pc-article, html.read-night article .pc-article { background: #15171c; color: #e7e3da !important; padding: 1.2em 1.4em; border-radius: 4px; }
+html.read-night .pc-article * { color: inherit !important; }
+html.read-night .pc-article a { color: #ffcf66 !important; }
