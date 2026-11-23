@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { getSiteByDomain, getActiveSite } from "@/config/sites";
 import "./globals.css";
+import { designFor } from "@/lib/design-nou";
+import { mockupOf } from "@/config/design-cfg";
 import AlertTicker from "@/components/design/AlertTicker";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import { STATE_FACTS } from "@/config/state-data";
@@ -99,6 +101,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const site = getSiteFromHeaders();
+  // card and photo effects: the paper's design family, one of three motion
+  // variants picked from its name, and its own accent colour, so no two papers
+  // share the same combination
+  const fxFamily = designFor(site.slug) || "live";
+  const fxVariant = ["a", "b", "c"][site.slug.split("").reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7) % 3];
+  const fxAcc = mockupOf(site.slug)?.acc || site.accent || "#b91c1c";
 
   const organizationJsonLd = {
     "@context": "https://schema.org",
@@ -167,7 +175,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify({ "@context": "https://schema.org", "@type": "WebSite", name: site.name, url: `https://${site.domain}`, inLanguage: "en-US", publisher: { "@type": "NewsMediaOrganization", name: site.name }, potentialAction: { "@type": "SearchAction", target: { "@type": "EntryPoint", urlTemplate: `https://${site.domain}/search?q={search_term_string}` }, "query-input": "required name=search_term_string" } }) }}
         />
       </head>
-      <body className="antialiased bg-white overflow-x-hidden">
+      <body className="antialiased bg-white overflow-x-hidden" data-fx={fxFamily} data-fxv={fxVariant} style={{ ["--fx-acc" as string]: fxAcc } as React.CSSProperties}>
         <AlertTicker />
         {children}
         <GoogleAnalytics />

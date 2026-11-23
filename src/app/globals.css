@@ -402,3 +402,65 @@ html.read-night .pc-article a { color: #ffcf66 !important; }
 .by-numbers { margin: 1.6em 0; padding: 1em 1.2em; border: 2px solid currentColor; font-size: .9em; }
 .by-numbers b { display: block; text-transform: uppercase; letter-spacing: .08em; font-size: .85em; margin-bottom: .5em; }
 .by-numbers ul { margin: 0; padding-left: 1.1em; } .by-numbers li { margin: .35em 0; }
+
+/* ── Card and photo effects, different on every paper ─────────────────────
+   <body data-fx="{design family}" data-fxv="a|b|c" style="--fx-acc">:
+   the family sets the look (corners, frame, shadow), the variant sets the
+   motion (zoom, pan, tilt), the accent colour is the paper's own. Applies to
+   linked pictures in the page body and to the article photo; never to the
+   masthead, logos or round avatars. */
+:root { --fx-r: 12px; --fx-shadow: 0 22px 44px -22px rgba(0,0,0,.55); --fx-lift: translateY(-4px); --fx-filter: saturate(1.12) contrast(1.04); --fx-base-filter: none; --fx-frame: none; }
+[data-fx="live"]      { --fx-r: 14px; }
+[data-fx="peach"]     { --fx-r: 22px; --fx-shadow: 0 24px 50px -20px color-mix(in srgb, var(--fx-acc) 55%, transparent); --fx-lift: translateY(-6px); }
+[data-fx="tabloid"]   { --fx-r: 0px; --fx-shadow: 7px 7px 0 var(--fx-acc); --fx-lift: translate(-3px,-3px) rotate(-.6deg); --fx-filter: contrast(1.12) saturate(1.2); }
+[data-fx="magazine"]  { --fx-r: 4px; --fx-shadow: 0 30px 60px -30px rgba(0,0,0,.45); --fx-lift: translateY(-2px); --fx-base-filter: saturate(.82); --fx-filter: saturate(1.08); }
+[data-fx="broadsheet"]{ --fx-r: 0px; --fx-shadow: 0 0 0 1px rgba(0,0,0,.18), 0 16px 30px -22px rgba(0,0,0,.5); --fx-lift: none; --fx-base-filter: sepia(.12) saturate(.9); --fx-filter: none; --fx-frame: inset 0 0 0 1px rgba(255,255,255,.35); }
+[data-fx="coastal"]   { --fx-r: 20px; --fx-shadow: 0 26px 46px -24px rgba(14,80,120,.55); --fx-lift: translateY(-5px); --fx-filter: brightness(1.06) saturate(1.15); }
+[data-fx="dark"]      { --fx-r: 10px; --fx-shadow: 0 0 0 1px color-mix(in srgb, var(--fx-acc) 70%, transparent), 0 0 34px -6px color-mix(in srgb, var(--fx-acc) 60%, transparent); --fx-lift: translateY(-3px); --fx-filter: brightness(1.12) saturate(1.15); }
+[data-fx="western"]   { --fx-r: 6px; --fx-shadow: 0 0 0 3px #f4ead8, 0 0 0 4px color-mix(in srgb, var(--fx-acc) 80%, #000), 0 20px 36px -20px rgba(60,30,0,.6); --fx-lift: translateY(-3px); --fx-base-filter: sepia(.18); --fx-filter: sepia(0) saturate(1.1); }
+[data-fx="gazette"]   { --fx-r: 2px; --fx-shadow: 0 0 0 6px #fff, 0 14px 30px -10px rgba(0,0,0,.45); --fx-lift: rotate(.8deg) translateY(-3px); --fx-filter: contrast(1.06); }
+
+/* motion variants */
+:root { --fx-zoom: scale(1.07); }
+[data-fxv="b"] { --fx-zoom: scale(1.09) translateX(-2%); }
+[data-fxv="c"] { --fx-zoom: scale(1.06) rotate(-1deg); }
+
+main a :is(div, span, figure, picture):has(> img:not([class*="rounded-full"])),
+main a:has(> img:not([class*="rounded-full"])) {
+  overflow: hidden;
+  border-radius: var(--fx-r);
+  isolation: isolate;
+  box-shadow: var(--fx-frame);
+  transition: box-shadow .45s ease, transform .45s cubic-bezier(.2,.7,.2,1);
+}
+main a img:not([class*="rounded-full"]) {
+  filter: var(--fx-base-filter);
+  transition: transform .9s cubic-bezier(.2,.7,.2,1), filter .5s ease;
+}
+@media (hover: hover) {
+  main a:hover :is(div, span, figure, picture):has(> img:not([class*="rounded-full"])),
+  main a:has(> img:not([class*="rounded-full"])):hover {
+    box-shadow: var(--fx-shadow);
+    transform: var(--fx-lift);
+  }
+  main a:hover img:not([class*="rounded-full"]) {
+    transform: var(--fx-zoom);
+    filter: var(--fx-filter);
+  }
+}
+
+/* the article's own photo, in the paper's style */
+article figure img, .pc-article figure img {
+  border-radius: var(--fx-r);
+  box-shadow: var(--fx-shadow);
+  filter: var(--fx-base-filter);
+  transition: transform .9s cubic-bezier(.2,.7,.2,1), filter .5s ease;
+  cursor: zoom-in;
+}
+@media (hover: hover) {
+  article figure img:hover, .pc-article figure img:hover { transform: scale(1.012); filter: var(--fx-filter); }
+}
+@media (prefers-reduced-motion: reduce) {
+  main a img, main a :is(div, span, figure, picture), main a,
+  article figure img, .pc-article figure img { transition: none !important; transform: none !important; }
+}
