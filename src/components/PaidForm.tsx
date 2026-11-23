@@ -58,7 +58,7 @@ export default function PaidForm({ product, price, siteName, accent }: { product
       <button disabled={busy} className="rounded px-6 py-3 text-[15px] font-bold text-white disabled:opacity-60" style={{ background: accent }}>
         {busy ? "Opening secure payment…" : `Continue to payment — ${price}`}
       </button>
-      <p className="text-[12.5px] text-gray-500">Secure card payment by Stripe. Reviewed by an editor within one business day.</p>
+      <p className="text-[12.5px] text-gray-500">Secure card payment by Stripe. Reviewed by an editor within one business day.{sponsored && " Casinos, gaming and 18+ shows are $99; the payment page shows the final price."}</p>
     </form>
   );
 }
