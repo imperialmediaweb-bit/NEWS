@@ -8,6 +8,28 @@ import { mockupOf } from "@/config/design-cfg";
 import { artOf } from "@/config/state-art";
 import { specialPagesFor } from "@/config/special-pages";
 import PeachFx, { SplitWords } from "@/components/design/peach/PeachFx";
+import { designFor } from "@/lib/design-nou";
+import { serif as liveSerif, sans as liveSans } from "@/components/design/live/shared";
+import { display as peachDisplay, body as peachBody } from "@/components/design/peach/shared";
+import { cond as tabCond, text as tabText } from "@/components/design/tabloid/shared";
+import { caslon, pub } from "@/components/design/broadsheet/shared";
+import { crimson, nunito } from "@/components/design/coastal/shared";
+import { spectral, mont } from "@/components/design/dark/shared";
+import { zilla, lora } from "@/components/design/western/shared";
+import { merri, mulish } from "@/components/design/gazette/shared";
+
+/** The design family's own display and text faces, so a guide reads like its newspaper. */
+const FONTS: Record<string, [string, string]> = {
+  live: [liveSerif.className, liveSans.className],
+  peach: [peachDisplay.className, peachBody.className],
+  tabloid: [tabCond.className, tabText.className],
+  magazine: [peachDisplay.className, peachBody.className],
+  broadsheet: [caslon.className, pub.className],
+  coastal: [crimson.className, nunito.className],
+  dark: [spectral.className, mont.className],
+  western: [zilla.className, lora.className],
+  gazette: [merri.className, mulish.className],
+};
 
 /**
  * Shared frame for the state-only pages (hurricane tracker, football scores,
@@ -39,7 +61,9 @@ export async function SpecialPage({ site, path, h1, answer, children, storiesTit
   const m = mockupOf(site.slug);
   const ink = m?.ink || "#14213d";
   const acc = m?.acc || site.accent || "#b91c1c";
-  const art = artOf(site.slug).landscape;
+  const a = artOf(site.slug);
+  const art = a.landscape || a.masthead || a.sky;
+  const [displayFont, textFont] = FONTS[designFor(site.slug) || "live"] || FONTS.live;
   const others = specialPagesFor(site.stateAbbr).filter((p) => p !== path).slice(0, 8);
   const label = (p: string) => p.slice(1).replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
   return (
@@ -48,7 +72,7 @@ export async function SpecialPage({ site, path, h1, answer, children, storiesTit
       <noscript><style>{`.pc-in{opacity:1!important;translate:none!important}.pc-in *{opacity:1!important;transform:none!important}`}</style></noscript>
       <PeachFx />
       <Header site={site} />
-      <div style={{ ["--sp-ink" as string]: ink, ["--sp-acc" as string]: acc } as React.CSSProperties} className="bg-[#f5f4f0] text-[#16181d]">
+      <div style={{ ["--sp-ink" as string]: ink, ["--sp-acc" as string]: acc } as React.CSSProperties} className={`${textFont} bg-[#f5f4f0] text-[#16181d]`}>
         <section className="relative overflow-hidden text-white" style={{ background: ink }}>
           {art && (
             // eslint-disable-next-line @next/next/no-img-element
@@ -57,7 +81,7 @@ export async function SpecialPage({ site, path, h1, answer, children, storiesTit
           <div className="absolute inset-0" style={{ background: `linear-gradient(90deg, ${ink} 30%, transparent)` }} />
           <div className="relative mx-auto max-w-[1100px] px-4 py-12 md:py-16">
             <p className="flex items-center gap-3 text-[12px] font-bold uppercase tracking-[.24em] text-white/80"><span className="h-[3px] w-10" style={{ background: acc }} />{site.name} · {site.state} guide</p>
-            <h1 className="mt-4 max-w-[860px] text-[38px] font-black leading-[1.02] md:text-[62px]"><SplitWords text={h1} /></h1>
+            <h1 className={`${displayFont} mt-4 max-w-[860px] text-[38px] font-black leading-[1.02] md:text-[62px]`}><SplitWords text={h1} /></h1>
             <p className="mt-4 flex flex-wrap items-center gap-3 text-[13.5px] text-white/80">
               <span className="inline-flex items-center gap-2 border border-white/25 px-3 py-1 font-bold uppercase tracking-wider"><span className="relative flex h-2.5 w-2.5"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#34d399] opacity-75" /><span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[#34d399]" /></span>Live</span>
               <span>Updated {updated}</span><span className="opacity-70">· {source}</span>
@@ -72,7 +96,7 @@ export async function SpecialPage({ site, path, h1, answer, children, storiesTit
           {children && <div className="pc-in pc-up mt-10">{children}</div>}
           {stories.length > 0 && (
             <section className="pc-in pc-up mt-14">
-              <h2 className="flex items-center gap-3 text-[26px] font-black md:text-[32px]"><span className="h-8 w-[6px]" style={{ background: acc }} />{storiesTitle}</h2>
+              <h2 className={`${displayFont} flex items-center gap-3 text-[26px] font-black md:text-[32px]`}><span className="h-8 w-[6px]" style={{ background: acc }} />{storiesTitle}</h2>
               <div className="pc-stagger mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {stories.slice(0, 9).map((a) => (
                   <a key={a.slug} href={storyHref(a)} className="pc-card group block border-b-2 border-transparent bg-white pb-4 transition hover:border-[var(--sp-acc)]">
@@ -89,7 +113,7 @@ export async function SpecialPage({ site, path, h1, answer, children, storiesTit
             </section>
           )}
           <section className="pc-in pc-up mt-14">
-            <h2 className="flex items-center gap-3 text-[26px] font-black md:text-[32px]"><span className="h-8 w-[6px]" style={{ background: acc }} />Questions people ask</h2>
+            <h2 className={`${displayFont} flex items-center gap-3 text-[26px] font-black md:text-[32px]`}><span className="h-8 w-[6px]" style={{ background: acc }} />Questions people ask</h2>
             <div className="mt-5 border-t border-black/10">
               {faqs.map(([q, a]) => (
                 <details key={q} className="group border-b border-black/10 py-4">
