@@ -191,16 +191,18 @@ export async function findImage(
   // 2. For storms, fires, quakes, launches and landmarks, a real photo of the subject
   // Both free-licence, with the credit printed under the article.
   if (ctx?.title && ctx.state) {
-    const place = placeOf(ctx.title, ctx.state);
-    if (place) {
-      const real = await searchOpenverse(`${place} ${ctx.state}`, "wikimedia,flickr");
-      if (real) return real;
-    }
-    // a team named in the headline: a free-licence photo of the team or its venue
+    // sports stories: the team (or its venue) first, never a random picture of the town
     const team = teamIn(ctx.title, ctx.state);
+    const sports = (category || "").toLowerCase().includes("sport");
     if (team) {
       const t = await searchOpenverse(team, "wikimedia,flickr");
       if (t) return t;
+    }
+    const place = sports ? null : placeOf(ctx.title, ctx.state);
+    if (place) {
+      // the town itself: skyline, downtown, landmarks (people and archive photos are filtered out)
+      const real = await searchOpenverse(`${place} ${ctx.state} downtown`, "wikimedia,flickr") || await searchOpenverse(`${place} ${ctx.state}`, "wikimedia,flickr");
+      if (real) return real;
     }
     if (REAL_PHOTO_SUBJECT.test(`${ctx.title} ${query}`)) {
       const subject = await searchOpenverse(query);
