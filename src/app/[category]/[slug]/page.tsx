@@ -127,8 +127,10 @@ function readingExtras(html: string, article: Record<string, unknown>, place: st
   const esc = (x: string) => x.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const when = article.published_at ? new Date(String(article.published_at)).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }) : "";
   const section = String(article.category || "").replace(/-/g, " ");
-  const bits = [place ? `<b>Where</b>${esc(place.replace(/\b\w/g, (c) => c.toUpperCase()))}` : "", section ? `<b>Section</b>${esc(section)}` : "", when ? `<b>Published</b>${esc(when)}` : ""].filter(Boolean);
-  const glance = bits.length >= 2 ? `<div class="at-a-glance">${bits.join(" &nbsp;·&nbsp; ")}</div>` : "";
+  const words = html.replace(/<[^>]+>/g, " ").trim().split(/\s+/).length;
+  const minutes = Math.max(1, Math.round(words / 220));
+  const bits = [`<b>Read</b>${minutes} min`, place ? `<b>Where</b>${esc(place.replace(/\b\w/g, (c) => c.toUpperCase()))}` : "", section ? `<b>Section</b>${esc(section)}` : "", when ? `<b>Published</b>${esc(when)}` : ""].filter(Boolean);
+  const glance = bits.length >= 3 ? `<div class="at-a-glance">${bits.join(" &nbsp;·&nbsp; ")}</div>` : "";
   const text = html.replace(/<[^>]+>/g, " ");
   const q = text.match(/[“"]([^”"]{70,220})[”"]/);
   let out = html;
