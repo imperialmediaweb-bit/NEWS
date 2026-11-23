@@ -20,7 +20,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function InBriefPage() {
   const site = siteFromHeaders();
   const { rows } = await pool.query(
-    `SELECT a.title, a.slug, a.category, a.summary, a.featured_image, a.published_at
+    `SELECT a.id, a.title, a.slug, a.category, a.summary, a.featured_image, a.published_at
        FROM articles a JOIN sites s ON s.id = a.site_id
       WHERE s.slug = $1 AND a.published_at > now() - interval '72 hours'
         AND a.featured_image IS NOT NULL AND a.featured_image <> ''
@@ -28,6 +28,7 @@ export default async function InBriefPage() {
     [site.slug]
   ).catch(() => ({ rows: [] as Record<string, unknown>[] }));
   const items: BriefItem[] = rows.map((r) => ({
+    id: Number(r.id),
     title: String(r.title),
     href: `/${r.category}/${r.slug}`,
     section: String(r.category).replace(/-/g, " "),

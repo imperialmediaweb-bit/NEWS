@@ -39,12 +39,20 @@ export default function StoryCards({ ink, acc, state }: { ink: string; acc: stri
   function next() { setI((v) => (v === null || v + 1 >= stories.length ? null : v + 1)); }
   function prev() { setI((v) => (v === null ? null : Math.max(0, v - 1))); }
 
-  if (stories.length < 3) return null;
+  // Express Swipe button: on every screen size, above the stories button on phones
+  const swipeBtn = i === null && (
+    <a href="/swipe" className="sw-pill fixed z-40 flex items-center gap-2 px-4 py-2.5 text-[13px] font-black uppercase tracking-wider text-white shadow-lg bottom-[calc(72px+env(safe-area-inset-bottom,0px))] left-4 md:bottom-6 md:left-6 md:px-5 md:py-3 md:text-[14px]" style={{ background: acc }} aria-label={`Express Swipe: today's ${state} stories full screen`}>
+      <span aria-hidden className="grid h-6 w-6 place-items-center rounded-full bg-white/25 text-[11px]">▶</span>Express Swipe
+      <style>{`.sw-pill{border-radius:999px;animation:swIn .5s ease-out both}.sw-pill:hover{filter:brightness(1.08);transform:translateY(-2px)}@keyframes swIn{from{opacity:0;transform:translateY(12px)}}@media (prefers-reduced-motion:reduce){.sw-pill{animation:none}}`}</style>
+    </a>
+  );
+  if (stories.length < 3) return swipeBtn || null;
   const s = i === null ? null : stories[i];
   const ago = (d: string) => { const h = Math.round((Date.now() - new Date(d).getTime()) / 3600000); return h < 1 ? "Just now" : `${h}h ago`; };
 
   return (
     <>
+      {swipeBtn}
       {i === null && (
         <button type="button" onClick={() => setI(0)} className="fixed bottom-[calc(16px+env(safe-area-inset-bottom,0px))] left-4 z-40 flex items-center gap-2 py-1.5 pl-1.5 pr-4 text-[13px] font-bold text-white shadow-lg md:hidden" style={{ background: ink }} aria-label={`Open today's ${state} stories`}>
           <span className="relative block h-9 w-9 overflow-hidden" style={{ boxShadow: `0 0 0 2px ${acc}` }}>
