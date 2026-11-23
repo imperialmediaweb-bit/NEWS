@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
   await ensurePaidTable();
   const { rows } = await pool.query(
     `SELECT title, business, photo_url, article_slug FROM paid_orders
-      WHERE site_slug = $1 AND product = 'featured' AND status = 'published' AND published_at > now() - interval '7 days'
+      WHERE site_slug = $1 AND product IN ('featured', 'spotlight_home') AND status = 'published' AND published_at > now() - interval '7 days'
       ORDER BY random() LIMIT 1`,
     [site.slug]
   );

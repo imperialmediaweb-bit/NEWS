@@ -13,6 +13,8 @@ export const PRODUCTS = {
   sponsored: { name: "Sponsored story", cents: Number(process.env.PRICE_SPONSORED_CENTS || 4900) },
   obituary: { name: "Obituary", cents: Number(process.env.PRICE_OBITUARY_CENTS || 2500) },
   listing: { name: "Local business directory listing (monthly)", cents: Number(process.env.PRICE_LISTING_CENTS || 1900) },
+  spotlight: { name: "Business Spotlight (12 months)", cents: Number(process.env.PRICE_SPOTLIGHT_CENTS || 4900) },
+  spotlight_home: { name: "Business Spotlight + 7 days on the homepage", cents: Number(process.env.PRICE_SPOTLIGHT_HOME_CENTS || 14900) },
   featured: { name: "Featured sponsored story (7 days on the homepage)", cents: Number(process.env.PRICE_SPONSORED_CENTS || 4900) + Number(process.env.PRICE_FEATURE_ADDON_CENTS || 10000) },
 } as const;
 export type Product = keyof typeof PRODUCTS;
@@ -43,7 +45,9 @@ export function ensurePaidTable() {
        ALTER TABLE paid_orders ADD COLUMN IF NOT EXISTS city TEXT;
        ALTER TABLE paid_orders ADD COLUMN IF NOT EXISTS phone TEXT;
        ALTER TABLE paid_orders ADD COLUMN IF NOT EXISTS listing_category TEXT;
-       ALTER TABLE paid_orders ADD COLUMN IF NOT EXISTS stripe_subscription TEXT;`
+       ALTER TABLE paid_orders ADD COLUMN IF NOT EXISTS stripe_subscription TEXT;
+       ALTER TABLE paid_orders ADD COLUMN IF NOT EXISTS business_id INT;
+       ALTER TABLE paid_orders ADD COLUMN IF NOT EXISTS auto_publish_at TIMESTAMPTZ;`
     )
     .catch((e) => {
       ready = null;

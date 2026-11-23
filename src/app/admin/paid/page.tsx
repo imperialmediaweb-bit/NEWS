@@ -1,6 +1,7 @@
 import { revalidatePath } from "next/cache";
 import pool from "@/lib/db";
 import { sites } from "@/config/sites";
+import { publishPaidOrder } from "@/lib/paid-publish";
 import { ensurePaidTable, PRODUCTS, stripe, bannedReason, type Product } from "@/lib/paid";
 
 export const dynamic = "force-dynamic";
@@ -13,11 +14,9 @@ export const dynamic = "force-dynamic";
 type Order = {
   id: number; site_slug: string; product: Product; title: string; body: string; business: string | null; website: string | null;
   name: string; email: string; photo_url: string | null; cents: number; status: string; stripe_session: string | null; created_at: string;
-  stripe_subscription?: string | null; city?: string | null; phone?: string | null; listing_category?: string | null;
+  stripe_subscription?: string | null; business_id?: number | null; auto_publish_at?: string | null; city?: string | null; phone?: string | null; listing_category?: string | null;
 };
 
-const esc = (x: string) => x.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-const slugify = (x: string) => x.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 120);
 
 async function act(formData: FormData) {
   "use server";
@@ -44,25 +43,12 @@ async function act(formData: FormData) {
   }
   if (o.status !== "paid") return;
   if (action === "publish") {
-    const { rows: s } = await pool.query("SELECT id FROM sites WHERE slug = $1", [o.site_slug]);
-    if (!s[0]) return;
-    const sponsored = o.product === "sponsored" || o.product === "featured";
-    const paras = o.body.split(/\n\s*\n/).map((p) => `<p>${esc(p.trim())}</p>`).join("\n");
-    const content = sponsored
-      ? `<p><em>Sponsored content from ${esc(o.business || o.name)}. ${esc(sites[o.site_slug]?.name || "")} was paid to publish it; the newsroom did not write it.</em></p>\n${paras}${o.website ? `\n<p><a href="${esc(o.website)}" rel="sponsored noopener" target="_blank">Visit ${esc(o.business || "the website")}</a></p>` : ""}`
-      : paras;
-    const slug = `${slugify(o.title)}-${o.id}`;
-    const category = sponsored ? "sponsored" : "obituaries";
-    await pool.query(
-      `INSERT INTO articles (site_id, title, slug, content, summary, category, author, featured_image, published_at, source_url, auto_generated)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,now(),NULL,false) ON CONFLICT (site_id, slug) DO NOTHING`,
-      [s[0].id, o.title, slug, content, o.body.slice(0, 155), category, sponsored ? "Sponsored Content" : "Obituary", o.photo_url]
-    );
-    await pool.query("UPDATE paid_orders SET status = 'published', article_slug = $2, published_at = now() WHERE id = $1", [id, `${category}/${slug}`]);
+    await publishPaidOrder(o);
   } else if (action === "decline" && o.stripe_session) {
     const s = await fetch(`https://api.stripe.com/v1/checkout/sessions/${o.stripe_session}`, { headers: { Authorization: `Bearer ${process.env.STRIPE_SECRET_KEY}` } }).then((r) => r.json());
     if (s.payment_intent) await stripe("refunds", { payment_intent: s.payment_intent });
     await pool.query("UPDATE paid_orders SET status = 'refunded' WHERE id = $1", [id]);
+    if (o.business_id) await pool.query("UPDATE businesses SET tier = 'free', tier_until = NULL WHERE id = $1", [o.business_id]).catch(() => null);
   }
   revalidatePath("/admin/paid");
 }

@@ -144,6 +144,12 @@ export async function POST(req: NextRequest) {
     actions.push("newsletter");
   }
 
+  // ─── Business Spotlight profiles go live 24 hours after payment ───
+  if ((await claimJob("spotlight_publish", 30 * 60)).claimed) {
+    fireAndForgetGet(baseUrl, "pipeline/spotlight-publish", secret);
+    actions.push("spotlight_publish");
+  }
+
   // ─── Push notifications: the route keeps to 2 a day per paper, 8 am-9 pm local ───
   if ((await claimJob("push_auto", 20 * 60)).claimed) {
     fireAndForgetGet(baseUrl, "pipeline/push-auto", secret);

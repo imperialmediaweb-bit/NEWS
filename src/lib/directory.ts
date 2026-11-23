@@ -1,0 +1,233 @@
+import pool from "@/lib/db";
+import { sites } from "@/config/sites";
+import { citiesOf } from "@/lib/local-data";
+import { slugOf } from "@/lib/topic-page";
+import { DIR_CATEGORIES, categorize, catBySlug } from "@/lib/directory-categories";
+
+/**
+ * Local business directory (per paper, per city, per category).
+ *  - Starts filled from OpenStreetMap (ODbL, credited on every page): only
+ *    named businesses with a phone or a website, in the categories of
+ *    directory-categories.ts, never adult / cannabis / vape / weapons / gambling.
+ *  - Owners claim their page or add their business (free), or buy Business
+ *    Spotlight ($49, 12 months: sponsored article, photo, website, top spot)
+ *    or Spotlight + Homepage ($149).
+ *  - Reviews only from readers with a confirmed email, one per email per
+ *    business; owners cannot delete them.
+ */
+
+export type Business = {
+  id: number; site_slug: string; slug: string; name: string; category: string; city: string; city_slug: string;
+  address: string | null; zip: string | null; lat: number | null; lon: number | null; phone: string | null; website: string | null;
+  hours: string | null; description: string | null; facebook: string | null; instagram: string | null; photo_url: string | null;
+  source: string; tier: string; tier_until: string | null; claimed: boolean; status: string; article_slug: string | null;
+  rating_sum: number; rating_count: number; osm_id: string | null; updated_at: string;
+};
+
+let ready: Promise<unknown> | null = null;
+export function dirSchema() {
+  ready ??= pool.query(`
+    CREATE TABLE IF NOT EXISTS businesses (
+      id SERIAL PRIMARY KEY, site_slug VARCHAR(100) NOT NULL, slug TEXT NOT NULL, osm_id TEXT UNIQUE,
+      name TEXT NOT NULL, category VARCHAR(60) NOT NULL, city TEXT NOT NULL, city_slug TEXT NOT NULL,
+      address TEXT, zip TEXT, lat DOUBLE PRECISION, lon DOUBLE PRECISION, phone TEXT, website TEXT, hours TEXT,
+      description TEXT, facebook TEXT, instagram TEXT, photo_url TEXT, owner_email TEXT,
+      source VARCHAR(20) NOT NULL DEFAULT 'osm', tier VARCHAR(20) NOT NULL DEFAULT 'free', tier_until TIMESTAMPTZ,
+      claimed BOOLEAN NOT NULL DEFAULT FALSE, status VARCHAR(20) NOT NULL DEFAULT 'active', article_slug TEXT,
+      rating_sum INT NOT NULL DEFAULT 0, rating_count INT NOT NULL DEFAULT 0,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT now(), updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+      UNIQUE (site_slug, slug)
+    );
+    CREATE INDEX IF NOT EXISTS idx_biz_city_cat ON businesses(site_slug, city_slug, category) WHERE status = 'active';
+    CREATE INDEX IF NOT EXISTS idx_biz_cat ON businesses(site_slug, category) WHERE status = 'active';
+    CREATE INDEX IF NOT EXISTS idx_biz_name ON businesses(site_slug, lower(name));
+    CREATE TABLE IF NOT EXISTS business_reviews (
+      id SERIAL PRIMARY KEY, business_id INT NOT NULL REFERENCES businesses(id) ON DELETE CASCADE,
+      rating INT NOT NULL CHECK (rating BETWEEN 1 AND 5), body TEXT NOT NULL, name TEXT NOT NULL, email TEXT NOT NULL,
+      verified BOOLEAN NOT NULL DEFAULT FALSE, token TEXT NOT NULL, owner_reply TEXT, hidden BOOLEAN NOT NULL DEFAULT FALSE,
+      ip_hash TEXT, created_at TIMESTAMPTZ NOT NULL DEFAULT now(), UNIQUE (business_id, email)
+    );
+    CREATE INDEX IF NOT EXISTS idx_reviews_biz ON business_reviews(business_id) WHERE verified AND NOT hidden;
+    CREATE TABLE IF NOT EXISTS business_claims (
+      id SERIAL PRIMARY KEY, business_id INT NOT NULL REFERENCES businesses(id) ON DELETE CASCADE, site_slug VARCHAR(100) NOT NULL,
+      data JSONB NOT NULL, name TEXT NOT NULL, email TEXT NOT NULL, status VARCHAR(20) NOT NULL DEFAULT 'pending', order_id INT,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    );
+    CREATE TABLE IF NOT EXISTS directory_imports (
+      state VARCHAR(4) PRIMARY KEY, status TEXT, found INT, saved INT, started_at TIMESTAMPTZ, finished_at TIMESTAMPTZ, error TEXT
+    );
+  `).catch((e) => { ready = null; throw e; });
+  return ready;
+}
+
+export const isSpotlight = (b: Pick<Business, "tier" | "tier_until">) => b.tier !== "free" && (!b.tier_until || new Date(b.tier_until) > new Date());
+export const ratingOf = (b: Pick<Business, "rating_sum" | "rating_count">) => (b.rating_count ? Math.round((b.rating_sum / b.rating_count) * 10) / 10 : null);
+export const bizHref = (b: Pick<Business, "slug">) => `/directory/listing/${b.slug}`;
+const ORDER = `(tier <> 'free' AND (tier_until IS NULL OR tier_until > now())) DESC, rating_count > 0 DESC, (rating_sum::float / NULLIF(rating_count, 0)) DESC NULLS LAST, claimed DESC, (website IS NOT NULL) DESC, name`;
+
+export async function listBusinesses(site: string, opts: { city?: string; category?: string; limit?: number; offset?: number }) {
+  await dirSchema();
+  const where = ["site_slug = $1", "status = 'active'"];
+  const args: unknown[] = [site];
+  if (opts.city) { args.push(opts.city); where.push(`city_slug = $${args.length}`); }
+  if (opts.category) { args.push(opts.category); where.push(`category = $${args.length}`); }
+  args.push(opts.limit ?? 30, opts.offset ?? 0);
+  const { rows } = await pool.query(`SELECT * FROM businesses WHERE ${where.join(" AND ")} ORDER BY ${ORDER} LIMIT $${args.length - 1} OFFSET $${args.length}`, args);
+  return rows as Business[];
+}
+
+/** Count per category for a city (or the whole state). */
+export async function categoryCounts(site: string, city?: string) {
+  await dirSchema();
+  const { rows } = await pool.query(
+    `SELECT category, COUNT(*)::int n FROM businesses WHERE site_slug = $1 AND status = 'active' ${city ? "AND city_slug = $2" : ""} GROUP BY category`,
+    city ? [site, city] : [site]
+  );
+  return Object.fromEntries(rows.map((r: { category: string; n: number }) => [r.category, r.n])) as Record<string, number>;
+}
+
+/** Cities with the most businesses (city slug, name, count). */
+export async function topCities(site: string, limit = 40, category?: string) {
+  await dirSchema();
+  const { rows } = await pool.query(
+    `SELECT city_slug, MIN(city) city, COUNT(*)::int n FROM businesses WHERE site_slug = $1 AND status = 'active' ${category ? "AND category = $3" : ""}
+      GROUP BY city_slug ORDER BY n DESC LIMIT $2`,
+    category ? [site, limit, category] : [site, limit]
+  );
+  return rows as Array<{ city_slug: string; city: string; n: number }>;
+}
+
+export async function getBusiness(site: string, slug: string) {
+  await dirSchema();
+  const { rows } = await pool.query(`SELECT * FROM businesses WHERE site_slug = $1 AND slug = $2 AND status <> 'hidden' LIMIT 1`, [site, slug]);
+  return (rows[0] as Business) || null;
+}
+
+export async function reviewsOf(id: number) {
+  await dirSchema();
+  const { rows } = await pool.query(`SELECT id, rating, body, name, owner_reply, created_at FROM business_reviews WHERE business_id = $1 AND verified AND NOT hidden ORDER BY created_at DESC LIMIT 50`, [id]);
+  return rows as Array<{ id: number; rating: number; body: string; name: string; owner_reply: string | null; created_at: string }>;
+}
+
+export async function searchBusinesses(site: string, q: string, city?: string, limit = 12) {
+  await dirSchema();
+  const args: unknown[] = [site, `%${q.toLowerCase().replace(/[%_]/g, "")}%`, limit];
+  let extra = "";
+  if (city) { args.push(slugOf(city)); extra = ` AND city_slug = $${args.length}`; }
+  const { rows } = await pool.query(`SELECT * FROM businesses WHERE site_slug = $1 AND status <> 'hidden' AND lower(name) LIKE $2${extra} ORDER BY ${ORDER} LIMIT $3`, args);
+  return rows as Business[];
+}
+
+export async function uniqueSlug(site: string, name: string, citySlug: string) {
+  const base = `${slugOf(name).slice(0, 60)}-${citySlug}`.replace(/-+/g, "-");
+  const { rows } = await pool.query(`SELECT slug FROM businesses WHERE site_slug = $1 AND slug LIKE $2`, [site, `${base}%`]);
+  const taken = new Set(rows.map((r: { slug: string }) => r.slug));
+  if (!taken.has(base)) return base;
+  for (let i = 2; ; i++) if (!taken.has(`${base}-${i}`)) return `${base}-${i}`;
+}
+
+// ── OpenStreetMap import ────────────────────────────────────────────────────
+
+const OVERPASS = (process.env.OVERPASS_URL || "https://overpass-api.de/api/interpreter,https://maps.mail.ru/osm/tools/overpass/api/interpreter,https://overpass.kumi.systems/api/interpreter").split(",");
+
+function cleanPhone(p?: string) {
+  if (!p) return null;
+  const first = p.split(/[;,]/)[0].trim();
+  const d = first.replace(/[^\d]/g, "").replace(/^1(?=\d{10}$)/, "");
+  return d.length === 10 ? `(${d.slice(0, 3)}) ${d.slice(3, 6)}-${d.slice(6)}` : first.slice(0, 30) || null;
+}
+function cleanUrl(u?: string) {
+  if (!u) return null;
+  const s = u.split(";")[0].trim();
+  if (!s) return null;
+  const full = /^https?:\/\//i.test(s) ? s : `https://${s}`;
+  try { const x = new URL(full); return /\./.test(x.hostname) ? x.toString().slice(0, 300) : null; } catch { return null; }
+}
+const dist = (a: number, b: number, c: number, d: number) => Math.hypot(a - c, (b - d) * Math.cos((a * Math.PI) / 180)) * 111;
+
+/** Import one state's businesses from OpenStreetMap. Runs in the background (minutes for big states). */
+export async function importState(abbr: string): Promise<{ found: number; saved: number }> {
+  await dirSchema();
+  const site = Object.values(sites).find((s) => s.stateAbbr === abbr);
+  if (!site) throw new Error(`unknown state ${abbr}`);
+  await pool.query(`INSERT INTO directory_imports (state, status, started_at) VALUES ($1, 'running', now())
+    ON CONFLICT (state) DO UPDATE SET status = 'running', started_at = now(), finished_at = NULL, error = NULL`, [abbr]);
+  const cities = citiesOf(site.state);
+  let found = 0, saved = 0;
+  try {
+    // one query per category group keeps each response a reasonable size
+    const groups = Array.from(new Set(DIR_CATEGORIES.map((c) => c.group)));
+    for (const g of groups) {
+      const filters = Array.from(new Set(DIR_CATEGORIES.filter((c) => c.group === g).flatMap((c) => c.osm)));
+      const parts = filters.map((f) => { const [k, v] = f.split("="); return `nwr(area.s)["name"]["${k}"="${v}"];`; }).join("");
+      const q = `[out:json][timeout:600];area["ISO3166-2"="US-${abbr}"][admin_level=4]->.s;(${parts});out center tags;`;
+      let json: { elements?: Array<{ type: string; id: number; lat?: number; lon?: number; center?: { lat: number; lon: number }; tags?: Record<string, string> }> } | null = null;
+      for (let attempt = 0; attempt < 6 && !json; attempt++) {
+        const r = await fetch(OVERPASS[attempt % OVERPASS.length], { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded", "User-Agent": "ExpressNews-Directory/1.0" }, body: `data=${encodeURIComponent(q)}`, signal: AbortSignal.timeout(660000) }).catch(() => null);
+        if (r?.ok) json = await r.json().catch(() => null);
+        else await new Promise((res) => setTimeout(res, 15000));
+      }
+      for (const el of json?.elements || []) {
+        const t = el.tags || {};
+        const phone = cleanPhone(t.phone || t["contact:phone"]);
+        const website = cleanUrl(t.website || t["contact:website"] || t.url);
+        if (!t.name || (!phone && !website)) continue;
+        const cat = categorize(t);
+        if (!cat || cat.group !== g) continue;
+        found++;
+        const lat = el.lat ?? el.center?.lat ?? null, lon = el.lon ?? el.center?.lon ?? null;
+        let city = (t["addr:city"] || "").trim();
+        if (!city && lat != null && lon != null && cities.length) {
+          const near = cities.map(([n, a, b]) => [n, dist(lat, lon, a, b)] as const).sort((x, y) => x[1] - y[1])[0];
+          if (near && near[1] < 40) city = near[0];
+        }
+        if (!city || city.length > 40) continue;
+        city = city.replace(/\b\w/g, (c) => c.toUpperCase());
+        const citySlug = slugOf(city);
+        const address = [t["addr:housenumber"], t["addr:street"]].filter(Boolean).join(" ") || null;
+        const osmId = `${el.type[0]}${el.id}`;
+        const exists = await pool.query(`SELECT id FROM businesses WHERE osm_id = $1`, [osmId]);
+        if (exists.rows[0]) {
+          await pool.query(`UPDATE businesses SET name = $2, category = $3, phone = COALESCE($4, phone), website = COALESCE($5, website), hours = COALESCE($6, hours), address = COALESCE($7, address), updated_at = now()
+            WHERE osm_id = $1 AND NOT claimed`, [osmId, t.name, cat.slug, phone, website, t.opening_hours || null, address]);
+        } else {
+          const slug = await uniqueSlug(site.slug, t.name, citySlug);
+          await pool.query(
+            `INSERT INTO businesses (site_slug, slug, osm_id, name, category, city, city_slug, address, zip, lat, lon, phone, website, hours, facebook, instagram)
+             VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16) ON CONFLICT DO NOTHING`,
+            [site.slug, slug, osmId, t.name.slice(0, 160), cat.slug, city, citySlug, address, t["addr:postcode"] || null, lat, lon, phone, website, (t.opening_hours || "").slice(0, 200) || null, cleanUrl(t["contact:facebook"]), cleanUrl(t["contact:instagram"])]
+          );
+          saved++;
+        }
+      }
+      await pool.query(`UPDATE directory_imports SET found = $2, saved = $3 WHERE state = $1`, [abbr, found, saved]);
+      await new Promise((res) => setTimeout(res, 8000)); // be polite to the public Overpass server
+    }
+    await pool.query(`UPDATE directory_imports SET status = 'done', found = $2, saved = $3, finished_at = now() WHERE state = $1`, [abbr, found, saved]);
+  } catch (e) {
+    await pool.query(`UPDATE directory_imports SET status = 'error', error = $2, finished_at = now() WHERE state = $1`, [abbr, String(e).slice(0, 500)]);
+    throw e;
+  }
+  return { found, saved };
+}
+
+/** Owner-supplied fields that may be written to a listing. */
+export const EDITABLE = ["name", "category", "city", "address", "zip", "phone", "website", "hours", "description", "facebook", "instagram", "photo_url"] as const;
+
+/** Apply an approved claim (or a paid Spotlight's claim): the owner's fields, marked claimed. */
+export async function applyClaim(claimId: number) {
+  await dirSchema();
+  const { rows } = await pool.query(`SELECT * FROM business_claims WHERE id = $1 AND status = 'pending'`, [claimId]);
+  const c = rows[0];
+  if (!c) return false;
+  const d = c.data as Record<string, string>;
+  const sets: string[] = [], args: unknown[] = [c.business_id];
+  for (const k of EDITABLE) if (d[k]) { args.push(d[k]); sets.push(`${k} = $${args.length}`); }
+  if (d.city) { args.push(slugOf(d.city)); sets.push(`city_slug = $${args.length}`); }
+  args.push(c.email); sets.push(`owner_email = $${args.length}`);
+  await pool.query(`UPDATE businesses SET ${sets.join(", ")}, claimed = TRUE, status = 'active', source = CASE WHEN source = 'osm' THEN 'osm+owner' ELSE source END, updated_at = now() WHERE id = $1`, args);
+  await pool.query(`UPDATE business_claims SET status = 'applied' WHERE id = $1`, [claimId]);
+  return true;
+}
+
+export { catBySlug };

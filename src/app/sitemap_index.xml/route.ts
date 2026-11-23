@@ -16,6 +16,7 @@ export async function GET(request: NextRequest) {
   const entries = [
     `${base}/sitemap.xml`,
     `${base}/news-sitemap.xml`,
+    `${base}/directory-sitemap.xml`,
   ];
 
   // List one article sitemap per 5,000 articles. /sitemap.xml only carries the

@@ -128,9 +128,9 @@ export default function AdvertisePage() {
               </a>
             </div>
             <a href="/directory/join" className="not-prose mb-4 block rounded-lg border-2 border-gray-300 p-5 hover:bg-gray-50">
-              <div className="text-[13px] font-bold uppercase tracking-wide text-gray-500">Business directory listing</div>
-              <div className="mt-1 text-3xl font-black text-gray-800">$19<span className="text-base font-bold text-gray-500">/month</span></div>
-              <p className="mt-2 text-[14px] text-gray-700">Your business in the {site.state} directory with phone, website and logo. Cancel any time.</p>
+              <div className="text-[13px] font-bold uppercase tracking-wide text-gray-500">Business Spotlight</div>
+              <div className="mt-1 text-3xl font-black text-gray-800">$49<span className="text-base font-bold text-gray-500"> once</span></div>
+              <p className="mt-2 text-[14px] text-gray-700">Top of your town&apos;s list in the {site.state} business directory for 12 months, plus a profile article about your business. Free listings available too.</p>
             </a>
             <p className="not-prose text-[13px] text-gray-500">Secure card payment by Stripe. Full refund if we decline it.</p>
 
