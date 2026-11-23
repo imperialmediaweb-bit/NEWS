@@ -118,7 +118,7 @@ export function LiveFooter({ site }: { site: SiteConfig }) {
             </div>
             <div>
               <p className="mb-2 font-bold uppercase tracking-wide">Contact</p>
-              {[["Contact the newsroom", "/contact"], ["Advertise", "/advertise"], ["Promote your business", "/promote"], ["Place an obituary", "/obituaries/submit"], ["Alerts & closings", "/alerts"], ["Things to do", "/things-to-do"], ["Privacy", "/privacy"], ["Terms", "/terms"]].map(([l, h]) => <a key={l} href={h} className="block py-0.5 text-white/80 hover:text-white">{l}</a>)}
+              {[["Contact the newsroom", "/contact"], ["Advertise", "/advertise"], ["Promote your business", "/promote"], ["Place an obituary", "/obituaries/submit"], ["Alerts & closings", "/alerts"], ["Things to do", "/things-to-do"], ["Gas prices", "/gas-prices"], ["Privacy", "/privacy"], ["Terms", "/terms"]].map(([l, h]) => <a key={l} href={h} className="block py-0.5 text-white/80 hover:text-white">{l}</a>)}
             </div>
           </div>
         </div>

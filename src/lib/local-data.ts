@@ -740,3 +740,32 @@ export async function getAllStateAlerts(abbr: string): Promise<FullAlert[] | nul
       .sort((a, b) => SEVERITY.indexOf(a.severity) - SEVERITY.indexOf(b.severity));
   });
 }
+
+export interface ForecastPeriod {
+  name: string;
+  temp: number;
+  unit: string;
+  isDay: boolean;
+  short: string;
+  detailed: string;
+  wind: string;
+  rain: number | null;
+}
+
+/** The full 7-day NWS forecast (day and night periods) for one city (the /weather pages). */
+export async function getForecastPeriods(city: string, lat: number, lon: number): Promise<ForecastPeriod[] | null> {
+  return cached(`nwsfull:${city}`, async () => {
+    const pt = await getJson(`https://api.weather.gov/points/${lat.toFixed(4)},${lon.toFixed(4)}`);
+    const fc = await getJson(pt.properties.forecast);
+    return ((fc.properties.periods || []) as Array<Record<string, unknown>>).map((p) => ({
+      name: String(p.name),
+      temp: Number(p.temperature),
+      unit: String(p.temperatureUnit || "F"),
+      isDay: !!p.isDaytime,
+      short: String(p.shortForecast || ""),
+      detailed: String(p.detailedForecast || ""),
+      wind: `${p.windSpeed || ""} ${p.windDirection || ""}`.trim(),
+      rain: (p.probabilityOfPrecipitation as { value?: number | null } | undefined)?.value ?? null,
+    }));
+  });
+}

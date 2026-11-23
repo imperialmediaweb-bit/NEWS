@@ -1,7 +1,7 @@
 import { STATE_CITIES, TEAMS } from "@/lib/pipeline/google-news";
 import { PLACES } from "@/lib/pipeline/relevance";
 import { STATE_FACTS } from "@/config/state-data";
-import { countiesOf } from "@/lib/local-data";
+import { countiesOf, citiesOf as citiesWx } from "@/lib/local-data";
 import { NextRequest, NextResponse } from "next/server";
 import pool from "@/lib/db";
 import { getActiveSite, getSiteByDomain } from "@/config/sites";
@@ -44,6 +44,7 @@ export async function GET(request: NextRequest) {
     { url: `${baseUrl}/entertainment`, lastModified: now, changeFrequency: "daily", priority: 0.7 },
     { url: `${baseUrl}/business`, lastModified: now, changeFrequency: "daily", priority: 0.7 },
     { url: `${baseUrl}/technology`, lastModified: now, changeFrequency: "daily", priority: 0.7 },
+    { url: `${baseUrl}/gas-prices`, lastModified: now, changeFrequency: "daily", priority: 0.7 },
     { url: `${baseUrl}/things-to-do`, lastModified: now, changeFrequency: "daily", priority: 0.8 },
     { url: `${baseUrl}/alerts`, lastModified: now, changeFrequency: "hourly", priority: 0.8 },
     { url: `${baseUrl}/submit`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
@@ -69,6 +70,7 @@ export async function GET(request: NextRequest) {
   const teamNames = (TEAMS[site.state] || STATE_FACTS[site.state]?.teams || []).filter((t) => t.length >= 4);
   const unit = site.state === "Louisiana" ? "parish" : "county";
   const topicPages: SitemapEntry[] = [
+    ...citiesWx(site.state).map(([c]) => ({ url: `${baseUrl}/weather/${slug(c)}`, lastModified: now, changeFrequency: "hourly" as const, priority: 0.75 })),
     ...cityNames.map((c) => ({ url: `${baseUrl}/city/${slug(c)}`, lastModified: now, changeFrequency: "daily" as const, priority: 0.8 })),
     ...(STATE_FACTS[site.state]?.counties || countiesOf(site.state).slice(0, 10)).map((c) => ({ url: `${baseUrl}/county/${slug(`${c} ${unit}`)}`, lastModified: now, changeFrequency: "daily" as const, priority: 0.7 })),
     ...teamNames.map((t) => ({ url: `${baseUrl}/team/${slug(t)}`, lastModified: now, changeFrequency: "daily" as const, priority: 0.75 })),
