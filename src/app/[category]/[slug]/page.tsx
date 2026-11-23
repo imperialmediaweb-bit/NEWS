@@ -163,6 +163,11 @@ function readingExtras(html: string, article: Record<string, unknown>, place: st
   return glance + toc + out;
 }
 
+function isoDate(v: unknown): string {
+  const d = v ? new Date(v as string) : null;
+  return d && !isNaN(d.getTime()) ? d.toISOString() : "";
+}
+
 const getArticleData = cache(async (siteSlug: string, articleSlug: string, domain: string) => {
   try {
     const siteId = await getSiteId(siteSlug);
@@ -356,8 +361,9 @@ export default async function ArticlePage({
     headline: displayTitle,
     description,
     image: image ? [image] : [],
-    datePublished: article?.published_at || "",
-    dateModified: article?.published_at || "",
+    // ISO 8601, as Google News / Top Stories require (published_at can arrive as a Date's toString())
+    datePublished: isoDate(article?.published_at),
+    dateModified: isoDate(article?.published_at),
     author: {
       // a desk byline ("… Newsroom", "Opinion Desk") is the organisation, not a person
       "@type": /\b(Newsroom|Desk|Staff)\b/.test(authorName) ? "Organization" : "Person",
