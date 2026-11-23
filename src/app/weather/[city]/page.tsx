@@ -6,6 +6,7 @@ import { TZ } from "@/config/timezones";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { generateContent } from "@/data/generate-content";
+import { siteStories, storyHref } from "@/lib/related-stories";
 
 export const dynamic = "force-dynamic";
 
@@ -35,12 +36,18 @@ export default async function CityWeatherPage({ params }: { params: { city: stri
   const tz = TZ[site.state] || "America/New_York";
   const now = periods?.[0];
   const others = citiesOf(site.state).filter(([x]) => x !== city);
+  const news = await siteStories(site.slug, "(weather|storm|snow|rain|flood|heat|cold|freeze|wind|tornado|hurricane|wildfire|ice|forecast)");
+  const next = periods?.find((p) => p.isDay && p !== now);
+  const summary = now
+    ? `${city} is ${now.isDay ? "seeing" : "expecting"} ${now.short.toLowerCase()} ${now.isDay ? "today" : "tonight"}, around ${now.temp}°${now.unit}${now.rain ? `, with a ${now.rain}% chance of rain` : ""}.${next ? ` ${next.name}: ${next.short.toLowerCase()}, high near ${next.temp}°.` : ""}${local.length ? ` ${local.length} weather alert${local.length > 1 ? "s" : ""} in effect for the area.` : ""}`
+    : "";
   return (
     <>
       <Header site={site} />
       <main className="mx-auto max-w-[960px] px-4 py-10">
         <h1 className="text-[32px] font-extrabold leading-tight md:text-[44px]">{city} weather today</h1>
         <p className="mt-1 text-[15px] text-gray-600">{new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", timeZone: tz })} · Forecast by the National Weather Service</p>
+        {summary && <p className="mt-4 max-w-[760px] text-[18px] leading-relaxed">{summary}</p>}
         {local.length > 0 && (
           <div className="mt-6 space-y-2">
             {local.map((a, i) => <p key={i} className="rounded border-l-4 border-red-700 bg-red-50 p-3 text-[15px]"><b>{a.event}:</b> {a.headline}</p>)}
@@ -69,6 +76,12 @@ export default async function CityWeatherPage({ params }: { params: { city: stri
                 </div>
               ))}
             </div>
+          </section>
+        )}
+        {news.length > 0 && (
+          <section className="mt-8">
+            <h2 className="text-[22px] font-extrabold">{site.state} weather news</h2>
+            <ul className="mt-3 space-y-2">{news.map((a) => <li key={a.slug}><a href={storyHref(a)} className="text-[16px] font-semibold hover:underline">{a.title}</a></li>)}</ul>
           </section>
         )}
         <section className="mt-8">
