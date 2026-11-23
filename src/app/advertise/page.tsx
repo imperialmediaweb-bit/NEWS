@@ -171,6 +171,7 @@ export default function AdvertisePage() {
             </div>
           </section>
 
+        <p className="mt-6 text-[15px]">Guides: <a href="/guides/how-to-write-a-press-release" className="underline">How to write a press release</a> · <a href="/guides/get-your-business-in-the-news" className="underline">Get your business in the news</a> · <a href="/guides/advertise-small-business" className="underline">Advertise a small business</a></p>
           {/* The page described four products and offered no way to order any
               of them, so every enquiry depended on a reader hunting down an
               address and writing one unprompted. */}

@@ -138,6 +138,9 @@ export default function Footer({ site }: FooterProps) {
           <a href="/live" className="font-bold hover:underline">● Live</a>
           <a href="/directory" className="font-bold hover:underline">Business Directory</a>
           <a href="/press-release" className="font-bold hover:underline">Publish a Press Release</a>
+          <a href="/guides/advertise-small-business" className="hover:underline">Advertise a Small Business</a>
+          <a href="/guides/get-your-business-in-the-news" className="hover:underline">Get Your Business in the News</a>
+          <a href="/guides/how-to-write-a-press-release" className="hover:underline">How to Write a Press Release</a>
           {["/alerts", "/gas-prices", "/things-to-do", ...specialPagesFor(site.stateAbbr)].map((p) => (
             <a key={p} href={p} className="hover:underline">{p.slice(1).replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())}</a>
           ))}
