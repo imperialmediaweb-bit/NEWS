@@ -85,7 +85,7 @@ export default function InBrief({ items, siteName, state, domain, ink, acc }: { 
 .ib-zoom{animation:ibZoom 9s ease-out forwards}
 @keyframes ibZoom{to{transform:scale(1.1)}}
 .ib-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.3) 0%,transparent 28%,rgba(0,0,0,.35) 52%,var(--ib-ink) 100%)}
-.ib-text{position:relative;z-index:3;padding:0 86px calc(34px + env(safe-area-inset-bottom,0px)) 18px;max-width:760px}
+.ib-text{position:relative;z-index:3;padding:0 86px calc(62px + env(safe-area-inset-bottom,0px)) 18px;max-width:760px}
 .ib-sec{display:inline-block;background:var(--ib-acc);font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;padding:4px 9px}
 .ib-text h2{font-family:Georgia,'Times New Roman',serif;font-weight:800;font-size:clamp(25px,6.6vw,44px);line-height:1.1;margin:10px 0 8px;text-shadow:0 2px 12px rgba(0,0,0,.6)}
 .ib-text p{font-size:15.5px;line-height:1.5;opacity:.92;margin:0 0 8px;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
