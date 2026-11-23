@@ -111,6 +111,8 @@ export default function InBrief({ items, siteName, state, domain, ink, acc }: { 
         <span>{items.length ? `${active + 1} / ${items.length + 1}` : ""}</span>
         <audio ref={music} src="/sounds/relax-v1.mp3" loop preload="none" />
       </header>
+      {/* desktop: the current photo, blurred, fills the sides around the phone-shaped column */}
+      {items[Math.min(active, items.length - 1)] && <div aria-hidden className="ib-bg" style={{ backgroundImage: `url("${items[Math.min(active, items.length - 1)].image}")` }} />}
       <div ref={box} className="ib-feed">
         {items.map((it, i) => (
           <article key={it.href} data-i={i} className="ib-item">
@@ -203,7 +205,13 @@ export default function InBrief({ items, siteName, state, domain, ink, acc }: { 
 .ib-ask .ib-ask-no{background:#eef1f7;color:var(--ib-ink)}
 .ib-hint{position:absolute;z-index:6;left:50%;bottom:calc(8px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:rgba(0,0,0,.6);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:7px 14px;font-size:12.5px;font-weight:700;white-space:nowrap;cursor:pointer;animation:ibHint 1.6s ease-in-out infinite}
 @keyframes ibHint{50%{transform:translate(-50%,-6px)}}
-@media (min-width:768px){.ib-text{padding-right:18px;margin:0 auto}.ib-btns{right:24px}}
+.ib-bg{display:none}
+@media (min-width:768px){
+.ib-bg{display:block;position:absolute;inset:-60px;background-size:cover;background-position:center;filter:blur(38px) brightness(.45) saturate(1.2);transform:scale(1.1);transition:background-image .5s ease}
+.ib-feed{position:relative;z-index:1;width:min(100vw,calc(100dvh * 9 / 16));margin:0 auto;box-shadow:0 0 0 1px rgba(255,255,255,.08),0 30px 80px rgba(0,0,0,.6)}
+.ib-top{left:50%;right:auto;width:min(100vw,calc(100dvh * 9 / 16));transform:translateX(-50%);z-index:6}
+.ib-text h2{font-size:clamp(24px,3.2vh,34px)}
+}
 @media (prefers-reduced-motion:reduce){.ib-zoom,.ib-hint,.ib-music-on,.ib-ask{animation:none}}
 ` }} />
     </div>
