@@ -361,6 +361,7 @@ export async function GET(req: NextRequest) {
     ["set_openai", "llm_model_openai"],
     ["set_anthropic", "llm_model_anthropic"],
     ["set_xai", "llm_model_xai"],
+    ["set_groq", "llm_model_groq"],
     ["set_provider", "llm_provider"],
   ] as const) {
     const value = params.get(param)?.trim();
@@ -373,7 +374,7 @@ export async function GET(req: NextRequest) {
     // applied to it as well, so the one field that is meant to hold commas
     // was the one field that rejected them.
     const pattern =
-      param === "set_provider" ? /^[A-Za-z0-9._:,-]{1,120}$/ : /^[A-Za-z0-9._:-]{1,80}$/;
+      param === "set_provider" ? /^[A-Za-z0-9._:,-]{1,120}$/ : param === "set_groq" ? /^[A-Za-z0-9._:\/-]{1,80}$/ : /^[A-Za-z0-9._:-]{1,80}$/;
     if (!pattern.test(value)) {
       return NextResponse.json(
         { error: `${param} must be a plain model name, got: ${value.slice(0, 80)}` },

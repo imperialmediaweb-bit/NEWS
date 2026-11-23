@@ -14,12 +14,12 @@ export interface RewriteResult {
 /** Sections a story can be filed under; they match the site menu. */
 export const SECTIONS = ["politics", "business", "sports", "life", "local-news"] as const;
 
-type LLMProvider = "gemini" | "openai" | "anthropic" | "xai";
+type LLMProvider = "gemini" | "openai" | "anthropic" | "xai" | "groq";
 
 // Round-robin counter stored in memory (resets on deploy, which is fine)
 let rotationIndex = 0;
 
-const PROVIDER_ORDER: LLMProvider[] = ["gemini", "openai", "anthropic", "xai"];
+const PROVIDER_ORDER: LLMProvider[] = ["gemini", "openai", "anthropic", "xai", "groq"];
 
 async function getConfig(key: string, fallback: string): Promise<string> {
   try {
@@ -514,6 +514,32 @@ async function callOpenAI(prompt: string): Promise<RewriteResult> {
  * agent API, which runs coding agents and does not generate text. Checked
  * against the live endpoint rather than assumed.
  */
+/**
+ * Groq (open models on fast hardware, OpenAI-compatible API), the same provider
+ * the Expres network uses. Default model openai/gpt-oss-120b; set
+ * llm_model_groq in pipeline_config to change it. Low temperature: the
+ * rewrite must keep names and figures exactly as in the source.
+ */
+async function callGroq(prompt: string): Promise<RewriteResult> {
+  const apiKey = process.env.GROQ_API_KEY;
+  if (!apiKey) throw new Error("GROQ_API_KEY not set");
+  const model = await getConfig("llm_model_groq", "openai/gpt-oss-120b");
+  const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
+    body: JSON.stringify({
+      model,
+      response_format: { type: "json_object" },
+      messages: [{ role: "user", content: prompt }],
+      max_tokens: 4096,
+      temperature: 0.3,
+    }),
+  });
+  if (!res.ok) throw new Error(`Groq API error ${res.status}: ${(await res.text()).slice(0, 300)}`);
+  const data = await res.json();
+  return parseRewriteResponse(data?.choices?.[0]?.message?.content || "");
+}
+
 async function callXai(prompt: string): Promise<RewriteResult> {
   const apiKey = process.env.XAI_API_KEY;
   if (!apiKey) throw new Error("XAI_API_KEY not set");
@@ -581,6 +607,7 @@ const PROVIDER_FNS: Record<LLMProvider, (prompt: string) => Promise<RewriteResul
   openai: callOpenAI,
   anthropic: callAnthropic,
   xai: callXai,
+  groq: callGroq,
 };
 
 function parseRewriteResponse(text: string): RewriteResult {
