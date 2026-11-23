@@ -72,7 +72,7 @@ export default function InBrief({ items, siteName, state, domain, ink, acc }: { 
         </article>
       </div>
       {hint && items.length > 1 && <div className="ib-hint" aria-hidden>↑ Swipe up for the next story</div>}
-      <style>{`
+      <style dangerouslySetInnerHTML={{ __html: `
 .ib{position:fixed;inset:0;z-index:10000;background:#000;color:#fff;font-family:Inter,system-ui,sans-serif}
 .ib-top{position:absolute;z-index:5;top:0;left:0;right:0;display:flex;align-items:center;gap:12px;padding:calc(10px + env(safe-area-inset-top,0px)) 14px 14px;background:linear-gradient(180deg,rgba(0,0,0,.7),transparent)}
 .ib-top b{font-family:Georgia,'Times New Roman',serif;font-size:20px;font-weight:800}
@@ -103,7 +103,7 @@ export default function InBrief({ items, siteName, state, domain, ink, acc }: { 
 @keyframes ibHint{50%{transform:translate(-50%,-6px)}}
 @media (min-width:768px){.ib-item{justify-content:center}.ib-text{padding-right:18px}}
 @media (prefers-reduced-motion:reduce){.ib-zoom,.ib-hint{animation:none}}
-`}</style>
+` }} />
     </div>
   );
 }
