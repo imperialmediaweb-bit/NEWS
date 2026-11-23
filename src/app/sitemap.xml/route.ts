@@ -49,6 +49,8 @@ export async function GET(request: NextRequest) {
     { url: `${baseUrl}/live`, lastModified: now, changeFrequency: "always", priority: 0.9 },
     { url: `${baseUrl}/quiz`, lastModified: now, changeFrequency: "weekly", priority: 0.6 },
     { url: `${baseUrl}/press-release`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
+    { url: `${baseUrl}/advertise`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
+    { url: `${baseUrl}/directory`, lastModified: now, changeFrequency: "daily", priority: 0.8 },
     { url: `${baseUrl}/alerts`, lastModified: now, changeFrequency: "hourly", priority: 0.8 },
     { url: `${baseUrl}/submit`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
     { url: `${baseUrl}/opinion`, lastModified: now, changeFrequency: "daily", priority: 0.6 },
