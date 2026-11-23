@@ -46,6 +46,28 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ streams });
   }
 
+  // source=meltwater: which pages visitors from that source opened, on every property, with city and date
+  const src = req.nextUrl.searchParams.get("source");
+  if (src) {
+    const hits = [];
+    for (const p of props) {
+      const r = await fetch(`https://analyticsdata.googleapis.com/v1beta/properties/${p.id}:runReport`, {
+        method: "POST", headers: { ...auth, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          dateRanges: [{ startDate: `${days}daysAgo`, endDate: "today" }],
+          dimensions: [{ name: "date" }, { name: "sessionSource" }, { name: "landingPage" }, { name: "city" }, { name: "country" }],
+          metrics: [{ name: "sessions" }],
+          dimensionFilter: { filter: { fieldName: "sessionSource", stringFilter: { matchType: "CONTAINS", value: src, caseSensitive: false } } },
+          limit: 100,
+        }),
+      });
+      if (!r.ok) continue;
+      const d = (await r.json()) as { rows?: { dimensionValues: { value: string }[]; metricValues: { value: string }[] }[] };
+      for (const row of d.rows || []) hits.push({ site: p.name, date: row.dimensionValues[0].value, source: row.dimensionValues[1].value, page: row.dimensionValues[2].value, city: row.dimensionValues[3].value, country: row.dimensionValues[4].value, sessions: Number(row.metricValues[0].value) });
+    }
+    return NextResponse.json({ source: src, days, hits: hits.sort((a, b) => b.date.localeCompare(a.date)) });
+  }
+
   // detail=1: where the "Direct" visitors come from, on the biggest properties
   if (req.nextUrl.searchParams.get("detail") === "1") {
     const only = req.nextUrl.searchParams.get("property");
