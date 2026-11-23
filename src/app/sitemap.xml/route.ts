@@ -76,7 +76,13 @@ export async function GET(request: NextRequest) {
     ...teamNames.map((t) => ({ url: `${baseUrl}/team/${slug(t)}`, lastModified: now, changeFrequency: "daily" as const, priority: 0.75 })),
   ];
 
-  let entries: SitemapEntry[] = staticPages.concat(topicPages);
+  // pages only some states have
+  const special: Record<string, string[]> = { AK: ["/aurora-forecast", "/snow-report"], NV: ["/las-vegas-shows", "/snow-report"], LA: ["/mardi-gras"] };
+  for (const ab of ["AZ", "CA", "CO", "ID", "MT", "NM", "OR", "UT", "WA", "WY", "SD"]) (special[ab] ||= []).push("/snow-report");
+  for (const ab of ["ND", "MN", "ME", "MT", "WA", "ID", "WI", "MI", "VT", "NH", "SD", "NY", "OR", "WY", "IA", "MA"]) (special[ab] ||= []).push("/aurora-forecast");
+  const specialPages: SitemapEntry[] = (special[site.stateAbbr] || []).map((p) => ({ url: `${baseUrl}${p}`, lastModified: now, changeFrequency: "daily" as const, priority: 0.8 }));
+
+  let entries: SitemapEntry[] = staticPages.concat(topicPages, specialPages);
 
   try {
     const { rows: siteRows } = await pool.query("SELECT id FROM sites WHERE slug = $1", [site.slug]);

@@ -769,3 +769,21 @@ export async function getForecastPeriods(city: string, lat: number, lon: number)
     }));
   });
 }
+
+/** More SNOTEL stations for the state's snow report page (highest first). */
+export async function getStateSnowMany(abbr: string, n = 14): Promise<SnowStation[] | null> {
+  const list = await cached(`snotel-many:${abbr}:${n}`, async () => {
+    const j = (await getJson(`https://wcc.sc.egov.usda.gov/awdbRestApi/services/v1/stations?stationTriplets=*:${abbr}:SNTL&activeOnly=true`, 9000)) as Array<{ stationTriplet: string; name: string; elevation?: number }>;
+    return j.sort((a, b) => (b.elevation || 0) - (a.elevation || 0)).slice(0, n).map((x) => [x.stationTriplet, x.name] as [string, string]);
+  });
+  return list && list.length ? getSnow(list) : null;
+}
+
+export interface KpPoint { time: string; kp: number; kind: string }
+/** NOAA SWPC planetary K-index, observed and forecast (the aurora pages). */
+export async function getKpForecast(): Promise<KpPoint[] | null> {
+  return cached("swpc-kp", async () => {
+    const j = (await getJson("https://services.swpc.noaa.gov/products/noaa-planetary-k-index-forecast.json")) as Array<{ time_tag: string; kp: number; observed: string }>;
+    return j.map((r) => ({ time: r.time_tag, kp: Number(r.kp), kind: r.observed }));
+  });
+}
