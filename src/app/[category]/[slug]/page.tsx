@@ -266,7 +266,7 @@ const getArticleData = cache(async (siteSlug: string, articleSlug: string, domai
       slug: row.slug as string,
     });
 
-    return { article: format(article, true), related: relatedRows.map(formatRelated) };
+    return { article: format(article, true), related: relatedRows.map(formatRelated), articleId: Number(article.id) || 0 };
   } catch {
     return { article: null, related: [] };
   }
@@ -321,7 +321,7 @@ export default async function ArticlePage({
   searchParams: { design?: string | string[] };
 }) {
   const site = getSiteFromHeaders();
-  const { article, related } = await getArticleData(site.slug, params.slug, site.domain);
+  const { article, related, articleId } = await getArticleData(site.slug, params.slug, site.domain);
 
   // Real 404 for missing articles — never serve a 200 "thin content" shell
   // with fabricated NewsArticle structured data (AdSense/indexing killer).
@@ -450,7 +450,7 @@ export default async function ArticlePage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       {design.family && <ArticleTools />}
-      {design.family && <ArticleReactions id={Number((article as { id?: number }).id)} />}
+      {design.family && <ArticleReactions id={articleId || 0} />}
       {design.family ? (
         <ArticleView
           site={site}
