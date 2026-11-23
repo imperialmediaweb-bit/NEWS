@@ -149,6 +149,26 @@ function cleanUrl(u?: string) {
   const full = /^https?:\/\//i.test(s) ? s : `https://${s}`;
   try { const x = new URL(full); return /\./.test(x.hostname) ? x.toString().slice(0, 300) : null; } catch { return null; }
 }
+/** One Overpass query, trying each server in turn; throws when all of them fail (so the group is retried later, not marked done). */
+async function overpass(q: string) {
+  let last = "";
+  for (let attempt = 0; attempt < 6; attempt++) {
+    const url = OVERPASS[attempt % OVERPASS.length];
+    try {
+      const r = await fetch(url, { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded", "User-Agent": "ExpressNews-Directory/1.0" }, body: `data=${encodeURIComponent(q)}`, signal: AbortSignal.timeout(330000) });
+      if (r.ok) {
+        const j = await r.json().catch(() => null);
+        if (j && Array.isArray(j.elements)) {
+          if (j.remark && /error|timed out|out of memory/i.test(j.remark) && !j.elements.length) last = `${url}: ${j.remark}`;
+          else return j.elements as Array<{ type: string; id: number; lat?: number; lon?: number; center?: { lat: number; lon: number }; tags?: Record<string, string> }>;
+        } else last = `${url}: bad JSON`;
+      } else last = `${url}: HTTP ${r.status}`;
+    } catch (e) { last = `${url}: ${String(e).slice(0, 120)}`; }
+    await new Promise((res) => setTimeout(res, 10000));
+  }
+  throw new Error(`Overpass failed: ${last}`);
+}
+
 const dist = (a: number, b: number, c: number, d: number) => Math.hypot(a - c, (b - d) * Math.cos((a * Math.PI) / 180)) * 111;
 
 /** Import one state's businesses from OpenStreetMap. Runs in the background (minutes for big states). */
@@ -158,7 +178,7 @@ export async function importState(abbr: string): Promise<{ found: number; saved:
   if (!site) throw new Error(`unknown state ${abbr}`);
   // resumable: a redeploy mid-import continues from the last finished category group
   const { rows: prev } = await pool.query(`SELECT status, groups_done, found, saved FROM directory_imports WHERE state = $1`, [abbr]);
-  const resume = prev[0] && ["running", "queued"].includes(prev[0].status);
+  const resume = prev[0] && ["running", "queued", "error"].includes(prev[0].status);
   await pool.query(`INSERT INTO directory_imports (state, status, started_at, heartbeat) VALUES ($1, 'running', now(), now())
     ON CONFLICT (state) DO UPDATE SET status = 'running', heartbeat = now(), finished_at = NULL, error = NULL,
       started_at = CASE WHEN $2 THEN directory_imports.started_at ELSE now() END,
@@ -173,14 +193,17 @@ export async function importState(abbr: string): Promise<{ found: number; saved:
       if (done.includes(g)) continue;
       await pool.query(`UPDATE directory_imports SET heartbeat = now() WHERE state = $1`, [abbr]);
       const filters = Array.from(new Set(DIR_CATEGORIES.filter((c) => c.group === g).flatMap((c) => c.osm)));
-      const parts = filters.map((f) => { const [k, v] = f.split("="); return `nwr(area.s)["name"]["${k}"="${v}"];`; }).join("");
-      const q = `[out:json][timeout:600];area["ISO3166-2"="US-${abbr}"][admin_level=4]->.s;(${parts});out center tags;`;
-      let json: { elements?: Array<{ type: string; id: number; lat?: number; lon?: number; center?: { lat: number; lon: number }; tags?: Record<string, string> }> } | null = null;
-      for (let attempt = 0; attempt < 6 && !json; attempt++) {
-        const r = await fetch(OVERPASS[attempt % OVERPASS.length], { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded", "User-Agent": "ExpressNews-Directory/1.0" }, body: `data=${encodeURIComponent(q)}`, signal: AbortSignal.timeout(660000) }).catch(() => null);
-        if (r?.ok) json = await r.json().catch(() => null);
-        else await new Promise((res) => setTimeout(res, 15000));
+      // one query per OSM tag, only elements that have a phone or a website: small, fast responses
+      type El = { type: string; id: number; lat?: number; lon?: number; center?: { lat: number; lon: number }; tags?: Record<string, string> };
+      const elements: El[] = [];
+      for (const f of filters) {
+        const [k, v] = f.split("=");
+        const q = `[out:json][timeout:300];area["ISO3166-2"="US-${abbr}"][admin_level=4]->.s;nwr(area.s)["name"]["${k}"="${v}"][~"^(phone|contact:phone|website|contact:website)$"~"."];out center tags;`;
+        elements.push(...(await overpass(q)));
+        await pool.query(`UPDATE directory_imports SET heartbeat = now() WHERE state = $1`, [abbr]);
+        await new Promise((res) => setTimeout(res, 3000));
       }
+      const json = { elements };
       for (const el of json?.elements || []) {
         const t = el.tags || {};
         const phone = cleanPhone(t.phone || t["contact:phone"]);
@@ -258,6 +281,7 @@ export async function importTick(): Promise<string | null> {
   await dirSchema();
   const { rows } = await pool.query(`SELECT state FROM directory_imports
     WHERE status = 'queued' OR (status = 'running' AND (heartbeat IS NULL OR heartbeat < now() - interval '45 minutes'))
+       OR (status = 'error' AND finished_at < now() - interval '30 minutes')
     ORDER BY (status = 'running') DESC, started_at NULLS LAST LIMIT 1`);
   if (!rows[0]) return null;
   importing = true;
