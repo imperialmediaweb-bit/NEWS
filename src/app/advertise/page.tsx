@@ -127,6 +127,11 @@ export default function AdvertisePage() {
                 <span className="mt-3 inline-block rounded bg-gray-800 px-4 py-2 text-[14px] font-bold text-white">Place an obituary ›</span>
               </a>
             </div>
+            <a href="/press-release" className="not-prose mb-4 block rounded-lg border-2 border-gray-300 p-5 hover:bg-gray-50">
+              <div className="text-[13px] font-bold uppercase tracking-wide text-gray-500">Press release</div>
+              <div className="mt-1 text-3xl font-black text-gray-800">$49</div>
+              <p className="mt-2 text-[14px] text-gray-700">Your press release published as written, labelled &quot;Press release&quot;, live within one business day. For companies and PR agencies.</p>
+            </a>
             <a href="/directory/join" className="not-prose mb-4 block rounded-lg border-2 border-gray-300 p-5 hover:bg-gray-50">
               <div className="text-[13px] font-bold uppercase tracking-wide text-gray-500">Business Spotlight</div>
               <div className="mt-1 text-3xl font-black text-gray-800">$49<span className="text-base font-bold text-gray-500"> once</span></div>

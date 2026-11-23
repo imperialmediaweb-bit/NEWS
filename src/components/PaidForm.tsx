@@ -3,17 +3,18 @@
 import { useState } from "react";
 
 /** Order form for a sponsored story or an obituary; payment happens on Stripe Checkout. */
-export default function PaidForm({ product, price, siteName, accent }: { product: "sponsored" | "obituary"; price: string; siteName: string; accent: string }) {
+export default function PaidForm({ product, price, siteName, accent }: { product: "sponsored" | "obituary" | "press_release"; price: string; siteName: string; accent: string }) {
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
-  const sponsored = product === "sponsored";
+  const release = product === "press_release";
+  const sponsored = product === "sponsored" || release;
   const [feature, setFeature] = useState(false);
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setBusy(true);
     setErr("");
     const data = new FormData(e.currentTarget);
-    data.set("product", sponsored && feature ? "featured" : product);
+    data.set("product", product === "sponsored" && feature ? "featured" : product);
     try {
       const r = await fetch("/api/paid/checkout", { method: "POST", body: data });
       const j = await r.json().catch(() => ({}));
@@ -34,11 +35,11 @@ export default function PaidForm({ product, price, siteName, accent }: { product
         </div>
       )}
       <label className="block text-[14px] font-semibold">
-        {sponsored ? "Headline" : "Name of the deceased and dates"}
+        {release ? "Press release headline" : sponsored ? "Headline" : "Name of the deceased and dates"}
         <input name="title" required minLength={8} maxLength={160} className={input} placeholder={sponsored ? "Grand opening: Main Street Bakery now open in Dayton" : "John A. Smith, 1948 – 2026"} />
       </label>
       <label className="block text-[14px] font-semibold">
-        {sponsored ? "Your story (we may edit for length and clarity)" : "Obituary text: life, family, service details"}
+        {release ? "Press release text, as you want it published (include the city, date and a media contact)" : sponsored ? "Your story (we may edit for length and clarity)" : "Obituary text: life, family, service details"}
         <textarea name="body" required minLength={80} maxLength={6000} rows={8} className={input} />
       </label>
       <label className="block text-[14px] font-semibold">Photo (optional, JPG/PNG/WebP up to 8 MB)<input name="photo" type="file" accept="image/jpeg,image/png,image/webp" className="mt-1 block w-full text-[14px]" /></label>
@@ -46,7 +47,7 @@ export default function PaidForm({ product, price, siteName, accent }: { product
         <label className="block text-[14px] font-semibold">Your name<input name="name" required maxLength={120} className={input} /></label>
         <label className="block text-[14px] font-semibold">Email (for the receipt)<input name="email" type="email" required maxLength={200} className={input} /></label>
       </div>
-      {sponsored && (
+      {product === "sponsored" && (
         <label className="flex items-start gap-2 rounded border border-amber-300 bg-amber-50 p-3 text-[14px] text-gray-800">
           <input type="checkbox" checked={feature} onChange={(e) => setFeature(e.target.checked)} className="mt-1" />
           <span><b>Feature it on the homepage for 7 days (+$100).</b> Your story appears as a highlighted sponsored card near the top of the front page.</span>
@@ -56,7 +57,9 @@ export default function PaidForm({ product, price, siteName, accent }: { product
       <label className="flex items-start gap-2 text-[13.5px] text-gray-700">
         <input type="checkbox" name="consent" required className="mt-1" />
         <span>
-          {sponsored
+          {release
+            ? `I have the right to publish this release. ${siteName} publishes it labelled "Press release" as paid content, does not edit its claims, may decline it, and refunds in full if declined.`
+            : sponsored
             ? `The text and photo are mine or I have the right to use them. ${siteName} publishes it labelled "Sponsored", may edit or decline it, and refunds in full if declined.`
             : `I am family or authorized to place this notice, and the photo is mine or I have the right to use it. ${siteName} may edit it and refunds in full if declined.`}
         </span>

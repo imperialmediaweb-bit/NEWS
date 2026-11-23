@@ -19,14 +19,17 @@ export async function publishPaidOrder(o: PaidOrder): Promise<string | null> {
   if (!s[0]) return null;
   const site = sites[o.site_slug];
   const spotlight = o.product === "spotlight" || o.product === "spotlight_home";
-  const sponsored = spotlight || o.product === "sponsored" || o.product === "featured";
+  const release = o.product === "press_release";
+  const sponsored = spotlight || release || o.product === "sponsored" || o.product === "featured";
   const paras = o.body.split(/\n\s*\n/).map((p) => `<p>${esc(p.trim())}</p>`).join("\n");
   let bizLink = "";
   if (spotlight && o.business_id) {
     const { rows: b } = await pool.query("SELECT slug FROM businesses WHERE id = $1", [o.business_id]);
     if (b[0]) bizLink = `\n<p><a href="/directory/listing/${esc(b[0].slug)}">See ${esc(o.business || "the business")} in the ${esc(site?.state || "")} business directory</a></p>`;
   }
-  const label = spotlight
+  const label = release
+    ? `<p><em>Press release from ${esc(o.business || o.name)}, published as submitted. ${esc(o.business || o.name)} paid ${esc(site?.name || "")} to publish it; the newsroom did not write or verify it.</em></p>`
+    : spotlight
     ? `<p><em>Business Spotlight: sponsored content. ${esc(o.business || o.name)} paid ${esc(site?.name || "")} to publish this profile, written from information the business provided. The newsroom did not report it.</em></p>`
     : `<p><em>Sponsored content from ${esc(o.business || o.name)}. ${esc(site?.name || "")} was paid to publish it; the newsroom did not write it.</em></p>`;
   const content = sponsored
@@ -37,7 +40,7 @@ export async function publishPaidOrder(o: PaidOrder): Promise<string | null> {
   await pool.query(
     `INSERT INTO articles (site_id, title, slug, content, summary, category, author, featured_image, published_at, source_url, auto_generated)
      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,now(),NULL,false) ON CONFLICT (site_id, slug) DO NOTHING`,
-    [s[0].id, o.title, slug, content, o.body.replace(/\s+/g, " ").slice(0, 155), category, sponsored ? "Sponsored Content" : "Obituary", o.photo_url]
+    [s[0].id, o.title, slug, content, o.body.replace(/\s+/g, " ").slice(0, 155), category, release ? "Press Release" : sponsored ? "Sponsored Content" : "Obituary", o.photo_url]
   );
   await pool.query("UPDATE paid_orders SET status = 'published', article_slug = $2, published_at = now() WHERE id = $1", [o.id, `${category}/${slug}`]);
   if (spotlight && o.business_id) await pool.query("UPDATE businesses SET article_slug = $2, updated_at = now() WHERE id = $1", [o.business_id, `${category}/${slug}`]).catch(() => null);

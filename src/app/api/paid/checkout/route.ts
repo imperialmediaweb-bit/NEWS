@@ -34,10 +34,10 @@ export async function POST(req: NextRequest) {
     if (!city || !(LISTING_CATEGORIES as readonly string[]).includes(listingCategory)) return NextResponse.json({ error: "Please choose a category and the city." }, { status: 400 });
   } else if (title.length < 8 || body.length < 80) return NextResponse.json({ error: "Please add a headline and at least a short paragraph." }, { status: 400 });
   if (!name || !/^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i.test(email)) return NextResponse.json({ error: "Please give your name and a valid email." }, { status: 400 });
-  if ((product === "sponsored" || product === "featured" || isListing) && !business) return NextResponse.json({ error: "Please give the business name." }, { status: 400 });
+  if ((product === "sponsored" || product === "featured" || product === "press_release" || isListing) && !business) return NextResponse.json({ error: "Please give the business name." }, { status: 400 });
   if (website && !/^https?:\/\//i.test(website)) return NextResponse.json({ error: "The website must start with http:// or https://" }, { status: 400 });
   if (form.get("consent") !== "on") return NextResponse.json({ error: "Please confirm the terms box." }, { status: 400 });
-  if (product === "sponsored" || product === "featured" || isListing) {
+  if (product === "sponsored" || product === "featured" || product === "press_release" || isListing) {
     const banned = bannedReason(title, body, business, website);
     if (banned) return NextResponse.json({ error: `We don't publish sponsored content about ${banned}. Nothing was charged.` }, { status: 400 });
   }
@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
   await ensurePaidTable();
   const p = PRODUCTS[product];
   // casinos, gaming and 18+ shows are published at the premium price
-  const isSponsored = product === "sponsored" || product === "featured";
+  const isSponsored = product === "sponsored" || product === "featured" || product === "press_release";
   const premium = isSponsored && isPremium(title, body, business, website);
   const addon = product === "featured" ? Number(process.env.PRICE_FEATURE_ADDON_CENTS || 10000) : 0;
   const cents = premium ? PREMIUM_CENTS + addon : p.cents;
@@ -66,7 +66,7 @@ export async function POST(req: NextRequest) {
     [site.slug, product, title, body, business || null, website || null, name, email, photoUrl, cents, city || null, phone || null, listingCategory || null]
   );
   const id = rows[0].id;
-  const back = product === "obituary" ? "obituaries/submit" : isListing ? "directory/join" : "promote";
+  const back = product === "obituary" ? "obituaries/submit" : isListing ? "directory/join" : product === "press_release" ? "press-release" : "promote";
   const session = await stripe<{ id: string; url: string }>("checkout/sessions", {
     mode: isListing ? "subscription" : "payment",
     ...(isListing ? { "line_items[0][price_data][recurring][interval]": "month", "subscription_data[metadata][order_id]": String(id) } : {}),
