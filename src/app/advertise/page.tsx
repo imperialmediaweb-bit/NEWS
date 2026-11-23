@@ -127,6 +127,11 @@ export default function AdvertisePage() {
                 <span className="mt-3 inline-block rounded bg-gray-800 px-4 py-2 text-[14px] font-bold text-white">Place an obituary ›</span>
               </a>
             </div>
+            <a href="/directory/join" className="not-prose mb-4 block rounded-lg border-2 border-gray-300 p-5 hover:bg-gray-50">
+              <div className="text-[13px] font-bold uppercase tracking-wide text-gray-500">Business directory listing</div>
+              <div className="mt-1 text-3xl font-black text-gray-800">$19<span className="text-base font-bold text-gray-500">/month</span></div>
+              <p className="mt-2 text-[14px] text-gray-700">Your business in the {site.state} directory with phone, website and logo. Cancel any time.</p>
+            </a>
             <p className="not-prose text-[13px] text-gray-500">Secure card payment by Stripe. Full refund if we decline it.</p>
 
             <h2 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900, borderBottom: "2px solid var(--accent)", paddingBottom: "0.5rem" }}>

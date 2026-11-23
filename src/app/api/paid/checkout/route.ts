@@ -3,7 +3,7 @@ import crypto from "crypto";
 import pool from "@/lib/db";
 import { getSiteByDomain } from "@/config/sites";
 import { r2Put, r2Ready, r2Url } from "@/lib/r2";
-import { ensurePaidTable, PRODUCTS, PREMIUM_CENTS, stripe, bannedReason, isPremium, type Product } from "@/lib/paid";
+import { ensurePaidTable, PRODUCTS, PREMIUM_CENTS, stripe, bannedReason, isPremium, LISTING_CATEGORIES, type Product } from "@/lib/paid";
 
 /** POST /api/paid/checkout (multipart) — saves the order, returns the Stripe Checkout URL. */
 export const dynamic = "force-dynamic";
@@ -19,18 +19,25 @@ export async function POST(req: NextRequest) {
   if (clean(form.get("company_url"), 10)) return NextResponse.json({ ok: true }); // honeypot
   const product = clean(form.get("product"), 20) as Product;
   if (!(product in PRODUCTS)) return NextResponse.json({ error: "Unknown product" }, { status: 400 });
-  const title = clean(form.get("title"), 160);
+  const isListing = product === "listing";
+  const title = isListing ? clean(form.get("business"), 160) : clean(form.get("title"), 160);
+  const city = clean(form.get("city"), 80);
+  const phone = clean(form.get("phone"), 40);
+  const listingCategory = clean(form.get("listing_category"), 60);
   const body = clean(form.get("body"), 6000);
   const name = clean(form.get("name"), 120);
   const email = clean(form.get("email"), 200);
   const business = clean(form.get("business"), 160);
   const website = clean(form.get("website"), 300);
-  if (title.length < 8 || body.length < 80) return NextResponse.json({ error: "Please add a headline and at least a short paragraph." }, { status: 400 });
+  if (isListing) {
+    if (title.length < 2 || body.length < 40) return NextResponse.json({ error: "Please give the business name and a short description (40+ characters)." }, { status: 400 });
+    if (!city || !(LISTING_CATEGORIES as readonly string[]).includes(listingCategory)) return NextResponse.json({ error: "Please choose a category and the city." }, { status: 400 });
+  } else if (title.length < 8 || body.length < 80) return NextResponse.json({ error: "Please add a headline and at least a short paragraph." }, { status: 400 });
   if (!name || !/^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i.test(email)) return NextResponse.json({ error: "Please give your name and a valid email." }, { status: 400 });
-  if ((product === "sponsored" || product === "featured") && !business) return NextResponse.json({ error: "Please give the business name." }, { status: 400 });
+  if ((product === "sponsored" || product === "featured" || isListing) && !business) return NextResponse.json({ error: "Please give the business name." }, { status: 400 });
   if (website && !/^https?:\/\//i.test(website)) return NextResponse.json({ error: "The website must start with http:// or https://" }, { status: 400 });
   if (form.get("consent") !== "on") return NextResponse.json({ error: "Please confirm the terms box." }, { status: 400 });
-  if (product === "sponsored" || product === "featured") {
+  if (product === "sponsored" || product === "featured" || isListing) {
     const banned = bannedReason(title, body, business, website);
     if (banned) return NextResponse.json({ error: `We don't publish sponsored content about ${banned}. Nothing was charged.` }, { status: 400 });
   }
@@ -54,14 +61,15 @@ export async function POST(req: NextRequest) {
   const addon = product === "featured" ? Number(process.env.PRICE_FEATURE_ADDON_CENTS || 10000) : 0;
   const cents = premium ? PREMIUM_CENTS + addon : p.cents;
   const { rows } = await pool.query(
-    `INSERT INTO paid_orders (site_slug, product, title, body, business, website, name, email, photo_url, cents)
-     VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING id`,
-    [site.slug, product, title, body, business || null, website || null, name, email, photoUrl, cents]
+    `INSERT INTO paid_orders (site_slug, product, title, body, business, website, name, email, photo_url, cents, city, phone, listing_category)
+     VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13) RETURNING id`,
+    [site.slug, product, title, body, business || null, website || null, name, email, photoUrl, cents, city || null, phone || null, listingCategory || null]
   );
   const id = rows[0].id;
-  const back = product === "obituary" ? "obituaries/submit" : "promote";
+  const back = product === "obituary" ? "obituaries/submit" : isListing ? "directory/join" : "promote";
   const session = await stripe<{ id: string; url: string }>("checkout/sessions", {
-    mode: "payment",
+    mode: isListing ? "subscription" : "payment",
+    ...(isListing ? { "line_items[0][price_data][recurring][interval]": "month", "subscription_data[metadata][order_id]": String(id) } : {}),
     customer_email: email,
     "line_items[0][quantity]": "1",
     "line_items[0][price_data][currency]": "usd",

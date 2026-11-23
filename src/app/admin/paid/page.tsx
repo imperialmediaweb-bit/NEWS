@@ -13,6 +13,7 @@ export const dynamic = "force-dynamic";
 type Order = {
   id: number; site_slug: string; product: Product; title: string; body: string; business: string | null; website: string | null;
   name: string; email: string; photo_url: string | null; cents: number; status: string; stripe_session: string | null; created_at: string;
+  stripe_subscription?: string | null; city?: string | null; phone?: string | null; listing_category?: string | null;
 };
 
 const esc = (x: string) => x.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -23,9 +24,25 @@ async function act(formData: FormData) {
   const id = Number(formData.get("id"));
   const action = String(formData.get("action"));
   await ensurePaidTable();
-  const { rows } = await pool.query<Order>("SELECT * FROM paid_orders WHERE id = $1 AND status = 'paid'", [id]);
+  const { rows } = await pool.query<Order>("SELECT * FROM paid_orders WHERE id = $1 AND status IN ('paid', 'published')", [id]);
   const o = rows[0];
   if (!o) return;
+  // directory listings: publish = live in /directory; decline = cancel + refund; end = cancel from now on
+  if (o.product === "listing") {
+    if (action === "publish" && o.status === "paid") await pool.query("UPDATE paid_orders SET status = 'published', published_at = now() WHERE id = $1", [id]);
+    if ((action === "decline" && o.status === "paid") || (action === "end" && o.status === "published")) {
+      if (o.stripe_subscription) {
+        const sub = await fetch(`https://api.stripe.com/v1/subscriptions/${o.stripe_subscription}?expand[]=latest_invoice`, { headers: { Authorization: `Bearer ${process.env.STRIPE_SECRET_KEY}` } }).then((r) => r.json()).catch(() => null);
+        await fetch(`https://api.stripe.com/v1/subscriptions/${o.stripe_subscription}`, { method: "DELETE", headers: { Authorization: `Bearer ${process.env.STRIPE_SECRET_KEY}` } }).catch(() => null);
+        const pi = sub?.latest_invoice?.payment_intent;
+        if (action === "decline" && pi) await stripe("refunds", { payment_intent: typeof pi === "string" ? pi : pi.id }).catch(() => null);
+      }
+      await pool.query("UPDATE paid_orders SET status = $2 WHERE id = $1", [id, action === "decline" ? "refunded" : "ended"]);
+    }
+    revalidatePath("/admin/paid");
+    return;
+  }
+  if (o.status !== "paid") return;
   if (action === "publish") {
     const { rows: s } = await pool.query("SELECT id FROM sites WHERE slug = $1", [o.site_slug]);
     if (!s[0]) return;
@@ -52,14 +69,14 @@ async function act(formData: FormData) {
 
 export default async function PaidPage({ searchParams }: { searchParams: { status?: string } }) {
   await ensurePaidTable();
-  const status = ["paid", "published", "refunded", "awaiting_payment"].includes(searchParams.status || "") ? searchParams.status! : "paid";
+  const status = ["paid", "published", "refunded", "ended", "awaiting_payment"].includes(searchParams.status || "") ? searchParams.status! : "paid";
   const { rows } = await pool.query<Order>("SELECT * FROM paid_orders WHERE status = $1 ORDER BY created_at DESC LIMIT 100", [status]);
   return (
     <div className="mx-auto max-w-[1100px] p-6">
       <h1 className="text-2xl font-bold">Paid placements</h1>
       <p className="mt-1 text-sm text-gray-600">Publish puts it on the site labelled as sponsored or as an obituary. Decline refunds the customer in full.</p>
       <nav className="mt-4 flex gap-3 text-sm">
-        {["paid", "published", "refunded", "awaiting_payment"].map((s) => (
+        {["paid", "published", "refunded", "ended", "awaiting_payment"].map((s) => (
           <a key={s} href={`/admin/paid?status=${s}`} className={s === status ? "font-bold underline" : "text-blue-700"}>{s.replace("_", " ")}</a>
         ))}
       </nav>
@@ -77,6 +94,13 @@ export default async function PaidPage({ searchParams }: { searchParams: { statu
               <img src={o.photo_url} alt="" className="mt-3 max-h-72 rounded" />
             )}
             <p className="mt-2 text-sm text-gray-700">From {o.name} &lt;{o.email}&gt;</p>
+            {o.product === "listing" && <p className="mt-1 text-sm font-semibold text-indigo-800">Directory listing · {o.listing_category} · {o.city}{o.phone ? ` · ${o.phone}` : ""} · ${(o.cents / 100).toFixed(2)}/month</p>}
+            {status === "published" && o.product === "listing" && (
+              <form action={act} className="mt-3">
+                <input type="hidden" name="id" value={o.id} />
+                <button name="action" value="end" className="rounded bg-gray-700 px-4 py-1.5 text-sm font-bold text-white">End listing (cancel the monthly payment)</button>
+              </form>
+            )}
             {status === "paid" && (
               <form action={act} className="mt-4 flex gap-2">
                 <input type="hidden" name="id" value={o.id} />
