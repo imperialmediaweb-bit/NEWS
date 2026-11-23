@@ -133,6 +133,7 @@ export default function Footer({ site }: FooterProps) {
       <nav aria-label={`${site.state} guides`} className="border-t border-[#dde1ea] bg-white px-4 py-5 text-[14px] text-[#1b2233]">
         <div className="mx-auto flex max-w-[1240px] flex-wrap gap-x-5 gap-y-2">
           <b>{site.state} guides:</b>
+          <a href="/swipe" className="font-bold hover:underline">▶ Express Swipe</a>
           {["/alerts", "/gas-prices", "/things-to-do", ...specialPagesFor(site.stateAbbr)].map((p) => (
             <a key={p} href={p} className="hover:underline">{p.slice(1).replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())}</a>
           ))}

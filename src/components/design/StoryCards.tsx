@@ -70,6 +70,7 @@ export default function StoryCards({ ink, acc, state }: { ink: string; acc: stri
           </div>
           <div className="relative flex items-center justify-between px-3 py-2 text-[12px] font-bold uppercase tracking-[.18em]">
             <span>{state} · {ago(s.published_at)}</span>
+            <a href="/swipe" className="ml-auto mr-1 border border-white/40 px-2.5 py-1.5 text-[11px]">All stories ›</a>
             <button type="button" onClick={() => setI(null)} className="flex h-11 w-11 items-center justify-center text-[28px]" aria-label="Close stories">×</button>
           </div>
           <button type="button" onClick={prev} className="absolute bottom-40 left-0 top-20 w-1/3" aria-label="Previous story" />
