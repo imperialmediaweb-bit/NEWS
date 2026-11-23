@@ -55,7 +55,7 @@ export default function StoryCards({ ink, acc, state }: { ink: string; acc: stri
         </button>
       )}
       {s && (
-        <div role="dialog" aria-modal="true" aria-label={`Today's ${state} stories`} className="fixed inset-0 z-[60] flex flex-col text-white md:hidden" style={{ background: ink }}
+        <div role="dialog" aria-modal="true" aria-label={`Today's ${state} stories`} className="fixed inset-0 z-[10000] flex flex-col text-white md:hidden" style={{ background: ink }}
           onTouchStart={(e) => { x0.current = e.touches[0].clientX; }}
           onTouchEnd={(e) => { if (x0.current === null) return; const dx = e.changedTouches[0].clientX - x0.current; x0.current = null; if (Math.abs(dx) > 50) (dx < 0 ? next : prev)(); }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}

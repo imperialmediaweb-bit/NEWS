@@ -102,7 +102,7 @@ function Gallery({ gal, set }: { gal: { pics: { src: string; cap: string }[]; i:
   const p = gal.pics[gal.i];
   const arrow = "absolute top-1/2 z-10 flex h-14 w-14 -translate-y-1/2 items-center justify-center bg-white/10 text-[34px] text-white hover:bg-white/25 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white";
   return (
-    <div role="dialog" aria-modal="true" aria-label="Story photos" className="fixed inset-0 z-50 flex flex-col bg-black/95 text-white"
+    <div role="dialog" aria-modal="true" aria-label="Story photos" className="fixed inset-0 z-[10000] flex flex-col bg-black/95 text-white"
       onTouchStart={(e) => setX0(e.touches[0].clientX)}
       onTouchEnd={(e) => { if (x0 === null) return; const dx = e.changedTouches[0].clientX - x0; if (Math.abs(dx) > 50) go(dx < 0 ? 1 : -1); setX0(null); }}>
       <div className="flex items-center justify-between px-4 py-3 text-[13px] font-bold uppercase tracking-[.18em] text-white/70">
