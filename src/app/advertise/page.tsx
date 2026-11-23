@@ -61,7 +61,7 @@ export default function AdvertisePage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 not-prose my-8">
               <a href="/promote" className="block bg-gray-50 rounded-lg p-5 text-center hover:bg-gray-100">
-                <div className="text-3xl font-black text-[var(--accent)]" style={{ fontFamily: "'Oswald', sans-serif" }}>$49</div>
+                <div className="text-3xl font-black text-[var(--accent)]" style={{ fontFamily: "'Oswald', sans-serif" }}>$99</div>
                 <div className="text-sm text-gray-600 mt-1">Sponsored story — order online ›</div>
               </a>
               <div className="bg-gray-50 rounded-lg p-5 text-center">
@@ -116,7 +116,7 @@ export default function AdvertisePage() {
             <div className="not-prose my-6 grid gap-4 sm:grid-cols-2">
               <a href="/promote" className="block rounded-lg border-2 p-5 hover:bg-gray-50" style={{ borderColor: "var(--accent)" }}>
                 <div className="text-[13px] font-bold uppercase tracking-wide text-gray-500">Sponsored story</div>
-                <div className="mt-1 text-3xl font-black" style={{ color: "var(--accent)" }}>$49</div>
+                <div className="mt-1 text-3xl font-black" style={{ color: "var(--accent)" }}>$99</div>
                 <p className="mt-2 text-[14px] text-gray-700">Your announcement on {site.name}, labelled Sponsored, with a link to your website. Write it, pay by card, live within one business day.</p>
                 <span className="mt-3 inline-block rounded px-4 py-2 text-[14px] font-bold text-white" style={{ background: "var(--accent)" }}>Order and pay ›</span>
               </a>
