@@ -15,8 +15,8 @@ self.addEventListener("push", (event) => {
   const title = data.title || "Breaking News";
   const options = {
     body: data.body || "New article published",
-    icon: "/icon-192.png",
-    badge: "/icon-192.png",
+    icon: data.icon || "/favicon.ico",
+    badge: data.icon || undefined,
     image: data.image || undefined,
     data: {
       url: data.url || "/",

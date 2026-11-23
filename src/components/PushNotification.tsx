@@ -53,7 +53,8 @@ export default function PushNotification() {
       setPermission(result);
 
       if (result === "granted") {
-        const vapidKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
+        // the key comes from the server (generated once and kept in the database)
+        const vapidKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY || (await fetch("/api/push/key").then((r) => r.json()).then((d) => d.key as string | null).catch(() => null));
         if (vapidKey) {
           const subscription = await registration.pushManager.subscribe({
             userVisibleOnly: true,
@@ -64,10 +65,7 @@ export default function PushNotification() {
           await fetch("/api/push/subscribe", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              subscription: subscription.toJSON(),
-              hostname: window.location.hostname,
-            }),
+            body: JSON.stringify({ subscription: subscription.toJSON() }),
           });
         }
       }
@@ -114,7 +112,7 @@ export default function PushNotification() {
       <div style={{ display: "flex", alignItems: "center", gap: "10px", flex: 1 }}>
         <span style={{ fontSize: "20px" }}>&#128276;</span>
         <p style={{ color: "#fff", fontSize: "14px", margin: 0, fontWeight: 500 }}>
-          Get breaking news alerts delivered to your device instantly!
+          Get the top local stories as alerts, no more than 2 a day.
         </p>
       </div>
 

@@ -1,47 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
-import pool from "@/lib/db";
+import { getSiteByDomain } from "@/config/sites";
+import { saveSubscriber, pushEnabled } from "@/lib/push";
 
-/**
- * Store push notification subscriptions.
- * Creates table if not exists.
- */
+/** Save a reader's push subscription for the paper whose domain they are on. */
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
-    const { subscription, hostname } = body;
-
-    if (!subscription?.endpoint) {
+    if (!pushEnabled()) return NextResponse.json({ error: "off" }, { status: 503 });
+    const host = (req.headers.get("host") || "").split(":")[0].replace(/^www\./, "");
+    const site = getSiteByDomain(host);
+    if (!site) return NextResponse.json({ error: "Unknown site" }, { status: 400 });
+    const { subscription } = await req.json();
+    const s = subscription as { endpoint?: string; keys?: { p256dh?: string; auth?: string } } | undefined;
+    if (!s?.endpoint || !/^https:\/\//.test(s.endpoint) || !s.keys?.p256dh || !s.keys?.auth) {
       return NextResponse.json({ error: "Invalid subscription" }, { status: 400 });
     }
-
-    // Ensure table exists
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS push_subscriptions (
-        id SERIAL PRIMARY KEY,
-        endpoint TEXT UNIQUE NOT NULL,
-        keys_p256dh TEXT,
-        keys_auth TEXT,
-        hostname TEXT,
-        created_at TIMESTAMP DEFAULT NOW()
-      )
-    `);
-
-    await pool.query(
-      `INSERT INTO push_subscriptions (endpoint, keys_p256dh, keys_auth, hostname)
-       VALUES ($1, $2, $3, $4)
-       ON CONFLICT (endpoint) DO UPDATE SET
-         keys_p256dh = $2, keys_auth = $3, hostname = $4`,
-      [
-        subscription.endpoint,
-        subscription.keys?.p256dh || "",
-        subscription.keys?.auth || "",
-        hostname || "",
-      ]
-    );
-
+    await saveSubscriber(site.slug, { endpoint: s.endpoint, keys: { p256dh: s.keys.p256dh, auth: s.keys.auth } }, req.headers.get("user-agent"));
     return NextResponse.json({ ok: true });
   } catch (err) {
-    console.error("Push subscribe error:", err);
-    return NextResponse.json({ error: "Server error" }, { status: 500 });
+    console.error("push subscribe:", err);
+    return NextResponse.json({ error: "Failed" }, { status: 500 });
   }
 }

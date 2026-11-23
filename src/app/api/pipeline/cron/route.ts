@@ -144,6 +144,12 @@ export async function POST(req: NextRequest) {
     actions.push("newsletter");
   }
 
+  // ─── Push notifications: the route keeps to 2 a day per paper, 8 am-9 pm local ───
+  if ((await claimJob("push_auto", 20 * 60)).claimed) {
+    fireAndForgetGet(baseUrl, "pipeline/push-auto", secret);
+    actions.push("push_auto");
+  }
+
   // ─── Submit sitemaps to Google & Bing: daily ───
   if ((await claimJob("submit_sitemaps", 24 * 60 * 60)).claimed) {
     fireAndForget(baseUrl, "admin/submit-sitemaps", {}, secret);
