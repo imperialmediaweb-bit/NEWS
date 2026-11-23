@@ -14,8 +14,10 @@ export default function InBrief({ items, siteName, state, domain, ink, acc }: { 
   const [active, setActive] = useState(0);
   const [hint, setHint] = useState(true);
   const [copied, setCopied] = useState<number | null>(null);
+  const [now, setNow] = useState<number | null>(null);
 
   useEffect(() => {
+    setNow(Date.now());
     const el = box.current; if (!el) return;
     const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { const i = Number((e.target as HTMLElement).dataset.i); setActive(i); if (i > 0) setHint(false); } }), { root: el, threshold: 0.6 });
     el.querySelectorAll("[data-i]").forEach((n) => io.observe(n));
@@ -28,7 +30,7 @@ export default function InBrief({ items, siteName, state, domain, ink, acc }: { 
     return () => { io.disconnect(); document.removeEventListener("keydown", k); };
   }, []);
 
-  const ago = (d: string) => { const h = Math.round((Date.now() - new Date(d).getTime()) / 3600000); return h < 1 ? "Just now" : h < 24 ? `${h}h ago` : `${Math.round(h / 24)}d ago`; };
+  const ago = (d: string) => { if (now === null) return ""; const h = Math.round((now - new Date(d).getTime()) / 3600000); return h < 1 ? "Just now" : h < 24 ? `${h}h ago` : `${Math.round(h / 24)}d ago`; };
   const url = (it: BriefItem) => `https://${domain}${it.href}`;
   async function share(it: BriefItem, i: number) {
     try {
@@ -54,7 +56,7 @@ export default function InBrief({ items, siteName, state, domain, ink, acc }: { 
               <span className="ib-sec">{it.section}</span>
               <h2><a href={it.href}>{it.title}</a></h2>
               {it.summary && <p>{it.summary}</p>}
-              <em>{siteName} · {ago(it.when)}</em>
+              <em>{siteName}{now !== null && ` · ${ago(it.when)}`}</em>
             </div>
             <div className="ib-btns">
               <a href={it.href} aria-label="Read the full story"><i className="ib-read">▤</i>Read</a>
