@@ -63,7 +63,8 @@ export async function searchOpenverse(query: string, sources?: string): Promise<
   if (!query.trim() || Date.now() < pausedUntil) return null;
   const params = new URLSearchParams({
     q: query,
-    license: "by,by-sa,cc0,pdm",
+    // no "pdm": public-domain-mark photos are mostly old archive pictures
+    license: "by,by-sa,cc0",
     // "size" and "aspect_ratio" make the API time out (504); filtered here instead
     mature: "false",
     page_size: "20",
