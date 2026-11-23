@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import pool from "@/lib/db";
-import { siteFromHeaders } from "@/lib/topic-page";
+import { siteFromHeaders, slugOf } from "@/lib/topic-page";
+import { citiesOf } from "@/lib/local-data";
 import { ensureSubmissionsTable } from "@/lib/submissions";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -47,6 +48,12 @@ export default async function ThingsToDoPage() {
       <main className="mx-auto max-w-[1100px] px-4 py-10">
         <h1 className="text-[34px] font-extrabold leading-tight md:text-[46px]">Things to do in {site.state} this weekend</h1>
         <p className="mt-2 max-w-[760px] text-[17px] text-gray-600">Festivals, concerts, fairs, shows and community events across {site.state}. Organizing something? <a href="/submit" className="font-semibold underline">Send us your event</a> for free, or <a href="/promote" className="font-semibold underline">feature it on the homepage</a>.</p>
+
+        <nav aria-label="By city" className="mt-5 flex flex-wrap gap-2">
+          {citiesOf(site.state).map(([n]) => (
+            <a key={n} href={`/things-to-do/${slugOf(n)}`} className="border border-gray-300 bg-white px-3 py-1.5 text-[14px] font-semibold hover:border-gray-900">This weekend in {n}</a>
+          ))}
+        </nav>
 
         {events.length > 0 && (
           <section className="mt-10">
