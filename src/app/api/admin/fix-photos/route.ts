@@ -12,7 +12,7 @@ import { storeImage } from "@/lib/pipeline/image-store";
  */
 export const dynamic = "force-dynamic";
 export const maxDuration = 300;
-const BAD = `(library of congress|national archives|hine|smithsonian|internet archive|nypl|new york public library)`;
+const BAD = `(library of congress|national archives|hine|smithsonian|internet archive|nypl|new york public library|gage skidmore|the white house)`;
 
 export async function GET(req: NextRequest) {
   const p = req.nextUrl.searchParams;

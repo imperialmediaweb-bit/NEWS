@@ -56,7 +56,7 @@ let pausedUntil = 0;
  * documents, maps, logos and scans.
  */
 const BAD_PHOTO = /\b(1[0-8]\d\d|19[0-7]\d)s?\b|child labou?r|lewis hine|vintage|antique|histor(ic|ical|y)|archive|postcard|engraving|lithograph|daguerreotype|tintype|sepia|black and white|b&w|portrait|headshot|selfie|\b(boys?|girls?|child(ren)?|kids?|baby|man|woman|men|women|people|person|family|couple|wedding|funeral|grave|cemetery|nude|crowd)\b|\bmap\b|diagram|chart|logo|flag of|coat of arms|seal of|document|letter|newspaper|scan|screenshot|poster|drawing|painting|illustration/i;
-const BAD_CREATOR = /library of congress|national archives|lewis (wickes )?hine|smithsonian|internet archive|nypl|new york public library/i;
+const BAD_CREATOR = /library of congress|national archives|lewis (wickes )?hine|smithsonian|internet archive|nypl|new york public library|gage skidmore|the white house/i;
 const okPhoto = (r: OvResult) => !BAD_PHOTO.test(`${r.title || ""} ${(r.tags || []).map((t) => t.name || "").join(" ")}`) && !BAD_CREATOR.test(r.creator || "");
 
 export async function searchOpenverse(query: string, sources?: string): Promise<FreeImage | null> {
