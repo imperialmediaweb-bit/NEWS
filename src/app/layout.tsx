@@ -61,6 +61,10 @@ export async function generateMetadata(): Promise<Metadata> {
     robots: {
       index: true,
       follow: true,
+      // large photos in Bing / Microsoft Start too, not only Google Discover
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
       googleBot: {
         index: true,
         follow: true,

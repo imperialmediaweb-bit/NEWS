@@ -464,3 +464,17 @@ article figure img, .pc-article figure img {
   main a img, main a :is(div, span, figure, picture), main a,
   article figure img, .pc-article figure img { transition: none !important; transform: none !important; }
 }
+
+/* reactions under the article text (ArticleReactions) */
+.art-react { margin: 2.2em 0 .5em; padding: 1.2em 1em; text-align: center; border-top: 2px solid var(--fx-acc, #b91c1c); border-bottom: 1px solid rgba(0,0,0,.1); font-family: Inter, system-ui, sans-serif; }
+.art-react-q { margin: 0 0 .7em !important; font-size: 15px !important; font-weight: 800; letter-spacing: .02em; }
+.art-react-row { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; }
+.art-react-row button { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border: 1px solid rgba(0,0,0,.14); border-radius: 999px; background: #fff; cursor: pointer; transition: transform .15s, background .2s, border-color .2s; }
+.art-react-row button span { font-size: 24px; line-height: 1; }
+.art-react-row button b { font-size: 14px; font-weight: 800; color: #333; }
+.art-react-row button:hover { transform: translateY(-2px) scale(1.06); }
+.art-react-row button:active { transform: scale(1.25); }
+.art-react-row button.is-on { background: color-mix(in srgb, var(--fx-acc, #b91c1c) 14%, #fff); border-color: var(--fx-acc, #b91c1c); }
+.art-react-n { margin: .7em 0 0 !important; font-size: 13px !important; opacity: .65; }
+.read-night .art-react-row button { background: #1c1f26; border-color: #3a3f4a; }
+.read-night .art-react-row button b { color: #ddd; }

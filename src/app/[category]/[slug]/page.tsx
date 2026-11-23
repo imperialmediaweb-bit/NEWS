@@ -1,4 +1,5 @@
 import { cache } from "react";
+import ArticleReactions from "@/components/design/ArticleReactions";
 import { Metadata } from "next";
 import { headers } from "next/headers";
 import { notFound, redirect } from "next/navigation";
@@ -449,6 +450,7 @@ export default async function ArticlePage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       {design.family && <ArticleTools />}
+      {design.family && <ArticleReactions id={Number((article as { id?: number }).id)} />}
       {design.family ? (
         <ArticleView
           site={site}
