@@ -6,7 +6,7 @@
 - **49 live news websites**, one for (almost) every US state, each with its **own unique design**, logo and local data
 - **MediaChief (media-chief.com)** — a live press-release marketplace that sells publication across the network ($150–$1,500 packages)
 - **A news engine that runs itself 24/7**: 321 local outlets, official sources (governors, attorneys general, police, city halls) on 33 states, Google Trends per state, every city and county, every pro and college team — rewritten with accuracy safeguards and published automatically
-- **Money features already switched on**: $99 sponsored stories and $25 obituaries paid by card (Stripe), advertise page, daily newsletter per state, alerts & closings pages, AdSense-ready ad slots
+- **Money features already switched on**: $49 sponsored stories and $25 obituaries paid by card (Stripe), advertise page, daily newsletter per state, alerts & closings pages, AdSense-ready ad slots
 - **Search engines already wired in**: Google Search Console and Bing on all 49 sites, IndexNow, Google News sitemaps, city/county/team landing pages, Discover-ready images
 - **Modern custom code** — Next.js 14, TypeScript, PostgreSQL, Cloudflare, Railway — no WordPress, no plugins
 
@@ -20,7 +20,7 @@
 - ✅ AI rewriting every 5 minutes with accuracy safeguards (no invented facts, exact names, legal wording)
 - ✅ Free-licence real photos with credits; images stored and resized on Cloudflare R2
 - ✅ Google Search Console (49 sites), Bing Webmaster (49 sites), IndexNow, Google News sitemaps, structured data
-- ✅ Sponsored stories $99 and obituaries $25 paid by card through Stripe, with editor review and automatic refunds
+- ✅ Sponsored stories $49 and obituaries $25 paid by card through Stripe, with editor review and automatic refunds
 - ✅ Banned-category filter for ads (drugs, pills, gambling, crypto, adult, weapons…)
 - ✅ Daily newsletter per state with double opt-in and one-click unsubscribe
 - ✅ Reader submissions (tips, photos, events, achievements, closings) with email alerts to the owner
@@ -91,7 +91,7 @@ National Weather Service forecasts and alerts · hurricanes (NHC) · earthquakes
 - Trust pages on every site: About, Editorial policy, Corrections, Ethics, Contact (working contact@ address), DMCA, Privacy, Terms, Advertise
 
 ### 8. Revenue features already built and live
-- **Sponsored stories — $99, paid by card (Stripe Checkout)**: the business writes it and pays; the editor publishes it labelled "Sponsored" with rel="sponsored" links, or declines with an automatic full refund
+- **Sponsored stories — $49, paid by card (Stripe Checkout)**: the business writes it and pays; the editor publishes it labelled "Sponsored" with rel="sponsored" links, or declines with an automatic full refund
 - **Obituaries — $25** with photo, same flow
 - Prohibited-category filter before payment (drugs, pills, cannabis, gambling, crypto, payday loans, adult, weapons, tobacco, link selling)
 - **Advertise page** with buy-now by card plus a proposal form for larger campaigns (emailed to the owner)

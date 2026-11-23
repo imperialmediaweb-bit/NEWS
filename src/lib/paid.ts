@@ -7,7 +7,7 @@ import pool from "@/lib/db";
  * reviews it in /admin/paid before it is published, clearly labelled.
  */
 export const PRODUCTS = {
-  sponsored: { name: "Sponsored story", cents: Number(process.env.PRICE_SPONSORED_CENTS || 9900) },
+  sponsored: { name: "Sponsored story", cents: Number(process.env.PRICE_SPONSORED_CENTS || 4900) },
   obituary: { name: "Obituary", cents: Number(process.env.PRICE_OBITUARY_CENTS || 2500) },
 } as const;
 export type Product = keyof typeof PRODUCTS;
