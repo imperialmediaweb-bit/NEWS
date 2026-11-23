@@ -9,6 +9,7 @@ import pool from "@/lib/db";
 export const PRODUCTS = {
   sponsored: { name: "Sponsored story", cents: Number(process.env.PRICE_SPONSORED_CENTS || 4900) },
   obituary: { name: "Obituary", cents: Number(process.env.PRICE_OBITUARY_CENTS || 2500) },
+  featured: { name: "Featured sponsored story (7 days on the homepage)", cents: Number(process.env.PRICE_SPONSORED_CENTS || 4900) + Number(process.env.PRICE_FEATURE_ADDON_CENTS || 10000) },
 } as const;
 export type Product = keyof typeof PRODUCTS;
 

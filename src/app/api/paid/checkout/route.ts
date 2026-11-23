@@ -27,10 +27,10 @@ export async function POST(req: NextRequest) {
   const website = clean(form.get("website"), 300);
   if (title.length < 8 || body.length < 80) return NextResponse.json({ error: "Please add a headline and at least a short paragraph." }, { status: 400 });
   if (!name || !/^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i.test(email)) return NextResponse.json({ error: "Please give your name and a valid email." }, { status: 400 });
-  if (product === "sponsored" && !business) return NextResponse.json({ error: "Please give the business name." }, { status: 400 });
+  if ((product === "sponsored" || product === "featured") && !business) return NextResponse.json({ error: "Please give the business name." }, { status: 400 });
   if (website && !/^https?:\/\//i.test(website)) return NextResponse.json({ error: "The website must start with http:// or https://" }, { status: 400 });
   if (form.get("consent") !== "on") return NextResponse.json({ error: "Please confirm the terms box." }, { status: 400 });
-  if (product === "sponsored") {
+  if (product === "sponsored" || product === "featured") {
     const banned = bannedReason(title, body, business, website);
     if (banned) return NextResponse.json({ error: `We don't publish sponsored content about ${banned}. Nothing was charged.` }, { status: 400 });
   }
@@ -49,22 +49,24 @@ export async function POST(req: NextRequest) {
   await ensurePaidTable();
   const p = PRODUCTS[product];
   // casinos, gaming and 18+ shows are published at the premium price
-  const premium = product === "sponsored" && isPremium(title, body, business, website);
-  const cents = premium ? PREMIUM_CENTS : p.cents;
+  const isSponsored = product === "sponsored" || product === "featured";
+  const premium = isSponsored && isPremium(title, body, business, website);
+  const addon = product === "featured" ? Number(process.env.PRICE_FEATURE_ADDON_CENTS || 10000) : 0;
+  const cents = premium ? PREMIUM_CENTS + addon : p.cents;
   const { rows } = await pool.query(
     `INSERT INTO paid_orders (site_slug, product, title, body, business, website, name, email, photo_url, cents)
      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING id`,
     [site.slug, product, title, body, business || null, website || null, name, email, photoUrl, cents]
   );
   const id = rows[0].id;
-  const back = product === "sponsored" ? "promote" : "obituaries/submit";
+  const back = product === "obituary" ? "obituaries/submit" : "promote";
   const session = await stripe<{ id: string; url: string }>("checkout/sessions", {
     mode: "payment",
     customer_email: email,
     "line_items[0][quantity]": "1",
     "line_items[0][price_data][currency]": "usd",
     "line_items[0][price_data][unit_amount]": String(cents),
-    "line_items[0][price_data][product_data][name]": `${premium ? "Sponsored story (casino, gaming or 18+ entertainment)" : p.name} — ${site.name}`,
+    "line_items[0][price_data][product_data][name]": `${p.name}${premium ? " (casino, gaming or 18+ entertainment)" : ""} — ${site.name}`,
     "metadata[order_id]": String(id),
     "metadata[site]": site.slug,
     success_url: `https://${site.domain}/${back}?paid=1`,

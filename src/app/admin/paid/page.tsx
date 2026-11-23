@@ -29,7 +29,7 @@ async function act(formData: FormData) {
   if (action === "publish") {
     const { rows: s } = await pool.query("SELECT id FROM sites WHERE slug = $1", [o.site_slug]);
     if (!s[0]) return;
-    const sponsored = o.product === "sponsored";
+    const sponsored = o.product === "sponsored" || o.product === "featured";
     const paras = o.body.split(/\n\s*\n/).map((p) => `<p>${esc(p.trim())}</p>`).join("\n");
     const content = sponsored
       ? `<p><em>Sponsored content from ${esc(o.business || o.name)}. ${esc(sites[o.site_slug]?.name || "")} was paid to publish it; the newsroom did not write it.</em></p>\n${paras}${o.website ? `\n<p><a href="${esc(o.website)}" rel="sponsored noopener" target="_blank">Visit ${esc(o.business || "the website")}</a></p>` : ""}`

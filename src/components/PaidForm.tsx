@@ -7,12 +7,13 @@ export default function PaidForm({ product, price, siteName, accent }: { product
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
   const sponsored = product === "sponsored";
+  const [feature, setFeature] = useState(false);
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setBusy(true);
     setErr("");
     const data = new FormData(e.currentTarget);
-    data.set("product", product);
+    data.set("product", sponsored && feature ? "featured" : product);
     try {
       const r = await fetch("/api/paid/checkout", { method: "POST", body: data });
       const j = await r.json().catch(() => ({}));
@@ -45,6 +46,12 @@ export default function PaidForm({ product, price, siteName, accent }: { product
         <label className="block text-[14px] font-semibold">Your name<input name="name" required maxLength={120} className={input} /></label>
         <label className="block text-[14px] font-semibold">Email (for the receipt)<input name="email" type="email" required maxLength={200} className={input} /></label>
       </div>
+      {sponsored && (
+        <label className="flex items-start gap-2 rounded border border-amber-300 bg-amber-50 p-3 text-[14px] text-gray-800">
+          <input type="checkbox" checked={feature} onChange={(e) => setFeature(e.target.checked)} className="mt-1" />
+          <span><b>Feature it on the homepage for 7 days (+$100).</b> Your story appears as a highlighted sponsored card near the top of the front page.</span>
+        </label>
+      )}
       <input name="company_url" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden />
       <label className="flex items-start gap-2 text-[13.5px] text-gray-700">
         <input type="checkbox" name="consent" required className="mt-1" />
@@ -56,7 +63,7 @@ export default function PaidForm({ product, price, siteName, accent }: { product
       </label>
       {err && <p className="text-[14px] font-semibold text-red-700">{err}</p>}
       <button disabled={busy} className="rounded px-6 py-3 text-[15px] font-bold text-white disabled:opacity-60" style={{ background: accent }}>
-        {busy ? "Opening secure payment…" : `Continue to payment — ${price}`}
+        {busy ? "Opening secure payment…" : `Continue to payment — ${sponsored && feature ? `$${Number(price.replace(/[^0-9]/g, "")) + 100}` : price}`}
       </button>
       <p className="text-[12.5px] text-gray-500">Secure card payment by Stripe. Reviewed by an editor within one business day.{sponsored && " Casinos, gaming and 18+ shows are $99; the payment page shows the final price."}</p>
     </form>
