@@ -1,4 +1,5 @@
 import { cache } from "react";
+import { sites } from "@/config/sites";
 import ArticleReactions from "@/components/design/ArticleReactions";
 import { Metadata } from "next";
 import { headers } from "next/headers";
@@ -248,10 +249,16 @@ const getArticleData = cache(async (siteSlug: string, articleSlug: string, domai
           .join("")}</ul></section>`
       : "";
 
+    // business stories: an offer to companies with news of their own (press release, $49)
+    const prState = sites[siteSlug]?.state || "";
+    const prBox = !isSponsored && /business/i.test(String(article.category || ""))
+      ? `\n<aside class="pr-offer"><b>Have company news in ${esc(prState)}?</b> Publish your press release on ${esc(sites[siteSlug]?.name || "")}, live within one business day. <a href="/press-release">Publish a press release ›</a></aside>`
+      : "";
+
     const format = (row: Record<string, unknown>, useEnrichedContent = false) => ({
       title: row.title as string,
       slug: row.slug as string,
-      content: useEnrichedContent ? readingExtras(enrichedContent, article, place) + placeBox + creditLine : ((row.content as string) || ""),
+      content: useEnrichedContent ? readingExtras(enrichedContent, article, place) + placeBox + prBox + creditLine : ((row.content as string) || ""),
       summary: (row.summary as string) || "",
       category: (row.category as string) || "news",
       author: (row.author as string) || "Staff Reporter",

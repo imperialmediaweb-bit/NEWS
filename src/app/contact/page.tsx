@@ -103,7 +103,7 @@ export default function ContactPage() {
                 Have a News Tip?
               </h2>
               <p className="text-gray-400 text-sm mb-4 leading-relaxed">
-                Know about a story we should cover? We welcome news tips from the {site.state} community. Select &quot;News Tips&quot; in the contact form to submit your tip confidentially.
+                Know about a story we should cover? We welcome news tips from the {site.state} community. Select &quot;News Tips&quot; in the contact form to submit your tip confidentially. Companies and PR agencies: to have a press release published as written, use <a href="/press-release" className="font-semibold underline">Publish a press release</a> ($49, live within one business day).
               </p>
             </div>
           </div>

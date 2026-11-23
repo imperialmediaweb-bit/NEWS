@@ -101,6 +101,7 @@ export async function POST(req: NextRequest) {
 <p>Because it promotes sales, tickets or offers, we can't run it as a free news item, but we'd be glad to publish it as a <b>Sponsored story</b> on ${esc(site.name)} for <b>${price}</b>: live within one business day, clearly labelled, with a link to your website.</p>
 <p><a href="https://${site.domain}/promote" style="display:inline-block;padding:10px 18px;background:#b91c1c;color:#fff;text-decoration:none;border-radius:4px">Order your sponsored story</a></p>
 <p>Want more visibility? A <b>Featured</b> story stays on the homepage for 7 days.</p>
+<p>Already have a press release? We can publish it exactly as written, labelled "Press release", for ${price}: <a href="https://${site.domain}/press-release">publish your press release</a>.</p>
 <p>Best regards,<br>${esc(site.name)}</p>`,
       })
       .catch(() => null);

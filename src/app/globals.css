@@ -478,3 +478,8 @@ article figure img, .pc-article figure img {
 .art-react-n { margin: .7em 0 0 !important; font-size: 13px !important; opacity: .65; }
 .read-night .art-react-row button { background: #1c1f26; border-color: #3a3f4a; }
 .read-night .art-react-row button b { color: #ddd; }
+
+/* press release offer under business stories */
+.pr-offer { margin: 2em 0 .5em; padding: 1em 1.2em; border-left: 4px solid var(--fx-acc, #b91c1c); background: rgba(0,0,0,.035); font-family: Inter, system-ui, sans-serif; font-size: 15px !important; line-height: 1.5; }
+.pr-offer a { font-weight: 800; white-space: nowrap; color: var(--fx-acc, #b91c1c); }
+.read-night .pr-offer { background: rgba(255,255,255,.06); }
