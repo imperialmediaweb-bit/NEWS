@@ -9,6 +9,7 @@ import Footer from "@/components/Footer";
 import { generateContent } from "@/data/generate-content";
 import { BizCard, Crumbs, OsmCredit, Stars } from "@/components/directory/parts";
 import ReviewForm from "@/components/directory/ReviewForm";
+import RemoveRequest from "@/components/directory/RemoveRequest";
 
 /**
  * One business. LocalBusiness markup with the specific schema.org type; stars
@@ -125,6 +126,7 @@ export default async function BusinessPage({ params, searchParams }: { params: {
             <p className="mt-1.5 text-[14.5px] opacity-90">{b.claimed ? "Update your details or get to the top of the list with Business Spotlight." : "Claim it free to correct the details, or get Business Spotlight: top of the list for 12 months plus a profile article."}</p>
             <a href={`/directory/join?b=${b.slug}`} className="mt-3 inline-block px-4 py-2.5 text-[14px] font-black" style={{ background: acc }}>{b.claimed ? "Update or upgrade ›" : "Claim this listing ›"}</a>
             <p className="mt-3 text-[13px] opacity-75">Something wrong? <a href={`/contact?subject=${encodeURIComponent(`Directory correction: ${b.name}`)}`} className="underline">Report a change</a></p>
+            <div className="mt-2"><RemoveRequest slug={b.slug} name={b.name} /></div>
           </div>
           {spot && (
             <div className="bg-white p-5 shadow-sm">

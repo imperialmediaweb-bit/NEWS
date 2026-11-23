@@ -15,6 +15,10 @@ async function act(fd: FormData) {
     const { rows } = await pool.query(`UPDATE business_claims SET status = 'rejected' WHERE id = $1 RETURNING business_id`, [id]);
     if (rows[0]) await pool.query(`UPDATE businesses SET status = 'hidden' WHERE id = $1 AND status = 'pending'`, [rows[0].business_id]);
   }
+  if (action === "remove-biz" || action === "keep-biz") {
+    const { rows } = await pool.query(`UPDATE business_removals SET status = $2 WHERE id = $1 AND status = 'pending' RETURNING business_id`, [id, action === "remove-biz" ? "removed" : "kept"]);
+    if (rows[0] && action === "remove-biz") await pool.query(`UPDATE businesses SET status = 'hidden', updated_at = now() WHERE id = $1`, [rows[0].business_id]);
+  }
   if (action === "hide-review") {
     const { rows } = await pool.query(`UPDATE business_reviews SET hidden = TRUE WHERE id = $1 AND NOT hidden AND verified RETURNING business_id, rating`, [id]);
     if (rows[0]) await pool.query(`UPDATE businesses SET rating_sum = rating_sum - $2, rating_count = GREATEST(rating_count - 1, 0) WHERE id = $1`, [rows[0].business_id, rows[0].rating]);
@@ -24,7 +28,8 @@ async function act(fd: FormData) {
 
 export default async function DirectoryAdmin() {
   await dirSchema();
-  const [{ rows: claims }, { rows: reviews }, { rows: imports }, { rows: totals }] = await Promise.all([
+  const [{ rows: removals }, { rows: claims }, { rows: reviews }, { rows: imports }, { rows: totals }] = await Promise.all([
+    pool.query(`SELECT r.*, b.name AS biz, b.city, b.slug, b.site_slug, b.tier FROM business_removals r JOIN businesses b ON b.id = r.business_id WHERE r.status = 'pending' ORDER BY r.created_at DESC`),
     pool.query(`SELECT c.*, b.name AS current_name, b.slug, b.status AS biz_status FROM business_claims c JOIN businesses b ON b.id = c.business_id WHERE c.status = 'pending' AND c.order_id IS NULL ORDER BY c.created_at DESC LIMIT 100`),
     pool.query(`SELECT r.id, r.rating, r.body, r.name, r.created_at, b.name AS biz, b.slug, b.site_slug FROM business_reviews r JOIN businesses b ON b.id = r.business_id WHERE r.verified AND NOT r.hidden ORDER BY r.created_at DESC LIMIT 60`),
     pool.query(`SELECT * FROM directory_imports ORDER BY started_at DESC`),
@@ -34,6 +39,22 @@ export default async function DirectoryAdmin() {
     <div className="mx-auto max-w-[1100px] p-6">
       <h1 className="text-2xl font-bold">Business directory</h1>
       <p className="mt-1 text-sm text-gray-600">{totals[0]?.n ?? 0} businesses · {totals[0]?.claimed ?? 0} claimed · {totals[0]?.paid ?? 0} Spotlight. Paid Spotlights are in <a href="/admin/paid" className="underline">admin / paid</a>.</p>
+
+      <h2 className="mt-8 text-xl font-bold">Removal requests ({removals.length})</h2>
+      <div className="mt-3 space-y-3">
+        {removals.map((r) => (
+          <form key={r.id} action={act} className="rounded border border-red-200 bg-white p-4">
+            <p className="font-bold">{r.biz} · {r.city} · {sites[r.site_slug]?.name}{r.tier !== "free" ? " · ⚠ PAID SPOTLIGHT" : ""}</p>
+            <p className="text-sm">From {r.name} &lt;{r.email}&gt;{r.reason ? `: ${r.reason}` : ""}</p>
+            <input type="hidden" name="id" value={r.id} />
+            <div className="mt-2 flex gap-2">
+              <button name="action" value="remove-biz" className="rounded bg-red-700 px-4 py-1.5 text-sm font-bold text-white">Remove listing</button>
+              <button name="action" value="keep-biz" className="rounded bg-gray-500 px-4 py-1.5 text-sm font-bold text-white">Keep</button>
+            </div>
+          </form>
+        ))}
+        {!removals.length && <p className="text-sm text-gray-500">None.</p>}
+      </div>
 
       <h2 className="mt-8 text-xl font-bold">Claims and free listings to check ({claims.length})</h2>
       <div className="mt-3 space-y-3">

@@ -53,6 +53,10 @@ export function dirSchema() {
       data JSONB NOT NULL, name TEXT NOT NULL, email TEXT NOT NULL, status VARCHAR(20) NOT NULL DEFAULT 'pending', order_id INT,
       created_at TIMESTAMPTZ NOT NULL DEFAULT now()
     );
+    CREATE TABLE IF NOT EXISTS business_removals (
+      id SERIAL PRIMARY KEY, business_id INT NOT NULL REFERENCES businesses(id) ON DELETE CASCADE, name TEXT NOT NULL, email TEXT NOT NULL,
+      reason TEXT, status VARCHAR(20) NOT NULL DEFAULT 'pending', created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    );
     CREATE TABLE IF NOT EXISTS directory_imports (
       state VARCHAR(4) PRIMARY KEY, status TEXT, found INT, saved INT, started_at TIMESTAMPTZ, finished_at TIMESTAMPTZ, error TEXT
     );
