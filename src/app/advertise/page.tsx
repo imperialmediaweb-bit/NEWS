@@ -20,8 +20,8 @@ function getSiteFromHeaders() {
 export async function generateMetadata(): Promise<Metadata> {
   const site = getSiteFromHeaders();
   return {
-    title: "Advertise With Us",
-    description: `Advertise on ${site.name}. Reach ${site.state} readers with targeted display ads, native content, and sponsored articles. Part of the MediaChief 50-state network.`,
+    title: `Advertise in ${site.state}: Rates for Sponsored Stories, Press Releases & Local Listings`,
+    description: `Advertise on ${site.name}: sponsored story $49, press release $49, Business Spotlight $49, obituary $25. Pay by card, live within one business day. Reach ${site.state} readers.`,
     alternates: { canonical: `https://${site.domain}/advertise` },
   };
 }
@@ -30,8 +30,22 @@ export default function AdvertisePage() {
   const site = getSiteFromHeaders();
   const content = generateContent(site);
 
+  const faqs: Array<[string, string]> = [
+    [`How much does it cost to advertise on ${site.name}?`, `A sponsored story is $49, a press release $49, a Business Spotlight in the ${site.state} business directory $49 for 12 months, and an obituary $25. Casino and 18+ venues pay $99. Featuring a sponsored story on the homepage for 7 days adds $100.`],
+    [`How fast does my ad go live?`, `Within one business day after payment. Every order is reviewed by our staff; if we decline it, you get a full refund.`],
+    [`Is sponsored content labelled?`, `Yes. Under U.S. FTC rules, paid stories and press releases are clearly labelled, and their links are marked as sponsored.`],
+    [`Can I advertise in all 50 states at once?`, `Yes. Through MediaChief, one article can be published on all 50 state papers of the network for $149.`],
+    [`What can't be advertised?`, `Cannabis, CBD or vaping, drugs, pills or supplements, crypto or investment offers, payday loans, adult content, weapons, tobacco and SEO link selling.`],
+  ];
+  const ld = [
+    { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faqs.map(([q, a]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } })) },
+    { "@context": "https://schema.org", "@type": "OfferCatalog", name: `Advertising on ${site.name}`, itemListElement: [
+      ["Sponsored story", "49.00", "/promote"], ["Press release", "49.00", "/press-release"], ["Business Spotlight (12 months)", "49.00", "/directory/join"], ["Obituary", "25.00", "/obituaries/submit"],
+    ].map(([name, price, path]) => ({ "@type": "Offer", name, price, priceCurrency: "USD", url: `https://${site.domain}${path}` })) },
+  ];
   return (
     <div className="min-h-screen bg-[#f5f5f5]">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
       <Header site={site} />
 
       <div className="bg-black text-white">
@@ -42,7 +56,7 @@ export default function AdvertisePage() {
             <span className="text-white">Advertise</span>
           </nav>
           <h1 className="text-3xl md:text-5xl" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 900 }}>
-            Advertise With Us
+            Advertise in {site.state} on {site.name}
           </h1>
           <p className="text-gray-400 mt-2 text-sm">Reach {site.state} readers through {site.name}</p>
         </div>
@@ -149,6 +163,13 @@ export default function AdvertisePage() {
             </p>
 
           </div>
+
+          <section className="mt-10">
+            <h2 className="text-[24px] font-extrabold">Advertising questions</h2>
+            <div className="mt-3 divide-y border-y bg-white">
+              {faqs.map(([q, a]) => <details key={q} className="p-4"><summary className="cursor-pointer text-[16.5px] font-bold">{q}</summary><p className="mt-2 text-[15.5px] text-gray-700">{a}</p></details>)}
+            </div>
+          </section>
 
           {/* The page described four products and offered no way to order any
               of them, so every enquiry depended on a reader hunting down an
