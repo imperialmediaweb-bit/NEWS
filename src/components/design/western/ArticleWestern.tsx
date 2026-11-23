@@ -102,7 +102,7 @@ export default function ArticleWestern({
             </figure>
           )}
           <p className={`${zilla.className} mx-auto mt-8 max-w-[700px] text-[14px] font-bold tracking-[.08em]`}>{b.dateline} —</p>
-          <div className={`${zilla.className} pc-article mx-auto max-w-[700px]`} dangerouslySetInnerHTML={{ __html: html }} />
+          <div className={`${zilla.className} pc-article first-cap mx-auto max-w-[700px]`} dangerouslySetInnerHTML={{ __html: html }} />
           <WRule className="mx-auto mt-10 max-w-[700px]" />
           <div className="mx-auto mt-4 flex max-w-[700px] flex-wrap items-center justify-between gap-4">
             <p className={`${zilla.className} text-[18px] italic`}>Have a tip about this story? <a href="/submit" className="font-bold not-italic text-[var(--ws-acc)]">Tell our newsroom ›</a></p>

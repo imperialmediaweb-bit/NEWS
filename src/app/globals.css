@@ -383,3 +383,11 @@ a.group:hover [class*="leading-"]:not(.pc-zoom) { text-decoration: underline; te
 @media (prefers-reduced-motion: reduce) { .x-numbers, .ws-band::before, .pc-footer { animation: none; } }
 .x-sig { margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw); background: radial-gradient(ellipse at 85% 0%, color-mix(in srgb, var(--x-acc) 40%, transparent), transparent 55%), linear-gradient(135deg, var(--x-ink), color-mix(in srgb, var(--x-ink) 65%, #000)); background-size: 200% 200%; animation: x-aurora 18s ease-in-out infinite alternate; }
 @media (prefers-reduced-motion: reduce) { .x-sig { animation: none; } }
+
+/* reading comfort on every article design */
+.pc-article, article .prose, article [class*="article"] { font-size: calc(1em * var(--article-scale, 1)); }
+.pull-quote { margin: 1.6em 0; padding: .2em 0 .2em 1em; border-left: 5px solid currentColor; font-size: 1.45em; line-height: 1.35; font-weight: 700; font-style: italic; opacity: .92; }
+.pull-quote cite { display: block; margin-top: .5em; font-size: .55em; font-style: normal; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; opacity: .7; }
+.at-a-glance { margin: 0 0 1.4em; padding: .9em 1.1em; border: 1px solid currentColor; border-left-width: 5px; font-size: .82em; line-height: 1.55; }
+.at-a-glance b { text-transform: uppercase; letter-spacing: .06em; font-size: .85em; margin-right: .4em; }
+.pc-dropcap > p:first-of-type::first-letter, .first-cap > p:first-of-type::first-letter { float: left; font-size: 3.6em; line-height: .85; font-weight: 800; padding: .06em .1em 0 0; }

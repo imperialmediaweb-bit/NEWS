@@ -16,6 +16,7 @@ import ArticleWestern from "@/components/design/western/ArticleWestern";
 import ArticleGazette from "@/components/design/gazette/ArticleGazette";
 import { getSiteByDomain, getActiveSite } from "@/config/sites";
 import pool from "@/lib/db";
+import ArticleTools from "@/components/design/ArticleTools";
 import { PLACES } from "@/lib/pipeline/relevance";
 import { getSiteId } from "@/lib/site-id";
 import ArticlePageClient from "@/components/ArticlePageClient";
@@ -117,6 +118,30 @@ function samePlace(title: string, place: string): boolean {
   return false;
 }
 
+/**
+ * Reading extras built only from the story itself: an "At a glance" line
+ * (place, section, date) and a pull quote copied word for word from a quote in
+ * the text, placed after the third paragraph.
+ */
+function readingExtras(html: string, article: Record<string, unknown>, place: string | null): string {
+  const esc = (x: string) => x.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const when = article.published_at ? new Date(String(article.published_at)).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }) : "";
+  const section = String(article.category || "").replace(/-/g, " ");
+  const bits = [place ? `<b>Where</b>${esc(place.replace(/\b\w/g, (c) => c.toUpperCase()))}` : "", section ? `<b>Section</b>${esc(section)}` : "", when ? `<b>Published</b>${esc(when)}` : ""].filter(Boolean);
+  const glance = bits.length >= 2 ? `<div class="at-a-glance">${bits.join(" &nbsp;·&nbsp; ")}</div>` : "";
+  const text = html.replace(/<[^>]+>/g, " ");
+  const q = text.match(/[“"]([^”"]{70,220})[”"]/);
+  let out = html;
+  if (q) {
+    const paras = out.split("</p>");
+    if (paras.length > 5) {
+      paras[2] += `</p><blockquote class="pull-quote">“${esc(q[1].trim())}”</blockquote`;
+      out = paras.join("</p>").replace("</blockquote</p>", "</blockquote>");
+    }
+  }
+  return glance + out;
+}
+
 const getArticleData = cache(async (siteSlug: string, articleSlug: string, domain: string) => {
   try {
     const siteId = await getSiteId(siteSlug);
@@ -200,7 +225,7 @@ const getArticleData = cache(async (siteSlug: string, articleSlug: string, domai
     const format = (row: Record<string, unknown>, useEnrichedContent = false) => ({
       title: row.title as string,
       slug: row.slug as string,
-      content: useEnrichedContent ? enrichedContent + placeBox + creditLine : ((row.content as string) || ""),
+      content: useEnrichedContent ? readingExtras(enrichedContent, article, place) + placeBox + creditLine : ((row.content as string) || ""),
       summary: (row.summary as string) || "",
       category: (row.category as string) || "news",
       author: (row.author as string) || "Staff Reporter",
@@ -403,6 +428,7 @@ export default async function ArticlePage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
+      {design.family && <ArticleTools />}
       {design.family ? (
         <ArticleView
           site={site}
