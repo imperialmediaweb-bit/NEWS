@@ -1,4 +1,5 @@
 import type { SiteConfig } from "@/config/site-config";
+import StateBand from "../StateBand";
 import PremiumFx from "../extras/PremiumFx";
 import { NAV as PNAV_ALL } from "../live/shared";
 import type { HomeArticle } from "@/lib/homepage-data";
@@ -72,6 +73,7 @@ export default function ArticleDark({ site, article, categorySlug, related, late
       <ReadingProgress target="#dk-story" />
       <DkTopBar site={site} capital={forecast?.now} />
       <DkHeader site={site} MobileMenu={MobileMenu} compact active={categorySlug} />
+      <StateBand site={site} categorySlug={categorySlug} />
 
       <header className={`${W} pt-10`}>
         <a href={`/${categorySlug}`}><DLabel>{categoryLabel}</DLabel></a>

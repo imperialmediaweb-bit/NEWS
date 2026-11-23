@@ -1,4 +1,5 @@
 import type { SiteConfig } from "@/config/site-config";
+import StateBand from "../StateBand";
 import PremiumFx from "../extras/PremiumFx";
 import { NAV as PNAV_ALL } from "../live/shared";
 import type { HomeArticle } from "@/lib/homepage-data";
@@ -88,6 +89,7 @@ export default function ArticlePeach({
       <ReadingProgress target="#pc-story" />
       <PeachTopBar site={site} capital={forecast?.now} />
       <PeachHeader site={site} MobileMenu={MobileMenu} compact active={categorySlug} />
+      <StateBand site={site} categorySlug={categorySlug} />
 
       {/* magazine opening: the photo full width, the headline on it */}
       <section className={`relative overflow-hidden bg-[var(--pc-ink)] text-white ${img ? "pc-parallax min-h-[560px] md:min-h-[680px]" : ""}`}>

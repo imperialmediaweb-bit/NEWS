@@ -1,4 +1,5 @@
 import type { SiteConfig } from "@/config/site-config";
+import StateBand from "../StateBand";
 import PremiumFx from "../extras/PremiumFx";
 import { NAV as PNAV_ALL } from "../live/shared";
 import type { HomeArticle } from "@/lib/homepage-data";
@@ -80,6 +81,7 @@ export default function ArticleGazette({
       <ReadingProgress target="#gz-story" />
       <GzTopBar site={site} capital={forecast?.now} />
       <GzHeader site={site} MobileMenu={MobileMenu} active={categorySlug} />
+      <StateBand site={site} categorySlug={categorySlug} />
 
       <div className={`${W} pt-6`}>
         <nav aria-label="Breadcrumb" className="mb-3 text-[13px] text-[#777]"><a href="/" className="hover:text-[var(--gz-acc)]">Home</a> » <a href={`/${categorySlug}`} className="hover:text-[var(--gz-acc)]">{categoryLabel}</a></nav>

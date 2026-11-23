@@ -1,4 +1,5 @@
 import type { SiteConfig } from "@/config/site-config";
+import StateBand from "../StateBand";
 import PremiumFx from "../extras/PremiumFx";
 import { NAV as PNAV_ALL } from "../live/shared";
 import type { HomeArticle } from "@/lib/homepage-data";
@@ -79,6 +80,7 @@ export default function ArticleMagazine({
       <ReadingProgress target="#mg-story" />
       <MagTopBar site={site} capital={forecast?.now} />
       <MagHeader site={site} MobileMenu={MobileMenu} compact active={categorySlug} />
+      <StateBand site={site} categorySlug={categorySlug} />
 
       <header className="mx-auto max-w-[920px] px-4 pt-10 text-center">
         <a href={`/${categorySlug}`}><Label>{categoryLabel}</Label></a>

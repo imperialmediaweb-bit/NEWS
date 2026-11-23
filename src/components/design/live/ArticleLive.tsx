@@ -1,4 +1,5 @@
 import type { SiteConfig } from "@/config/site-config";
+import StateBand from "../StateBand";
 import PremiumFx from "../extras/PremiumFx";
 import { NAV as PNAV_ALL } from "../live/shared";
 import type { HomeArticle } from "@/lib/homepage-data";
@@ -127,6 +128,7 @@ export default function ArticleLive({
           </a>
         </div>
       </header>
+      <StateBand site={site} categorySlug={categorySlug} />
 
       {/* breaking bar */}
       {breaking && (

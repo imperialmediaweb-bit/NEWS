@@ -1,4 +1,6 @@
 import { headers } from "next/headers";
+import { mockupOf } from "@/config/design-cfg";
+import StoryCards from "@/components/design/StoryCards";
 import { getSiteByDomain, getActiveSite } from "@/config/sites";
 import { getHomepageArticles } from "@/lib/homepage-data";
 import HomeClient from "@/components/HomeClient";
@@ -95,7 +97,8 @@ export default async function Home({ searchParams }: Props) {
     ]);
     const sections = Object.fromEntries(SECTIONS.map((c, i) => [c, (lists[i] as Awaited<ReturnType<typeof getCategoryArticles>>).articles]));
     const Home = { peach: HomePeach, tabloid: HomeTabloid, magazine: HomeMagazine, broadsheet: HomeBroadsheet, coastal: HomeCoastal, dark: HomeDark, western: HomeWestern, gazette: HomeGazette, live: HomeLive }[design.family];
-    return <Home site={site} articles={articles} weather={weather} storms={storms} counties={countiesOf(site.state)} sections={sections} alerts={alerts} gas={gas} lottery={lottery} airports={airports} launches={launches} quakes={quakes} fires={fires} outline={outlineOf(site.state)} subway={subway} volcanoes={volcanoes} buoys={buoys} uv={uv} snow={snow} drought={drought} signature={signature} />;
+    const mk = mockupOf(site.slug);
+    return <><StoryCards ink={mk?.ink || "#14213d"} acc={mk?.acc || site.accent || "#b91c1c"} state={site.state} /><Home site={site} articles={articles} weather={weather} storms={storms} counties={countiesOf(site.state)} sections={sections} alerts={alerts} gas={gas} lottery={lottery} airports={airports} launches={launches} quakes={quakes} fires={fires} outline={outlineOf(site.state)} subway={subway} volcanoes={volcanoes} buoys={buoys} uv={uv} snow={snow} drought={drought} signature={signature} /></>;
   }
 
   return <HomeClient site={site} articles={articles} />;

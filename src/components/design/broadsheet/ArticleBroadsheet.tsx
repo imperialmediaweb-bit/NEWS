@@ -1,4 +1,5 @@
 import type { SiteConfig } from "@/config/site-config";
+import StateBand from "../StateBand";
 import PremiumFx from "../extras/PremiumFx";
 import { NAV as PNAV_ALL } from "../live/shared";
 import type { HomeArticle } from "@/lib/homepage-data";
@@ -80,6 +81,7 @@ export default function ArticleBroadsheet({
       <ReadingProgress target="#bs-story" />
       <BsTopBar site={site} capital={forecast?.now} />
       <BsHeader site={site} MobileMenu={MobileMenu} compact active={categorySlug} />
+      <StateBand site={site} categorySlug={categorySlug} />
 
       <div className={`${W} mt-8 grid gap-10 lg:grid-cols-[minmax(0,1fr)_320px]`}>
         <article id="bs-story" className="min-w-0">
