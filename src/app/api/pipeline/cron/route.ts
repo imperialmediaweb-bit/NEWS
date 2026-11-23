@@ -144,6 +144,12 @@ export async function POST(req: NextRequest) {
     actions.push("newsletter");
   }
 
+  // ─── Directory: continue / start OpenStreetMap imports (resumable) ───
+  if ((await claimJob("directory_import", 5 * 60)).claimed) {
+    fireAndForgetGet(baseUrl, "pipeline/directory-import", secret);
+    actions.push("directory_import");
+  }
+
   // ─── Business Spotlight profiles go live 24 hours after payment ───
   if ((await claimJob("spotlight_publish", 30 * 60)).claimed) {
     fireAndForgetGet(baseUrl, "pipeline/spotlight-publish", secret);

@@ -53,5 +53,5 @@ export function Crumbs({ items, domain }: { items: Array<[string, string]>; doma
 }
 
 export const OsmCredit = () => (
-  <p className="mt-10 text-[12.5px] text-gray-500">Some business details come from <a href="https://www.openstreetmap.org/copyright" className="underline" rel="noopener" target="_blank">OpenStreetMap</a> contributors (ODbL) and may be out of date. Owners can claim and correct their listing for free.</p>
+  <p className="mt-10 text-[12.5px] text-gray-500">Some business details come from <a href="https://www.openstreetmap.org/copyright" className="underline" rel="noopener" target="_blank">OpenStreetMap</a> contributors (ODbL) and may be out of date. Owners can claim, correct or remove their listing for free. <a href="/directory/terms" className="underline">Directory terms &amp; data sources</a>.</p>
 );

@@ -154,7 +154,7 @@ export default function JoinForm({ siteName, state, cities, initial, prices }: {
         <input name="company_url" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden />
         <label className="mt-4 flex items-start gap-2 text-[14px]">
           <input type="checkbox" name="consent" required className="mt-1" />
-          <span>I own or manage this business, the details are true, and I understand {tier === "free" ? "the listing is checked before it goes live" : `Spotlight is a one-time payment of ${tier === "spotlight" ? prices.spotlight : prices.home}, the article is labelled as sponsored and goes live within 24 hours unless ${siteName} declines it (full refund)`}.</span>
+          <span>I own or manage this business, the details are true, and I understand {tier === "free" ? "the listing is checked before it goes live" : `Spotlight is a one-time payment of ${tier === "spotlight" ? prices.spotlight : prices.home}, the article is labelled as sponsored and goes live within 24 hours unless ${siteName} declines it (full refund)`}. I agree to the <a href="/directory/terms" target="_blank" className="underline">directory terms</a>.</span>
         </label>
         {msg && <p className={`mt-4 p-3 text-[14.5px] font-semibold ${msg.ok ? "bg-green-50 text-green-800" : "bg-red-50 text-red-800"}`}>{msg.text}</p>}
         <button disabled={busy} className="mt-4 w-full bg-gray-900 px-6 py-4 text-[17px] font-black uppercase tracking-wider text-white disabled:opacity-60">

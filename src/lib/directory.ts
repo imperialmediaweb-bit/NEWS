@@ -60,6 +60,8 @@ export function dirSchema() {
     CREATE TABLE IF NOT EXISTS directory_imports (
       state VARCHAR(4) PRIMARY KEY, status TEXT, found INT, saved INT, started_at TIMESTAMPTZ, finished_at TIMESTAMPTZ, error TEXT
     );
+    ALTER TABLE directory_imports ADD COLUMN IF NOT EXISTS groups_done TEXT[] NOT NULL DEFAULT '{}';
+    ALTER TABLE directory_imports ADD COLUMN IF NOT EXISTS heartbeat TIMESTAMPTZ;
   `).catch((e) => { ready = null; throw e; });
   return ready;
 }
@@ -154,14 +156,22 @@ export async function importState(abbr: string): Promise<{ found: number; saved:
   await dirSchema();
   const site = Object.values(sites).find((s) => s.stateAbbr === abbr);
   if (!site) throw new Error(`unknown state ${abbr}`);
-  await pool.query(`INSERT INTO directory_imports (state, status, started_at) VALUES ($1, 'running', now())
-    ON CONFLICT (state) DO UPDATE SET status = 'running', started_at = now(), finished_at = NULL, error = NULL`, [abbr]);
+  // resumable: a redeploy mid-import continues from the last finished category group
+  const { rows: prev } = await pool.query(`SELECT status, groups_done, found, saved FROM directory_imports WHERE state = $1`, [abbr]);
+  const resume = prev[0] && ["running", "queued"].includes(prev[0].status);
+  await pool.query(`INSERT INTO directory_imports (state, status, started_at, heartbeat) VALUES ($1, 'running', now(), now())
+    ON CONFLICT (state) DO UPDATE SET status = 'running', heartbeat = now(), finished_at = NULL, error = NULL,
+      started_at = CASE WHEN $2 THEN directory_imports.started_at ELSE now() END,
+      groups_done = CASE WHEN $2 THEN directory_imports.groups_done ELSE '{}' END`, [abbr, !!resume]);
+  const done: string[] = resume ? prev[0].groups_done || [] : [];
   const cities = citiesOf(site.state);
-  let found = 0, saved = 0;
+  let found = resume ? prev[0].found || 0 : 0, saved = resume ? prev[0].saved || 0 : 0;
   try {
     // one query per category group keeps each response a reasonable size
     const groups = Array.from(new Set(DIR_CATEGORIES.map((c) => c.group)));
     for (const g of groups) {
+      if (done.includes(g)) continue;
+      await pool.query(`UPDATE directory_imports SET heartbeat = now() WHERE state = $1`, [abbr]);
       const filters = Array.from(new Set(DIR_CATEGORIES.filter((c) => c.group === g).flatMap((c) => c.osm)));
       const parts = filters.map((f) => { const [k, v] = f.split("="); return `nwr(area.s)["name"]["${k}"="${v}"];`; }).join("");
       const q = `[out:json][timeout:600];area["ISO3166-2"="US-${abbr}"][admin_level=4]->.s;(${parts});out center tags;`;
@@ -204,7 +214,7 @@ export async function importState(abbr: string): Promise<{ found: number; saved:
           saved++;
         }
       }
-      await pool.query(`UPDATE directory_imports SET found = $2, saved = $3 WHERE state = $1`, [abbr, found, saved]);
+      await pool.query(`UPDATE directory_imports SET found = $2, saved = $3, heartbeat = now(), groups_done = array_append(groups_done, $4) WHERE state = $1`, [abbr, found, saved, g]);
       await new Promise((res) => setTimeout(res, 8000)); // be polite to the public Overpass server
     }
     await pool.query(`UPDATE directory_imports SET status = 'done', found = $2, saved = $3, finished_at = now() WHERE state = $1`, [abbr, found, saved]);
@@ -232,6 +242,27 @@ export async function applyClaim(claimId: number) {
   await pool.query(`UPDATE businesses SET ${sets.join(", ")}, claimed = TRUE, status = 'active', source = CASE WHEN source = 'osm' THEN 'osm+owner' ELSE source END, updated_at = now() WHERE id = $1`, args);
   await pool.query(`UPDATE business_claims SET status = 'applied' WHERE id = $1`, [claimId]);
   return true;
+}
+
+/** Queue states for import; the cron works through the queue one state at a time. */
+export async function queueImports(states: string[]) {
+  await dirSchema();
+  for (const s of states) await pool.query(`INSERT INTO directory_imports (state, status, groups_done) VALUES ($1, 'queued', '{}')
+    ON CONFLICT (state) DO UPDATE SET status = 'queued', groups_done = '{}', found = 0, saved = 0, error = NULL, finished_at = NULL`, [s]);
+}
+
+let importing = false;
+/** Cron tick: continue an interrupted import, or start the next queued state. */
+export async function importTick(): Promise<string | null> {
+  if (importing) return "busy";
+  await dirSchema();
+  const { rows } = await pool.query(`SELECT state FROM directory_imports
+    WHERE status = 'queued' OR (status = 'running' AND (heartbeat IS NULL OR heartbeat < now() - interval '45 minutes'))
+    ORDER BY (status = 'running') DESC, started_at NULLS LAST LIMIT 1`);
+  if (!rows[0]) return null;
+  importing = true;
+  importState(rows[0].state).catch((e) => console.error("directory import", rows[0].state, e)).finally(() => { importing = false; });
+  return rows[0].state;
 }
 
 export { catBySlug };
