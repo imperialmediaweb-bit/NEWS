@@ -9,6 +9,8 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { generateContent } from "@/data/generate-content";
 import { OwnerLogin, ReplyBox } from "@/components/directory/OwnerTools";
+import SiteEditor from "@/components/directory/SiteEditor";
+import { bizSiteFor, isLive } from "@/lib/business-site";
 
 /**
  * Owner dashboard (sign-in by emailed link): for each listing the email has
@@ -41,13 +43,16 @@ export default async function Owner({ searchParams }: { searchParams: { t?: stri
     );
   }
   const items = await Promise.all(own.businesses.map(async (b: Record<string, never>) => {
-    const [stats, ranking, { rows: reviews }] = await Promise.all([
+    const [stats, ranking, { rows: reviews }, bsite, { rows: questions }, { rows: leads }] = await Promise.all([
       ownerStats(b.id as number),
       rank(site.slug, b.city_slug, b.category).catch(() => []),
       pool.query(`SELECT id, rating, body, name, owner_reply, created_at FROM business_reviews WHERE business_id = $1 AND verified AND NOT hidden ORDER BY created_at DESC LIMIT 30`, [b.id]),
+      bizSiteFor(b.id as number).catch(() => null),
+      pool.query(`SELECT q, answered, created_at FROM business_ai_questions WHERE business_id = $1 ORDER BY created_at DESC LIMIT 25`, [b.id]).catch(() => ({ rows: [] })),
+      pool.query(`SELECT name, email, phone, message, created_at FROM business_leads WHERE business_id = $1 ORDER BY created_at DESC LIMIT 20`, [b.id]).catch(() => ({ rows: [] })),
     ]);
     const pos = ranking.findIndex((r) => r.name.toLowerCase() === String(b.name).toLowerCase());
-    return { b, stats, pos: ranking.length >= 5 ? pos : -1, reviews };
+    return { b, stats, pos: ranking.length >= 5 ? pos : -1, reviews, bsite, questions, leads };
   }));
   const tile = (label: string, n: number | undefined, icon: string) => (
     <div className="bg-white p-4 shadow-sm"><p className="text-[12px] font-bold uppercase tracking-wider text-gray-500">{icon} {label}</p><p className="mt-1 text-[30px] font-black">{n || 0}</p></div>
@@ -63,7 +68,7 @@ export default async function Owner({ searchParams }: { searchParams: { t?: stri
       </section>
       <main className="mx-auto max-w-[1000px] space-y-12 px-4 py-9">
         {items.length === 0 && <p>No claimed listings for this email on {site.name}.</p>}
-        {items.map(({ b, stats, pos, reviews }) => {
+        {items.map(({ b, stats, pos, reviews, bsite, questions, leads }) => {
           const cat = catBySlug(b.category as string);
           const badgeUrl = `https://${site.domain}/api/directory/top10?b=${b.slug}`;
           const pageUrl = `https://${site.domain}/directory/listing/${b.slug}`;
@@ -80,6 +85,20 @@ export default async function Owner({ searchParams }: { searchParams: { t?: stri
                   {[["Google", stats.from_google], ["Bing / Yahoo / DuckDuckGo", stats.from_bing], ["ChatGPT", stats.from_chatgpt], ["Perplexity", stats.from_perplexity], ["Social media", stats.from_social], ["Your QR sign", stats.from_qr], ["Other sites", stats.from_other]].map(([l, n]) => <span key={l as string}><b>{(n as number) || 0}</b> {l}</span>)}
                 </div>
               </div>
+              <div className="mt-5"><SiteEditor token={searchParams.t!} businessId={b.id as number} acc={acc} live={!!bsite && isLive(bsite)} initial={bsite ? { slug: bsite.slug, status: bsite.status, theme: bsite.theme, accent: bsite.accent, tagline: bsite.tagline, about: bsite.about, services: bsite.services, faqs: bsite.faqs, gallery: bsite.gallery, hero_url: bsite.hero_url, cta_label: bsite.cta_label, contact_email: bsite.contact_email } : null} /></div>
+              {(questions.length > 0 || leads.length > 0) && (
+                <div className="mt-5 grid gap-5 md:grid-cols-2">
+                  <div className="bg-white p-4 shadow-sm">
+                    <p className="text-[12px] font-bold uppercase tracking-wider text-gray-500">What customers asked the AI</p>
+                    <ul className="mt-2 space-y-1.5 text-[14px]">{questions.map((q: { q: string; answered: boolean }, i: number) => <li key={i}>{q.answered ? "✅" : "❓"} {q.q}</li>)}</ul>
+                    {questions.some((q: { answered: boolean }) => !q.answered) && <p className="mt-2 text-[12.5px] text-gray-500">❓ = your page didn&apos;t have the answer. Add it to your website&apos;s questions.</p>}
+                  </div>
+                  <div className="bg-white p-4 shadow-sm">
+                    <p className="text-[12px] font-bold uppercase tracking-wider text-gray-500">Messages from your website</p>
+                    {leads.length ? <ul className="mt-2 space-y-2 text-[14px]">{leads.map((l: { name: string; email: string | null; phone: string | null; message: string }, i: number) => <li key={i} className="border-b pb-2"><b>{l.name}</b> {l.email || ""} {l.phone || ""}<br />{l.message}</li>)}</ul> : <p className="mt-2 text-[14px] text-gray-500">None yet.</p>}
+                  </div>
+                </div>
+              )}
               <div className="mt-5 grid gap-5 md:grid-cols-[1fr_260px]">
                 <div>
                   <h3 className="text-[19px] font-black">Reviews ({reviews.length})</h3>

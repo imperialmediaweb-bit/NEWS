@@ -17,6 +17,24 @@ export async function POST(req: NextRequest) {
   // a directory listing's subscription ended (cancelled or unpaid): take it off the site
   if (event.type === "customer.subscription.deleted") {
     await pool.query("UPDATE paid_orders SET status = 'ended' WHERE stripe_subscription = $1 AND product = 'listing'", [event.data.object.id]);
+    await pool.query("UPDATE business_sites SET status = 'canceled' WHERE stripe_subscription = $1", [event.data.object.id]).catch(() => null);
+    return NextResponse.json({ ok: true });
+  }
+  // a failed renewal pauses the Business Website until it is paid
+  if (event.type === "invoice.payment_failed") {
+    const sub = (event.data.object as unknown as { subscription?: string }).subscription;
+    if (sub) await pool.query("UPDATE business_sites SET status = 'past_due' WHERE stripe_subscription = $1", [sub]).catch(() => null);
+    return NextResponse.json({ ok: true });
+  }
+  if (event.type === "invoice.paid") {
+    const sub = (event.data.object as unknown as { subscription?: string }).subscription;
+    if (sub) await pool.query("UPDATE business_sites SET status = 'active' WHERE stripe_subscription = $1 AND status IN ('past_due', 'active')", [sub]).catch(() => null);
+    return NextResponse.json({ ok: true });
+  }
+  // Business Website subscription started
+  if (event.type === "checkout.session.completed" && event.data.object.metadata?.kind === "business_site") {
+    await pool.query("UPDATE business_sites SET status = 'active', plan = $2, stripe_subscription = $3, updated_at = now() WHERE business_id = $1",
+      [Number(event.data.object.metadata.business_id), event.data.object.metadata.plan || "month", event.data.object.subscription || null]).catch(() => null);
     return NextResponse.json({ ok: true });
   }
   if (event.type !== "checkout.session.completed" || event.data.object.payment_status !== "paid") return NextResponse.json({ ok: true });

@@ -13,6 +13,7 @@ import { BizCard, Crumbs, OsmCredit, Stars } from "@/components/directory/parts"
 import ReviewForm from "@/components/directory/ReviewForm";
 import RemoveRequest from "@/components/directory/RemoveRequest";
 import AskBiz from "@/components/directory/AskBiz";
+import { bizSiteFor, isLive } from "@/lib/business-site";
 import BizTracker from "@/components/directory/BizTracker";
 
 /**
@@ -55,6 +56,8 @@ export default async function BusinessPage({ params, searchParams }: { params: {
     storiesAbout(site.slug, b.name).catch(() => []),
   ]);
   const deals = await liveDeals(site.slug, { businessId: b.id }).catch(() => []);
+  const bsite = await bizSiteFor(b.id).catch(() => null);
+  const siteLive = !!bsite && isLive(bsite);
   const m = mockupOf(site.slug);
   const ink = m?.ink || "#14213d", acc = m?.acc || site.accent || "#b91c1c";
   const spot = isSpotlight(b);
@@ -138,6 +141,7 @@ export default async function BusinessPage({ params, searchParams }: { params: {
           <div className="mt-6 flex flex-wrap gap-3">
             {b.phone && <a data-track="call" href={`tel:${b.phone.replace(/[^\d+]/g, "")}`} className="biz-btn px-5 py-3 text-[15px] font-black" style={{ background: acc }}>☎ Call {b.phone}</a>}
             {b.website && <a data-track="website" href={b.website} target="_blank" rel={spot ? "sponsored noopener" : "nofollow noopener"} className="biz-btn bg-white px-5 py-3 text-[15px] font-black" style={{ color: ink }}>Visit website ›</a>}
+            {siteLive && <a href={`/b/${bsite!.slug}`} className="biz-btn rounded-none bg-white px-5 py-3 text-[15px] font-black" style={{ color: acc }}>✨ Visit {b.name}&apos;s page ›</a>}
             <a data-track="directions" href={mapUrl} target="_blank" rel="noopener nofollow" className="biz-btn border border-white/50 px-5 py-3 text-[15px] font-bold backdrop-blur">Directions</a>
             <a href="#review" className="biz-btn border border-white/50 px-5 py-3 text-[15px] font-bold backdrop-blur">★ Review</a>
           </div>

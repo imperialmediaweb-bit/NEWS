@@ -5,6 +5,8 @@ import { catBySlug } from "@/lib/directory-categories";
 import { parseHours, rangeText, DAY_NAMES, openNow } from "@/lib/opening-hours";
 import { TZ } from "@/config/timezones";
 import { llmJson } from "@/lib/llm-json";
+import pool from "@/lib/db";
+import { bizSiteFor, isLive, siteSchema } from "@/lib/business-site";
 
 /**
  * "Ask AI about this business": answers a reader's question from the listing
@@ -45,7 +47,13 @@ export async function POST(req: NextRequest) {
     b.description && `Description from the business: ${b.description}`,
     b.facebook && `Facebook: ${b.facebook}`,
     reviews.length ? `Verified reader reviews (${reviews.length}): ${reviews.slice(0, 12).map((r) => `${r.rating}/5 "${r.body.slice(0, 300)}"`).join(" | ")}` : "Reviews: none yet",
-  ].filter(Boolean).join("\n");
+  ].filter(Boolean).join("\n")
+    + (await (async () => {
+      // a live Business Website trains the assistant on the owner's own content
+      const bs = await bizSiteFor(b.id).catch(() => null);
+      if (!bs || !isLive(bs)) return "";
+      return `\nFrom the business's own website on ${site.name}:\n${bs.tagline || ""}\n${bs.about || ""}\nServices: ${bs.services.map((x) => `${x.name}${x.price ? ` (${x.price})` : ""}${x.desc ? `: ${x.desc}` : ""}`).join("; ")}\nFAQ: ${bs.faqs.map((x) => `Q: ${x.q} A: ${x.a}`).join(" | ")}`;
+    })());
   const out = await llmJson<{ answer: string }>(
     `You answer a reader's question about one local business on ${site.name}.
 Use ONLY the FACTS. If the facts don't answer it (prices, services not listed, parking, menus, appointments...), say plainly that the listing doesn't say and suggest calling${b.phone ? ` ${b.phone}` : ""}${b.website ? " or checking their website" : ""}. Never guess, never invent services, prices or policies. Reviews are opinions: say "readers say" when you use them.
@@ -54,5 +62,7 @@ FACTS:
 ${facts}
 QUESTION: ${q}`, 400).catch(() => null);
   if (!out?.answer) return NextResponse.json({ error: "The assistant is busy. Please try again." }, { status: 503 });
+  // the owner sees what customers ask (and what the listing couldn't answer)
+  await siteSchema().then(() => pool.query(`INSERT INTO business_ai_questions (business_id, q, answered) VALUES ($1, $2, $3)`, [b.id, q, !/doesn'?t say|does not say|not listed|isn'?t listed|don'?t have that|no information/i.test(out.answer)])).catch(() => null);
   return NextResponse.json({ answer: String(out.answer).slice(0, 700) });
 }

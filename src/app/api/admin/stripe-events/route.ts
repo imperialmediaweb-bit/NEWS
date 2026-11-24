@@ -3,7 +3,7 @@ import { stripe } from "@/lib/paid";
 
 /** Make sure the news webhook also receives subscription cancellations (directory listings). */
 export const dynamic = "force-dynamic";
-const NEEDED = ["checkout.session.completed", "customer.subscription.deleted"];
+const NEEDED = ["checkout.session.completed", "customer.subscription.deleted", "invoice.payment_failed", "invoice.paid"];
 
 export async function GET(req: NextRequest) {
   const token = req.nextUrl.searchParams.get("key") || req.headers.get("authorization")?.replace("Bearer ", "");
