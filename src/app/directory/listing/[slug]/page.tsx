@@ -112,7 +112,7 @@ export default async function BusinessPage({ params, searchParams }: { params: {
                 <img src={b.photo_url} alt={b.name} className="h-full w-full object-cover" />
               ) : icon ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={icon} alt="" className="h-14 w-14 object-contain" />
+                <img src={icon} alt="" className="h-9 w-9 object-contain [image-rendering:auto]" />
               ) : <span className="text-[48px]" aria-hidden>{cat?.icon || "🏪"}</span>}
             </div>
             <div className="min-w-0">
