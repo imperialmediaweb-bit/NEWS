@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { siteFromHeaders } from "@/lib/topic-page";
-import { topCities, listBusinesses } from "@/lib/directory";
+import { topCities, listBusinesses, collapseChains } from "@/lib/directory";
 import { catBySlug } from "@/lib/directory-categories";
 import { mockupOf } from "@/config/design-cfg";
 import Header from "@/components/Header";
@@ -47,7 +47,7 @@ export default async function StateCategory({ params }: { params: { cat: string 
         {cities.length ? (
           <div className="flex flex-wrap gap-2">{cities.map((c) => <a key={c.city_slug} href={`/directory/${c.city_slug}/${cat.slug}`} className="border border-gray-300 bg-white px-3 py-1.5 text-[14px] font-semibold hover:border-gray-900">{cat.name} in {c.city} <span className="text-gray-500">{c.n}</span></a>)}</div>
         ) : <p className="text-[17px]">No {cat.name.toLowerCase()} listed yet. <a href="/directory/join" className="font-bold underline">Add yours free</a>.</p>}
-        {top.length > 0 && <><h2 className="mt-10 text-[22px] font-black">Featured {cat.name.toLowerCase()}</h2><div className="mt-4 grid gap-5 md:grid-cols-2">{top.map((b) => <BizCard key={b.id} b={b} acc={acc} showCity />)}</div></>}
+        {top.length > 0 && <><h2 className="mt-10 text-[22px] font-black">Featured {cat.name.toLowerCase()}</h2><div className="mt-4 grid gap-5 md:grid-cols-2">{collapseChains(top).map((b) => <BizCard key={b.id} b={b} acc={acc} showCity />)}</div></>}
         <OsmCredit />
       </main>
       <Footer site={site} about={generateContent(site).footerAbout} />

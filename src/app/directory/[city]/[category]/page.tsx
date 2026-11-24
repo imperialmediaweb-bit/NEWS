@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { siteFromHeaders } from "@/lib/topic-page";
-import { listBusinesses, categoryCounts, topCities, ratingOf, bizHref } from "@/lib/directory";
+import { listBusinesses, categoryCounts, topCities, ratingOf, bizHref, collapseChains } from "@/lib/directory";
 import { catBySlug, DIR_CATEGORIES } from "@/lib/directory-categories";
 import { mockupOf } from "@/config/design-cfg";
 import Header from "@/components/Header";
@@ -71,7 +71,7 @@ export default async function CityCategory({ params }: { params: { city: string;
         </div>
       </section>
       <main className="mx-auto max-w-[1100px] px-4 py-9">
-        <div className="grid gap-5">{list.map((b) => <BizCard key={b.id} b={b} acc={acc} />)}</div>
+        <div className="grid gap-5">{collapseChains(list).map((b) => <BizCard key={b.id} b={b} acc={acc} />)}</div>
         <aside className="mt-8 flex flex-col items-start justify-between gap-3 p-5 text-white sm:flex-row sm:items-center" style={{ background: ink }}>
           <p className="text-[16px]"><b>Are you a {cat.one} in {cityName}?</b> Claim your listing free, or get to the top with Business Spotlight.</p>
           <a href="/directory/join" className="shrink-0 px-5 py-2.5 font-black" style={{ background: acc }}>Add or claim ›</a>

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { siteFromHeaders } from "@/lib/topic-page";
-import { categoryCounts, listBusinesses } from "@/lib/directory";
+import { categoryCounts, listBusinesses, collapseChains } from "@/lib/directory";
 import { DIR_CATEGORIES, DIR_GROUPS } from "@/lib/directory-categories";
 import { mockupOf } from "@/config/design-cfg";
 import Header from "@/components/Header";
@@ -67,7 +67,7 @@ export default async function CityDirectory({ params }: { params: { city: string
           );
         })}
         <h2 className="mt-4 text-[20px] font-black">Featured in {cityName}</h2>
-        <div className="mt-4 grid gap-5 md:grid-cols-2">{top.map((b) => <BizCard key={b.id} b={b} acc={acc} />)}</div>
+        <div className="mt-4 grid gap-5 md:grid-cols-2">{collapseChains(top).map((b) => <BizCard key={b.id} b={b} acc={acc} />)}</div>
         <OsmCredit />
       </main>
       <Footer site={site} about={generateContent(site).footerAbout} />

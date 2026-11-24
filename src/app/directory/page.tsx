@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { siteFromHeaders } from "@/lib/topic-page";
-import { categoryCounts, topCities, listBusinesses, dirSchema } from "@/lib/directory";
+import { categoryCounts, topCities, listBusinesses, dirSchema, collapseChains } from "@/lib/directory";
 import { DIR_CATEGORIES, DIR_GROUPS } from "@/lib/directory-categories";
 import { mockupOf } from "@/config/design-cfg";
 import Header from "@/components/Header";
@@ -60,7 +60,7 @@ export default async function DirectoryHub({ searchParams }: { searchParams: { q
         {q && (
           <section className="mb-12">
             <h2 className="text-[24px] font-black">{results.length} result{results.length === 1 ? "" : "s"} for “{q}”{where ? ` in ${where}` : ""}</h2>
-            <div className="mt-5 grid gap-5 md:grid-cols-2">{results.map((b) => <BizCard key={b.id} b={b} acc={acc} showCity />)}</div>
+            <div className="mt-5 grid gap-5 md:grid-cols-2">{collapseChains(results).map((b) => <BizCard key={b.id} b={b} acc={acc} showCity />)}</div>
           </section>
         )}
         {DIR_GROUPS.map((g) => {
@@ -88,7 +88,7 @@ export default async function DirectoryHub({ searchParams }: { searchParams: { q
         {!q && featured.length > 0 && (
           <section>
             <h2 className="flex items-center gap-3 text-[22px] font-black"><span className="h-6 w-[5px]" style={{ background: acc }} />Featured businesses</h2>
-            <div className="mt-5 grid gap-5 md:grid-cols-2">{featured.map((b) => <BizCard key={b.id} b={b} acc={acc} showCity />)}</div>
+            <div className="mt-5 grid gap-5 md:grid-cols-2">{collapseChains(featured).map((b) => <BizCard key={b.id} b={b} acc={acc} showCity />)}</div>
           </section>
         )}
         <OsmCredit />

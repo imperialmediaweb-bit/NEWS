@@ -13,7 +13,7 @@ export function Stars({ value, count, size = 15 }: { value: number | null; count
   );
 }
 
-export function BizCard({ b, acc, showCity = false }: { b: Business; acc: string; showCity?: boolean }) {
+export function BizCard({ b, acc, showCity = false }: { b: Business & { locations?: number; branches?: Array<{ slug: string; address: string | null; phone: string | null }> }; acc: string; showCity?: boolean }) {
   const spot = isSpotlight(b);
   const cat = catBySlug(b.category);
   return (
@@ -27,11 +27,21 @@ export function BizCard({ b, acc, showCity = false }: { b: Business; acc: string
       )}
       <div className="min-w-0 flex-1">
         <h3 className="text-[18px] font-extrabold leading-snug md:text-[20px]"><a href={bizHref(b)} className="hover:underline">{b.name}</a></h3>
-        <p className="mt-0.5 text-[13px] font-semibold text-gray-500">{cat?.name}{showCity || !b.address ? ` · ${b.city}` : ""}{b.address ? ` · ${b.address}` : ""}</p>
+        <p className="mt-0.5 text-[13px] font-semibold text-gray-500">{cat?.name}{showCity || !b.address || (b.branches?.length || 0) > 1 ? ` · ${b.city}` : ""}{b.address && (b.branches?.length || 0) <= 1 ? ` · ${b.address}` : ""}</p>
         <div className="mt-1"><Stars value={ratingOf(b)} count={b.rating_count} /></div>
+        {(b.branches?.length || 0) > 1 && (
+          <details className="mt-1.5">
+            <summary className="cursor-pointer text-[13.5px] font-bold" style={{ color: acc }}>{b.branches!.length} locations in {b.city}</summary>
+            <ul className="mt-1.5 space-y-1 text-[13.5px]">
+              {b.branches!.map((x) => (
+                <li key={x.slug}><a href={`/directory/listing/${x.slug}`} className="hover:underline">{x.address || "Location"}</a>{x.phone ? <> · <a href={`tel:${x.phone.replace(/[^\d+]/g, "")}`} style={{ color: acc }}>{x.phone}</a></> : null}</li>
+              ))}
+            </ul>
+          </details>
+        )}
         {b.description && <p className="mt-1.5 line-clamp-2 text-[14.5px] text-gray-700">{b.description}</p>}
         <p className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-[14px] font-bold">
-          {b.phone && <a href={`tel:${b.phone.replace(/[^\d+]/g, "")}`} style={{ color: acc }}>☎ {b.phone}</a>}
+          {b.phone && (b.branches?.length || 0) <= 1 && <a href={`tel:${b.phone.replace(/[^\d+]/g, "")}`} style={{ color: acc }}>☎ {b.phone}</a>}
           {b.website && <a href={b.website} target="_blank" rel={spot ? "sponsored noopener" : "nofollow noopener"} style={{ color: acc }}>Website ›</a>}
           <a href={bizHref(b)} className="text-gray-700">Details &amp; reviews ›</a>
         </p>

@@ -66,6 +66,18 @@ export function dirSchema() {
   return ready;
 }
 
+/** One card per business name: chains with several branches show once, with how many locations. */
+export function collapseChains<T extends { name: string; slug: string; address: string | null; phone: string | null }>(list: T[]): Array<T & { locations: number; branches: Array<{ slug: string; address: string | null; phone: string | null }> }> {
+  const seen = new Map<string, T & { locations: number; branches: Array<{ slug: string; address: string | null; phone: string | null }> }>();
+  for (const b of list) {
+    const k = b.name.toLowerCase().replace(/[^a-z0-9]/g, "");
+    const hit = seen.get(k);
+    const br = { slug: b.slug, address: b.address, phone: b.phone };
+    if (hit) { hit.locations++; hit.branches.push(br); } else seen.set(k, { ...b, locations: 1, branches: [br] });
+  }
+  return Array.from(seen.values());
+}
+
 export const isSpotlight = (b: Pick<Business, "tier" | "tier_until">) => b.tier !== "free" && (!b.tier_until || new Date(b.tier_until) > new Date());
 export const ratingOf = (b: Pick<Business, "rating_sum" | "rating_count">) => (b.rating_count ? Math.round((b.rating_sum / b.rating_count) * 10) / 10 : null);
 export const bizHref = (b: Pick<Business, "slug">) => `/directory/listing/${b.slug}`;

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { siteFromHeaders } from "@/lib/topic-page";
-import { getBusiness, reviewsOf, listBusinesses, isSpotlight, ratingOf, bizHref } from "@/lib/directory";
+import { getBusiness, reviewsOf, listBusinesses, isSpotlight, ratingOf, bizHref, collapseChains } from "@/lib/directory";
 import { catBySlug } from "@/lib/directory-categories";
 import { mockupOf } from "@/config/design-cfg";
 import Header from "@/components/Header";
@@ -141,7 +141,7 @@ export default async function BusinessPage({ params, searchParams }: { params: {
       {related.filter((x) => x.id !== b.id).length > 0 && (
         <section className="mx-auto max-w-[1100px] px-4 pb-10">
           <h2 className="text-[22px] font-black">More {cat?.name.toLowerCase()} in {b.city}</h2>
-          <div className="mt-4 grid gap-5 md:grid-cols-2">{related.filter((x) => x.id !== b.id).slice(0, 6).map((x) => <BizCard key={x.id} b={x} acc={acc} />)}</div>
+          <div className="mt-4 grid gap-5 md:grid-cols-2">{collapseChains(related.filter((x) => x.id !== b.id && x.name !== b.name)).slice(0, 6).map((x) => <BizCard key={x.id} b={x} acc={acc} />)}</div>
           <p className="mt-4"><a href={`/directory/${b.city_slug}/${b.category}`} className="font-bold underline">All {cat?.name.toLowerCase()} in {b.city} ›</a></p>
           {b.source.startsWith("osm") && <OsmCredit />}
         </section>
