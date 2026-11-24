@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { siteFromHeaders } from "@/lib/topic-page";
-import { getBusiness, reviewsOf, listBusinesses, isSpotlight, ratingOf, bizHref, collapseChains, categoryPhoto, nearby, storiesAbout } from "@/lib/directory";
+import { getBusiness, reviewsOf, listBusinesses, isSpotlight, ratingOf, bizHref, collapseChains, categoryPhoto, nearby, storiesAbout, liveDeals } from "@/lib/directory";
 import { catBySlug } from "@/lib/directory-categories";
 import { parseHours, openNow, rangeText, DAY_NAMES } from "@/lib/opening-hours";
 import { TZ } from "@/config/timezones";
@@ -54,6 +54,7 @@ export default async function BusinessPage({ params, searchParams }: { params: {
     b.lat != null && b.lon != null ? nearby(site.slug, b.lat, b.lon, b.id, 6).catch(() => []) : Promise.resolve([]),
     storiesAbout(site.slug, b.name).catch(() => []),
   ]);
+  const deals = await liveDeals(site.slug, { businessId: b.id }).catch(() => []);
   const m = mockupOf(site.slug);
   const ink = m?.ink || "#14213d", acc = m?.acc || site.accent || "#b91c1c";
   const spot = isSpotlight(b);
@@ -165,6 +166,14 @@ export default async function BusinessPage({ params, searchParams }: { params: {
             ))}
           </div>
 
+          {deals.map((d) => (
+            <div key={d.id} className="mb-6 rounded-xl border-2 border-dashed bg-white p-5" style={{ borderColor: acc }}>
+              <p className="text-[12px] font-black uppercase tracking-[.18em]" style={{ color: acc }}>🏷 Deal · until {new Date(d.expires_at).toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" })}</p>
+              <p className="mt-1 text-[22px] font-black">{d.title}</p>
+              {d.details && <p className="mt-1 text-[15px] text-gray-700">{d.details}</p>}
+              {d.code && <p className="mt-2 inline-block rounded border-2 border-dashed px-3 py-1 font-mono text-[16px] font-bold" style={{ borderColor: acc }}>{d.code}</p>}
+            </div>
+          ))}
           <AskBiz slug={b.slug} name={b.name} acc={acc} hasHours={!!b.hours} hasReviews={b.rating_count > 0} />
 
           {b.description && <section className="mt-8"><h2 className="text-[22px] font-black">About {b.name}</h2><p className="mt-2 whitespace-pre-line text-[17px] leading-relaxed text-gray-800">{b.description}</p></section>}
@@ -261,6 +270,7 @@ export default async function BusinessPage({ params, searchParams }: { params: {
             <h2 className="text-[17px] font-black">{b.claimed ? "Is this your business?" : "Own this business?"}</h2>
             <p className="mt-1.5 text-[14.5px] opacity-90">{b.claimed ? "Update your details or get to the top of the list with Business Spotlight." : "Claim it free to add photos, hours and a description, or get Business Spotlight: top of the list for 12 months plus a profile article."}</p>
             <a href={`/directory/join?b=${b.slug}`} className="mt-3 inline-block px-4 py-2.5 text-[14px] font-black" style={{ background: acc }}>{b.claimed ? "Update or upgrade ›" : "Claim this listing ›"}</a>
+            <a href={`/directory/deal?b=${b.slug}`} className="mt-3 block rounded-lg bg-white/10 p-2.5 text-[13.5px] font-bold ring-1 ring-white/20 hover:bg-white/15">🏷 Post a deal or coupon on this page ($19) ›</a>
             <a href={`/api/directory/qr?b=${b.slug}&format=sign`} target="_blank" rel="noopener" className="mt-3 flex items-center gap-3 rounded-lg bg-white/10 p-2.5 text-[13.5px] font-bold ring-1 ring-white/20 hover:bg-white/15">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={`/api/directory/qr?b=${b.slug}`} alt="" className="h-14 w-14 rounded bg-white p-1" />

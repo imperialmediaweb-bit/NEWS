@@ -13,6 +13,7 @@ export const PRODUCTS = {
   sponsored: { name: "Sponsored story", cents: Number(process.env.PRICE_SPONSORED_CENTS || 4900) },
   obituary: { name: "Obituary", cents: Number(process.env.PRICE_OBITUARY_CENTS || 2500) },
   listing: { name: "Local business directory listing (monthly)", cents: Number(process.env.PRICE_LISTING_CENTS || 1900) },
+  deal: { name: "Deal or coupon (up to 30 days)", cents: Number(process.env.PRICE_DEAL_CENTS || 1900) },
   press_release: { name: "Press release", cents: Number(process.env.PRICE_PRESS_RELEASE_CENTS || 4900) },
   spotlight: { name: "Business Spotlight (12 months)", cents: Number(process.env.PRICE_SPOTLIGHT_CENTS || 4900) },
   spotlight_home: { name: "Business Spotlight + 7 days on the homepage", cents: Number(process.env.PRICE_SPOTLIGHT_HOME_CENTS || 14900) },

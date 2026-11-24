@@ -53,7 +53,7 @@ export default async function DirectoryHub({ searchParams }: { searchParams: { q
             <input name="where" defaultValue={where} placeholder="City or town" className="px-4 py-3.5 text-[16px] text-gray-900 sm:w-[220px]" aria-label="Where?" />
             <button className="px-6 py-3.5 text-[16px] font-black uppercase tracking-wider" style={{ background: acc }}>Search</button>
           </form>
-          <a href="/directory/join" className="mt-5 inline-block border border-white/50 px-5 py-2.5 text-[14px] font-bold hover:bg-white/10">Own a business? Add or claim it free ›</a>
+          <div className="mt-5 flex flex-wrap gap-3"><a href="/directory/join" className="inline-block border border-white/50 px-5 py-2.5 text-[14px] font-bold hover:bg-white/10">Own a business? Add or claim it free ›</a><a href="/directory/deals" className="inline-block px-5 py-2.5 text-[14px] font-bold" style={{ background: acc }}>🏷 Local deals ›</a></div>
         </div>
       </section>
       <main className="mx-auto max-w-[1150px] px-4 py-10">

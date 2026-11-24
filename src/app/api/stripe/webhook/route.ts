@@ -39,6 +39,11 @@ export async function POST(req: NextRequest) {
       [o.business_id, o.product, o.email, o.photo_url, o.website]
     ).catch(() => null);
   }
+  // a paid deal goes live at once (it was checked against the banned list before payment; the editor can still decline it)
+  if (o && o.product === "deal") {
+    await pool.query("UPDATE business_deals SET status = 'live' WHERE order_id = $1", [o.id]).catch(() => null);
+    await pool.query("UPDATE paid_orders SET status = 'published', published_at = now() WHERE id = $1", [o.id]).catch(() => null);
+  }
   if (o && process.env.RESEND_API_KEY) {
     const site = sites[o.site_slug];
     await new Resend(process.env.RESEND_API_KEY).emails

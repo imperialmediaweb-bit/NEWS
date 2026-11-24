@@ -57,6 +57,12 @@ export function dirSchema() {
       id SERIAL PRIMARY KEY, business_id INT NOT NULL REFERENCES businesses(id) ON DELETE CASCADE, name TEXT NOT NULL, email TEXT NOT NULL,
       reason TEXT, status VARCHAR(20) NOT NULL DEFAULT 'pending', created_at TIMESTAMPTZ NOT NULL DEFAULT now()
     );
+    CREATE TABLE IF NOT EXISTS business_deals (
+      id SERIAL PRIMARY KEY, business_id INT NOT NULL REFERENCES businesses(id) ON DELETE CASCADE, site_slug VARCHAR(100) NOT NULL,
+      title TEXT NOT NULL, details TEXT, code TEXT, expires_at DATE NOT NULL, order_id INT, status VARCHAR(20) NOT NULL DEFAULT 'awaiting_payment',
+      created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    );
+    CREATE INDEX IF NOT EXISTS idx_deals_live ON business_deals(site_slug, status, expires_at);
     CREATE TABLE IF NOT EXISTS directory_imports (
       state VARCHAR(4) PRIMARY KEY, status TEXT, found INT, saved INT, started_at TIMESTAMPTZ, finished_at TIMESTAMPTZ, error TEXT
     );
@@ -343,4 +349,16 @@ export async function storiesAbout(site: string, name: string, limit = 4) {
     [site, `%${name.replace(/[%_]/g, "")}%`, limit]
   ).catch(() => ({ rows: [] }));
   return rows as Array<{ title: string; slug: string; category: string; published_at: string }>;
+}
+
+export type Deal = { id: number; business_id: number; title: string; details: string | null; code: string | null; expires_at: string };
+/** Live deals: for one business, or the state (optionally one town), newest first. */
+export async function liveDeals(site: string, opts: { businessId?: number; city?: string; limit?: number } = {}) {
+  await dirSchema();
+  const args: unknown[] = [site]; const where = ["d.site_slug = $1", "d.status = 'live'", "d.expires_at >= current_date", "b.status = 'active'"];
+  if (opts.businessId) { args.push(opts.businessId); where.push(`d.business_id = $${args.length}`); }
+  if (opts.city) { args.push(opts.city); where.push(`b.city_slug = $${args.length}`); }
+  args.push(opts.limit ?? 60);
+  const { rows } = await pool.query(`SELECT d.*, b.name AS biz_name, b.slug AS biz_slug, b.city, b.city_slug, b.category, b.phone FROM business_deals d JOIN businesses b ON b.id = d.business_id WHERE ${where.join(" AND ")} ORDER BY d.created_at DESC LIMIT $${args.length}`, args);
+  return rows as Array<Deal & { biz_name: string; biz_slug: string; city: string; city_slug: string; category: string; phone: string | null }>;
 }

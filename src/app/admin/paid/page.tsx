@@ -26,6 +26,19 @@ async function act(formData: FormData) {
   const { rows } = await pool.query<Order>("SELECT * FROM paid_orders WHERE id = $1 AND status IN ('paid', 'published')", [id]);
   const o = rows[0];
   if (!o) return;
+  // deals: live on payment; "decline" removes the deal and refunds
+  if (o.product === "deal") {
+    if (action === "decline" || action === "end") {
+      await pool.query("UPDATE business_deals SET status = 'removed' WHERE order_id = $1", [id]);
+      if (action === "decline" && o.stripe_session) {
+        const s = await fetch(`https://api.stripe.com/v1/checkout/sessions/${o.stripe_session}`, { headers: { Authorization: `Bearer ${process.env.STRIPE_SECRET_KEY}` } }).then((r) => r.json());
+        if (s.payment_intent) await stripe("refunds", { payment_intent: s.payment_intent }).catch(() => null);
+      }
+      await pool.query("UPDATE paid_orders SET status = $2 WHERE id = $1", [id, action === "decline" ? "refunded" : "ended"]);
+    }
+    revalidatePath("/admin/paid");
+    return;
+  }
   // directory listings: publish = live in /directory; decline = cancel + refund; end = cancel from now on
   if (o.product === "listing") {
     if (action === "publish" && o.status === "paid") await pool.query("UPDATE paid_orders SET status = 'published', published_at = now() WHERE id = $1", [id]);
@@ -81,6 +94,9 @@ export default async function PaidPage({ searchParams }: { searchParams: { statu
             )}
             <p className="mt-2 text-sm text-gray-700">From {o.name} &lt;{o.email}&gt;</p>
             {o.product === "listing" && <p className="mt-1 text-sm font-semibold text-indigo-800">Directory listing · {o.listing_category} · {o.city}{o.phone ? ` · ${o.phone}` : ""} · ${(o.cents / 100).toFixed(2)}/month</p>}
+            {status === "published" && o.product === "deal" && (
+              <form action={act} className="mt-3"><input type="hidden" name="id" value={o.id} /><button name="action" value="decline" className="rounded bg-red-700 px-4 py-1.5 text-sm font-bold text-white">Remove deal &amp; refund</button></form>
+            )}
             {status === "published" && o.product === "listing" && (
               <form action={act} className="mt-3">
                 <input type="hidden" name="id" value={o.id} />

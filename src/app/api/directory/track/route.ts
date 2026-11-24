@@ -10,7 +10,7 @@ import { dirSchema } from "@/lib/directory";
  * These are the owner's monthly figures ("230 views, 14 calls").
  */
 export const dynamic = "force-dynamic";
-const KINDS = ["view", "call", "website", "directions"];
+const KINDS = ["view", "call", "website", "directions", "from_google", "from_bing", "from_chatgpt", "from_perplexity", "from_social", "from_qr", "from_other"];
 let ready = false;
 
 export async function POST(req: NextRequest) {
