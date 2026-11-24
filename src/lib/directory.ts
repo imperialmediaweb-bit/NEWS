@@ -302,3 +302,45 @@ export async function importTick(): Promise<string | null> {
 }
 
 export { catBySlug };
+
+// ── Photos and neighbours for the business pages ─────────────────────────────
+
+/** One free photo per category (Pexels, stored on our CDN once), credited. */
+export async function categoryPhoto(category: string): Promise<{ url: string; credit: string } | null> {
+  await dirSchema();
+  await pool.query(`CREATE TABLE IF NOT EXISTS directory_cat_photos (category VARCHAR(60) PRIMARY KEY, url TEXT, credit TEXT, created_at TIMESTAMPTZ DEFAULT now())`);
+  const { rows } = await pool.query(`SELECT url, credit FROM directory_cat_photos WHERE category = $1`, [category]);
+  if (rows[0]) return rows[0].url ? rows[0] : null;
+  const cat = catBySlug(category);
+  if (!cat) return null;
+  const { searchPexels } = await import("@/lib/pipeline/images");
+  const { storeImage } = await import("@/lib/pipeline/image-store");
+  const img = await searchPexels(cat.name.replace(/&/g, "and")).catch(() => null);
+  const url = img?.url ? (await storeImage(img.url, `${cat.name} directory`, true).catch(() => null)) || img.url : null;
+  await pool.query(`INSERT INTO directory_cat_photos (category, url, credit) VALUES ($1,$2,$3) ON CONFLICT (category) DO NOTHING`, [category, url, img?.credit || null]);
+  return url ? { url, credit: img?.credit || "" } : null;
+}
+
+/** Businesses near a point (any category), nearest first, with the distance in miles. */
+export async function nearby(site: string, lat: number, lon: number, exceptId: number, limit = 6) {
+  await dirSchema();
+  const { rows } = await pool.query(
+    `SELECT *, (($2 - lat) * ($2 - lat) + (($3 - lon) * cos(radians($2))) * (($3 - lon) * cos(radians($2)))) AS d2
+       FROM businesses WHERE site_slug = $1 AND status = 'active' AND id <> $4 AND lat BETWEEN $2 - 0.04 AND $2 + 0.04 AND lon BETWEEN $3 - 0.05 AND $3 + 0.05
+      ORDER BY d2 LIMIT $5`,
+    [site, lat, lon, exceptId, limit]
+  );
+  return (rows as Array<Business & { d2: number }>).map((b) => ({ ...b, miles: Math.sqrt(b.d2) * 69 }));
+}
+
+/** The paper's stories that name the business (title or text), newest first. */
+export async function storiesAbout(site: string, name: string, limit = 4) {
+  if (name.length < 6 || /^(the |a )?(bank|church|store|restaurant|cafe|bar|pizza|salon)$/i.test(name)) return [];
+  const { rows } = await pool.query(
+    `SELECT a.title, a.slug, a.category, a.published_at FROM articles a JOIN sites s ON s.id = a.site_id
+      WHERE s.slug = $1 AND a.category NOT IN ('guides', 'sponsored') AND a.title ILIKE $2 AND a.published_at > now() - interval '365 days'
+      ORDER BY a.published_at DESC LIMIT $3`,
+    [site, `%${name.replace(/[%_]/g, "")}%`, limit]
+  ).catch(() => ({ rows: [] }));
+  return rows as Array<{ title: string; slug: string; category: string; published_at: string }>;
+}
