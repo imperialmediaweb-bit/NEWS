@@ -67,6 +67,7 @@ export default async function CityCategory({ params }: { params: { city: string;
         <div className="mx-auto max-w-[1100px] px-4 py-9 md:py-12">
           <Crumbs domain={site.domain} items={[["Directory", "/directory"], [cityName!, `/directory/${params.city}`], [cat.name, `/directory/${params.city}/${cat.slug}`]]} />
           <h1 className="mt-3 text-[32px] font-black leading-[1.05] md:text-[50px]"><span aria-hidden>{cat.icon} </span>{cat.name} in {cityName}, {site.state}</h1>
+          {list.length >= 5 && <a href={`/directory/best/${params.city}/${cat.slug}`} className="mt-4 inline-block rounded-full bg-white/15 px-4 py-2 text-[14px] font-black ring-1 ring-white/30 hover:bg-white/25">🏆 See the top 10 {cat.name.toLowerCase()} in {cityName} ›</a>}
           <p className="mt-3 max-w-[760px] text-[17px] opacity-85">{list.length} local {list.length === 1 ? cat.one : cat.name.toLowerCase()} with phone numbers, addresses, hours and reader reviews. Updated {month()}.</p>
         </div>
       </section>
