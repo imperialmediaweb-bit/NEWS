@@ -92,14 +92,14 @@ export function TabHeader({ site, MobileMenu, active }: { site: SiteConfig; Mobi
         <MobileMenu nav={TNAV} />
         <a href="/" aria-label={site.name}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={logo} alt={site.name} width={200} height={100} className="h-[76px] w-auto" />
+          <img src={logo} alt={site.name} width={200} height={100} className="max-w-[min(460px,64vw)] object-contain h-[76px] w-auto" />
         </a>
         <a href="/search" aria-label="Search" className="flex h-11 w-11 items-center justify-center text-[var(--tb-ink)]"><Search /></a>
       </div>
       <div className="mx-auto hidden max-w-[1360px] items-center gap-6 px-4 py-2 md:flex">
         <a href="/" aria-label={site.name} className="shrink-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={logo} alt={site.name} width={300} height={150} className="h-[112px] w-auto" />
+          <img src={logo} alt={site.name} width={300} height={150} className="max-w-[min(460px,64vw)] object-contain h-[112px] w-auto" />
           <span className="sr-only">{t.slogan}</span>
         </a>
         <span className="h-20 w-[3px] bg-[var(--tb-gold)]" aria-hidden />

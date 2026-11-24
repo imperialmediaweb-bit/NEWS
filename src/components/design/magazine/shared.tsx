@@ -89,7 +89,7 @@ export function MagHeader({ site, MobileMenu, compact = false, active }: { site:
         <MobileMenu nav={MNAV} />
         <a href="/" aria-label={site.name}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={logo} alt={site.name} width={200} height={100} className="h-[84px] w-auto" />
+          <img src={logo} alt={site.name} width={200} height={100} className="max-w-[min(460px,64vw)] object-contain h-[84px] w-auto" />
         </a>
         <a href="/search" aria-label="Search" className="flex h-11 w-11 items-center justify-center text-[var(--mg-ink)]"><Search /></a>
       </div>
@@ -101,7 +101,7 @@ export function MagHeader({ site, MobileMenu, compact = false, active }: { site:
         <div className={`text-center ${compact ? "pt-1" : "pt-3"}`}>
           <a href="/" aria-label={site.name} className="inline-block">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={logo} alt={site.name} width={360} height={180} className={`mx-auto w-auto ${compact ? "h-[110px]" : "h-[170px]"}`} />
+            <img src={logo} alt={site.name} width={360} height={180} className={`max-w-[min(460px,64vw)] object-contain mx-auto w-auto ${compact ? "h-[110px]" : "h-[170px]"}`} />
           </a>
         </div>
         <nav className="border-b border-[var(--mg-gold)]">

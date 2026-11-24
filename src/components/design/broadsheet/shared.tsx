@@ -87,7 +87,7 @@ export function BsHeader({ site, MobileMenu, compact = false, active }: { site: 
         <MobileMenu nav={BNAV} />
         <a href="/" aria-label={site.name}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={logo} alt={site.name} width={200} height={100} className="h-[84px] w-auto" />
+          <img src={logo} alt={site.name} width={200} height={100} className="max-w-[min(460px,64vw)] object-contain h-[84px] w-auto" />
         </a>
         <a href="/search" aria-label="Search" className="flex h-11 w-11 items-center justify-center"><Search /></a>
       </div>
@@ -95,7 +95,7 @@ export function BsHeader({ site, MobileMenu, compact = false, active }: { site: 
         <div className="text-center">
           <a href="/" aria-label={site.name} className="inline-block">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={logo} alt={site.name} width={420} height={210} className={`mx-auto w-auto ${compact ? "h-[110px]" : "h-[180px]"}`} />
+            <img src={logo} alt={site.name} width={420} height={210} className={`max-w-[min(460px,64vw)] object-contain mx-auto w-auto ${compact ? "h-[110px]" : "h-[180px]"}`} />
           </a>
         </div>
         <nav className="relative">

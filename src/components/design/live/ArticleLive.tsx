@@ -106,14 +106,14 @@ export default function ArticleLive({
           <MobileMenu nav={NAV} />
           <a href="/" aria-label={site.name}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={logo} alt={site.name} width={200} height={100} className="h-[80px] w-auto" />
+            <img src={logo} alt={site.name} width={200} height={100} className="max-w-[min(460px,64vw)] object-contain h-[80px] w-auto" />
           </a>
           <a href="/search" aria-label="Search" className="flex h-11 w-11 items-center justify-center text-[var(--lv-ink)]"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" aria-hidden><circle cx="10.5" cy="10.5" r="7" /><path d="M16 16l6 6" strokeLinecap="round" /></svg></a>
         </div>
         <div className="mx-auto hidden max-w-[1240px] items-center gap-6 px-4 md:flex">
           <a href="/" aria-label={site.name} className="shrink-0">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={logo} alt={site.name} width={260} height={130} className="h-[116px] w-auto" />
+            <img src={logo} alt={site.name} width={260} height={130} className="max-w-[min(460px,64vw)] object-contain h-[116px] w-auto" />
           </a>
           <span className="hidden h-16 w-px bg-[#cfd4e0] md:block" aria-hidden />
           <nav className="flex-1 overflow-x-auto">

@@ -150,14 +150,14 @@ export function LiveCompactHeader({ site, active, MobileMenu }: { site: SiteConf
         <MobileMenu nav={NAV} />
         <a href="/" aria-label={site.name}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={logo} alt={site.name} width={200} height={100} className="h-[80px] w-auto" />
+          <img src={logo} alt={site.name} width={200} height={100} className="max-w-[min(460px,64vw)] object-contain h-[80px] w-auto" />
         </a>
         <a href="/search" aria-label="Search" className="flex h-11 w-11 items-center justify-center text-[var(--lv-ink)]">{search}</a>
       </div>
       <div className="mx-auto hidden max-w-[1240px] items-center gap-6 px-4 md:flex">
         <a href="/" aria-label={site.name} className="shrink-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={logo} alt={site.name} width={260} height={130} className="h-[116px] w-auto" />
+          <img src={logo} alt={site.name} width={260} height={130} className="max-w-[min(460px,64vw)] object-contain h-[116px] w-auto" />
         </a>
         <span className="h-16 w-px bg-[#cfd4e0]" aria-hidden />
         <nav className="flex-1">

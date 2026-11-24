@@ -105,7 +105,7 @@ export function WsHeader({ site, MobileMenu, compact = false, active }: { site: 
         <MobileMenu nav={WNAV} />
         <a href="/" aria-label={site.name}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={logo} alt={site.name} width={200} height={100} className="h-[84px] w-auto" />
+          <img src={logo} alt={site.name} width={200} height={100} className="max-w-[min(460px,64vw)] object-contain h-[84px] w-auto" />
         </a>
         <a href="/search" aria-label="Search" className="flex h-11 w-11 items-center justify-center text-[var(--ws-ink)]"><Search /></a>
       </div>
@@ -116,7 +116,7 @@ export function WsHeader({ site, MobileMenu, compact = false, active }: { site: 
       <div className="mx-auto hidden max-w-[1340px] grid-cols-[auto_1fr] items-end gap-8 px-4 md:grid">
         <a href="/" aria-label={site.name} className="py-3">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={logo} alt={site.name} width={300} height={150} className={`w-auto ${compact ? "h-[104px]" : "h-[150px]"}`} />
+          <img src={logo} alt={site.name} width={300} height={150} className={`max-w-[min(460px,64vw)] object-contain w-auto ${compact ? "h-[104px]" : "h-[150px]"}`} />
         </a>
         <div className="flex flex-col justify-end">
           {!compact && (artOf(site.slug).masthead ? (

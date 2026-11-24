@@ -91,7 +91,7 @@ export function DkHeader({ site, MobileMenu, compact = false, active }: { site: 
         <MobileMenu nav={DNAV} />
         <a href="/" aria-label={site.name}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={logo} alt={site.name} width={200} height={100} className="h-[84px] w-auto drop-shadow-[0_2px_12px_rgba(0,0,0,.5)]" />
+          <img src={logo} alt={site.name} width={200} height={100} className="max-w-[min(460px,64vw)] object-contain h-[84px] w-auto drop-shadow-[0_2px_12px_rgba(0,0,0,.5)]" />
         </a>
         <a href="/search" aria-label="Search" className="flex h-11 w-11 items-center justify-center"><Search /></a>
       </div>
@@ -100,7 +100,7 @@ export function DkHeader({ site, MobileMenu, compact = false, active }: { site: 
         <div className={`relative mx-auto max-w-[1340px] px-4 text-center ${compact ? "py-2" : "py-5"}`}>
           <a href="/" aria-label={site.name} className="inline-block">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={logo} alt={site.name} width={380} height={190} className={`mx-auto w-auto drop-shadow-[0_2px_18px_rgba(0,0,0,.45)] ${compact ? "h-[100px]" : "h-[160px]"}`} />
+            <img src={logo} alt={site.name} width={380} height={190} className={`max-w-[min(460px,64vw)] object-contain mx-auto w-auto drop-shadow-[0_2px_18px_rgba(0,0,0,.45)] ${compact ? "h-[100px]" : "h-[160px]"}`} />
           </a>
         </div>
       </div>

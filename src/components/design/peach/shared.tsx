@@ -109,7 +109,7 @@ export function PeachHeader({ site, MobileMenu, compact = false, active }: { sit
         <MobileMenu nav={PNAV} />
         <a href="/" aria-label={site.name}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={logo} alt={site.name} width={200} height={100} className="h-[84px] w-auto" />
+          <img src={logo} alt={site.name} width={200} height={100} className="max-w-[min(460px,64vw)] object-contain h-[84px] w-auto" />
         </a>
         <a href="/search" aria-label="Search" className="flex h-11 w-11 items-center justify-center text-[var(--pc-ink)]"><SearchIcon /></a>
       </div>
@@ -121,7 +121,7 @@ export function PeachHeader({ site, MobileMenu, compact = false, active }: { sit
         <div className="mx-auto hidden max-w-[1360px] items-center gap-6 px-4 md:flex">
           <a href="/" aria-label={site.name} className="shrink-0">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={logo} alt={site.name} width={240} height={120} className="h-[104px] w-auto" />
+            <img src={logo} alt={site.name} width={240} height={120} className="max-w-[min(460px,64vw)] object-contain h-[104px] w-auto" />
           </a>
           <nav className="flex-1">
             <ul className={`${display.className} flex items-center justify-end gap-7 whitespace-nowrap text-[19px] font-semibold text-[var(--pc-ink)]`}>
@@ -140,7 +140,7 @@ export function PeachHeader({ site, MobileMenu, compact = false, active }: { sit
           <div className="mx-auto hidden max-w-[1360px] px-4 pt-3 text-center md:block">
             <a href="/" aria-label={site.name} className="inline-block">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={logo} alt={site.name} width={340} height={170} className="mx-auto h-[170px] w-auto" />
+              <img src={logo} alt={site.name} width={340} height={170} className="max-w-[min(460px,64vw)] object-contain mx-auto h-[170px] w-auto" />
             </a>
           </div>
           <nav className="mx-auto hidden max-w-[1360px] border-t border-[var(--pc-cu)]/40 px-4 md:block">

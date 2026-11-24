@@ -83,7 +83,7 @@ export function GzHeader({ site, MobileMenu, active }: { site: SiteConfig; Mobil
         <MobileMenu nav={GNAV} />
         <a href="/" aria-label={site.name}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={logo} alt={site.name} width={200} height={100} className="h-[80px] w-auto" />
+          <img src={logo} alt={site.name} width={200} height={100} className="max-w-[min(460px,64vw)] object-contain h-[80px] w-auto" />
         </a>
         <a href="/search" aria-label="Search" className="flex h-11 w-11 items-center justify-center text-[var(--gz-ink)]"><Search /></a>
       </div>
@@ -94,7 +94,7 @@ export function GzHeader({ site, MobileMenu, active }: { site: SiteConfig; Mobil
       <div className="mx-auto hidden max-w-[1340px] items-center gap-8 px-4 py-2 md:flex">
         <a href="/" aria-label={site.name} className="shrink-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={logo} alt={site.name} width={280} height={140} className="h-[118px] w-auto" />
+          <img src={logo} alt={site.name} width={280} height={140} className="max-w-[min(460px,64vw)] object-contain h-[118px] w-auto" />
         </a>
         <span className="h-16 w-px bg-[#d9c79d]" aria-hidden />
         <nav className="flex-1">
