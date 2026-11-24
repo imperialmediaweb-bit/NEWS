@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { siteFromHeaders } from "@/lib/topic-page";
+import { siteFromHeaders, slugOf } from "@/lib/topic-page";
+import { citiesOf } from "@/lib/local-data";
 import { PRODUCTS } from "@/lib/paid";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -54,6 +55,9 @@ export default function PressReleasePage({ searchParams }: { searchParams: { pai
           <span><b className="block text-[17px]">Need national reach? Publish on all 50 state papers at once.</b><span className="text-[14.5px] text-gray-700">One release on every paper of the network, one in every state, live within 24 hours, with a full report of the links.</span></span>
           <span className="mt-2 shrink-0 bg-gray-900 px-4 py-2.5 text-[14px] font-black text-white sm:mt-0">All 50 states: $149 ›</span>
         </a>
+        <nav aria-label="By town" className="mt-6 flex flex-wrap gap-2">
+          {citiesOf(site.state).map(([n]) => <a key={n} href={`/press-release/${slugOf(n)}`} className="border border-gray-300 bg-white px-3 py-1.5 text-[14px] font-semibold hover:border-gray-900">Press release in {n}</a>)}
+        </nav>
         <p className="mt-6 text-[15px]">Guides: <a href="/guides/how-to-write-a-press-release" className="underline">How to write a press release</a> · <a href="/guides/get-your-business-in-the-news" className="underline">Get your business in the news</a> · <a href="/guides/advertise-small-business" className="underline">Advertise a small business</a></p>
         {searchParams.paid && <p className="mt-6 rounded bg-green-50 p-4 font-semibold text-green-900">Payment received, thank you. An editor will review your release within one business day and email you the link.</p>}
         {searchParams.cancelled && <p className="mt-6 rounded bg-yellow-50 p-4 text-yellow-900">Payment was cancelled; nothing was charged.</p>}

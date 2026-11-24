@@ -80,6 +80,7 @@ export async function GET(request: NextRequest) {
   const unit = site.state === "Louisiana" ? "parish" : "county";
   const topicPages: SitemapEntry[] = [
     ...citiesWx(site.state).map(([c]) => ({ url: `${baseUrl}/weather/${slug(c)}`, lastModified: now, changeFrequency: "hourly" as const, priority: 0.75 })),
+    ...citiesWx(site.state).map(([c]) => ({ url: `${baseUrl}/press-release/${slug(c)}`, lastModified: now, changeFrequency: "weekly" as const, priority: 0.5 })),
     ...cityNames.map((c) => ({ url: `${baseUrl}/city/${slug(c)}`, lastModified: now, changeFrequency: "daily" as const, priority: 0.8 })),
     ...(STATE_FACTS[site.state]?.counties || countiesOf(site.state).slice(0, 10)).map((c) => ({ url: `${baseUrl}/county/${slug(`${c} ${unit}`)}`, lastModified: now, changeFrequency: "daily" as const, priority: 0.7 })),
     ...teamNames.map((t) => ({ url: `${baseUrl}/team/${slug(t)}`, lastModified: now, changeFrequency: "daily" as const, priority: 0.75 })),
