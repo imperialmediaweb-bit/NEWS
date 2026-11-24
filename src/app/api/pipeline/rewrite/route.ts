@@ -122,7 +122,7 @@ export async function POST(req: NextRequest) {
   const { rows: pending } = await pool.query(
     `WITH silence AS (
        SELECT s.state, max(a.published_at) AS last_published,
-              count(a.id) FILTER (WHERE a.published_at > now() - interval '24 hours') AS day_count
+              count(a.id) FILTER (WHERE a.published_at > now() - interval '24 hours' AND a.category NOT IN ('guides', 'sponsored', 'obituaries')) AS day_count
          FROM sites s
          LEFT JOIN articles a ON a.site_id = s.id
         GROUP BY s.state
@@ -138,11 +138,13 @@ export async function POST(req: NextRequest) {
             AND created_at > NOW() - INTERVAL '24 hours'
        ) ranked
        LEFT JOIN silence ON silence.state = ranked.state
+       -- at most NEWS_PER_DAY_MAX news stories a day per paper (default 20): quality over volume
+       WHERE coalesce(silence.day_count, 0) < $2
        ORDER BY ranked.rn ASC, LEAST(coalesce(silence.day_count, 0), 12) ASC, silence.last_published ASC NULLS FIRST
        LIMIT $1
      )
      RETURNING *`,
-    [batchSize]
+    [batchSize, Number(process.env.NEWS_PER_DAY_MAX || 20)]
   );
 
   if (pending.length === 0) {
