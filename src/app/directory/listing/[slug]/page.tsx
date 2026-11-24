@@ -12,6 +12,7 @@ import { generateContent } from "@/data/generate-content";
 import { BizCard, Crumbs, OsmCredit, Stars } from "@/components/directory/parts";
 import ReviewForm from "@/components/directory/ReviewForm";
 import RemoveRequest from "@/components/directory/RemoveRequest";
+import AskBiz from "@/components/directory/AskBiz";
 
 /**
  * One business. LocalBusiness markup with the specific schema.org type; stars
@@ -161,6 +162,8 @@ export default async function BusinessPage({ params, searchParams }: { params: {
               </div>
             ))}
           </div>
+
+          <AskBiz slug={b.slug} name={b.name} acc={acc} hasHours={!!b.hours} hasReviews={b.rating_count > 0} />
 
           {b.description && <section className="mt-8"><h2 className="text-[22px] font-black">About {b.name}</h2><p className="mt-2 whitespace-pre-line text-[17px] leading-relaxed text-gray-800">{b.description}</p></section>}
           {b.article_slug && <p className="mt-4"><a href={`/${b.article_slug}`} className="font-bold underline" style={{ color: acc }}>Read the Business Spotlight profile ›</a></p>}
