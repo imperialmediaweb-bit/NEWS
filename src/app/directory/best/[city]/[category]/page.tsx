@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import pool from "@/lib/db";
 import { siteFromHeaders } from "@/lib/topic-page";
-import { dirSchema, bizHref, ratingOf, isSpotlight, type Business } from "@/lib/directory";
+import { bizHref, ratingOf, isSpotlight, rank } from "@/lib/directory";
 import { catBySlug } from "@/lib/directory-categories";
-import { parseHours } from "@/lib/opening-hours";
 import { mockupOf } from "@/config/design-cfg";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -20,31 +18,6 @@ import { Crumbs, OsmCredit, Stars } from "@/components/directory/parts";
  */
 export const dynamic = "force-dynamic";
 
-type Ranked = Business & { score: number; why: string[] };
-
-async function rank(site: string, city: string, category: string): Promise<Ranked[]> {
-  await dirSchema();
-  const { rows } = await pool.query(`SELECT * FROM businesses WHERE site_slug = $1 AND city_slug = $2 AND category = $3 AND status = 'active' LIMIT 400`, [site, city, category]);
-  const seen = new Set<string>();
-  const out: Ranked[] = [];
-  for (const b of rows as Business[]) {
-    const key = b.name.toLowerCase().replace(/[^a-z0-9]/g, "");
-    if (seen.has(key)) continue; // one place per chain
-    seen.add(key);
-    const why: string[] = [];
-    // Bayesian average: 3.5 stars with the weight of 3 reviews, plus the real reviews
-    const bayes = (3.5 * 3 + b.rating_sum) / (3 + b.rating_count);
-    let score = bayes * 20;
-    if (b.rating_count) why.push(`${ratingOf(b)}★ from ${b.rating_count} review${b.rating_count === 1 ? "" : "s"}`);
-    if (parseHours(b.hours)) { score += 6; why.push("hours listed"); }
-    if (b.phone) score += 4;
-    if (b.website) { score += 4; why.push("website"); }
-    if (b.description) { score += 5; why.push("owner description"); }
-    if (b.claimed) { score += 6; why.push("verified owner"); }
-    out.push({ ...b, score, why });
-  }
-  return out.sort((a, b) => b.score - a.score).slice(0, 10);
-}
 const month = () => new Date().toLocaleDateString("en-US", { month: "long", year: "numeric" });
 
 export async function generateMetadata({ params }: { params: { city: string; category: string } }): Promise<Metadata> {

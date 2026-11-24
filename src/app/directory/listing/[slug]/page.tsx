@@ -276,6 +276,7 @@ export default async function BusinessPage({ params, searchParams }: { params: {
               <img src={`/api/directory/qr?b=${b.slug}`} alt="" className="h-14 w-14 rounded bg-white p-1" />
               <span>Print your free “Review us” QR sign for the counter ›</span>
             </a>
+            {b.claimed && <a href="/directory/owner" className="mt-3 block text-[13.5px] font-bold underline">Owner? Open your dashboard: views, calls, Google &amp; ChatGPT ›</a>}
             <p className="mt-3 text-[13px] opacity-75">Something wrong? <a href={`/contact?subject=${encodeURIComponent(`Directory correction: ${b.name}`)}`} className="underline">Report a change</a></p>
             <div className="mt-2"><RemoveRequest slug={b.slug} name={b.name} /></div>
           </div>

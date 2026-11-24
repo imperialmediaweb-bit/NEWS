@@ -1,4 +1,5 @@
 import pool from "@/lib/db";
+import { parseHours as _parseHours } from "@/lib/opening-hours";
 import { sites } from "@/config/sites";
 import { citiesOf } from "@/lib/local-data";
 import { slugOf } from "@/lib/topic-page";
@@ -361,4 +362,31 @@ export async function liveDeals(site: string, opts: { businessId?: number; city?
   args.push(opts.limit ?? 60);
   const { rows } = await pool.query(`SELECT d.*, b.name AS biz_name, b.slug AS biz_slug, b.city, b.city_slug, b.category, b.phone FROM business_deals d JOIN businesses b ON b.id = d.business_id WHERE ${where.join(" AND ")} ORDER BY d.created_at DESC LIMIT $${args.length}`, args);
   return rows as Array<Deal & { biz_name: string; biz_slug: string; city: string; city_slug: string; category: string; phone: string | null }>;
+}
+
+// ── Top 10 ranking (shared by the Best pages and the owner page) ──
+export type Ranked = Business & { score: number; why: string[] };
+
+export async function rank(site: string, city: string, category: string): Promise<Ranked[]> {
+  await dirSchema();
+  const { rows } = await pool.query(`SELECT * FROM businesses WHERE site_slug = $1 AND city_slug = $2 AND category = $3 AND status = 'active' LIMIT 400`, [site, city, category]);
+  const seen = new Set<string>();
+  const out: Ranked[] = [];
+  for (const b of rows as Business[]) {
+    const key = b.name.toLowerCase().replace(/[^a-z0-9]/g, "");
+    if (seen.has(key)) continue; // one place per chain
+    seen.add(key);
+    const why: string[] = [];
+    // Bayesian average: 3.5 stars with the weight of 3 reviews, plus the real reviews
+    const bayes = (3.5 * 3 + b.rating_sum) / (3 + b.rating_count);
+    let score = bayes * 20;
+    if (b.rating_count) why.push(`${ratingOf(b)}★ from ${b.rating_count} review${b.rating_count === 1 ? "" : "s"}`);
+    if (_parseHours(b.hours)) { score += 6; why.push("hours listed"); }
+    if (b.phone) score += 4;
+    if (b.website) { score += 4; why.push("website"); }
+    if (b.description) { score += 5; why.push("owner description"); }
+    if (b.claimed) { score += 6; why.push("verified owner"); }
+    out.push({ ...b, score, why });
+  }
+  return out.sort((a, b) => b.score - a.score).slice(0, 10);
 }
