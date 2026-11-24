@@ -31,7 +31,7 @@ async function searchPixabay(query: string): Promise<ImageResult | null> {
   };
 }
 
-async function searchPexels(query: string): Promise<ImageResult | null> {
+export async function searchPexels(query: string): Promise<ImageResult | null> {
   const apiKey = process.env.PEXELS_API_KEY;
   if (!apiKey) return null;
 

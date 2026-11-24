@@ -2,7 +2,7 @@ import pool from "@/lib/db";
 import { sites } from "@/config/sites";
 import type { SiteConfig } from "@/config/site-config";
 import { llmJson } from "@/lib/llm-json";
-import { findImage } from "@/lib/pipeline/images";
+import { findImage, searchPexels } from "@/lib/pipeline/images";
 import { storeImage } from "@/lib/pipeline/image-store";
 import { citiesOf } from "@/lib/local-data";
 import { PRODUCTS } from "@/lib/paid";
@@ -122,13 +122,19 @@ ${facts}`, 4000).catch(() => null);
     advertise: `<aside class="guide-cta"><b>Want ${esc(site.state)} customers to know you?</b> ${L.advertise.replace(">advertise", ">Advertise")}: sponsored stories from ${price.sponsored}.</aside>`,
     directory: `<aside class="guide-cta"><b>Is your business listed?</b> ${L.directory.replace(">add", ">Add")}: free, or Business Spotlight for ${price.spotlight}.</aside>`,
   }[product];
+  const usedKeys = new Set(Array.from(JSON.stringify(out).matchAll(/\[\[(obituary|release|advertise|directory)\]\]/g)).map((m) => m[1]));
+  const want: Array<keyof typeof L> = product === "obituary" ? ["obituary", "advertise"] : product === "release" ? ["release", "advertise"] : product === "advertise" ? ["advertise", "release", "directory"] : ["directory", "advertise"];
+  const missing = want.filter((k) => !usedKeys.has(k));
+  const related = missing.length ? `\n<p class="guide-related">Related: you can ${missing.map((k) => L[k]).join(" or ")} on ${esc(site.name)}.</p>` : "";
   const html = out.sections.map((x) => `<h2>${esc(x.heading)}</h2>\n${String(x.text).split(/\n\s*\n/).map((p) => `<p>${fill(p.trim()).replace(/\n/g, "<br>")}</p>`).join("\n")}`).join("\n")
+    + related
     + `\n${cta}`
     + (out.faqs?.length ? `\n<h2>Frequently asked questions</h2>\n${out.faqs.map((f) => `<h3>${esc(f.q)}</h3>\n<p>${fill(f.a)}</p>`).join("\n")}` : "");
   const { rows: s } = await pool.query("SELECT id FROM sites WHERE slug = $1", [site.slug]);
   if (!s[0]) return null;
-  const img = await findImage(topic.image, "guides", { title, state: site.state }).catch(() => null);
-  const stored = img?.url ? await storeImage(img.url, title).catch(() => null) : null;
+  // Pexels first (free licence, reliable hotlinking); our own copy when the store works
+  const img = (await searchPexels(topic.image).catch(() => null)) || (await findImage(topic.image, "guides").catch(() => null));
+  const stored = img?.url ? await storeImage(img.url, title, true).catch(() => null) : null;
   const slug = slugify(title);
   const ins = await pool.query(
     `INSERT INTO articles (site_id, title, slug, content, summary, category, author, featured_image, published_at, source_url, auto_generated, image_credit)
