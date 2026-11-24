@@ -50,7 +50,7 @@ export default function PressReleasePage({ searchParams }: { searchParams: { pai
         <p className="mt-4 text-[14px] text-gray-600">
           For agencies: send releases about {site.state} as often as you like; each one is reviewed and billed separately. Free news tips and announcements can still be sent through the <a href="/submit" className="underline">submit page</a>; our newsroom decides whether to cover them. We do not publish releases about cannabis, vaping, drugs or supplements, crypto or investment offers, payday loans, adult content, weapons, or anything misleading. Casino and 18+ venue releases are {`$${(Number(process.env.PRICE_PREMIUM_CENTS || 9900) / 100).toFixed(0)}`}.
         </p>
-        <a href="https://media-chief.com/packages" target="_blank" rel="noopener" className="mt-6 flex flex-col gap-1 border-2 border-gray-900 bg-white p-5 hover:bg-gray-50 sm:flex-row sm:items-center sm:justify-between">
+        <a href="/all-50-states" className="mt-6 flex flex-col gap-1 border-2 border-gray-900 bg-white p-5 hover:bg-gray-50 sm:flex-row sm:items-center sm:justify-between">
           <span><b className="block text-[17px]">Need national reach? Publish on all 50 state papers at once.</b><span className="text-[14.5px] text-gray-700">One release on every paper of the network, one in every state, live within 24 hours, with a full report of the links.</span></span>
           <span className="mt-2 shrink-0 bg-gray-900 px-4 py-2.5 text-[14px] font-black text-white sm:mt-0">All 50 states: $149 ›</span>
         </a>

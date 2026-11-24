@@ -118,7 +118,7 @@ ${facts}`, 4000).catch(() => null);
   const product = topic.product;
   const cta = {
     obituary: `<aside class="guide-cta"><b>Ready to share your loved one's story?</b> ${L.obituary.replace(">place an", ">Place an")}: ${price.obituary}, with photo, online within one business day.</aside>`,
-    release: `<aside class="guide-cta"><b>Have news to announce?</b> ${L.release.replace(">publish a", ">Publish a")}: ${price.release}, live within one business day. All 50 states: $149.</aside>`,
+    release: `<aside class="guide-cta"><b>Have news to announce?</b> ${L.release.replace(">publish a", ">Publish a")}: ${price.release}, live within one business day. <a href="/all-50-states">All 50 states: $149</a>.</aside>`,
     advertise: `<aside class="guide-cta"><b>Want ${esc(site.state)} customers to know you?</b> ${L.advertise.replace(">advertise", ">Advertise")}: sponsored stories from ${price.sponsored}.</aside>`,
     directory: `<aside class="guide-cta"><b>Is your business listed?</b> ${L.directory.replace(">add", ">Add")}: free, or Business Spotlight for ${price.spotlight}.</aside>`,
   }[product];

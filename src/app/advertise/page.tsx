@@ -141,6 +141,11 @@ export default function AdvertisePage() {
                 <span className="mt-3 inline-block rounded bg-gray-800 px-4 py-2 text-[14px] font-bold text-white">Place an obituary ›</span>
               </a>
             </div>
+            <a href="/all-50-states" className="not-prose mb-4 block rounded-lg border-2 p-5 hover:bg-gray-50" style={{ borderColor: "var(--accent)" }}>
+              <div className="text-[13px] font-bold uppercase tracking-wide text-gray-500">National package · all 50 state papers</div>
+              <div className="mt-1 text-3xl font-black" style={{ color: "var(--accent)" }}>$149</div>
+              <p className="mt-2 text-[14px] text-gray-700">One article or press release on every state news site of the network, live within 24 hours, with a report of all 50 links.</p>
+            </a>
             <a href="/press-release" className="not-prose mb-4 block rounded-lg border-2 border-gray-300 p-5 hover:bg-gray-50">
               <div className="text-[13px] font-bold uppercase tracking-wide text-gray-500">Press release</div>
               <div className="mt-1 text-3xl font-black text-gray-800">$49</div>

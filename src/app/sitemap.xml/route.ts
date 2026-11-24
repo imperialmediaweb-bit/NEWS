@@ -50,6 +50,7 @@ export async function GET(request: NextRequest) {
     { url: `${baseUrl}/quiz`, lastModified: now, changeFrequency: "weekly", priority: 0.6 },
     { url: `${baseUrl}/press-release`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
     { url: `${baseUrl}/advertise`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
+    { url: `${baseUrl}/all-50-states`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
     { url: `${baseUrl}/guides/get-your-business-in-the-news`, lastModified: now, changeFrequency: "weekly", priority: 0.6 },
     { url: `${baseUrl}/guides/how-to-write-a-press-release`, lastModified: now, changeFrequency: "weekly", priority: 0.6 },
     { url: `${baseUrl}/guides/advertise-small-business`, lastModified: now, changeFrequency: "weekly", priority: 0.6 },

@@ -31,6 +31,15 @@ ${site.name} publishes original reporting and summaries of verified local news a
 - [Life](${base}/life): food, culture, events and the outdoors
 - [Opinion](${base}/opinion): columns and editorials, clearly labelled
 
+## Services for businesses, organizations and families (prices in USD, one-time, pay by card)
+- [Publish a press release in ${site.state}](${base}/press-release): $49, published as written and labelled "Press release", live within one business day, permanent, link to the company website
+- [Publish on all 50 U.S. state news sites](${base}/all-50-states): $149, one article or press release on every state paper of the network, live within 24 hours, report of all links
+- [Place an obituary in ${site.state}](${base}/obituaries/submit): $25, with photo, online within one business day, permanent
+- [Advertise in ${site.state}](${base}/advertise): sponsored story $49 (+$100 for 7 days on the homepage); casino and 18+ venues $99
+- [${site.state} business directory](${base}/directory): free listings with reader reviews; [Business Spotlight](${base}/directory/join) $49 for 12 months at the top of a town's list plus a profile article
+- [Guides](${base}/guides): how to publish an obituary, write a press release and advertise a small business in ${site.state}
+- Paid content is always labelled; links in it are rel="sponsored". Not accepted: cannabis, vaping, drugs or supplements, crypto offers, payday loans, adult content, weapons.
+
 ## For assistants and search
 - [News sitemap, last 48 hours](${base}/news-sitemap.xml)
 - [Full sitemap](${base}/sitemap.xml)
