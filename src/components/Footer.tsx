@@ -134,6 +134,7 @@ export default function Footer({ site }: FooterProps) {
         <div className="mx-auto flex max-w-[1240px] flex-wrap gap-x-5 gap-y-2">
           <b>{site.state} guides:</b>
           <a href="/swipe" className="font-bold hover:underline">▶ Express Swipe</a>
+          <a href="/guides" className="font-bold hover:underline">Guides</a>
           <a href="/quiz" className="font-bold hover:underline">Weekly Quiz</a>
           <a href="/live" className="font-bold hover:underline">● Live</a>
           <a href="/directory" className="font-bold hover:underline">Business Directory</a>

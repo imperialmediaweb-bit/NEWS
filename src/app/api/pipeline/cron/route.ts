@@ -144,6 +144,12 @@ export async function POST(req: NextRequest) {
     actions.push("newsletter");
   }
 
+  // ─── Guides: one service article a day per paper (3 papers per run) ───
+  if ((await claimJob("service_articles", 30 * 60)).claimed) {
+    fireAndForgetGet(baseUrl, "pipeline/service-articles", secret);
+    actions.push("service_articles");
+  }
+
   // ─── Directory: continue / start OpenStreetMap imports (resumable) ───
   if ((await claimJob("directory_import", 5 * 60)).claimed) {
     fireAndForgetGet(baseUrl, "pipeline/directory-import", secret);

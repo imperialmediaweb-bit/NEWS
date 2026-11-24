@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
     // Google News sitemap: articles from last 48 hours
     const { rows: articles } = await pool.query(
       `SELECT title, slug, category, published_at, author, featured_image, summary
-       FROM articles WHERE site_id = $1 AND published_at > NOW() - INTERVAL '48 hours'
+       FROM articles WHERE site_id = $1 AND published_at > NOW() - INTERVAL '48 hours' AND category <> 'guides'
        ORDER BY published_at DESC LIMIT 1000`,
       [siteId]
     );

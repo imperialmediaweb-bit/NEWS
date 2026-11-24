@@ -483,3 +483,8 @@ article figure img, .pc-article figure img {
 .pr-offer { margin: 2em 0 .5em; padding: 1em 1.2em; border-left: 4px solid var(--fx-acc, #b91c1c); background: rgba(0,0,0,.035); font-family: Inter, system-ui, sans-serif; font-size: 15px !important; line-height: 1.5; }
 .pr-offer a { font-weight: 800; white-space: nowrap; color: var(--fx-acc, #b91c1c); }
 .read-night .pr-offer { background: rgba(255,255,255,.06); }
+
+/* Guides section: the call to action box */
+.guide-cta { margin: 1.8em 0; padding: 1em 1.2em; border-left: 5px solid var(--fx-acc, #b91c1c); background: rgba(0,0,0,.04); font-family: Inter, system-ui, sans-serif; font-size: 16px !important; line-height: 1.55; }
+.guide-cta a { font-weight: 800; color: var(--fx-acc, #b91c1c); }
+.read-night .guide-cta { background: rgba(255,255,255,.06); }
