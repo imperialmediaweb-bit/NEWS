@@ -368,6 +368,8 @@ export default async function ArticlePage({
     headline: displayTitle,
     description,
     image: image ? [image] : [],
+    // where the story happened (town from the headline, else the state) and its section, for search and AI answers
+    contentLocation: { "@type": "Place", name: [placeIn(displayTitle, site.state), site.state].filter(Boolean).join(", ") },
     // ISO 8601, as Google News / Top Stories require (published_at can arrive as a Date's toString())
     datePublished: isoDate(article?.published_at),
     dateModified: isoDate(article?.published_at),

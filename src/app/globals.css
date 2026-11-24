@@ -488,3 +488,12 @@ article figure img, .pc-article figure img {
 .guide-cta { margin: 1.8em 0; padding: 1em 1.2em; border-left: 5px solid var(--fx-acc, #b91c1c); background: rgba(0,0,0,.04); font-family: Inter, system-ui, sans-serif; font-size: 16px !important; line-height: 1.55; }
 .guide-cta a { font-weight: 800; color: var(--fx-acc, #b91c1c); }
 .read-night .guide-cta { background: rgba(255,255,255,.06); }
+
+/* key facts box and Q&A on stories */
+.key-facts { margin: 0 0 1.6em; padding: .9em 1.2em; border-left: 5px solid var(--fx-acc, #b91c1c); background: rgba(0,0,0,.035); font-family: Inter, system-ui, sans-serif; }
+.key-facts-h { margin: 0 0 .3em !important; font-size: 12px !important; font-weight: 900; letter-spacing: .16em; text-transform: uppercase; color: var(--fx-acc, #b91c1c); }
+.key-facts ul { margin: 0; padding-left: 1.1em; }
+.key-facts li { margin: .25em 0; font-size: 16px; line-height: 1.5; }
+.story-qa { margin-top: 2.2em; padding-top: 1em; border-top: 2px solid rgba(0,0,0,.12); }
+.story-qa h3 { font-size: 1.05em; margin: 1em 0 .3em; }
+.read-night .key-facts { background: rgba(255,255,255,.06); }

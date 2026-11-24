@@ -285,8 +285,11 @@ Return ONLY valid JSON, no markdown fences:
   "content": "the article body as HTML",
   "suggestedImageQuery": "2-4 words describing a generic scene, never a specific person",
   "section": "one of politics | business | sports | life | local-news",
-  "aboutState": true
-}`;
+  "aboutState": true,
+  "keyFacts": ["3 short bullet facts a reader needs: what happened, where, when / what is next. Only from the source."],
+  "faqs": [{"q": "a question a ${state} reader would search about this story", "a": "a 1-2 sentence answer taken only from the source"}]
+}
+"faqs": 2 or 3 questions, only ones the source answers; no question about anything the source does not say.`;
 
   return restoreSourceSpellings(await callWithFallback(prompt), sourceText);
 }
@@ -610,6 +613,20 @@ const PROVIDER_FNS: Record<LLMProvider, (prompt: string) => Promise<RewriteResul
   groq: callGroq,
 };
 
+/**
+ * Key facts at the top and a short Q&A at the end of every story: the forms
+ * search engines and AI assistants quote ("People also ask", AI answers).
+ * They are part of the content, so the name/number fact check covers them.
+ */
+function withSearchExtras(content: string, keyFacts: unknown, faqs: unknown): string {
+  const e = (x: string) => String(x).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const facts = Array.isArray(keyFacts) ? keyFacts.map(String).map((x) => x.trim()).filter((x) => x.length > 8 && x.length < 260).slice(0, 4) : [];
+  const qa = Array.isArray(faqs) ? (faqs as Array<{ q?: string; a?: string }>).filter((x) => x?.q && x?.a && String(x.a).length > 10).slice(0, 3) : [];
+  const top = facts.length >= 2 ? `<aside class="key-facts"><p class="key-facts-h">Key facts</p><ul>${facts.map((f) => `<li>${e(f)}</li>`).join("")}</ul></aside>\n` : "";
+  const end = qa.length >= 2 ? `\n<section class="story-qa"><h2>Questions answered</h2>${qa.map((x) => `<h3>${e(String(x.q))}</h3><p>${e(String(x.a))}</p>`).join("")}</section>` : "";
+  return `${top}${content}${end}`;
+}
+
 function parseRewriteResponse(text: string): RewriteResult {
   const cleaned = text
     .replace(/^```json?\s*/i, "")
@@ -620,7 +637,7 @@ function parseRewriteResponse(text: string): RewriteResult {
   return {
     title: json.title || "",
     summary: json.summary || "",
-    content: json.content || "",
+    content: withSearchExtras(json.content || "", json.keyFacts, json.faqs),
     suggestedImageQuery: json.suggested_image_query || json.suggestedImageQuery || "",
     section: typeof json.section === "string" ? json.section.trim().toLowerCase() : undefined,
     aboutState: typeof json.aboutState === "boolean" ? json.aboutState : undefined,
