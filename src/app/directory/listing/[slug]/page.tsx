@@ -13,6 +13,7 @@ import { BizCard, Crumbs, OsmCredit, Stars } from "@/components/directory/parts"
 import ReviewForm from "@/components/directory/ReviewForm";
 import RemoveRequest from "@/components/directory/RemoveRequest";
 import AskBiz from "@/components/directory/AskBiz";
+import BizTracker from "@/components/directory/BizTracker";
 
 /**
  * One business. LocalBusiness markup with the specific schema.org type; stars
@@ -97,6 +98,7 @@ export default async function BusinessPage({ params, searchParams }: { params: {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
+      <BizTracker slug={b.slug} />
       <Header site={site} />
       <section className="biz-hero relative overflow-hidden text-white" style={{ background: ink }}>
         {hero && (
@@ -133,9 +135,9 @@ export default async function BusinessPage({ params, searchParams }: { params: {
             </div>
           </div>
           <div className="mt-6 flex flex-wrap gap-3">
-            {b.phone && <a href={`tel:${b.phone.replace(/[^\d+]/g, "")}`} className="biz-btn px-5 py-3 text-[15px] font-black" style={{ background: acc }}>☎ Call {b.phone}</a>}
-            {b.website && <a href={b.website} target="_blank" rel={spot ? "sponsored noopener" : "nofollow noopener"} className="biz-btn bg-white px-5 py-3 text-[15px] font-black" style={{ color: ink }}>Visit website ›</a>}
-            <a href={mapUrl} target="_blank" rel="noopener nofollow" className="biz-btn border border-white/50 px-5 py-3 text-[15px] font-bold backdrop-blur">Directions</a>
+            {b.phone && <a data-track="call" href={`tel:${b.phone.replace(/[^\d+]/g, "")}`} className="biz-btn px-5 py-3 text-[15px] font-black" style={{ background: acc }}>☎ Call {b.phone}</a>}
+            {b.website && <a data-track="website" href={b.website} target="_blank" rel={spot ? "sponsored noopener" : "nofollow noopener"} className="biz-btn bg-white px-5 py-3 text-[15px] font-black" style={{ color: ink }}>Visit website ›</a>}
+            <a data-track="directions" href={mapUrl} target="_blank" rel="noopener nofollow" className="biz-btn border border-white/50 px-5 py-3 text-[15px] font-bold backdrop-blur">Directions</a>
             <a href="#review" className="biz-btn border border-white/50 px-5 py-3 text-[15px] font-bold backdrop-blur">★ Review</a>
           </div>
         </div>
@@ -234,7 +236,7 @@ export default async function BusinessPage({ params, searchParams }: { params: {
             <h2 className="text-[17px] font-black">Contact</h2>
             <dl className="mt-3 space-y-2.5 text-[15px]">
               {b.address && <div><dt className="text-[12px] font-bold uppercase text-gray-500">Address</dt><dd>{fullAddress}</dd></div>}
-              {b.phone && <div><dt className="text-[12px] font-bold uppercase text-gray-500">Phone</dt><dd><a href={`tel:${b.phone.replace(/[^\d+]/g, "")}`} className="font-bold" style={{ color: acc }}>{b.phone}</a></dd></div>}
+              {b.phone && <div><dt className="text-[12px] font-bold uppercase text-gray-500">Phone</dt><dd><a data-track="call" href={`tel:${b.phone.replace(/[^\d+]/g, "")}`} className="font-bold" style={{ color: acc }}>{b.phone}</a></dd></div>}
               {host && <div><dt className="text-[12px] font-bold uppercase text-gray-500">Website</dt><dd><a href={b.website!} target="_blank" rel={spot ? "sponsored noopener" : "nofollow noopener"} className="underline">{host}</a></dd></div>}
               {!week && b.hours && <div><dt className="text-[12px] font-bold uppercase text-gray-500">Hours</dt><dd className="whitespace-pre-line">{b.hours.replace(/;\s*/g, "\n")}</dd></div>}
               {(b.facebook || b.instagram) && <div><dt className="text-[12px] font-bold uppercase text-gray-500">Social</dt><dd className="flex gap-3">{b.facebook && <a href={b.facebook} target="_blank" rel="nofollow noopener" className="underline">Facebook</a>}{b.instagram && <a href={b.instagram} target="_blank" rel="nofollow noopener" className="underline">Instagram</a>}</dd></div>}
@@ -259,6 +261,11 @@ export default async function BusinessPage({ params, searchParams }: { params: {
             <h2 className="text-[17px] font-black">{b.claimed ? "Is this your business?" : "Own this business?"}</h2>
             <p className="mt-1.5 text-[14.5px] opacity-90">{b.claimed ? "Update your details or get to the top of the list with Business Spotlight." : "Claim it free to add photos, hours and a description, or get Business Spotlight: top of the list for 12 months plus a profile article."}</p>
             <a href={`/directory/join?b=${b.slug}`} className="mt-3 inline-block px-4 py-2.5 text-[14px] font-black" style={{ background: acc }}>{b.claimed ? "Update or upgrade ›" : "Claim this listing ›"}</a>
+            <a href={`/api/directory/qr?b=${b.slug}&format=sign`} target="_blank" rel="noopener" className="mt-3 flex items-center gap-3 rounded-lg bg-white/10 p-2.5 text-[13.5px] font-bold ring-1 ring-white/20 hover:bg-white/15">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={`/api/directory/qr?b=${b.slug}`} alt="" className="h-14 w-14 rounded bg-white p-1" />
+              <span>Print your free “Review us” QR sign for the counter ›</span>
+            </a>
             <p className="mt-3 text-[13px] opacity-75">Something wrong? <a href={`/contact?subject=${encodeURIComponent(`Directory correction: ${b.name}`)}`} className="underline">Report a change</a></p>
             <div className="mt-2"><RemoveRequest slug={b.slug} name={b.name} /></div>
           </div>
