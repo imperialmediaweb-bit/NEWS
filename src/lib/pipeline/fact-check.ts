@@ -19,10 +19,16 @@ const COMMON = new Set(("the a an and or but in on at for of to from by with aft
   "monday tuesday wednesday thursday friday saturday sunday january february march april may june july august september october november december " +
   "mr mrs ms dr gov governor sen senator rep representative mayor president sheriff chief police department county city state university college school " +
   "north south east west new st saint mount fort lake river street avenue road highway interstate park center county's state's city's " +
-  "according officials residents local news express newsroom thanksgiving christmas easter halloween").split(" "));
+  "according officials residents local news express newsroom thanksgiving christmas easter halloween " +
+  "united states america american americans nation national federal president association department office board council committee commission " +
+  "key facts questions answered").split(" "));
 
 export function factCheck(r: RewriteResult, source: string, allowed: string[] = []): string[] {
-  const out = strip(`${r.title}\n${r.summary}\n${r.content}`);
+  // Title Case headlines ("Eureka Shootings Leaves Deputy") make every word look like a name:
+  // their names are checked where they also appear in the body, so the title is left out then.
+  const tw = r.title.split(/\s+/).filter((w) => /^[A-Za-z]/.test(w));
+  const titleCase = tw.length >= 4 && tw.filter((w) => /^[A-Z]/.test(w)).length / tw.length > 0.6;
+  const out = strip(`${titleCase ? "" : r.title}\n${r.summary}\n${r.content}`);
   const src = norm(strip(source));
   const extra = norm(allowed.join(" "));
   const problems: string[] = [];
