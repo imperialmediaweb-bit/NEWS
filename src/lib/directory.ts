@@ -283,6 +283,9 @@ export async function applyClaim(claimId: number) {
   args.push(c.email); sets.push(`owner_email = $${args.length}`);
   await pool.query(`UPDATE businesses SET ${sets.join(", ")}, claimed = TRUE, status = 'active', source = CASE WHEN source = 'osm' THEN 'osm+owner' ELSE source END, updated_at = now() WHERE id = $1`, args);
   await pool.query(`UPDATE business_claims SET status = 'applied' WHERE id = $1`, [claimId]);
+  // welcome email with the dashboard link (the owner asked to be listed, so this is expected)
+  const { sendOwnerWelcome } = await import("@/lib/directory-owner");
+  await sendOwnerWelcome(c.site_slug, c.business_id).catch(() => null);
   return true;
 }
 
