@@ -19,7 +19,18 @@ export type BizSite = {
   business_id: number; site_slug: string; slug: string; theme: string; accent: string | null; tagline: string | null; about: string | null;
   services: Service[]; faqs: Faq[]; gallery: string[]; hero_url: string | null; cta_label: string | null; contact_email: string | null;
   status: string; plan: string | null; stripe_subscription: string | null; paid_until: string | null; updated_at: string;
+  logo_url: string | null; booking_url: string | null; video_url: string | null; announcement: string | null; hidden: string[];
 };
+export const SECTIONS = ["services", "about", "gallery", "video", "assistant", "reviews", "faqs", "contact"] as const;
+
+/** A YouTube or Vimeo link as an embeddable URL (anything else: null). */
+export function videoEmbed(u: string | null): string | null {
+  if (!u) return null;
+  const y = u.match(/(?:youtube\.com\/(?:watch\?v=|shorts\/|embed\/)|youtu\.be\/)([\w-]{11})/);
+  if (y) return `https://www.youtube-nocookie.com/embed/${y[1]}`;
+  const v = u.match(/vimeo\.com\/(\d+)/);
+  return v ? `https://player.vimeo.com/video/${v[1]}` : null;
+}
 export const THEMES = ["classic", "bold", "minimal"] as const;
 
 let ready = false;
@@ -35,6 +46,11 @@ export async function siteSchema() {
       status VARCHAR(20) NOT NULL DEFAULT 'draft', plan VARCHAR(10), stripe_subscription TEXT, paid_until TIMESTAMPTZ,
       created_at TIMESTAMPTZ NOT NULL DEFAULT now(), updated_at TIMESTAMPTZ NOT NULL DEFAULT now(), UNIQUE (site_slug, slug)
     );
+    ALTER TABLE business_sites ADD COLUMN IF NOT EXISTS logo_url TEXT;
+    ALTER TABLE business_sites ADD COLUMN IF NOT EXISTS booking_url TEXT;
+    ALTER TABLE business_sites ADD COLUMN IF NOT EXISTS video_url TEXT;
+    ALTER TABLE business_sites ADD COLUMN IF NOT EXISTS announcement TEXT;
+    ALTER TABLE business_sites ADD COLUMN IF NOT EXISTS hidden JSONB NOT NULL DEFAULT '[]';
     CREATE TABLE IF NOT EXISTS business_ai_questions (
       id SERIAL PRIMARY KEY, business_id INT NOT NULL REFERENCES businesses(id) ON DELETE CASCADE, q TEXT NOT NULL, answered BOOLEAN NOT NULL DEFAULT TRUE,
       created_at TIMESTAMPTZ NOT NULL DEFAULT now()

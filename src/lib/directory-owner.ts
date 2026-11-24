@@ -39,6 +39,14 @@ export async function sendOwnerWelcome(siteSlug: string, businessId: number) {
   const token = await newOwnerToken(b.owner_email, siteSlug);
   const dash = `https://${site.domain}/directory/owner?t=${token}`;
   const page = `https://${site.domain}/directory/listing/${b.slug}`;
+  // the website preview is built now, so the owner finds it ready
+  let preview: string | null = null;
+  try {
+    const { draftSite } = await import("@/lib/business-site");
+    const full = (await pool.query(`SELECT * FROM businesses WHERE id = $1`, [businessId])).rows[0];
+    const ds = full ? await draftSite(full) : null;
+    if (ds) preview = `https://${site.domain}/b/${ds.slug}?t=${token}`;
+  } catch { /* the owner can still build it from the dashboard */ }
   const e = (x: string) => String(x).replace(/</g, "&lt;");
   await new Resend(process.env.RESEND_API_KEY).emails.send({
     from: `${site.name} <contact@alabama-express.com>`, to: b.owner_email,
@@ -51,7 +59,7 @@ export async function sendOwnerWelcome(siteSlug: string, businessId: number) {
 <p><b>Free for you:</b></p>
 <ul><li>A printable "Review us" QR sign for your counter</li><li>An AI assistant on your page that answers customers' questions</li><li>A badge for your website if you're in your town's top 10</li></ul>
 <p><b>When you want more customers:</b></p>
-<ul><li><b>Your own website on ${e(site.name)}</b>: we build a free preview in 30 seconds (services, prices, photos, contact form, AI assistant). $29/month only if you publish it.</li><li><b>Business Spotlight</b>: top of ${e(b.city)}'s list for 12 months plus a profile article, $49 once.</li><li><b>A deal or coupon</b> on your page and the ${e(site.state)} deals page, $19.</li></ul>
+<ul><li><b>Your own website on ${e(site.name)}</b>: ${preview ? `we already built a free preview for you: <a href="${preview}">see your website</a>. Add your logo and photos, or just tell our AI how you want it to look and it changes it for you.` : "we build a free preview in 30 seconds."} Services, prices, booking, video, contact form, AI assistant. $29/month only if you publish it.</li><li><b>Business Spotlight</b>: top of ${e(b.city)}'s list for 12 months plus a profile article, $49 once.</li><li><b>A deal or coupon</b> on your page and the ${e(site.state)} deals page, $19.</li></ul>
 <p>The dashboard link works for 7 days; you can always get a new one at ${site.domain}/directory/owner.</p>
 <p>${e(site.name)}</p></div>`,
   }).catch(() => null);
