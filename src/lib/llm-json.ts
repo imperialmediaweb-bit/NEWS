@@ -1,9 +1,21 @@
 /**
- * Small JSON-only LLM call for the directory tools (Gemini first, OpenAI as
- * fallback). Low temperature: these prompts extract or rephrase, never invent.
+ * Small JSON-only LLM call for the directory tools (Groq first, then Gemini,
+ * then OpenAI). Low temperature: these prompts extract or rephrase, never invent.
  */
 export async function llmJson<T>(prompt: string, maxTokens = 1500): Promise<T> {
   const errors: string[] = [];
+  if (process.env.GROQ_API_KEY) {
+    try {
+      const r = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+        method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.GROQ_API_KEY}` },
+        body: JSON.stringify({ model: process.env.DIRECTORY_GROQ_MODEL || "openai/gpt-oss-120b", temperature: 0.2, max_tokens: Math.max(maxTokens, 2500), response_format: { type: "json_object" }, messages: [{ role: "user", content: prompt }] }),
+        signal: AbortSignal.timeout(60000),
+      });
+      if (!r.ok) throw new Error(`groq ${r.status}`);
+      const j = await r.json();
+      return JSON.parse(j?.choices?.[0]?.message?.content || "{}") as T;
+    } catch (e) { errors.push(String(e)); }
+  }
   if (process.env.GEMINI_API_KEY) {
     try {
       const model = process.env.DIRECTORY_GEMINI_MODEL || "gemini-2.0-flash";
