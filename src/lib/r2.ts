@@ -20,8 +20,9 @@ const endpoint = (key: string) => `https://${process.env.R2_ACCOUNT_ID}.r2.cloud
 export async function r2Put(key: string, body: Uint8Array, contentType: string): Promise<void> {
   const r = await c().fetch(endpoint(key), {
     method: "PUT",
-    body: new Blob([body as unknown as ArrayBuffer], { type: contentType }),
-    headers: { "Content-Type": contentType, "Cache-Control": "public, max-age=31536000, immutable" },
+    // A Blob body can go out chunked without Content-Length, which R2 rejects (411).
+    body: Buffer.from(body),
+    headers: { "Content-Type": contentType, "Content-Length": String(body.byteLength), "Cache-Control": "public, max-age=31536000, immutable" },
   });
   if (!r.ok) throw new Error(`r2 put ${key}: ${r.status} ${(await r.text()).slice(0, 200)}`);
 }

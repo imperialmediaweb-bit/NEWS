@@ -49,8 +49,11 @@ export async function POST(req: NextRequest) {
     if (photo.size > 8 * 1024 * 1024 || !/^image\/(jpeg|png|webp)$/i.test(photo.type)) return NextResponse.json({ error: "The photo must be JPG, PNG or WebP, up to 8 MB." }, { status: 400 });
     if (r2Ready()) {
       const key = `directory/${site.slug}/${Date.now()}-${crypto.randomBytes(6).toString("hex")}.${photo.type.split("/")[1].replace("jpeg", "jpg")}`;
-      await r2Put(key, new Uint8Array(await photo.arrayBuffer()), photo.type);
-      d.photo_url = r2Url(key);
+      // a failed photo upload must not lose the listing: save it without the photo
+      try {
+        await r2Put(key, new Uint8Array(await photo.arrayBuffer()), photo.type);
+        d.photo_url = r2Url(key);
+      } catch (e) { console.error("[directory] photo upload failed:", (e as Error).message); }
     }
   }
 
