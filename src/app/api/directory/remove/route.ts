@@ -3,6 +3,7 @@ import pool from "@/lib/db";
 import { getSiteByDomain } from "@/config/sites";
 import { getBusiness, dirSchema } from "@/lib/directory";
 import { Resend } from "resend";
+import { ADMIN_URL } from "@/lib/admin-url";
 
 /** "Remove this listing": the request is saved and the newsroom is emailed; removal is one click in /admin/directory. */
 export const dynamic = "force-dynamic";
@@ -22,7 +23,7 @@ export async function POST(req: NextRequest) {
     await new Resend(process.env.RESEND_API_KEY).emails.send({
       from: `${site.name} <contact@alabama-express.com>`, to: process.env.SUBMISSIONS_EMAIL || "ainewss2023@gmail.com",
       subject: `[Directory] Removal request: ${biz.name} (${biz.city})`.slice(0, 180),
-      html: `<p>${name.replace(/</g, "")} &lt;${email.replace(/</g, "")}&gt; asks to remove <b>${biz.name.replace(/</g, "")}</b> (${biz.city}) from ${site.name}.</p><p>Reason: ${(reason || "none given").replace(/</g, "")}</p><p><a href="https://${site.domain}/admin/directory">Remove it in one click</a></p>`,
+      html: `<p>${name.replace(/</g, "")} &lt;${email.replace(/</g, "")}&gt; asks to remove <b>${biz.name.replace(/</g, "")}</b> (${biz.city}) from ${site.name}.</p><p>Reason: ${(reason || "none given").replace(/</g, "")}</p><p><a href="${ADMIN_URL}/admin/directory">Remove it in one click</a></p>`,
     }).catch(() => null);
   }
   return NextResponse.json({ ok: true });

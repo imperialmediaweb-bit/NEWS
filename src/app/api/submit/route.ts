@@ -6,6 +6,7 @@ import { r2Put, r2Ready, r2Url } from "@/lib/r2";
 import { ensureSubmissionsTable, SUBMISSION_TYPES, type SubmissionType } from "@/lib/submissions";
 import { Resend } from "resend";
 import { isPremium, PREMIUM_CENTS, PRODUCTS } from "@/lib/paid";
+import { ADMIN_URL } from "@/lib/admin-url";
 
 const NEWSROOM_INBOX = process.env.SUBMISSIONS_EMAIL || "ainewss2023@gmail.com";
 const esc = (x: string) => x.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -119,7 +120,7 @@ export async function POST(req: NextRequest) {
 <h2>${esc(title)}</h2><p style="white-space:pre-wrap">${esc(body)}</p>
 ${photoUrl ? `<p><img src="${photoUrl}" style="max-width:520px"></p>` : ""}${videoUrl ? `<p>Video: <a href="${esc(videoUrl)}">${esc(videoUrl)}</a></p>` : ""}
 <p>From ${esc(name)} &lt;${esc(email)}&gt;${phone ? ` · ${esc(phone)}` : ""}</p>
-<p><a href="https://${site.domain}/admin/submissions">Review it in the admin</a> (approve or reject).</p>`,
+<p><a href="${ADMIN_URL}/admin/submissions">Review it in the admin</a> (approve or reject).</p>`,
       });
     } catch (e) {
       console.error("[submit] notify failed", e instanceof Error ? e.message : e);

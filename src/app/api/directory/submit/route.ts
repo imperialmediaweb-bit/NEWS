@@ -8,6 +8,7 @@ import { ensurePaidTable, PRODUCTS, stripe, bannedReason } from "@/lib/paid";
 import { dirSchema, getBusiness, uniqueSlug, EDITABLE } from "@/lib/directory";
 import { catBySlug } from "@/lib/directory-categories";
 import { Resend } from "resend";
+import { ADMIN_URL } from "@/lib/admin-url";
 
 /**
  * POST (multipart) from /directory/join.
@@ -77,7 +78,7 @@ export async function POST(req: NextRequest) {
       await new Resend(process.env.RESEND_API_KEY).emails.send({
         from: `${site.name} <contact@alabama-express.com>`, to: process.env.SUBMISSIONS_EMAIL || "ainewss2023@gmail.com",
         subject: `[Directory] ${mode === "claim" ? "Claim" : "New free listing"}: ${d.name} (${d.city})`.slice(0, 180),
-        html: `<p>${mode === "claim" ? "Claim request" : "New free listing"} on ${site.name}: <b>${d.name}</b>, ${d.city}, from ${owner} &lt;${email}&gt;.</p><p><a href="https://${site.domain}/admin/directory">Approve or reject</a></p>`,
+        html: `<p>${mode === "claim" ? "Claim request" : "New free listing"} on ${site.name}: <b>${d.name}</b>, ${d.city}, from ${owner} &lt;${email}&gt;.</p><p><a href="${ADMIN_URL}/admin/directory">Approve or reject</a></p>`,
       }).catch(() => null);
     }
     return NextResponse.json({ ok: true, review: true });
