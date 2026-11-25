@@ -2,6 +2,7 @@ import { revalidatePath } from "next/cache";
 import pool from "@/lib/db";
 import { sites } from "@/config/sites";
 import { dirSchema, applyClaim } from "@/lib/directory";
+import { siteSchema } from "@/lib/business-site";
 
 /** Directory admin: approve claims and free listings, hide abusive reviews, see imports. Behind the admin login. */
 export const dynamic = "force-dynamic";
@@ -28,6 +29,7 @@ async function act(fd: FormData) {
 
 export default async function DirectoryAdmin() {
   await dirSchema();
+  await siteSchema();
   const [{ rows: removals }, { rows: claims }, { rows: reviews }, { rows: imports }, { rows: totals }] = await Promise.all([
     pool.query(`SELECT r.*, b.name AS biz, b.city, b.slug, b.site_slug, b.tier FROM business_removals r JOIN businesses b ON b.id = r.business_id WHERE r.status = 'pending' ORDER BY r.created_at DESC`),
     pool.query(`SELECT c.*, b.name AS current_name, b.slug, b.status AS biz_status FROM business_claims c JOIN businesses b ON b.id = c.business_id WHERE c.status = 'pending' AND c.order_id IS NULL ORDER BY c.created_at DESC LIMIT 100`),
@@ -35,10 +37,38 @@ export default async function DirectoryAdmin() {
     pool.query(`SELECT * FROM directory_imports ORDER BY started_at DESC`),
     pool.query(`SELECT COUNT(*)::int n, COUNT(*) FILTER (WHERE claimed)::int claimed, COUNT(*) FILTER (WHERE tier <> 'free')::int paid FROM businesses`),
   ]);
+  // Owner-run businesses (claimed, paid or with a website) — the ones worth watching.
+  const { rows: owned } = await pool.query(`
+    SELECT b.id, b.name, b.city, b.slug, b.site_slug, b.tier, b.claimed, b.status, b.owner_email, b.updated_at,
+           s.slug AS web_slug, s.status AS web_status, s.plan AS web_plan, s.paid_until
+    FROM businesses b LEFT JOIN business_sites s ON s.business_id = b.id
+    WHERE b.claimed OR b.tier <> 'free' OR s.business_id IS NOT NULL
+    ORDER BY b.updated_at DESC LIMIT 300`);
   return (
     <div className="mx-auto max-w-[1100px] p-6">
       <h1 className="text-2xl font-bold">Business directory</h1>
       <p className="mt-1 text-sm text-gray-600">{totals[0]?.n ?? 0} businesses · {totals[0]?.claimed ?? 0} claimed · {totals[0]?.paid ?? 0} Spotlight. Paid Spotlights are in <a href="/admin/paid" className="underline">admin / paid</a>.</p>
+
+      <h2 className="mt-8 text-xl font-bold">Owner businesses and websites ({owned.length})</h2>
+      <p className="text-sm text-gray-600">Claimed, Spotlight or with a website. Website: draft = preview only, active = live and paid, past_due = payment failed, canceled = stopped.</p>
+      <div className="mt-3 overflow-x-auto">
+        <table className="w-full text-sm"><thead><tr className="text-left"><th>Business</th><th>Newspaper</th><th>Listing</th><th>Tier</th><th>Website</th><th>Owner</th></tr></thead>
+          <tbody>{owned.map((b) => {
+            const dom = sites[b.site_slug]?.domain;
+            return (
+              <tr key={b.id} className="border-t align-top">
+                <td className="py-1 font-semibold">{b.name}<div className="text-xs font-normal text-gray-500">{b.city}</div></td>
+                <td>{sites[b.site_slug]?.name || b.site_slug}</td>
+                <td>{dom ? <a href={`https://${dom}/directory/listing/${b.slug}`} target="_blank" rel="noreferrer" className="underline">{b.status}</a> : b.status}{b.claimed ? " · claimed" : ""}</td>
+                <td>{b.tier}</td>
+                <td>{b.web_slug ? <><a href={`https://${dom}/b/${b.web_slug}`} target="_blank" rel="noreferrer" className="underline">{b.web_status}</a>{b.web_plan ? ` · ${b.web_plan}` : ""}</> : "—"}</td>
+                <td className="text-xs">{b.owner_email || "—"}</td>
+              </tr>
+            );
+          })}</tbody>
+        </table>
+        {!owned.length && <p className="text-sm text-gray-500">None yet.</p>}
+      </div>
 
       <h2 className="mt-8 text-xl font-bold">Removal requests ({removals.length})</h2>
       <div className="mt-3 space-y-3">
