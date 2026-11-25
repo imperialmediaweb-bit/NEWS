@@ -69,6 +69,7 @@ export function dirSchema() {
     );
     ALTER TABLE directory_imports ADD COLUMN IF NOT EXISTS groups_done TEXT[] NOT NULL DEFAULT '{}';
     ALTER TABLE directory_imports ADD COLUMN IF NOT EXISTS heartbeat TIMESTAMPTZ;
+    ALTER TABLE business_claims ADD COLUMN IF NOT EXISTS source_info TEXT;
   `).catch((e) => { ready = null; throw e; });
   return ready;
 }

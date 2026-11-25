@@ -7,6 +7,16 @@ import { siteSchema } from "@/lib/business-site";
 /** Directory admin: approve claims and free listings, hide abusive reviews, see imports. Behind the admin login. */
 export const dynamic = "force-dynamic";
 
+/** "google.com → /directory/austin" style label from the saved source JSON. */
+function srcLabel(raw: string): string {
+  try {
+    const j = JSON.parse(raw) as { ref?: string; landing?: string };
+    const host = (u?: string) => { try { return u ? new URL(u).hostname.replace(/^www\./, "") : ""; } catch { return ""; } };
+    let land = ""; try { const u = new URL(j.landing || ""); land = u.pathname + (u.search.includes("utm_") ? u.search : ""); } catch { /* none */ }
+    return `${host(j.ref) || "direct / unknown"}${land ? ` → ${land}` : ""}`;
+  } catch { return raw.slice(0, 120); }
+}
+
 async function act(fd: FormData) {
   "use server";
   await dirSchema();
@@ -95,6 +105,7 @@ export default async function DirectoryAdmin() {
             <p className="text-sm text-gray-700">{[c.data.address, c.data.phone, c.data.website, c.data.hours].filter(Boolean).join(" · ")}</p>
             {c.data.description && <p className="mt-1 text-sm">{c.data.description}</p>}
             <p className="mt-1 text-sm text-gray-600">From {c.name} &lt;{c.email}&gt;</p>
+            {c.source_info && <p className="text-xs text-gray-500">Came from: {srcLabel(c.source_info)}</p>}
             <form action={act} className="mt-3 flex gap-2">
               <input type="hidden" name="id" value={c.id} />
               <button name="action" value="approve" className="rounded bg-green-700 px-4 py-1.5 text-sm font-bold text-white">Approve</button>

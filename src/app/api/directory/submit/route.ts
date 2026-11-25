@@ -73,7 +73,8 @@ export async function POST(req: NextRequest) {
     );
     businessId = rows[0].id;
   }
-  const { rows: cl } = await pool.query(`INSERT INTO business_claims (business_id, site_slug, data, name, email) VALUES ($1,$2,$3,$4,$5) RETURNING id`, [businessId, site.slug, JSON.stringify(d), owner, email]);
+  const srcInfo = clean(f.get("src"), 1500) || JSON.stringify({ ref: req.headers.get("referer") || "" });
+  const { rows: cl } = await pool.query(`INSERT INTO business_claims (business_id, site_slug, data, name, email, source_info) VALUES ($1,$2,$3,$4,$5,$6) RETURNING id`, [businessId, site.slug, JSON.stringify(d), owner, email, srcInfo]);
   const claimId = cl[0].id;
 
   if (tier === "free") {

@@ -27,6 +27,7 @@ export default function JoinForm({ siteName, state, cities, initial, prices }: {
   const [tier, setTier] = useState<"free" | "spotlight" | "spotlight_home">("spotlight");
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
+  const [joined, setJoined] = useState(false);
   const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => setF((x) => ({ ...x, [k]: e.target.value }));
 
   async function find() {
@@ -57,10 +58,15 @@ export default function JoinForm({ siteName, state, cities, initial, prices }: {
     data.set("mode", claimSlug ? "claim" : "new");
     if (claimSlug) data.set("business_slug", claimSlug);
     data.set("tier", tier); data.set("article_title", title); data.set("article", article);
+    // where the owner came from: the first page of this visit and its referrer, plus this page's referrer
+    try {
+      const first = JSON.parse(sessionStorage.getItem("dir_src") || "null") as { ref: string; page: string } | null;
+      data.set("src", JSON.stringify({ ref: first?.ref || document.referrer, landing: first?.page || location.href, join_ref: document.referrer }).slice(0, 1500));
+    } catch { data.set("src", JSON.stringify({ ref: document.referrer, landing: location.href })); }
     const r = await fetch("/api/directory/submit", { method: "POST", body: data }).then(async (x) => ({ ok: x.ok, j: await x.json() })).catch(() => null);
     if (r?.ok && r.j.url) { window.location.href = r.j.url; return; }
     setBusy(false);
-    if (r?.ok && r.j.review) { setMsg({ ok: true, text: `Thank you! ${siteName} will check your listing within one business day and email you when it's live.` }); return; }
+    if (r?.ok && r.j.review) { setMsg({ ok: true, text: `Thank you! ${siteName} will check your listing within one business day and email you when it's live.` }); setJoined(true); return; }
     setMsg({ ok: false, text: r?.j?.error || "Something went wrong. Nothing was charged." });
   }
 
@@ -157,6 +163,18 @@ export default function JoinForm({ siteName, state, cities, initial, prices }: {
           <span>I own or manage this business, the details are true, and I understand {tier === "free" ? "the listing is checked before it goes live" : `Spotlight is a one-time payment of ${tier === "spotlight" ? prices.spotlight : prices.home}, the article is labelled as sponsored and goes live within 24 hours unless ${siteName} declines it (full refund)`}. I agree to the <a href="/directory/terms" target="_blank" className="underline">directory terms</a>.</span>
         </label>
         {msg && <p className={`mt-4 p-3 text-[14.5px] font-semibold ${msg.ok ? "bg-green-50 text-green-800" : "bg-red-50 text-red-800"}`}>{msg.text}</p>}
+        {joined && (
+          <div className="mt-4 border-2 border-gray-900 bg-white p-4 text-[14.5px]">
+            <p className="text-[17px] font-bold">Next: your own website, already built for you</p>
+            <p className="mt-1 text-gray-700">When your listing is approved we build a free preview of your business website and email you the link. No card needed to see it.</p>
+            <ul className="mt-2 list-disc pl-5 text-gray-700">
+              <li>Your services, photos, logo, hours and a booking or call button</li>
+              <li>An AI assistant that changes it for you: just tell it what you want</li>
+              <li>Messages from customers straight to your inbox</li>
+            </ul>
+            <p className="mt-2 font-semibold">Publish it only if you like it: $29/month or $249/year.</p>
+          </div>
+        )}
         <button disabled={busy} className="mt-4 w-full bg-gray-900 px-6 py-4 text-[17px] font-black uppercase tracking-wider text-white disabled:opacity-60">
           {busy ? "One moment…" : tier === "free" ? `Submit free listing` : `Continue to secure payment · ${tier === "spotlight" ? prices.spotlight : prices.home}`}
         </button>

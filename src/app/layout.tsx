@@ -9,6 +9,7 @@ import GoogleAnalytics from "@/components/GoogleAnalytics";
 import { STATE_FACTS } from "@/config/state-data";
 import AnalyticsTracker from "@/components/AnalyticsTracker";
 import CookieConsent from "@/components/CookieConsent";
+import Script from "next/script";
 import FacebookPixel from "@/components/FacebookPixel";
 import PushNotification from "@/components/PushNotification";
 
@@ -188,6 +189,8 @@ export default function RootLayout({
         <FacebookPixel
           pixelId={process.env.FACEBOOK_PIXEL_ID || process.env.NEXT_PUBLIC_FACEBOOK_PIXEL_ID}
         />
+        {/* first page + referrer of this visit, read by the directory join form (tab-only, no cookie) */}
+        <Script id="dir-src" strategy="afterInteractive">{`try{if(!sessionStorage.getItem("dir_src"))sessionStorage.setItem("dir_src",JSON.stringify({ref:document.referrer,page:location.href}))}catch(e){}`}</Script>
         <AnalyticsTracker />
         <CookieConsent />
         <PushNotification />
