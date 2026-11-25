@@ -17,6 +17,7 @@ interface AnalyticsData {
   topPages: { path: string; title: string; domain: string; views: number }[];
   topReferrers: { source: string; views: number }[];
   hourlyTrend: { hour: string; views: number }[];
+  realBreakdown?: { source: string; today: number; week: number }[];
 }
 
 export default function AnalyticsDashboard() {
@@ -203,6 +204,23 @@ export default function AnalyticsDashboard() {
               <p className="text-gray-400 text-center py-4">No data yet</p>
             )}
           </div>
+        </div>
+
+        {/* Real visitors by source (bots and scrapers left out) */}
+        <div className="bg-white rounded-xl shadow-sm p-6">
+          <h2 className="font-bold mb-1">Real visitors by source</h2>
+          <p className="mb-3 text-xs text-gray-500">Without automated browsers and without addresses that load over 150 pages a week. AI assistants (ChatGPT, Perplexity, Claude, Gemini, Copilot) are counted on their own.</p>
+          <table className="w-full text-sm">
+            <thead><tr className="text-left text-gray-500"><th>Source</th><th className="text-right">Today</th><th className="text-right">7 days</th></tr></thead>
+            <tbody>
+              {(data?.realBreakdown || []).map((r) => (
+                <tr key={r.source} className="border-t"><td className="py-1">{r.source}</td><td className="text-right">{r.today}</td><td className="text-right">{r.week}</td></tr>
+              ))}
+              {(data?.realBreakdown || []).length > 0 && (
+                <tr className="border-t font-bold"><td className="py-1">Total</td><td className="text-right">{data!.realBreakdown!.reduce((a, r) => a + r.today, 0)}</td><td className="text-right">{data!.realBreakdown!.reduce((a, r) => a + r.week, 0)}</td></tr>
+              )}
+            </tbody>
+          </table>
         </div>
 
         {/* Top Referrers */}

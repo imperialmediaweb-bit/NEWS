@@ -133,6 +133,11 @@ export async function GET(req: NextRequest) {
     const { rows: searchEngineBreakdown } = await pool.query(`
       SELECT
         CASE
+          WHEN referrer ILIKE '%chatgpt.com%' OR referrer ILIKE '%chat.openai.%' THEN 'ChatGPT'
+          WHEN referrer ILIKE '%perplexity.%' THEN 'Perplexity'
+          WHEN referrer ILIKE '%claude.ai%' THEN 'Claude'
+          WHEN referrer ILIKE '%gemini.google.%' THEN 'Gemini'
+          WHEN referrer ILIKE '%copilot.microsoft.%' THEN 'Copilot'
           WHEN referrer ILIKE '%google.%' THEN 'Google'
           WHEN referrer ILIKE '%bing.%' THEN 'Bing'
           WHEN referrer ILIKE '%yahoo.%' THEN 'Yahoo'
@@ -149,6 +154,39 @@ export async function GET(req: NextRequest) {
       ORDER BY views DESC
     `);
 
+    // Real visitors: no automated flag, and not from an address that loads
+    // more than 150 pages a week (a person doesn't; a scraper does).
+    const { rows: realBreakdown } = await pool.query(`
+      WITH heavy AS (
+        SELECT ip_hash FROM page_views WHERE created_at > NOW() - INTERVAL '7 days'
+        GROUP BY ip_hash HAVING COUNT(*) > 150
+      )
+      SELECT
+        CASE
+          WHEN referrer ILIKE '%chatgpt.com%' OR referrer ILIKE '%chat.openai.%' THEN 'ChatGPT'
+          WHEN referrer ILIKE '%perplexity.%' THEN 'Perplexity'
+          WHEN referrer ILIKE '%claude.ai%' THEN 'Claude'
+          WHEN referrer ILIKE '%gemini.google.%' THEN 'Gemini'
+          WHEN referrer ILIKE '%copilot.microsoft.%' THEN 'Copilot'
+          WHEN referrer ILIKE '%google.%' THEN 'Google'
+          WHEN referrer ILIKE '%bing.%' THEN 'Bing'
+          WHEN referrer ILIKE '%yahoo.%' THEN 'Yahoo'
+          WHEN referrer ILIKE '%duckduckgo.%' THEN 'DuckDuckGo'
+          WHEN referrer ILIKE '%facebook.%' OR referrer ILIKE '%fb.%' THEN 'Facebook'
+          WHEN referrer ILIKE '%twitter.%' OR referrer ILIKE '%t.co%' THEN 'Twitter/X'
+          WHEN referrer = '' OR referrer IS NULL THEN 'Direct'
+          ELSE 'Other sites'
+        END as source,
+        COUNT(*) FILTER (WHERE pv.created_at > NOW() - INTERVAL '1 day')::int as today,
+        COUNT(*)::int as week
+      FROM page_views pv
+      WHERE pv.created_at > NOW() - INTERVAL '7 days'
+        AND NOT COALESCE(pv.is_bot, FALSE)
+        AND (pv.ip_hash IS NULL OR pv.ip_hash NOT IN (SELECT ip_hash FROM heavy WHERE ip_hash IS NOT NULL))
+      GROUP BY source
+      ORDER BY week DESC
+    `).catch(() => ({ rows: [] as { source: string; today: number; week: number }[] }));
+
     return NextResponse.json({
       totals: totals[0] || { today: 0, week: 0, month: 0 },
       sitesToday,
@@ -159,6 +197,7 @@ export async function GET(req: NextRequest) {
       searchPages,
       topUserAgents,
       searchEngineBreakdown,
+      realBreakdown,
     });
   } catch (error) {
     return NextResponse.json({ error: String(error) }, { status: 500 });

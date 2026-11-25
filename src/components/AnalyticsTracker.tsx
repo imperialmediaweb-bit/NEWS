@@ -20,6 +20,7 @@ export default function AnalyticsTracker() {
           path: pathname,
           referrer: document.referrer || "",
           title: document.title || "",
+          wd: !!(navigator as Navigator & { webdriver?: boolean }).webdriver,
         }),
       }).catch(() => {}); // Fire and forget
     }, 500);
