@@ -18,7 +18,8 @@ export async function publishPaidOrder(o: PaidOrder): Promise<string | null> {
   const { rows: s } = await pool.query("SELECT id FROM sites WHERE slug = $1", [o.site_slug]);
   if (!s[0]) return null;
   const site = sites[o.site_slug];
-  const spotlight = o.product === "spotlight" || o.product === "spotlight_home";
+  const monthly = o.product === "monthly_article";
+  const spotlight = o.product === "spotlight" || o.product === "spotlight_home" || monthly;
   const release = o.product === "press_release";
   const sponsored = spotlight || release || o.product === "sponsored" || o.product === "featured";
   const paras = o.body.split(/\n\s*\n/).map((p) => `<p>${esc(p.trim())}</p>`).join("\n");
@@ -30,7 +31,7 @@ export async function publishPaidOrder(o: PaidOrder): Promise<string | null> {
   const label = release
     ? `<p><em>Press release from ${esc(o.business || o.name)}, published as submitted. ${esc(o.business || o.name)} paid ${esc(site?.name || "")} to publish it; the newsroom did not write or verify it.</em></p>`
     : spotlight
-    ? `<p><em>Business Spotlight: sponsored content. ${esc(o.business || o.name)} paid ${esc(site?.name || "")} to publish this profile, written from information the business provided. The newsroom did not report it.</em></p>`
+    ? `<p><em>Business Spotlight: sponsored content. ${esc(o.business || o.name)} paid ${esc(site?.name || "")} to publish this ${monthly ? "article" : "profile"}, written from information the business provided. The newsroom did not report it.</em></p>`
     : `<p><em>Sponsored content from ${esc(o.business || o.name)}. ${esc(site?.name || "")} was paid to publish it; the newsroom did not write it.</em></p>`;
   const content = sponsored
     ? `${label}\n${paras}${o.website ? `\n<p><a href="${esc(o.website)}" rel="sponsored noopener" target="_blank">Visit ${esc(o.business || "the website")}</a></p>` : ""}${bizLink}`
@@ -43,13 +44,13 @@ export async function publishPaidOrder(o: PaidOrder): Promise<string | null> {
     [s[0].id, o.title, slug, content, o.body.replace(/\s+/g, " ").slice(0, 155), category, release ? "Press Release" : sponsored ? "Sponsored Content" : "Obituary", o.photo_url]
   );
   await pool.query("UPDATE paid_orders SET status = 'published', article_slug = $2, published_at = now() WHERE id = $1", [o.id, `${category}/${slug}`]);
-  if (spotlight && o.business_id) await pool.query("UPDATE businesses SET article_slug = $2, updated_at = now() WHERE id = $1", [o.business_id, `${category}/${slug}`]).catch(() => null);
+  if (spotlight && !monthly && o.business_id) await pool.query("UPDATE businesses SET article_slug = $2, updated_at = now() WHERE id = $1", [o.business_id, `${category}/${slug}`]).catch(() => null);
   return `${category}/${slug}`;
 }
 
 /** Cron: Spotlight profiles go live 24 hours after payment unless the editor declined them. */
 export async function autoPublishSpotlights(): Promise<number> {
-  const { rows } = await pool.query(`SELECT * FROM paid_orders WHERE product IN ('spotlight', 'spotlight_home') AND status = 'paid' AND auto_publish_at IS NOT NULL AND auto_publish_at < now() LIMIT 20`).catch(() => ({ rows: [] }));
+  const { rows } = await pool.query(`SELECT * FROM paid_orders WHERE product IN ('spotlight', 'spotlight_home', 'monthly_article') AND status = 'paid' AND auto_publish_at IS NOT NULL AND auto_publish_at < now() LIMIT 20`).catch(() => ({ rows: [] }));
   let n = 0;
   for (const o of rows as PaidOrder[]) if (await publishPaidOrder(o)) n++;
   return n;
