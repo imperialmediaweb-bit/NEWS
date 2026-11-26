@@ -172,7 +172,7 @@ export default function JoinForm({ siteName, state, cities, initial, prices }: {
               <li>An AI assistant that changes it for you: just tell it what you want</li>
               <li>Messages from customers straight to your inbox</li>
             </ul>
-            <p className="mt-2 font-semibold">Publish it only if you like it: $29/month or $249/year.</p>
+            <p className="mt-2 font-semibold">Publish it only if you like it: $9 the first month, then $29/month, or $249/year. Premium puts you first in your city list.</p>
           </div>
         )}
         <button disabled={busy} className="mt-4 w-full bg-gray-900 px-6 py-4 text-[17px] font-black uppercase tracking-wider text-white disabled:opacity-60">

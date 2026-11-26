@@ -51,10 +51,10 @@ export default function SiteEditor({ token, businessId, initial, acc, live }: { 
     setBusy(null); setMsg(r.ok ? { ok: true, text: "Saved." } : { ok: false, text: r.j.error });
     return r.ok;
   }
-  async function publish(plan: "month" | "year") {
+  async function publish(plan: "month" | "year", level: "standard" | "premium" = "standard") {
     if (!(await save())) return;
     setBusy("pay");
-    const r = await api({ action: "subscribe", plan });
+    const r = await api({ action: "subscribe", plan, level });
     if (r.ok && r.j.url) { location.href = r.j.url; return; }
     setBusy(null); setMsg({ ok: false, text: r.j.error || "Something went wrong." });
   }
@@ -149,11 +149,27 @@ export default function SiteEditor({ token, businessId, initial, acc, live }: { 
       {msg && <p className={`mt-4 rounded p-3 text-[14px] font-semibold ${msg.ok ? "bg-green-50 text-green-800" : "bg-red-50 text-red-800"}`}>{msg.text}</p>}
       <div className="mt-5 flex flex-wrap gap-3">
         <button onClick={save} disabled={!!busy} className="rounded-full border-2 border-gray-900 px-5 py-2.5 text-[14px] font-black disabled:opacity-60">{busy === "save" ? "Saving…" : "Save"}</button>
-        {!live && <>
-          <button onClick={() => publish("month")} disabled={!!busy} className="rounded-full px-5 py-2.5 text-[14px] font-black text-white disabled:opacity-60" style={{ background: acc }}>Publish · $29/month</button>
-          <button onClick={() => publish("year")} disabled={!!busy} className="rounded-full bg-gray-900 px-5 py-2.5 text-[14px] font-black text-white disabled:opacity-60">Publish · $249/year (save $99)</button>
-        </>}
       </div>
+      {!live && (
+        <div className="mt-5 grid gap-3 sm:grid-cols-2">
+          <div className="rounded-xl border-2 border-gray-900 p-4">
+            <p className="text-[16px] font-black">Standard</p>
+            <p className="text-[13px] text-gray-600">Your website live, your listing with logo and photos.</p>
+            <div className="mt-3 flex flex-col gap-2">
+              <button onClick={() => publish("year")} disabled={!!busy} className="rounded-full bg-gray-900 px-4 py-2.5 text-[14px] font-black text-white disabled:opacity-60">$249/year · 3 months free</button>
+              <button onClick={() => publish("month")} disabled={!!busy} className="rounded-full px-4 py-2.5 text-[14px] font-black text-white disabled:opacity-60" style={{ background: acc }}>$9 first month, then $29/month</button>
+            </div>
+          </div>
+          <div className="rounded-xl border-2 p-4" style={{ borderColor: acc }}>
+            <p className="text-[16px] font-black">Premium</p>
+            <p className="text-[13px] text-gray-600">Everything in Standard, plus your business first in its city list while you&apos;re subscribed.</p>
+            <div className="mt-3 flex flex-col gap-2">
+              <button onClick={() => publish("year", "premium")} disabled={!!busy} className="rounded-full bg-gray-900 px-4 py-2.5 text-[14px] font-black text-white disabled:opacity-60">$549/year · 3 months free</button>
+              <button onClick={() => publish("month", "premium")} disabled={!!busy} className="rounded-full px-4 py-2.5 text-[14px] font-black text-white disabled:opacity-60" style={{ background: acc }}>$9 first month, then $59/month</button>
+            </div>
+          </div>
+        </div>
+      )}
       {!live && <p className="mt-2 text-[12.5px] text-gray-500">Cancel any time. Your page stays a private preview until you publish.</p>}
     </div>
   );

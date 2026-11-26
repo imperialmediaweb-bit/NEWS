@@ -9,7 +9,22 @@ import { stripe, bannedReason } from "@/lib/paid";
 /** Owner actions on a Business Website: preview (AI draft), save, subscribe ($29/month or $249/year). */
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
-const PRICES = { month: Number(process.env.PRICE_SITE_MONTH_CENTS || 2900), year: Number(process.env.PRICE_SITE_YEAR_CENTS || 24900) };
+const PRICES = {
+  standard: { month: Number(process.env.PRICE_SITE_MONTH_CENTS || 2900), year: Number(process.env.PRICE_SITE_YEAR_CENTS || 24900) },
+  premium: { month: Number(process.env.PRICE_PREMIUM_MONTH_CENTS || 5900), year: Number(process.env.PRICE_PREMIUM_YEAR_CENTS || 54900) },
+};
+/** First month of a monthly plan costs this much (a one-time Stripe coupon for the difference). 0 turns it off. */
+const FIRST_MONTH_CENTS = Number(process.env.PRICE_FIRST_MONTH_CENTS ?? 900);
+
+/** The one-time "first month" coupon for a price, created once in Stripe and reused (fixed id). */
+async function firstMonthCoupon(priceCents: number): Promise<string | null> {
+  const off = priceCents - FIRST_MONTH_CENTS;
+  if (!FIRST_MONTH_CENTS || off <= 0) return null;
+  const id = `FIRSTMONTH_${priceCents}_${FIRST_MONTH_CENTS}`;
+  try { await stripe("coupons", { id, amount_off: String(off), currency: "usd", duration: "once", name: `First month $${FIRST_MONTH_CENTS / 100}` }); }
+  catch (e) { if (!/already exists/i.test((e as Error).message)) return null; }
+  return id;
+}
 
 export async function POST(req: NextRequest) {
   const host = (req.headers.get("host") || "").split(":")[0].replace(/^www\./, "");
@@ -67,13 +82,18 @@ INSTRUCTION: ${instruction}`, 3500).catch(() => null);
   if (body.action === "subscribe") {
     if (!process.env.STRIPE_SECRET_KEY) return NextResponse.json({ error: "Payments are not set up yet." }, { status: 503 });
     const plan = body.plan === "year" ? "year" : "month";
+    const level = body.level === "premium" ? "premium" : "standard";
     const s = await bizSiteFor(biz.id) || await draftSite(biz);
+    const cents = PRICES[level][plan];
+    const coupon = plan === "month" ? await firstMonthCoupon(cents) : null;
     const session = await stripe<{ id: string; url: string }>("checkout/sessions", {
       mode: "subscription", customer_email: own.email,
-      "line_items[0][quantity]": "1", "line_items[0][price_data][currency]": "usd", "line_items[0][price_data][unit_amount]": String(PRICES[plan]),
-      "line_items[0][price_data][recurring][interval]": plan, "line_items[0][price_data][product_data][name]": `Business Website: ${biz.name} on ${site.name}`.slice(0, 250),
-      "metadata[kind]": "business_site", "metadata[business_id]": String(biz.id), "metadata[plan]": plan,
-      "subscription_data[metadata][kind]": "business_site", "subscription_data[metadata][business_id]": String(biz.id),
+      "line_items[0][quantity]": "1", "line_items[0][price_data][currency]": "usd", "line_items[0][price_data][unit_amount]": String(cents),
+      "line_items[0][price_data][recurring][interval]": plan,
+      "line_items[0][price_data][product_data][name]": `${level === "premium" ? "Premium" : "Standard"}: ${biz.name} on ${site.name}`.slice(0, 250),
+      ...(coupon ? { "discounts[0][coupon]": coupon } : {}),
+      "metadata[kind]": "business_site", "metadata[business_id]": String(biz.id), "metadata[plan]": plan, "metadata[level]": level,
+      "subscription_data[metadata][kind]": "business_site", "subscription_data[metadata][business_id]": String(biz.id), "subscription_data[metadata][level]": level,
       success_url: `https://${site.domain}/b/${s.slug}?live=1`, cancel_url: `https://${site.domain}/directory/owner?t=${encodeURIComponent(String(body.token))}`,
     });
     return NextResponse.json({ url: session.url });

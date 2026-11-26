@@ -51,6 +51,7 @@ export async function siteSchema() {
     ALTER TABLE business_sites ADD COLUMN IF NOT EXISTS video_url TEXT;
     ALTER TABLE business_sites ADD COLUMN IF NOT EXISTS announcement TEXT;
     ALTER TABLE business_sites ADD COLUMN IF NOT EXISTS hidden JSONB NOT NULL DEFAULT '[]';
+    ALTER TABLE business_sites ADD COLUMN IF NOT EXISTS level VARCHAR(12) NOT NULL DEFAULT 'standard';
     CREATE TABLE IF NOT EXISTS business_ai_questions (
       id SERIAL PRIMARY KEY, business_id INT NOT NULL REFERENCES businesses(id) ON DELETE CASCADE, q TEXT NOT NULL, answered BOOLEAN NOT NULL DEFAULT TRUE,
       created_at TIMESTAMPTZ NOT NULL DEFAULT now()
