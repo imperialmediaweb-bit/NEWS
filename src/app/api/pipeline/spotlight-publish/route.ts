@@ -3,6 +3,7 @@ import { ensurePaidTable } from "@/lib/paid";
 import { autoPublishSpotlights } from "@/lib/paid-publish";
 import { writeMonthlyArticles } from "@/lib/monthly-article";
 import { sendMonthlyReports } from "@/lib/monthly-report";
+import { sendOwnerDrip } from "@/lib/owner-drip";
 
 /** Cron: write the monthly articles of live websites; publish Spotlight profiles and monthly articles when due (unless declined in /admin/paid). */
 export const dynamic = "force-dynamic";
@@ -14,5 +15,7 @@ export async function GET(req: NextRequest) {
   const written = await writeMonthlyArticles().catch(() => 0);
   const published = await autoPublishSpotlights();
   const reports = await sendMonthlyReports().catch(() => 0);
-  return NextResponse.json({ written, published, reports });
+  // follow-ups to free owners: off until NEWSLETTER_POSTAL_ADDRESS is set
+  const followups = await sendOwnerDrip().catch(() => 0);
+  return NextResponse.json({ written, published, reports, followups });
 }
