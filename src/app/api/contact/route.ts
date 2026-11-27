@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
-import { sites as siteConfigs } from "@/config/sites";
+import { sites as siteConfigs, getSiteByDomain } from "@/config/sites";
+import { looksCommercial } from "@/lib/commercial-pitch";
+import { PRODUCTS } from "@/lib/paid";
 
 const CONTACT_EMAIL = "ainewss2023@gmail.com";
 
@@ -71,6 +73,26 @@ export async function POST(req: NextRequest) {
         </div>
       `,
     });
+
+    // A business pitching its own website as a "tip" gets the sponsored offer by email
+    // (the newsroom still gets the message above).
+    const host = (req.headers.get("host") || "").split(":")[0].replace(/^www\./, "");
+    const site = getSiteByDomain(host);
+    const e = (x: unknown) => String(x ?? "").replace(/[<>&"]/g, (c) => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;", '"': "&quot;" })[c]!);
+    if (site && /^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i.test(String(email)) && !/correction|legal|privacy/i.test(String(department))
+        && looksCommercial(`${subject} ${message}`, [site.domain], String(email))) {
+      const price = `$${(PRODUCTS.sponsored.cents / 100).toFixed(0)}`;
+      await resend.emails.send({
+        from: fromAddress, to: String(email), replyTo: CONTACT_EMAIL,
+        subject: `Re: ${String(subject).slice(0, 150)}`,
+        html: `<p>Hi ${e(name)},</p>
+<p>Thanks for writing to ${e(site.name)}.</p>
+<p>Since your note links to a company's own website, we can't run it as a news story. We'd be glad to publish it as a <b>Sponsored story</b> on ${e(site.name)} for <b>${price}</b>: live within one business day, clearly labelled, with your link (marked rel="sponsored", as Google requires).</p>
+<p><a href="https://${site.domain}/promote" style="display:inline-block;padding:10px 18px;background:#b91c1c;color:#fff;text-decoration:none;border-radius:4px">Order your sponsored story</a></p>
+<p>More reach: a <b>Featured</b> story stays on our homepage for 7 days, and our network campaign publishes it across our state newspapers nationwide: <a href="https://${site.domain}/all-50-states">see the network offer</a>.</p>
+<p>Best regards,<br>${e(site.name)}</p>`,
+      }).catch(() => null);
+    }
 
     return NextResponse.json({ success: true });
   } catch (error) {

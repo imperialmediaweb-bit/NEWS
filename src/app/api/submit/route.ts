@@ -5,6 +5,7 @@ import { getSiteByDomain } from "@/config/sites";
 import { r2Put, r2Ready, r2Url } from "@/lib/r2";
 import { ensureSubmissionsTable, SUBMISSION_TYPES, type SubmissionType } from "@/lib/submissions";
 import { Resend } from "resend";
+import { looksCommercial } from "@/lib/commercial-pitch";
 import { isPremium, PREMIUM_CENTS, PRODUCTS } from "@/lib/paid";
 import { ADMIN_URL } from "@/lib/admin-url";
 
@@ -87,7 +88,9 @@ export async function POST(req: NextRequest) {
   );
   // A business promoting itself (tickets, prices, offers) is offered a sponsored
   // story by email straight away; the editor still sees the submission.
-  const promo = /\b(tickets?|discount|% off|\d+% ?off|limited time|promo code|coupon|book now|buy now|order now|call now|sale|special offer|free admission|reservations?|on sale)\b|\$\d/i.test(`${title} ${body}`);
+  const promoWords = /\b(tickets?|discount|% off|\d+% ?off|limited time|promo code|coupon|book now|buy now|order now|call now|sale|special offer|free admission|reservations?|on sale)\b|\$\d/i.test(`${title} ${body}`);
+  // ...or a pitch whose point is a link to the sender's own commercial site
+  const promo = promoWords || looksCommercial(`${title} ${body}`, [site.domain], email);
   if (promo && process.env.RESEND_API_KEY && type !== "closing") {
     const cents = isPremium(title, body) ? PREMIUM_CENTS : PRODUCTS.sponsored.cents;
     const price = `$${(cents / 100).toFixed(0)}`;
@@ -99,7 +102,7 @@ export async function POST(req: NextRequest) {
         subject: `Your submission to ${site.name}: publish it as a sponsored story`,
         html: `<p>Hi ${esc(name)},</p>
 <p>Thanks for sending <b>${esc(title)}</b> to ${esc(site.name)}.</p>
-<p>Because it promotes sales, tickets or offers, we can't run it as a free news item, but we'd be glad to publish it as a <b>Sponsored story</b> on ${esc(site.name)} for <b>${price}</b>: live within one business day, clearly labelled, with a link to your website.</p>
+<p>Because it promotes a business (its offers, services or website), we can't run it as a free news item, but we'd be glad to publish it as a <b>Sponsored story</b> on ${esc(site.name)} for <b>${price}</b>: live within one business day, clearly labelled, with a link to your website.</p>
 <p><a href="https://${site.domain}/promote" style="display:inline-block;padding:10px 18px;background:#b91c1c;color:#fff;text-decoration:none;border-radius:4px">Order your sponsored story</a></p>
 <p>Want more visibility? A <b>Featured</b> story stays on the homepage for 7 days.</p>
 <p>Already have a press release? We can publish it exactly as written, labelled "Press release", for ${price}: <a href="https://${site.domain}/press-release">publish your press release</a>.</p>
