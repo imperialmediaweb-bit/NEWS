@@ -21,9 +21,9 @@ async function act(fd: FormData) {
   "use server";
   await dirSchema();
   const id = Number(fd.get("id")), action = String(fd.get("action"));
-  if (action === "approve") await applyClaim(id);
+  if (action === "approve" && await applyClaim(id)) await pool.query(`UPDATE business_claims SET reviewed_by = 'admin', reviewed_at = now() WHERE id = $1`, [id]);
   if (action === "reject") {
-    const { rows } = await pool.query(`UPDATE business_claims SET status = 'rejected' WHERE id = $1 RETURNING business_id`, [id]);
+    const { rows } = await pool.query(`UPDATE business_claims SET status = 'rejected', reviewed_by = 'admin', reviewed_at = now() WHERE id = $1 RETURNING business_id`, [id]);
     if (rows[0]) await pool.query(`UPDATE businesses SET status = 'hidden' WHERE id = $1 AND status = 'pending'`, [rows[0].business_id]);
   }
   if (action === "remove-biz" || action === "keep-biz") {
@@ -48,6 +48,13 @@ export default async function DirectoryAdmin() {
     pool.query(`SELECT COUNT(*)::int n, COUNT(*) FILTER (WHERE claimed)::int claimed, COUNT(*) FILTER (WHERE tier <> 'free')::int paid FROM businesses`),
   ]);
   const { rows: inv } = await pool.query(`SELECT COUNT(*) FILTER (WHERE i.status = 'sent')::int sent, COUNT(*) FILTER (WHERE i.status = 'sent' AND b.claimed)::int claimed, COUNT(*) FILTER (WHERE i.status = 'sent' AND b.marketing_optout)::int optout FROM business_invites i JOIN businesses b ON b.id = i.business_id`).catch(() => ({ rows: [] as { sent: number; claimed: number; optout: number }[] }));
+  // Every signup and claim of the last 30 days, with who decided and where it came from.
+  const { rows: recent } = await pool.query(`
+    SELECT c.id, c.site_slug, c.status, c.reviewed_by, c.created_at, c.source_info, c.data->>'name' AS name, c.data->>'city' AS city,
+           b.slug, b.status AS biz_status, b.claimed, (b.source = 'owner') AS is_new
+      FROM business_claims c JOIN businesses b ON b.id = c.business_id
+     WHERE c.created_at > now() - interval '30 days' AND c.order_id IS NULL
+     ORDER BY c.created_at DESC LIMIT 200`).catch(() => ({ rows: [] as Record<string, unknown>[] }));
   // Owner-run businesses (claimed, paid or with a website) — the ones worth watching.
   const { rows: owned } = await pool.query(`
     SELECT b.id, b.name, b.city, b.slug, b.site_slug, b.tier, b.claimed, b.status, b.owner_email, b.updated_at,
@@ -60,6 +67,27 @@ export default async function DirectoryAdmin() {
       <h1 className="text-2xl font-bold">Business directory</h1>
       <p className="mt-1 text-sm text-gray-600">{totals[0]?.n ?? 0} businesses · {totals[0]?.claimed ?? 0} claimed · {totals[0]?.paid ?? 0} Spotlight. Paid Spotlights are in <a href="/admin/paid" className="underline">admin / paid</a>.</p>
       {inv[0] && <p className="text-sm text-gray-600">Invitations to imported businesses: {inv[0].sent} sent · {inv[0].claimed} claimed · {inv[0].optout} unsubscribed.</p>}
+
+      <h2 className="mt-8 text-xl font-bold">Signups and claims, last 30 days ({recent.length})</h2>
+      <p className="text-sm text-gray-600">Approved = live (auto = checked automatically, admin = by you). Rejected repeats are double submissions.</p>
+      <div className="mt-3 overflow-x-auto">
+        <table className="w-full text-sm"><thead><tr className="text-left"><th>Date</th><th>Business</th><th>Newspaper</th><th>Type</th><th>Status</th><th>Came from</th></tr></thead>
+          <tbody>{recent.map((r) => {
+            const dom = sites[String(r.site_slug)]?.domain;
+            const st = r.status === "applied" ? `approved${r.reviewed_by ? ` (${r.reviewed_by})` : ""}` : r.status === "rejected" ? `rejected${r.reviewed_by ? ` (${r.reviewed_by})` : ""}` : String(r.status);
+            return (
+              <tr key={String(r.id)} className="border-t align-top">
+                <td className="py-1 text-xs">{new Date(String(r.created_at)).toLocaleDateString("en-US")}</td>
+                <td className="font-semibold">{r.status === "applied" && dom ? <a href={`https://${dom}/directory/listing/${r.slug}`} target="_blank" rel="noreferrer" className="underline">{String(r.name)}</a> : String(r.name)}<div className="text-xs font-normal text-gray-500">{String(r.city || "")}</div></td>
+                <td>{sites[String(r.site_slug)]?.name || String(r.site_slug)}</td>
+                <td>{r.is_new ? "new listing" : "claim"}</td>
+                <td className={r.status === "applied" ? "text-green-700" : r.status === "rejected" ? "text-gray-500" : "font-bold text-amber-700"}>{st}</td>
+                <td className="text-xs">{r.source_info ? srcLabel(String(r.source_info)) : "—"}</td>
+              </tr>
+            );
+          })}</tbody>
+        </table>
+      </div>
 
       <h2 className="mt-8 text-xl font-bold">Owner businesses and websites ({owned.length})</h2>
       <p className="text-sm text-gray-600">Claimed, Spotlight or with a website. Website: draft = preview only, active = live and paid, past_due = payment failed, canceled = stopped.</p>

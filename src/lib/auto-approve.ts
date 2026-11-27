@@ -46,7 +46,7 @@ export async function autoReviewClaims(): Promise<{ approved: number; duplicates
          AND lower(e.data->>'name') = lower($3) AND regexp_replace(coalesce(e.data->>'phone', ''), '\\D', '', 'g') LIKE '%' || $4
          AND e.created_at > $5::timestamptz - interval '2 hours' LIMIT 1`, [c.id, c.site_slug, d.name || "", phone || "§", c.created_at]);
     if (dup.length && phone) {
-      await pool.query(`UPDATE business_claims SET status = 'rejected' WHERE id = $1`, [c.id]);
+      await pool.query(`UPDATE business_claims SET status = 'rejected', reviewed_by = 'auto', reviewed_at = now() WHERE id = $1`, [c.id]);
       await pool.query(`UPDATE businesses SET status = 'hidden' WHERE id = $1 AND status = 'pending'`, [c.business_id]);
       duplicates++;
       continue;
@@ -54,7 +54,10 @@ export async function autoReviewClaims(): Promise<{ approved: number; duplicates
     let ok = false;
     if (c.biz_status === "pending") ok = await websiteConfirms(d.website, phone, d.name || "");
     else ok = (!!phone && phone === digits(c.cur_phone)) || (!!hostOf(d.website) && hostOf(d.website) === hostOf(c.cur_website));
-    if (ok && await applyClaim(c.id).catch(() => false)) approved++;
+    if (ok && await applyClaim(c.id).catch(() => false)) {
+      await pool.query(`UPDATE business_claims SET reviewed_by = 'auto', reviewed_at = now() WHERE id = $1`, [c.id]);
+      approved++;
+    }
   }
   return { approved, duplicates };
 }
