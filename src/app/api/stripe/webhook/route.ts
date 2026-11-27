@@ -78,6 +78,12 @@ export async function POST(req: NextRequest) {
     if (b) await notify(ADMIN_TO(), `[Website] New ${level}: ${b.name} (${b.city})`, `<p><b>${esc(b.name)}</b>, ${esc(b.city)} bought <b>${esc(level)}</b> (${esc(plan === "year" ? "yearly" : "monthly")}) on ${esc(sites[b.site_slug]?.name)}.</p><p><a href="https://${esc(sites[b.site_slug]?.domain)}/b/${esc(b.web_slug)}">See the website</a></p>`);
     return NextResponse.json({ ok: true });
   }
+  // a business paid for a customer's contact (quote request)
+  if (event.type === "checkout.session.completed" && event.data.object.metadata?.kind === "lead_unlock" && event.data.object.payment_status === "paid") {
+    const { unlockLead } = await import("@/lib/quotes");
+    await unlockLead(Number(event.data.object.metadata.quote_id), Number(event.data.object.metadata.business_id)).catch(() => null);
+    return NextResponse.json({ ok: true });
+  }
   if (event.type !== "checkout.session.completed" || event.data.object.payment_status !== "paid") return NextResponse.json({ ok: true });
   const id = Number(event.data.object.metadata?.order_id);
   const { rows } = await pool.query(

@@ -8,6 +8,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { generateContent } from "@/data/generate-content";
 import { BizCard, Crumbs, OsmCredit } from "@/components/directory/parts";
+import QuoteForm from "@/components/directory/QuoteForm";
 
 /**
  * "{Category} in {City}, {State}": the page people land on from searches like
@@ -72,6 +73,7 @@ export default async function CityCategory({ params }: { params: { city: string;
         </div>
       </section>
       <main className="mx-auto max-w-[1100px] px-4 py-9">
+        <div className="mb-6"><QuoteForm category={cat.slug} categoryName={cat.name} one={cat.one} city={cityName!} citySlug={params.city} siteName={site.name} acc={acc} /></div>
         <div className="grid gap-5">{collapseChains(list).map((b) => <BizCard key={b.id} b={b} acc={acc} />)}</div>
         <aside className="mt-8 flex flex-col items-start justify-between gap-3 p-5 text-white sm:flex-row sm:items-center" style={{ background: ink }}>
           <p className="text-[16px]"><b>Are you a {cat.one} in {cityName}?</b> Claim your listing free, or get to the top with Business Spotlight.</p>
