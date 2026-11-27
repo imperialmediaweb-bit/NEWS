@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { siteFromHeaders } from "@/lib/topic-page";
 import { getBizSite, isLive, videoEmbed } from "@/lib/business-site";
+import { previewSig } from "@/lib/invite-sig";
 import { ownerBusinesses } from "@/lib/directory-owner";
 import { reviewsOf, ratingOf } from "@/lib/directory";
 import { catBySlug } from "@/lib/directory-categories";
@@ -28,6 +29,8 @@ async function load(slug: string, token?: string) {
   const live = isLive(s);
   let owner = false;
   if (!live && token) { const own = await ownerBusinesses(token, site.slug); owner = !!own?.businesses.some((b: { id: number }) => b.id === s.business_id); }
+  // a signed preview link (from the invitation email) shows the draft to the business before it claims
+  if (!live && !owner && token?.startsWith("pv_") && token.slice(3) === previewSig(s.business_id)) owner = true;
   if (!live && !owner) return null;
   return { site, s, live };
 }

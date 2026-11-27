@@ -47,6 +47,7 @@ export default async function DirectoryAdmin() {
     pool.query(`SELECT * FROM directory_imports ORDER BY started_at DESC`),
     pool.query(`SELECT COUNT(*)::int n, COUNT(*) FILTER (WHERE claimed)::int claimed, COUNT(*) FILTER (WHERE tier <> 'free')::int paid FROM businesses`),
   ]);
+  const { rows: inv } = await pool.query(`SELECT COUNT(*) FILTER (WHERE i.status = 'sent')::int sent, COUNT(*) FILTER (WHERE i.status = 'sent' AND b.claimed)::int claimed, COUNT(*) FILTER (WHERE i.status = 'sent' AND b.marketing_optout)::int optout FROM business_invites i JOIN businesses b ON b.id = i.business_id`).catch(() => ({ rows: [] as { sent: number; claimed: number; optout: number }[] }));
   // Owner-run businesses (claimed, paid or with a website) — the ones worth watching.
   const { rows: owned } = await pool.query(`
     SELECT b.id, b.name, b.city, b.slug, b.site_slug, b.tier, b.claimed, b.status, b.owner_email, b.updated_at,
@@ -58,6 +59,7 @@ export default async function DirectoryAdmin() {
     <div className="mx-auto max-w-[1100px] p-6">
       <h1 className="text-2xl font-bold">Business directory</h1>
       <p className="mt-1 text-sm text-gray-600">{totals[0]?.n ?? 0} businesses · {totals[0]?.claimed ?? 0} claimed · {totals[0]?.paid ?? 0} Spotlight. Paid Spotlights are in <a href="/admin/paid" className="underline">admin / paid</a>.</p>
+      {inv[0] && <p className="text-sm text-gray-600">Invitations to imported businesses: {inv[0].sent} sent · {inv[0].claimed} claimed · {inv[0].optout} unsubscribed.</p>}
 
       <h2 className="mt-8 text-xl font-bold">Owner businesses and websites ({owned.length})</h2>
       <p className="text-sm text-gray-600">Claimed, Spotlight or with a website. Website: draft = preview only, active = live and paid, past_due = payment failed, canceled = stopped.</p>

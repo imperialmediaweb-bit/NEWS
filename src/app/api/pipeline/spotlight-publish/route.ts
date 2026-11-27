@@ -4,6 +4,7 @@ import { autoPublishSpotlights } from "@/lib/paid-publish";
 import { writeMonthlyArticles } from "@/lib/monthly-article";
 import { sendMonthlyReports } from "@/lib/monthly-report";
 import { sendOwnerDrip } from "@/lib/owner-drip";
+import { sendInvites } from "@/lib/invite";
 
 /** Cron: write the monthly articles of live websites; publish Spotlight profiles and monthly articles when due (unless declined in /admin/paid). */
 export const dynamic = "force-dynamic";
@@ -17,5 +18,7 @@ export async function GET(req: NextRequest) {
   const reports = await sendMonthlyReports().catch(() => 0);
   // follow-ups to free owners: off until NEWSLETTER_POSTAL_ADDRESS is set
   const followups = await sendOwnerDrip().catch(() => 0);
-  return NextResponse.json({ written, published, reports, followups });
+  // invitations to imported businesses: INVITES_PER_DAY a day (default 5)
+  const invites = await sendInvites().catch((e) => ({ error: String(e) }));
+  return NextResponse.json({ written, published, reports, followups, invites });
 }
