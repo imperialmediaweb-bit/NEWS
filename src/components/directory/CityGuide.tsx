@@ -40,7 +40,7 @@ export function CityHero({ city, state, total, ranked, verified, ink, acc, crumb
           Every local business in {city}, {state}, ranked the same open way: verified reader reviews, a complete profile and a confirmed owner. Nobody can pay to move up.
         </p>
         <div className="mt-8 grid max-w-[720px] grid-cols-3 gap-px overflow-hidden rounded-2xl bg-white/15 ring-1 ring-white/15">
-          {[[total.toLocaleString("en-US"), "local businesses"], [ranked.toLocaleString("en-US"), "fields ranked"], [verified.toLocaleString("en-US"), "verified owners"]].map(([n, l]) => (
+          {[[total.toLocaleString("en-US"), "local businesses"], [ranked.toLocaleString("en-US"), "fields ranked"], [verified.toLocaleString("en-US"), verified === 1 ? "verified owner" : "verified owners"]].map(([n, l]) => (
             <div key={l} className="bg-white/[0.06] px-4 py-4 backdrop-blur"><p className="text-[26px] font-black leading-none md:text-[34px]">{n}</p><p className="mt-1 text-[12.5px] uppercase tracking-wider text-white/65">{l}</p></div>
           ))}
         </div>
@@ -71,7 +71,7 @@ export function LeaderBoards({ leaders, city, citySlug, acc }: { leaders: Leader
                 <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-gray-100 text-[24px]" aria-hidden>{c?.icon}</span>
                 <span><span className="block text-[12px] font-bold uppercase tracking-wider text-gray-500">{l.count} ranked</span><span className="block text-[18px] font-black leading-tight group-hover:underline">Best {c?.name.toLowerCase()}</span></span>
               </a>
-              <ol className={`mt-4 flex-1 space-y-2.5 ${idx === 0 ? "lg:grid lg:grid-cols-3 lg:gap-3 lg:space-y-0" : ""}`}>
+              <ol className={`mt-4 flex-1 space-y-2.5 ${idx === 0 ? "lg:grid lg:grid-cols-3 lg:items-start lg:content-start lg:gap-3 lg:space-y-0" : ""}`}>
                 {l.top.map((b, i) => (
                   <li key={b.id} className={`flex items-center gap-3 rounded-xl p-2.5 ${i === 0 ? "bg-amber-50/70 ring-1 ring-amber-200/70" : "bg-gray-50"}`}>
                     <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[14px] font-black text-white shadow" style={{ background: MEDALS[i] }}>{i + 1}</span>
