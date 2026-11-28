@@ -438,3 +438,18 @@ export async function ownerPosition(site: string, city: string, category: string
   const above = i > 0 ? list[i - 1] : null;
   return { position: i + 1, total: list.length, score: list[i].express, above: above ? { name: above.name, score: above.express.total, gap: above.express.total - list[i].express.total } : null, tips: scoreTips(me) };
 }
+
+
+/** One photo per city for its guide (Pexels, stored on our CDN once); falls back to a state photo for small towns. */
+export async function cityPhoto(site: string, citySlug: string, city: string, state: string): Promise<{ url: string; credit: string } | null> {
+  await pool.query(`CREATE TABLE IF NOT EXISTS directory_city_photos (site_slug VARCHAR(100), city_slug TEXT, url TEXT, credit TEXT, created_at TIMESTAMPTZ DEFAULT now(), PRIMARY KEY (site_slug, city_slug))`);
+  const { rows } = await pool.query(`SELECT url, credit FROM directory_city_photos WHERE site_slug = $1 AND city_slug = $2`, [site, citySlug]);
+  if (rows[0]) return rows[0].url ? rows[0] : null;
+  const { searchPexels } = await import("@/lib/pipeline/images");
+  const { storeImage } = await import("@/lib/pipeline/image-store");
+  let img = await searchPexels(`${city} ${state} downtown`).catch(() => null);
+  if (!img?.url) img = await searchPexels(`${state} landscape`).catch(() => null);
+  const url = img?.url ? (await storeImage(img.url, `${city}, ${state}`, true).catch(() => null)) || img.url : null;
+  await pool.query(`INSERT INTO directory_city_photos (site_slug, city_slug, url, credit) VALUES ($1,$2,$3,$4) ON CONFLICT DO NOTHING`, [site, citySlug, url, img?.credit || null]);
+  return url ? { url, credit: img?.credit || "" } : null;
+}

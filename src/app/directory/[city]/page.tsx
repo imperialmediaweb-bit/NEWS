@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { siteFromHeaders } from "@/lib/topic-page";
-import { categoryCounts, listBusinesses, collapseChains, cityLeaders } from "@/lib/directory";
+import { categoryCounts, listBusinesses, collapseChains, cityLeaders, categoryPhoto, cityPhoto } from "@/lib/directory";
 import { DIR_CATEGORIES, DIR_GROUPS } from "@/lib/directory-categories";
 import { mockupOf } from "@/config/design-cfg";
 import Header from "@/components/Header";
@@ -23,7 +23,13 @@ async function load(city: string) {
     listBusinesses(site.slug, { city, limit: 8 }), cityLeaders(site.slug, city),
     pool.query(`SELECT COUNT(*)::int n FROM businesses WHERE site_slug = $1 AND city_slug = $2 AND status = 'active' AND claimed`, [site.slug, city]).catch(() => ({ rows: [{ n: 0 }] })),
   ]);
-  return { site, counts, total, top, leaders, verified: v[0]?.n || 0, cityName: top[0]?.city || city };
+  const cityName = top[0]?.city || city;
+  const [photo, ...catPhotos] = await Promise.all([
+    cityPhoto(site.slug, city, cityName, site.state).catch(() => null),
+    ...leaders.slice(0, 12).map((l) => categoryPhoto(l.category).catch(() => null)),
+  ]);
+  const photos = Object.fromEntries(leaders.slice(0, 12).map((l, i) => [l.category, catPhotos[i]?.url || null]));
+  return { site, counts, total, top, leaders, verified: v[0]?.n || 0, cityName, photo: photo?.url || null, photos };
 }
 
 export async function generateMetadata({ params }: { params: { city: string } }): Promise<Metadata> {
@@ -40,16 +46,17 @@ export async function generateMetadata({ params }: { params: { city: string } })
 export default async function CityDirectory({ params }: { params: { city: string } }) {
   const d = await load(params.city);
   if (!d) notFound();
-  const { site, counts, total, top, leaders, verified, cityName } = d;
+  const { site, counts, total, top, leaders, verified, cityName, photo, photos } = d;
   const m = mockupOf(site.slug);
   const ink = m?.ink || "#14213d", acc = m?.acc || site.accent || "#b91c1c";
   return (
     <>
       <Header site={site} />
-      <CityHero city={cityName} state={site.state} total={total} ranked={leaders.length} verified={verified} ink={ink} acc={acc}
+      <CityHero city={cityName} state={site.state} total={total} ranked={leaders.length} verified={verified} ink={ink} acc={acc} photo={photo}
+        popular={leaders.slice(0, 6).map((l) => { const c = DIR_CATEGORIES.find((x) => x.slug === l.category); return { slug: l.category, name: c?.name || l.category, icon: c?.icon || "" }; })}
         crumbs={<Crumbs domain={site.domain} items={[["Directory", "/directory"], [cityName, `/directory/${params.city}`]]} />} />
       <div className="bg-[#f6f5f1]">
-        <LeaderBoards leaders={leaders} city={cityName} citySlug={params.city} acc={acc} />
+        <LeaderBoards leaders={leaders} city={cityName} citySlug={params.city} acc={acc} photos={photos} />
         <section className="mx-auto max-w-[1160px] px-4 pb-12">
           <p className="text-[12.5px] font-black uppercase tracking-[.2em]" style={{ color: acc }}>Explore {cityName}</p>
           <h2 className="mt-1 font-serif text-[28px] font-black md:text-[36px]">Every field, every business</h2>
