@@ -1,4 +1,5 @@
 import { cache } from "react";
+import { directoryLinkBox } from "@/lib/article-dir-link";
 import { sites } from "@/config/sites";
 import ArticleReactions from "@/components/design/ArticleReactions";
 import { Metadata } from "next";
@@ -255,10 +256,13 @@ const getArticleData = cache(async (siteSlug: string, articleSlug: string, domai
       ? `\n<aside class="pr-offer"><b>Have company news in ${esc(prState)}?</b> Publish your press release on ${esc(sites[siteSlug]?.name || "")}, live within one business day. <a href="/press-release">Publish a press release ›</a></aside>`
       : "";
 
+    // one useful link into the town's business guide (not on paid placements)
+    const dirBox = isSponsored ? "" : await directoryLinkBox(siteSlug, place, String(article.title || ""), String(article.content || ""), placeLabel).catch(() => "");
+
     const format = (row: Record<string, unknown>, useEnrichedContent = false) => ({
       title: row.title as string,
       slug: row.slug as string,
-      content: useEnrichedContent ? readingExtras(enrichedContent, article, place) + placeBox + prBox + creditLine : ((row.content as string) || ""),
+      content: useEnrichedContent ? readingExtras(enrichedContent, article, place) + placeBox + dirBox + prBox + creditLine : ((row.content as string) || ""),
       summary: (row.summary as string) || "",
       category: (row.category as string) || "news",
       author: (row.author as string) || "Staff Reporter",
