@@ -31,8 +31,28 @@ const TOPICS: [string, RegExp][] = [
   ["contractors", /\b(construction|renovat\w+|remodel\w*|builders?)\b/i],
 ];
 
+// the towns each paper's directory knows (with 20+ businesses), cached for an hour
+const townCache = new Map<string, { at: number; towns: { name: string; slug: string }[] }>();
+async function townsOf(siteSlug: string) {
+  const hit = townCache.get(siteSlug);
+  if (hit && Date.now() - hit.at < 3600_000) return hit.towns;
+  const { rows } = await pool.query(`SELECT city, city_slug, COUNT(*) n FROM businesses WHERE site_slug = $1 AND status = 'active' GROUP BY city, city_slug HAVING COUNT(*) >= 20 ORDER BY COUNT(*) DESC LIMIT 600`, [siteSlug]).catch(() => ({ rows: [] }));
+  const towns = rows.filter((r: { city: string }) => r.city && r.city.length >= 4).map((r: { city: string; city_slug: string }) => ({ name: r.city, slug: r.city_slug }))
+    .sort((a: { name: string }, b: { name: string }) => b.name.length - a.name.length);
+  townCache.set(siteSlug, { at: Date.now(), towns });
+  return towns;
+}
+
 export async function directoryLinkBox(siteSlug: string, place: string | null, title: string, content: string, cityLabel: string): Promise<string> {
-  if (!place || / (county|parish)$/i.test(place)) return "";
+  if (place && / (county|parish)$/i.test(place)) place = null;
+  if (!place) {
+    // any town of the directory named in the headline ("Tyler police...", "Waco restaurant...")
+    const towns = await townsOf(siteSlug);
+    const t = title.toLowerCase();
+    const hit = towns.find((x) => new RegExp(`(^|[^a-z])${x.name.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}([^a-z]|$)`).test(t) && !new RegExp(`${x.name.toLowerCase()} (county|parish|christian|university|college|high school|isd)`).test(t));
+    if (!hit) return "";
+    place = hit.slug; cityLabel = hit.name;
+  }
   const citySlug = place.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
   const { rows } = await pool.query(`SELECT category, COUNT(*)::int n FROM businesses WHERE site_slug = $1 AND city_slug = $2 AND status = 'active' GROUP BY category`, [siteSlug, citySlug]).catch(() => ({ rows: [] }));
   if (!rows.length) return "";
