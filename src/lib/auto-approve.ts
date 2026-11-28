@@ -32,7 +32,7 @@ async function websiteConfirms(website: string, phone: string, name: string): Pr
 
 export async function autoReviewClaims(): Promise<{ approved: number; duplicates: number }> {
   const { rows } = await pool.query(`
-    SELECT c.id, c.site_slug, c.data, c.created_at, b.status AS biz_status, b.phone AS cur_phone, b.website AS cur_website, b.id AS business_id
+    SELECT c.id, c.site_slug, c.data, c.created_at, c.name, c.ip_hash, b.status AS biz_status, b.phone AS cur_phone, b.website AS cur_website, b.id AS business_id
       FROM business_claims c JOIN businesses b ON b.id = c.business_id
      WHERE c.status = 'pending' AND c.order_id IS NULL
      ORDER BY c.id LIMIT 30`).catch(() => ({ rows: [] }));
@@ -51,6 +51,9 @@ export async function autoReviewClaims(): Promise<{ approved: number; duplicates
       duplicates++;
       continue;
     }
+    // one person sending many listings (lead-gen networks) always goes to a person
+    const { rows: bulk } = await pool.query(`SELECT COUNT(*)::int n FROM business_claims WHERE (lower(name) = lower($1) OR (ip_hash IS NOT NULL AND ip_hash = $3)) AND created_at > $2::timestamptz - interval '24 hours' AND created_at < $2::timestamptz + interval '24 hours'`, [c.name || "", c.created_at, c.ip_hash || null]);
+    if ((bulk[0]?.n || 0) > 3) continue;
     let ok = false;
     if (c.biz_status === "pending") ok = await websiteConfirms(d.website, phone, d.name || "");
     else ok = (!!phone && phone === digits(c.cur_phone)) || (!!hostOf(d.website) && hostOf(d.website) === hostOf(c.cur_website));

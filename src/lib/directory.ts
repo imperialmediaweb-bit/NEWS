@@ -71,6 +71,7 @@ export function dirSchema() {
     ALTER TABLE directory_imports ADD COLUMN IF NOT EXISTS heartbeat TIMESTAMPTZ;
     ALTER TABLE business_claims ADD COLUMN IF NOT EXISTS source_info TEXT;
     ALTER TABLE business_claims ADD COLUMN IF NOT EXISTS reviewed_by VARCHAR(10);
+    ALTER TABLE business_claims ADD COLUMN IF NOT EXISTS ip_hash TEXT;
     ALTER TABLE business_claims ADD COLUMN IF NOT EXISTS reviewed_at TIMESTAMPTZ;
   `).catch((e) => { ready = null; throw e; });
   return ready;

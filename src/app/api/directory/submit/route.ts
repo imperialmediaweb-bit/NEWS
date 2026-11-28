@@ -40,6 +40,8 @@ export async function POST(req: NextRequest) {
   if (!d.name || !d.city || !catBySlug(d.category)) return NextResponse.json({ error: "Business name, city and category are required." }, { status: 400 });
   if (!d.phone && !d.website) return NextResponse.json({ error: "Add a phone number or a website so customers can reach you." }, { status: 400 });
   for (const k of ["website", "facebook", "instagram"]) if (d[k] && !/^https:\/\/[^\s/]+\.[^\s]+$/i.test(d[k].replace(/^http:/, "https:"))) return NextResponse.json({ error: `The ${k} address doesn't look right.` }, { status: 400 });
+  // the sender's network address, hashed: same person behind several names/emails
+  const ipHash = crypto.createHash("sha256").update(`${process.env.CRON_SECRET || ""}:${req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "?"}`).digest("hex").slice(0, 32);
   const banned = bannedReason(d.name, d.description, clean(f.get("article"), 6000), d.website);
   if (banned) return NextResponse.json({ error: `We can't list businesses related to ${banned}. Nothing was charged.` }, { status: 400 });
 
@@ -74,7 +76,7 @@ export async function POST(req: NextRequest) {
     businessId = rows[0].id;
   }
   const srcInfo = clean(f.get("src"), 1500) || JSON.stringify({ ref: req.headers.get("referer") || "" });
-  const { rows: cl } = await pool.query(`INSERT INTO business_claims (business_id, site_slug, data, name, email, source_info) VALUES ($1,$2,$3,$4,$5,$6) RETURNING id`, [businessId, site.slug, JSON.stringify(d), owner, email, srcInfo]);
+  const { rows: cl } = await pool.query(`INSERT INTO business_claims (business_id, site_slug, data, name, email, source_info, ip_hash) VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING id`, [businessId, site.slug, JSON.stringify(d), owner, email, srcInfo, ipHash]);
   const claimId = cl[0].id;
 
   if (tier === "free") {

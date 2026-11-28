@@ -42,7 +42,9 @@ export default async function DirectoryAdmin() {
   await siteSchema();
   const [{ rows: removals }, { rows: claims }, { rows: reviews }, { rows: imports }, { rows: totals }] = await Promise.all([
     pool.query(`SELECT r.*, b.name AS biz, b.city, b.slug, b.site_slug, b.tier FROM business_removals r JOIN businesses b ON b.id = r.business_id WHERE r.status = 'pending' ORDER BY r.created_at DESC`),
-    pool.query(`SELECT c.*, b.name AS current_name, b.slug, b.status AS biz_status FROM business_claims c JOIN businesses b ON b.id = c.business_id WHERE c.status = 'pending' AND c.order_id IS NULL ORDER BY c.created_at DESC LIMIT 100`),
+    pool.query(`SELECT c.*, b.name AS current_name, b.slug, b.status AS biz_status,
+                       (SELECT COUNT(*)::int FROM business_claims x WHERE lower(x.name) = lower(c.name) AND x.created_at > now() - interval '7 days') AS by_same
+                  FROM business_claims c JOIN businesses b ON b.id = c.business_id WHERE c.status = 'pending' AND c.order_id IS NULL ORDER BY c.created_at DESC LIMIT 100`),
     pool.query(`SELECT r.id, r.rating, r.body, r.name, r.created_at, b.name AS biz, b.slug, b.site_slug FROM business_reviews r JOIN businesses b ON b.id = r.business_id WHERE r.verified AND NOT r.hidden ORDER BY r.created_at DESC LIMIT 60`),
     pool.query(`SELECT * FROM directory_imports ORDER BY started_at DESC`),
     pool.query(`SELECT COUNT(*)::int n, COUNT(*) FILTER (WHERE claimed)::int claimed, COUNT(*) FILTER (WHERE tier <> 'free')::int paid FROM businesses`),
@@ -134,7 +136,7 @@ export default async function DirectoryAdmin() {
             <p className="mt-1 font-bold">{c.data.name} · {c.data.category} · {c.data.city}</p>
             <p className="text-sm text-gray-700">{[c.data.address, c.data.phone, c.data.website, c.data.hours].filter(Boolean).join(" · ")}</p>
             {c.data.description && <p className="mt-1 text-sm">{c.data.description}</p>}
-            <p className="mt-1 text-sm text-gray-600">From {c.name} &lt;{c.email}&gt;</p>
+            <p className="mt-1 text-sm text-gray-600">From {c.name} &lt;{c.email}&gt;{c.by_same > 3 && <b className="ml-2 rounded bg-amber-100 px-2 py-0.5 text-amber-800">BULK: {c.by_same} listings from this sender in 7 days</b>}</p>
             {c.source_info && <p className="text-xs text-gray-500">Came from: {srcLabel(c.source_info)}</p>}
             <form action={act} className="mt-3 flex gap-2">
               <input type="hidden" name="id" value={c.id} />
