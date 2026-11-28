@@ -11,7 +11,8 @@ import { rejectSender } from "@/lib/reject-sender";
  *    listing's phone number or name (the owner controls that website);
  *  - a CLAIM of a listing we already have is approved when the phone or the
  *    website domain matches what the listing already says.
- * Everything else stays in /admin/directory for a person to decide.
+ * Anything else waits up to 24 hours for a person; then a single listing with a
+ * phone number goes live by itself. Bulk senders always wait for a person.
  */
 const digits = (v: unknown) => String(v || "").replace(/\D/g, "").slice(-10);
 const hostOf = (u: unknown) => { try { return new URL(String(u)).hostname.replace(/^www\./, "").toLowerCase(); } catch { return ""; } };
@@ -68,6 +69,9 @@ export async function autoReviewClaims(): Promise<{ approved: number; duplicates
     let ok = false;
     if (c.biz_status === "pending") ok = await websiteConfirms(d.website, phone, d.name || "");
     else ok = (!!phone && phone === digits(c.cur_phone)) || (!!hostOf(d.website) && hostOf(d.website) === hostOf(c.cur_website));
+    // nobody decided within 24 hours: a single (non-bulk) listing with a phone number goes live anyway,
+    // so the owner gets the service without waiting for a person (it was screened for banned topics at submit)
+    if (!ok && phone.length >= 10 && Date.now() - new Date(c.created_at).getTime() > 24 * 3600_000) ok = true;
     if (ok && await applyClaim(c.id).catch(() => false)) {
       await pool.query(`UPDATE business_claims SET reviewed_by = 'auto', reviewed_at = now() WHERE id = $1`, [c.id]);
       approved++;

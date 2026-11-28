@@ -44,13 +44,23 @@ export async function publishPaidOrder(o: PaidOrder): Promise<string | null> {
     [s[0].id, o.title, slug, content, o.body.replace(/\s+/g, " ").slice(0, 155), category, release ? "Press Release" : sponsored ? "Sponsored Content" : "Obituary", o.photo_url]
   );
   await pool.query("UPDATE paid_orders SET status = 'published', article_slug = $2, published_at = now() WHERE id = $1", [o.id, `${category}/${slug}`]);
+  // the customer gets the live link (not for monthly articles: the owner already approved those)
+  if (process.env.RESEND_API_KEY && (o as PaidOrder & { email?: string }).email && o.product !== "monthly_article") {
+    const { Resend } = await import("resend");
+    const link = `https://${site?.domain}/${category}/${slug}`;
+    await new Resend(process.env.RESEND_API_KEY).emails.send({
+      from: `${site?.name || "Express"} <contact@alabama-express.com>`, to: (o as PaidOrder & { email?: string }).email!, replyTo: process.env.SUBMISSIONS_EMAIL || "ainewss2023@gmail.com",
+      subject: `It's live: ${o.title}`.slice(0, 180),
+      html: `<p>Hello ${esc(o.name || "")},</p><p>Your ${o.product === "obituary" ? "obituary" : "story"} is now live on ${esc(site?.name || "")}:</p><p><a href="${link}" style="display:inline-block;background:#111;color:#fff;padding:12px 20px;border-radius:8px;text-decoration:none;font-weight:bold">See it live</a></p><p>${link}</p><p>Share it with friends, family and customers. Thank you for choosing ${esc(site?.name || "")}.</p>`,
+    }).catch(() => null);
+  }
   if (spotlight && !monthly && o.business_id) await pool.query("UPDATE businesses SET article_slug = $2, updated_at = now() WHERE id = $1", [o.business_id, `${category}/${slug}`]).catch(() => null);
   return `${category}/${slug}`;
 }
 
 /** Cron: Spotlight profiles go live 24 hours after payment unless the editor declined them. */
 export async function autoPublishSpotlights(): Promise<number> {
-  const { rows } = await pool.query(`SELECT * FROM paid_orders WHERE product IN ('spotlight', 'spotlight_home', 'monthly_article', 'news_brief') AND status = 'paid' AND auto_publish_at IS NOT NULL AND auto_publish_at < now() LIMIT 20`).catch(() => ({ rows: [] }));
+  const { rows } = await pool.query(`SELECT * FROM paid_orders WHERE product IN ('spotlight', 'spotlight_home', 'monthly_article', 'news_brief', 'sponsored', 'featured', 'press_release', 'obituary') AND status = 'paid' AND auto_publish_at IS NOT NULL AND auto_publish_at < now() LIMIT 20`).catch(() => ({ rows: [] }));
   let n = 0;
   for (const o of rows as PaidOrder[]) if (await publishPaidOrder(o)) n++;
   return n;

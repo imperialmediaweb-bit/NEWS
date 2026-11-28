@@ -91,6 +91,19 @@ export async function POST(req: NextRequest) {
     [id, event.data.object.id, event.data.object.subscription || null]
   );
   const o = rows[0];
+  // sponsored stories, featured stories, press releases and obituaries go live by themselves 2 hours
+  // after payment (checked against the banned list before payment; the editor can still decline)
+  if (o && ["sponsored", "featured", "press_release", "obituary"].includes(o.product)) {
+    await pool.query("UPDATE paid_orders SET auto_publish_at = now() + interval '2 hours' WHERE id = $1", [o.id]);
+    if (process.env.RESEND_API_KEY && o.email) {
+      const site = sites[o.site_slug];
+      await new Resend(process.env.RESEND_API_KEY).emails.send({
+        from: `${site?.name || "Express"} <contact@alabama-express.com>`, to: o.email, replyTo: process.env.SUBMISSIONS_EMAIL || "ainewss2023@gmail.com",
+        subject: `Thank you: your ${PRODUCTS[o.product as Product]?.name.toLowerCase() || "order"} on ${site?.name || "our site"}`,
+        html: `<p>Hello ${String(o.name || "").replace(/</g, "&lt;")},</p><p>We received your payment for <b>${String(o.title || "").replace(/</g, "&lt;")}</b>. It goes live on ${site?.name || "our site"} within about 2 hours, and we'll email you the link as soon as it's published.</p><p>Need a change? Just reply to this email.</p><p>${site?.name || ""}</p>`,
+      }).catch(() => null);
+    }
+  }
   // a paid news brief goes live within the hour (the editor can still decline it in /admin/paid)
   if (o && o.product === "news_brief") await pool.query("UPDATE paid_orders SET auto_publish_at = now() + interval '1 hour' WHERE id = $1", [o.id]);
   // Business Spotlight: the listing upgrades now, the profile article goes live in 24 hours unless declined
@@ -120,7 +133,7 @@ export async function POST(req: NextRequest) {
         subject: `[PAID $${(o.cents / 100).toFixed(2)}${o.product === "listing" ? "/month" : ""}] ${PRODUCTS[o.product as Product]?.name}: ${o.title}`.slice(0, 180),
         html: o.product === "spotlight" || o.product === "spotlight_home"
           ? `<p>New Business Spotlight on ${site?.name}: <b>${o.business || o.title}</b> (${o.name} &lt;${o.email}&gt;).</p><p>The listing is upgraded now. The profile article <b>goes live automatically in 24 hours</b>. To stop it, open <a href="https://${site?.domain}/admin/paid">admin / paid</a> and press "Decline &amp; refund".</p>`
-          : `<p>New paid ${o.product} on ${site?.name} from ${o.name} &lt;${o.email}&gt;.</p><p><a href="https://${site?.domain}/admin/paid">Review and publish</a></p>`,
+          : `<p>New paid ${o.product} on ${site?.name} from ${o.name} &lt;${o.email}&gt;: <b>${String(o.title || "").replace(/</g, "&lt;")}</b>.</p><p>It <b>goes live automatically in 2 hours</b> and the customer gets the link by email. To stop it, open <a href="https://${site?.domain}/admin/paid">admin / paid</a> and press "Decline &amp; refund".</p>`,
       })
       .catch(() => null);
   }
