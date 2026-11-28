@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { siteFromHeaders } from "@/lib/topic-page";
-import { categoryCounts, listBusinesses, collapseChains, cityLeaders, bizHref } from "@/lib/directory";
-import { DIR_CATEGORIES, DIR_GROUPS, catBySlug } from "@/lib/directory-categories";
+import { categoryCounts, listBusinesses, collapseChains, cityLeaders } from "@/lib/directory";
+import { DIR_CATEGORIES, DIR_GROUPS } from "@/lib/directory-categories";
 import { mockupOf } from "@/config/design-cfg";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { generateContent } from "@/data/generate-content";
 import { BizCard, Crumbs, OsmCredit } from "@/components/directory/parts";
+import { CityHero, LeaderBoards, HowRanked } from "@/components/directory/CityGuide";
+import pool from "@/lib/db";
 
 /** "Local businesses in {City}": every category with listings in that town. */
 export const dynamic = "force-dynamic";
@@ -17,8 +19,11 @@ async function load(city: string) {
   const counts = await categoryCounts(site.slug, city);
   const total = Object.values(counts).reduce((a, b) => a + b, 0);
   if (!total) return null;
-  const [top, leaders] = await Promise.all([listBusinesses(site.slug, { city, limit: 8 }), cityLeaders(site.slug, city)]);
-  return { site, counts, total, top, leaders, cityName: top[0]?.city || city };
+  const [top, leaders, { rows: v }] = await Promise.all([
+    listBusinesses(site.slug, { city, limit: 8 }), cityLeaders(site.slug, city),
+    pool.query(`SELECT COUNT(*)::int n FROM businesses WHERE site_slug = $1 AND city_slug = $2 AND status = 'active' AND claimed`, [site.slug, city]).catch(() => ({ rows: [{ n: 0 }] })),
+  ]);
+  return { site, counts, total, top, leaders, verified: v[0]?.n || 0, cityName: top[0]?.city || city };
 }
 
 export async function generateMetadata({ params }: { params: { city: string } }): Promise<Metadata> {
@@ -35,70 +40,51 @@ export async function generateMetadata({ params }: { params: { city: string } })
 export default async function CityDirectory({ params }: { params: { city: string } }) {
   const d = await load(params.city);
   if (!d) notFound();
-  const { site, counts, total, top, leaders, cityName } = d;
+  const { site, counts, total, top, leaders, verified, cityName } = d;
   const m = mockupOf(site.slug);
   const ink = m?.ink || "#14213d", acc = m?.acc || site.accent || "#b91c1c";
   return (
     <>
       <Header site={site} />
-      <section className="text-white" style={{ background: ink }}>
-        <div className="mx-auto max-w-[1100px] px-4 py-9 md:py-12">
-          <Crumbs domain={site.domain} items={[["Directory", "/directory"], [cityName, `/directory/${params.city}`]]} />
-          <h1 className="mt-3 text-[32px] font-black leading-[1.05] md:text-[50px]">{cityName} Business Guide {new Date().getFullYear()}</h1>
-          <p className="mt-3 max-w-[760px] text-[17px] opacity-85">{total} local businesses in {cityName}, {site.state}, ranked by the Express Score: verified reader reviews, a complete profile and a confirmed owner. Nobody can pay to move up; paid placements are always labelled.</p>
-        </div>
-      </section>
-      <main className="mx-auto max-w-[1100px] px-4 py-9">
-        {leaders.length > 0 && (
-          <section className="mb-10">
-            <h2 className="text-[22px] font-black">Top-rated in {cityName}</h2>
-            <p className="text-[14px] text-gray-600">The three highest Express Scores in each field. <a href="#how-ranked" className="underline">How we rank</a></p>
-            <div className="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {leaders.slice(0, 12).map((l) => {
-                const c = catBySlug(l.category);
-                return (
-                  <div key={l.category} className="border border-gray-200 bg-white p-4">
-                    <a href={`/directory/best/${params.city}/${l.category}`} className="text-[16px] font-black hover:underline"><span aria-hidden>{c?.icon} </span>Best {c?.name.toLowerCase()} in {cityName}</a>
-                    <ol className="mt-2 space-y-1.5">
-                      {l.top.map((b, i) => (
-                        <li key={b.id} className="flex items-center justify-between gap-2 text-[14.5px]">
-                          <a href={bizHref(b)} className="truncate hover:underline"><b>{i + 1}.</b> {b.name}</a>
-                          <span className="shrink-0 rounded px-2 py-0.5 text-[12.5px] font-black text-white" style={{ background: acc }} title="Express Score">{b.express.total}</span>
-                        </li>
-                      ))}
-                    </ol>
-                    <p className="mt-2 text-[12.5px] text-gray-500">{l.count} {c?.name.toLowerCase()} ranked</p>
+      <CityHero city={cityName} state={site.state} total={total} ranked={leaders.length} verified={verified} ink={ink} acc={acc}
+        crumbs={<Crumbs domain={site.domain} items={[["Directory", "/directory"], [cityName, `/directory/${params.city}`]]} />} />
+      <div className="bg-[#f6f5f1]">
+        <LeaderBoards leaders={leaders} city={cityName} citySlug={params.city} acc={acc} />
+        <section className="mx-auto max-w-[1160px] px-4 pb-12">
+          <p className="text-[12.5px] font-black uppercase tracking-[.2em]" style={{ color: acc }}>Explore {cityName}</p>
+          <h2 className="mt-1 font-serif text-[28px] font-black md:text-[36px]">Every field, every business</h2>
+          <div className="mt-6 space-y-6">
+            {DIR_GROUPS.map((g) => {
+              const cats = DIR_CATEGORIES.filter((c) => c.group === g && counts[c.slug]);
+              if (!cats.length) return null;
+              return (
+                <div key={g}>
+                  <h3 className="text-[13px] font-black uppercase tracking-wider text-gray-500">{g}</h3>
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {cats.map((c) => (
+                      <a key={c.slug} href={`/directory/${params.city}/${c.slug}`} className="inline-flex items-center gap-2 rounded-full bg-white px-3.5 py-2 text-[14.5px] font-semibold shadow-sm ring-1 ring-black/5 transition hover:-translate-y-0.5 hover:shadow-md">
+                        <span aria-hidden>{c.icon}</span>{c.name}<span className="rounded-full bg-gray-100 px-2 text-[12px] font-bold text-gray-600">{counts[c.slug]}</span>
+                      </a>
+                    ))}
                   </div>
-                );
-              })}
-            </div>
-          </section>
-        )}
-        {DIR_GROUPS.map((g) => {
-          const cats = DIR_CATEGORIES.filter((c) => c.group === g && counts[c.slug]);
-          if (!cats.length) return null;
-          return (
-            <section key={g} className="mb-8">
-              <h2 className="text-[20px] font-black">{g}</h2>
-              <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
-                {cats.map((c) => (
-                  <a key={c.slug} href={`/directory/${params.city}/${c.slug}`} className="flex items-center gap-3 border border-gray-200 bg-white p-3 transition hover:-translate-y-0.5 hover:shadow-md">
-                    <span className="text-[24px]" aria-hidden>{c.icon}</span>
-                    <span><b className="block text-[14.5px] leading-tight">{c.name} in {cityName}</b><span className="text-[12.5px] text-gray-500">{counts[c.slug]}</span></span>
-                  </a>
-                ))}
-              </div>
-            </section>
-          );
-        })}
-        <h2 className="mt-4 text-[20px] font-black">Featured in {cityName}</h2>
-        <div className="mt-4 grid gap-5 md:grid-cols-2">{collapseChains(top).map((b) => <BizCard key={b.id} b={b} acc={acc} />)}</div>
-        <section id="how-ranked" className="mt-10 border-t pt-6 text-[14.5px] text-gray-700">
-          <h2 className="text-[18px] font-black text-gray-900">How the Express Score works</h2>
-          <p className="mt-2">Every business gets a score from 0 to 100, the same way: <b>reviews</b> up to 55 points (stars from readers who confirmed their email, and how many), <b>profile</b> up to 30 (hours, phone, website, description, photo) and <b>owner verified</b> 15 (the owner claimed the listing). Payment never changes the score; sponsored places are shown separately and marked &ldquo;Sponsored&rdquo;. Owners can raise their score for free by completing their profile and asking customers for reviews.</p>
+                </div>
+              );
+            })}
+          </div>
         </section>
-        <OsmCredit />
-      </main>
+        <section className="mx-auto max-w-[1160px] px-4 pb-12">
+          <h2 className="font-serif text-[26px] font-black md:text-[32px]">Featured in {cityName}</h2>
+          <div className="mt-5 grid gap-5 md:grid-cols-2">{collapseChains(top).map((b) => <BizCard key={b.id} b={b} acc={acc} />)}</div>
+        </section>
+        <section className="mx-auto max-w-[1160px] px-4 pb-12">
+          <div className="flex flex-col items-start justify-between gap-4 rounded-3xl p-6 text-white md:flex-row md:items-center md:p-8" style={{ background: `linear-gradient(120deg, ${acc}, ${ink})` }}>
+            <div><p className="font-serif text-[24px] font-black md:text-[30px]">Own a business in {cityName}?</p><p className="mt-1 text-[16px] text-white/85">Claim your listing free, see your place in the city and get a website built for you.</p></div>
+            <a href="/directory/join" className="shrink-0 rounded-full bg-white px-6 py-3 text-[15px] font-black text-gray-900 shadow-lg transition hover:-translate-y-0.5">Claim it free ›</a>
+          </div>
+        </section>
+        <HowRanked acc={acc} />
+        <div className="mx-auto max-w-[1160px] px-4 pb-10"><OsmCredit /></div>
+      </div>
       <Footer site={site} about={generateContent(site).footerAbout} />
     </>
   );
