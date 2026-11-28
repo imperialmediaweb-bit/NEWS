@@ -1,5 +1,6 @@
 import pool from "@/lib/db";
 import { applyClaim } from "@/lib/directory";
+import { rejectSender } from "@/lib/reject-sender";
 
 /**
  * Automatic review of free listings and claims, so the admin only sees the
@@ -53,7 +54,17 @@ export async function autoReviewClaims(): Promise<{ approved: number; duplicates
     }
     // one person sending many listings (lead-gen networks) always goes to a person
     const { rows: bulk } = await pool.query(`SELECT COUNT(*)::int n FROM business_claims WHERE (lower(name) = lower($1) OR (ip_hash IS NOT NULL AND ip_hash = $3)) AND created_at > $2::timestamptz - interval '24 hours' AND created_at < $2::timestamptz + interval '24 hours'`, [c.name || "", c.created_at, c.ip_hash || null]);
-    if ((bulk[0]?.n || 0) > 3) continue;
+    if ((bulk[0]?.n || 0) > 3) {
+      // a lead-gen network: most of the sender's listings are "<City> <Service>" sites in different cities
+      const { rows: theirs } = await pool.query(`SELECT data->>'name' AS name, data->>'city' AS city FROM business_claims WHERE lower(name) = lower($1) AND created_at > now() - interval '7 days'`, [c.name || ""]);
+      const cityNamed = theirs.filter((t) => t.city && String(t.name || "").toLowerCase().includes(String(t.city).toLowerCase().split(",")[0].trim())).length;
+      const cities = new Set(theirs.map((t) => String(t.city || "").toLowerCase())).size;
+      if (theirs.length >= 4 && cities >= 3 && cityNamed / theirs.length >= 0.6) {
+        await rejectSender(c.name, { notify: true }).catch(() => null);
+        duplicates++;
+      }
+      continue; // otherwise a person decides
+    }
     let ok = false;
     if (c.biz_status === "pending") ok = await websiteConfirms(d.website, phone, d.name || "");
     else ok = (!!phone && phone === digits(c.cur_phone)) || (!!hostOf(d.website) && hostOf(d.website) === hostOf(c.cur_website));
