@@ -10,6 +10,7 @@ import Footer from "@/components/Footer";
 import { generateContent } from "@/data/generate-content";
 import { OwnerLogin, ReplyBox } from "@/components/directory/OwnerTools";
 import SiteEditor from "@/components/directory/SiteEditor";
+import BriefBox from "@/components/directory/BriefBox";
 import { bizSiteFor, isLive } from "@/lib/business-site";
 
 /**
@@ -110,6 +111,7 @@ export default async function Owner({ searchParams }: { searchParams: { t?: stri
                   </div>
                 );
               })()}
+              <BriefBox token={searchParams.t!} businessId={b.id as number} siteName={site.name} included={!!bsite && isLive(bsite)} acc={acc} />
               <div className="mt-3 bg-white p-4 shadow-sm">
                 <p className="text-[12px] font-bold uppercase tracking-wider text-gray-500">Where people found you</p>
                 <div className="mt-2 flex flex-wrap gap-x-6 gap-y-1 text-[15px]">

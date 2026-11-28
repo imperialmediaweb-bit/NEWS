@@ -91,6 +91,8 @@ export async function POST(req: NextRequest) {
     [id, event.data.object.id, event.data.object.subscription || null]
   );
   const o = rows[0];
+  // a paid news brief goes live within the hour (the editor can still decline it in /admin/paid)
+  if (o && o.product === "news_brief") await pool.query("UPDATE paid_orders SET auto_publish_at = now() + interval '1 hour' WHERE id = $1", [o.id]);
   // Business Spotlight: the listing upgrades now, the profile article goes live in 24 hours unless declined
   if (o && (o.product === "spotlight" || o.product === "spotlight_home") && o.business_id) {
     await pool.query("UPDATE paid_orders SET auto_publish_at = now() + interval '24 hours' WHERE id = $1", [o.id]);

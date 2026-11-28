@@ -18,7 +18,7 @@ export async function publishPaidOrder(o: PaidOrder): Promise<string | null> {
   const { rows: s } = await pool.query("SELECT id FROM sites WHERE slug = $1", [o.site_slug]);
   if (!s[0]) return null;
   const site = sites[o.site_slug];
-  const monthly = o.product === "monthly_article";
+  const monthly = o.product === "monthly_article" || o.product === "news_brief";
   const spotlight = o.product === "spotlight" || o.product === "spotlight_home" || monthly;
   const release = o.product === "press_release";
   const sponsored = spotlight || release || o.product === "sponsored" || o.product === "featured";
@@ -50,7 +50,7 @@ export async function publishPaidOrder(o: PaidOrder): Promise<string | null> {
 
 /** Cron: Spotlight profiles go live 24 hours after payment unless the editor declined them. */
 export async function autoPublishSpotlights(): Promise<number> {
-  const { rows } = await pool.query(`SELECT * FROM paid_orders WHERE product IN ('spotlight', 'spotlight_home', 'monthly_article') AND status = 'paid' AND auto_publish_at IS NOT NULL AND auto_publish_at < now() LIMIT 20`).catch(() => ({ rows: [] }));
+  const { rows } = await pool.query(`SELECT * FROM paid_orders WHERE product IN ('spotlight', 'spotlight_home', 'monthly_article', 'news_brief') AND status = 'paid' AND auto_publish_at IS NOT NULL AND auto_publish_at < now() LIMIT 20`).catch(() => ({ rows: [] }));
   let n = 0;
   for (const o of rows as PaidOrder[]) if (await publishPaidOrder(o)) n++;
   return n;
