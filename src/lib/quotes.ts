@@ -93,6 +93,11 @@ export async function unlockLead(quoteId: number, businessId: number) {
   const site = b[0] && sites[b[0].site_slug];
   if (!q[0] || !b[0]?.owner_email || !site) return;
   await new Resend(process.env.RESEND_API_KEY).emails.send({
+    from: `${site.name} <contact@alabama-express.com>`, to: process.env.SUBMISSIONS_EMAIL || "ainewss2023@gmail.com",
+    subject: `[PAID $${(LEAD_CENTS / 100).toFixed(2)}] Customer contact unlocked: ${b[0].name} (${q[0].city})`.slice(0, 180),
+    html: `<p><b>${e(b[0].name)}</b> paid $${(LEAD_CENTS / 100).toFixed(2)} for a customer request in ${e(q[0].city)} on ${site.name}. The contact was sent to them automatically.</p>`,
+  }).catch(() => null);
+  await new Resend(process.env.RESEND_API_KEY).emails.send({
     from: `${site.name} <contact@alabama-express.com>`, to: b[0].owner_email, subject: `Customer contact: ${q[0].city}`,
     html: `<p>Hello ${e(b[0].name)},</p><p>Here is the customer who asked for quotes:</p><p><b>${e(q[0].name)}</b> · <a href="mailto:${e(q[0].email)}">${e(q[0].email)}</a>${q[0].phone ? ` · ${e(q[0].phone)}` : ""}</p><blockquote style="border-left:4px solid #ddd;margin:12px 0;padding:8px 14px">${e(q[0].details)}</blockquote><p>Good luck!<br>${site.name}</p>`,
   }).catch(() => null);
