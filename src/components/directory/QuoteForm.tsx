@@ -19,7 +19,7 @@ export default function QuoteForm({ category, categoryName, one, city, citySlug,
   }
 
   if (done) return (
-    <div className="border-2 border-gray-900 bg-white p-5">
+    <div className="rounded-3xl bg-white p-5 shadow-[0_10px_30px_-18px_rgba(0,0,0,.35)] ring-1 ring-black/5 md:p-7">
       <p className="text-[19px] font-black">Request sent ✓</p>
       <p className="mt-1 text-[15px] text-gray-700">{done.sent ? `It went to ${done.sent} local ${done.sent === 1 ? one : categoryName.toLowerCase()}; they'll contact you directly. We emailed you a copy.` : "We emailed you a copy and will pass it on to local businesses."}</p>
       {done.call.length > 0 && (
@@ -31,20 +31,20 @@ export default function QuoteForm({ category, categoryName, one, city, citySlug,
   );
 
   return (
-    <form onSubmit={submit} className="border-2 border-gray-900 bg-white p-5">
-      <p className="text-[20px] font-black">Get free quotes from {categoryName.toLowerCase()} in {city}</p>
+    <form onSubmit={submit} className="rounded-3xl bg-white p-5 shadow-[0_10px_30px_-18px_rgba(0,0,0,.35)] ring-1 ring-black/5 md:p-7">
+      <p className="font-serif text-[24px] font-black">Get free quotes from {categoryName.toLowerCase()} in {city}</p>
       <p className="mt-1 text-[14.5px] text-gray-600">Describe the job once. Up to 3 local {categoryName.toLowerCase()} get it and contact you. Free, no obligation.</p>
-      <textarea name="details" required minLength={15} maxLength={2000} rows={3} placeholder={`What do you need? e.g. when, where, how big the job is`} className="mt-3 w-full border border-gray-400 p-2.5 text-[15px]" />
+      <textarea name="details" required minLength={15} maxLength={2000} rows={3} placeholder={`What do you need? e.g. when, where, how big the job is`} className="mt-3 w-full rounded-2xl border border-gray-300 p-3 text-[15px] outline-none focus:border-gray-900" />
       <div className="mt-2 grid gap-2 sm:grid-cols-2">
-        <input name="name" required maxLength={120} placeholder="Your name" className="border border-gray-400 p-2.5 text-[15px]" />
-        <input name="email" type="email" required maxLength={200} placeholder="Email" className="border border-gray-400 p-2.5 text-[15px]" />
-        <input name="phone" maxLength={40} placeholder="Phone (optional)" className="border border-gray-400 p-2.5 text-[15px]" />
-        <input name="zip" maxLength={12} placeholder="ZIP code (optional)" className="border border-gray-400 p-2.5 text-[15px]" />
+        <input name="name" required maxLength={120} placeholder="Your name" className="rounded-2xl border border-gray-300 p-3 text-[15px] outline-none focus:border-gray-900" />
+        <input name="email" type="email" required maxLength={200} placeholder="Email" className="rounded-2xl border border-gray-300 p-3 text-[15px] outline-none focus:border-gray-900" />
+        <input name="phone" maxLength={40} placeholder="Phone (optional)" className="rounded-2xl border border-gray-300 p-3 text-[15px] outline-none focus:border-gray-900" />
+        <input name="zip" maxLength={12} placeholder="ZIP code (optional)" className="rounded-2xl border border-gray-300 p-3 text-[15px] outline-none focus:border-gray-900" />
       </div>
       <input name="company_url" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden />
       <label className="mt-3 flex items-start gap-2 text-[13px] text-gray-600"><input type="checkbox" name="consent" required className="mt-1" /><span>I agree that {siteName} shares my request and contact details with up to 3 local {categoryName.toLowerCase()} so they can reply to me.</span></label>
       {err && <p className="mt-2 bg-red-50 p-2 text-[14px] font-semibold text-red-800">{err}</p>}
-      <button disabled={busy} className="mt-3 px-6 py-3 text-[15px] font-black text-white disabled:opacity-60" style={{ background: acc }}>{busy ? "Sending…" : "Get my free quotes"}</button>
+      <button disabled={busy} className="mt-3 rounded-full px-7 py-3 text-[15px] font-black text-white shadow-lg transition hover:-translate-y-0.5 disabled:opacity-60" style={{ background: acc }}>{busy ? "Sending…" : "Get my free quotes"}</button>
     </form>
   );
 }
