@@ -2,19 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  LayoutDashboard,
-  FileText,
-  Globe,
-  Send,
-  Download,
-  Settings,
-  Menu,
-  Zap,
-  BarChart3,
-  Facebook,
-  ShoppingCart,
-} from "lucide-react";
+import { LayoutDashboard, FileText, Globe, Send, Download, Settings, Menu, Zap, BarChart3, Facebook, ShoppingCart, Inbox, Store, DollarSign } from "lucide-react";
 import { useState } from "react";
 
 const navItems = [
@@ -22,6 +10,9 @@ const navItems = [
   { href: "/admin/articles", label: "Articles", icon: FileText },
   { href: "/admin/sites", label: "Sites", icon: Globe },
   { href: "/admin/publish", label: "Publish", icon: Send },
+  { href: "/admin/submissions", label: "News tips", icon: Inbox },
+  { href: "/admin/directory", label: "Directory", icon: Store },
+  { href: "/admin/paid", label: "Paid & sponsored", icon: DollarSign },
   { href: "/admin/orders", label: "Orders", icon: ShoppingCart },
   { href: "/admin/import", label: "Import", icon: Download },
   { href: "/admin/domains", label: "Domains", icon: Globe },
