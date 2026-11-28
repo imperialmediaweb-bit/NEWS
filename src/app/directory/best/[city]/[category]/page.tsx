@@ -69,7 +69,10 @@ export default async function Best({ params }: { params: { city: string; categor
                 <p className="text-[13.5px] text-gray-500">{[b.address, b.city].filter(Boolean).join(", ")}</p>
                 <div className="mt-1"><Stars value={ratingOf(b)} count={b.rating_count} /></div>
                 {b.description && <p className="mt-1.5 line-clamp-2 text-[14.5px] text-gray-700">{b.description}</p>}
-                {b.why.length > 0 && <p className="mt-1.5 text-[12.5px] font-semibold text-gray-500">Why it ranks: {b.why.join(" · ")}</p>}
+                <div className="mt-2 flex flex-wrap items-center gap-2 text-[12.5px]">
+                  <span className="rounded bg-gray-900 px-2 py-0.5 font-black text-white" title="Express Score, 0-100">Express Score {b.express.total}</span>
+                  {b.express.parts.map((p) => <span key={p.label} className="rounded border border-gray-300 px-2 py-0.5 text-gray-600">{p.label}: {p.points}/{p.max}</span>)}
+                </div>
                 <p className="mt-2 flex flex-wrap gap-4 text-[14px] font-bold">
                   {b.phone && <a href={`tel:${b.phone.replace(/[^\d+]/g, "")}`} style={{ color: acc }}>☎ {b.phone}</a>}
                   <a href={bizHref(b)} className="text-gray-700">Hours, map &amp; reviews ›</a>

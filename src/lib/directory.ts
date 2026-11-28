@@ -4,6 +4,7 @@ import { sites } from "@/config/sites";
 import { citiesOf } from "@/lib/local-data";
 import { slugOf } from "@/lib/topic-page";
 import { DIR_CATEGORIES, categorize, catBySlug } from "@/lib/directory-categories";
+import { expressScore, type Score } from "@/lib/express-score";
 
 /**
  * Local business directory (per paper, per city, per category).
@@ -372,7 +373,7 @@ export async function liveDeals(site: string, opts: { businessId?: number; city?
 }
 
 // ── Top 10 ranking (shared by the Best pages and the owner page) ──
-export type Ranked = Business & { score: number; why: string[] };
+export type Ranked = Business & { score: number; why: string[]; express: Score };
 
 export async function rank(site: string, city: string, category: string): Promise<Ranked[]> {
   await dirSchema();
@@ -393,7 +394,26 @@ export async function rank(site: string, city: string, category: string): Promis
     if (b.website) { score += 4; why.push("website"); }
     if (b.description) { score += 5; why.push("owner description"); }
     if (b.claimed) { score += 6; why.push("verified owner"); }
-    out.push({ ...b, score, why });
+    const express = expressScore(b);
+    out.push({ ...b, score: express.total + score / 1000, why, express });
   }
   return out.sort((a, b) => b.score - a.score).slice(0, 10);
+}
+
+/** The top 3 of every category in a city (categories with 3+ businesses), for the city guide. */
+export async function cityLeaders(site: string, city: string): Promise<{ category: string; count: number; top: (Business & { express: Score })[] }[]> {
+  await dirSchema();
+  const { rows } = await pool.query(`SELECT * FROM businesses WHERE site_slug = $1 AND city_slug = $2 AND status = 'active' LIMIT 5000`, [site, city]);
+  const by = new Map<string, Map<string, Business & { express: Score }>>();
+  for (const b of rows as Business[]) {
+    const key = b.name.toLowerCase().replace(/[^a-z0-9]/g, "");
+    const m = by.get(b.category) || new Map();
+    const e = { ...b, express: expressScore(b) };
+    if (!m.has(key) || m.get(key)!.express.total < e.express.total) m.set(key, e);
+    by.set(b.category, m);
+  }
+  return Array.from(by.entries())
+    .filter(([, m]) => m.size >= 3)
+    .map(([category, m]) => ({ category, count: m.size, top: Array.from(m.values()).sort((a, b) => b.express.total - a.express.total || b.rating_count - a.rating_count).slice(0, 3) }))
+    .sort((a, b) => b.count - a.count);
 }
