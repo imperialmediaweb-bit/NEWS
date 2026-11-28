@@ -52,6 +52,16 @@ export default async function CityDirectory({ params }: { params: { city: string
   return (
     <>
       <Header site={site} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([
+        { "@context": "https://schema.org", "@type": "CollectionPage", name: `${cityName} Business Guide`, url: `https://${site.domain}/directory/${params.city}`, about: { "@type": "City", name: cityName, containedInPlace: { "@type": "State", name: site.state } },
+          hasPart: leaders.slice(0, 12).map((l) => ({ "@type": "ItemList", name: `Best ${DIR_CATEGORIES.find((c) => c.slug === l.category)?.name.toLowerCase() || l.category} in ${cityName}`, url: `https://${site.domain}/directory/best/${params.city}/${l.category}`,
+            itemListElement: l.top.map((b, i) => ({ "@type": "ListItem", position: i + 1, name: b.name, url: `https://${site.domain}/directory/listing/${b.slug}` })) })) },
+        { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: [
+          { "@type": "Question", name: `How are businesses in ${cityName} ranked?`, acceptedAnswer: { "@type": "Answer", text: `By the Express Score from 0 to 100: verified reader reviews up to 55 points, a complete profile up to 30 and a verified owner 15. Payment never changes the score; sponsored places are labelled.` } },
+          { "@type": "Question", name: `How many local businesses are listed in ${cityName}?`, acceptedAnswer: { "@type": "Answer", text: `${total.toLocaleString("en-US")} businesses in ${cityName}, ${site.state}, across ${Object.keys(counts).length} fields.` } },
+          { "@type": "Question", name: `How do I get quotes from local businesses in ${cityName}?`, acceptedAnswer: { "@type": "Answer", text: `Open the field you need (for example plumbers) in the ${cityName} guide and describe the job once; up to 3 local businesses receive it and contact you. It is free.` } },
+        ] },
+      ]) }} />
       <CityHero city={cityName} state={site.state} total={total} ranked={leaders.length} verified={verified} ink={ink} acc={acc} photo={photo}
         popular={leaders.slice(0, 6).map((l) => { const c = DIR_CATEGORIES.find((x) => x.slug === l.category); return { slug: l.category, name: c?.name || l.category, icon: c?.icon || "" }; })}
         crumbs={<Crumbs domain={site.domain} items={[["Directory", "/directory"], [cityName, `/directory/${params.city}`]]} />} />
