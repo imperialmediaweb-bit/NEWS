@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { siteFromHeaders } from "@/lib/topic-page";
-import { listBusinesses, categoryCounts, topCities, ratingOf, bizHref, collapseChains } from "@/lib/directory";
+import { listBusinesses, categoryCounts, topCities, ratingOf, bizHref, collapseChains, categoryPhoto } from "@/lib/directory";
 import { catBySlug, DIR_CATEGORIES } from "@/lib/directory-categories";
 import { mockupOf } from "@/config/design-cfg";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { generateContent } from "@/data/generate-content";
-import { BizCard, Crumbs, OsmCredit } from "@/components/directory/parts";
+import { BizCard, Crumbs, OsmCredit, PhotoHero } from "@/components/directory/parts";
 import QuoteForm from "@/components/directory/QuoteForm";
 
 /**
@@ -42,7 +42,7 @@ export default async function CityCategory({ params }: { params: { city: string;
   const d = await load(params.city, params.category);
   if (!d?.cityName) notFound();
   const { site, cat, list, cityName } = d;
-  const [counts, nearby] = await Promise.all([categoryCounts(site.slug, params.city), topCities(site.slug, 14, cat.slug)]);
+  const [counts, nearby, photo] = await Promise.all([categoryCounts(site.slug, params.city), topCities(site.slug, 14, cat.slug), categoryPhoto(cat.slug).catch(() => null)]);
   const m = mockupOf(site.slug);
   const ink = m?.ink || "#14213d", acc = m?.acc || site.accent || "#b91c1c";
   const rated = list.filter((b) => b.rating_count > 0).sort((a, b) => (ratingOf(b) || 0) - (ratingOf(a) || 0));
@@ -64,14 +64,14 @@ export default async function CityCategory({ params }: { params: { city: string;
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
       <Header site={site} />
-      <section className="text-white" style={{ background: ink }}>
-        <div className="mx-auto max-w-[1100px] px-4 py-9 md:py-12">
-          <Crumbs domain={site.domain} items={[["Directory", "/directory"], [cityName!, `/directory/${params.city}`], [cat.name, `/directory/${params.city}/${cat.slug}`]]} />
-          <h1 className="mt-3 text-[32px] font-black leading-[1.05] md:text-[50px]"><span aria-hidden>{cat.icon} </span>{cat.name} in {cityName}, {site.state}</h1>
-          {list.length >= 5 && <a href={`/directory/best/${params.city}/${cat.slug}`} className="mt-4 inline-block rounded-full bg-white/15 px-4 py-2 text-[14px] font-black ring-1 ring-white/30 hover:bg-white/25">🏆 See the top 10 {cat.name.toLowerCase()} in {cityName} ›</a>}
-          <p className="mt-3 max-w-[760px] text-[17px] opacity-85">{list.length} local {list.length === 1 ? cat.one : cat.name.toLowerCase()} with phone numbers, addresses, hours and reader reviews. Updated {month()}.</p>
-        </div>
-      </section>
+      <PhotoHero photo={photo?.url} ink={ink} acc={acc} kicker={`Updated ${month()}`}
+        crumbs={<Crumbs domain={site.domain} items={[["Directory", "/directory"], [cityName!, `/directory/${params.city}`], [cat.name, `/directory/${params.city}/${cat.slug}`]]} />}
+        title={<>{cat.name} in {cityName}</>}
+        sub={<>
+          <p>{list.length} local {list.length === 1 ? cat.one : cat.name.toLowerCase()} in {cityName}, {site.state}, with phone numbers, addresses, hours and reader reviews.</p>
+          {list.length >= 5 && <a href={`/directory/best/${params.city}/${cat.slug}`} className="mt-5 inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-[15px] font-black text-gray-900 shadow-lg transition hover:-translate-y-0.5">🏆 See the top 10 {cat.name.toLowerCase()} ›</a>}
+        </>} />
+      <div className="bg-[#f6f5f1]">
       <main className="mx-auto max-w-[1100px] px-4 py-9">
         <div className="mb-6"><QuoteForm category={cat.slug} categoryName={cat.name} one={cat.one} city={cityName!} citySlug={params.city} siteName={site.name} acc={acc} /></div>
         <div className="grid gap-5">{collapseChains(list).map((b) => <BizCard key={b.id} b={b} acc={acc} />)}</div>
@@ -97,6 +97,7 @@ export default async function CityCategory({ params }: { params: { city: string;
         )}
         <OsmCredit />
       </main>
+      </div>
       <Footer site={site} about={generateContent(site).footerAbout} />
     </>
   );

@@ -133,7 +133,7 @@ export default async function BusinessPage({ params, searchParams }: { params: {
                 )}
                 {b.claimed && <span className="rounded-full bg-white/10 px-3 py-1 text-[13px] font-semibold ring-1 ring-white/25">✓ Claimed by owner</span>}
               </div>
-              <h1 className="mt-2 text-[34px] font-black leading-[1.05] md:text-[52px]">{b.name}</h1>
+              <h1 className="mt-2 font-serif text-[36px] font-black leading-[1.03] tracking-tight drop-shadow md:text-[56px]">{b.name}</h1>
               <p className="mt-2 text-[16px] opacity-85">{cat?.icon} {cat?.name} · {fullAddress}</p>
               <div className="mt-2 [&_*]:!text-white"><Stars value={rating} count={b.rating_count} size={18} /></div>
             </div>
