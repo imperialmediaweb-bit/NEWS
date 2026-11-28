@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import pool from "@/lib/db";
 import { siteFromHeaders } from "@/lib/topic-page";
 import { ownerBusinesses, ownerStats } from "@/lib/directory-owner";
-import { rank, isSpotlight } from "@/lib/directory";
+import { rank, isSpotlight, ownerPosition } from "@/lib/directory";
 import { catBySlug } from "@/lib/directory-categories";
 import { mockupOf } from "@/config/design-cfg";
 import Header from "@/components/Header";
@@ -52,7 +52,8 @@ export default async function Owner({ searchParams }: { searchParams: { t?: stri
       pool.query(`SELECT name, email, phone, message, created_at FROM business_leads WHERE business_id = $1 ORDER BY created_at DESC LIMIT 20`, [b.id]).catch(() => ({ rows: [] })),
     ]);
     const pos = ranking.findIndex((r) => r.name.toLowerCase() === String(b.name).toLowerCase());
-    return { b, stats, pos: ranking.length >= 5 ? pos : -1, reviews, bsite, questions, leads };
+    const standing = await ownerPosition(site.slug, b.city_slug as string, b.category as string, b.id as number).catch(() => null);
+    return { b, stats, pos: ranking.length >= 5 ? pos : -1, reviews, bsite, questions, leads, standing };
   }));
   const tile = (label: string, n: number | undefined, icon: string) => (
     <div className="bg-white p-4 shadow-sm"><p className="text-[12px] font-bold uppercase tracking-wider text-gray-500">{icon} {label}</p><p className="mt-1 text-[30px] font-black">{n || 0}</p></div>
@@ -68,7 +69,7 @@ export default async function Owner({ searchParams }: { searchParams: { t?: stri
       </section>
       <main className="mx-auto max-w-[1000px] space-y-12 px-4 py-9">
         {items.length === 0 && <p>No claimed listings for this email on {site.name}.</p>}
-        {items.map(({ b, stats, pos, reviews, bsite, questions, leads }) => {
+        {items.map(({ b, stats, pos, reviews, bsite, questions, leads, standing }) => {
           const cat = catBySlug(b.category as string);
           const badgeUrl = `https://${site.domain}/api/directory/top10?b=${b.slug}`;
           const pageUrl = `https://${site.domain}/directory/listing/${b.slug}`;
@@ -79,6 +80,36 @@ export default async function Owner({ searchParams }: { searchParams: { t?: stri
               <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4">
                 {tile("Page views", stats.view, "👀")}{tile("Calls", stats.call, "☎")}{tile("Website visits", stats.website, "🔗")}{tile("Directions", stats.directions, "🧭")}
               </div>
+              {standing && (() => {
+                const paid = !!bsite && isLive(bsite);
+                return (
+                  <div className="mt-3 bg-white p-5 shadow-sm ring-2" style={{ ["--tw-ring-color" as string]: acc } as React.CSSProperties}>
+                    <div className="flex flex-wrap items-end justify-between gap-3">
+                      <div>
+                        <p className="text-[12px] font-bold uppercase tracking-wider text-gray-500">Your place in {String(b.city)}</p>
+                        <p className="mt-1 text-[30px] font-black leading-none">#{standing.position} <span className="text-[17px] font-bold text-gray-500">of {standing.total} {cat?.name.toLowerCase()}</span></p>
+                      </div>
+                      <p className="rounded bg-gray-900 px-3 py-1.5 text-[15px] font-black text-white">Express Score {standing.score.total}/100</p>
+                    </div>
+                    {standing.above && (
+                      <p className="mt-3 text-[15px]">
+                        {paid ? <>Just above you: <b>{standing.above.name}</b>, {standing.above.gap} point{standing.above.gap === 1 ? "" : "s"} ahead.</> : <>The business just above you is <b>{standing.above.gap} point{standing.above.gap === 1 ? "" : "s"}</b> ahead. <span className="text-gray-500">(See who it is with your website subscription.)</span></>}
+                      </p>
+                    )}
+                    {standing.tips.length > 0 && (
+                      <div className="mt-3">
+                        <p className="text-[13px] font-bold uppercase tracking-wider text-gray-500">Climb for free</p>
+                        <ul className="mt-1 space-y-1 text-[15px]">{standing.tips.map((t) => <li key={t.text}>➕ {t.text} <b style={{ color: acc }}>+{t.points} points</b></li>)}</ul>
+                      </div>
+                    )}
+                    <div className="mt-4 flex flex-wrap items-center gap-3">
+                      {paid
+                        ? <a href={`/directory/owner/certificate?t=${encodeURIComponent(searchParams.t!)}&b=${b.id}`} target="_blank" className="rounded-full px-5 py-2.5 text-[14px] font-black text-white" style={{ background: acc }}>🏅 Print this month&apos;s certificate</a>
+                        : <span className="rounded-full border-2 border-dashed border-gray-300 px-5 py-2.5 text-[14px] font-bold text-gray-500">🏅 Monthly certificate: included with your website (from $9)</span>}
+                    </div>
+                  </div>
+                );
+              })()}
               <div className="mt-3 bg-white p-4 shadow-sm">
                 <p className="text-[12px] font-bold uppercase tracking-wider text-gray-500">Where people found you</p>
                 <div className="mt-2 flex flex-wrap gap-x-6 gap-y-1 text-[15px]">

@@ -28,3 +28,15 @@ export function expressScore(b: Pick<Business, "rating_sum" | "rating_count" | "
     ],
   };
 }
+
+/** Free ways to raise the score, each with its points, from what the profile is missing. */
+export function scoreTips(b: Pick<Business, "rating_count" | "hours" | "phone" | "website" | "description" | "photo_url" | "claimed">): { text: string; points: number }[] {
+  const t: { text: string; points: number }[] = [];
+  if (!b.photo_url) t.push({ text: "Add a photo of your business", points: 5 });
+  if (!b.hours) t.push({ text: "Add your opening hours", points: 7 });
+  if (!b.description || b.description.length <= 60) t.push({ text: "Write a short description (2-3 sentences)", points: 6 });
+  if (!b.website) t.push({ text: "Add your website (we can build you one)", points: 6 });
+  if (!b.phone) t.push({ text: "Add a phone number", points: 6 });
+  if ((b.rating_count || 0) < 10) t.push({ text: "Ask happy customers for a review (use your QR sign)", points: b.rating_count ? 3 : 8 });
+  return t;
+}

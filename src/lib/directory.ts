@@ -4,7 +4,7 @@ import { sites } from "@/config/sites";
 import { citiesOf } from "@/lib/local-data";
 import { slugOf } from "@/lib/topic-page";
 import { DIR_CATEGORIES, categorize, catBySlug } from "@/lib/directory-categories";
-import { expressScore, type Score } from "@/lib/express-score";
+import { expressScore, scoreTips, type Score } from "@/lib/express-score";
 
 /**
  * Local business directory (per paper, per city, per category).
@@ -416,4 +416,25 @@ export async function cityLeaders(site: string, city: string): Promise<{ categor
     .filter(([, m]) => m.size >= 3)
     .map(([category, m]) => ({ category, count: m.size, top: Array.from(m.values()).sort((a, b) => b.express.total - a.express.total || b.rating_count - a.rating_count).slice(0, 3) }))
     .sort((a, b) => b.count - a.count);
+}
+
+
+/** Where one business stands among every business in its city and field, the one just above, and free tips to climb. */
+export async function ownerPosition(site: string, city: string, category: string, businessId: number) {
+  await dirSchema();
+  const { rows } = await pool.query(`SELECT * FROM businesses WHERE site_slug = $1 AND city_slug = $2 AND category = $3 AND status = 'active' LIMIT 3000`, [site, city, category]);
+  const me = (rows as Business[]).find((b) => b.id === businessId);
+  if (!me) return null;
+  const seen = new Map<string, Business & { express: Score }>();
+  for (const b of rows as Business[]) {
+    const key = b.name.toLowerCase().replace(/[^a-z0-9]/g, "");
+    const e = { ...b, express: expressScore(b) };
+    if (b.id === businessId) { seen.set(key, e); continue; }
+    if (!seen.has(key) || (seen.get(key)!.id !== businessId && seen.get(key)!.express.total < e.express.total)) seen.set(key, e);
+  }
+  const list = Array.from(seen.values()).sort((a, b) => b.express.total - a.express.total || b.rating_count - a.rating_count);
+  const i = list.findIndex((b) => b.id === businessId);
+  if (i < 0) return null;
+  const above = i > 0 ? list[i - 1] : null;
+  return { position: i + 1, total: list.length, score: list[i].express, above: above ? { name: above.name, score: above.express.total, gap: above.express.total - list[i].express.total } : null, tips: scoreTips(me) };
 }
